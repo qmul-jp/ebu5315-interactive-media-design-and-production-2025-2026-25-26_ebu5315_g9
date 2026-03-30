@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>弦切角定理</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; }
+        canvas { display: block; margin: 0 auto; }
+        .descriptions { margin-top: 16px; line-height: 2.4; font-size: 1em; }
+        .theorem { font-weight: bold; margin-top: 8px; font-size: 1.1em; }
+
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; }
+        html,body { background:var(--bg)!important; color:var(--fg)!important; transition:background .2s,color .2s; }
+        canvas { background:var(--bg)!important; }
+        h3 { color:var(--fg); }
+        .zh-text { display:inline; }
+        .en-text { display:none; }
+    </style>
+</head>
+<body>
+    <h3><span class="zh-text">弦切角定理</span><span class="en-text">Tangent-Chord Angle Theorem</span></h3>
+
+    <div>
+        <canvas id="circleCanvas" width="620" height="500"
+                style="border:1px solid #ffffff; background:#ffffff;"></canvas>
+    </div>
+
+    <div class="descriptions">
+        <span class="zh-text">弦切角 ∠BAT = </span><span class="en-text">Tangent-chord angle ∠BAT = </span><span id="valBAT">0.00</span>°
+        &nbsp;&nbsp;
+        <span class="zh-text">圆周角 ∠ACB = </span><span class="en-text">Inscribed angle ∠ACB = </span><span id="valACB">0.00</span>°
+        &nbsp;&nbsp;
+        <span id="equalStatus">—</span>
+    </div>
+
+    <div class="theorem">
+        <span class="zh-text">弦切角等于它所夹弧所对的圆周角</span>
+        <span class="en-text">A tangent-chord angle equals the inscribed angle subtending the same arc</span>
+    </div>
+
+    <script>
+    (function () {
+        function _fg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000'; }
+        function _bg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#000000' : '#ffffff'; }
+        function _lang() { return (window._CL && window._CL.lang) || 'zh'; }
+
+        const canvas = document.getElementById('circleCanvas');
+        const ctx    = canvas.getContext('2d');
+
+        const cx = 300, cy = 255, radius = 180;
+
+        // A：切点（弦的端点），B：弦的另一端，C：圆周角的顶点
+        // 切线过 A，方向垂直于 OA（即沿切线方向）
+        let angleA = 150; // 度
+        let angleB = 40;
+        let angleC = 260;
+
+        const elBAT   = document.getElementById('valBAT');
+        const elACB   = document.getElementById('valACB');
+        const elEqual = document.getElementById('equalStatus');
+
+        let dragging = false, dragTarget = null;
+
+        function d2r(d) { return d * Math.PI / 180; }
+        function r2d(r) { return r * 180 / Math.PI; }
+
+        function pt(deg) {
+            return {
+                x: cx + radius * Math.cos(d2r(deg)),
+                y: cy + radius * Math.sin(d2r(deg))
+            };
+        }
+
+        // 三点夹角，顶点在 b
+        function angleBetween(a, b, c) {
+            const v1 = { x: a.x - b.x, y: a.y - b.y };
+            const v2 = { x: c.x - b.x, y: c.y - b.y };
+            const dot = v1.x * v2.x + v1.y * v2.y;
+            const len = Math.hypot(v1.x, v1.y) * Math.hypot(v2.x, v2.y);
+            if (len < 1e-9) return 0;
+            return r2d(Math.acos(Math.max(-1, Math.min(1, dot / len))));
+        }
+
+        // 切线方向：垂直于 OA，有两个方向，取朝向 B 那侧的方向
+        function getTangentDir(pA, pB) {
+            // OA 方向
+            const oaDx = pA.x - cx, oaDy = pA.y - cy;
+            // 垂直方向（两个候选）
+            const t1 = { x: -oaDy, y: oaDx };
+            const t2 = { x:  oaDy, y: -oaDx };
+            // 选与 AB 方向点积为正的那个（朝向 B 侧）
+            const abx = pB.x - pA.x, aby = pB.y - pA.y;
+            const dot1 = t1.x * abx + t1.y * aby;
+            const chosen = dot1 >= 0 ? t1 : t2;
+            const len = Math.hypot(chosen.x, chosen.y);
+            return { x: chosen.x / len, y: chosen.y / len };
+        }
+
+        // 画小角弧
+        function drawAngleArc(vertex, from, to, r, color) {
+            const a1 = Math.atan2(from.y - vertex.y, from.x - vertex.x);
+            const a2 = Math.atan2(to.y   - vertex.y, to.x   - vertex.x);
+            const diff = Math.atan2(Math.sin(a2 - a1), Math.cos(a2 - a1));
+            const ccw = diff < 0;
+            ctx.beginPath();
+            ctx.arc(vertex.x, vertex.y, r, a1, a2, ccw);
+            ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+
+        // 直角标记
+        function drawRightAngle(vertex, dir1, dir2, size, color) {
+            const a1 = Math.atan2(dir1.y, dir1.x);
+            const a2 = Math.atan2(dir2.y, dir2.x);
+            const p1 = { x: vertex.x + Math.cos(a1) * size, y: vertex.y + Math.sin(a1) * size };
+            const p2 = { x: vertex.x + Math.cos(a2) * size, y: vertex.y + Math.sin(a2) * size };
+            const p3 = { x: p1.x + Math.cos(a2) * size,    y: p1.y + Math.sin(a2) * size };
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y); ctx.lineTo(p3.x, p3.y); ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+
+        function update() {
+            const pA = pt(angleA), pB = pt(angleB), pC = pt(angleC);
+
+            // 切线方向向量（过 A，朝向 B 侧）
+            const tDir = getTangentDir(pA, pB);
+            // 切线上 A 外侧的点 T（用于标注和角计算）
+            const T = { x: pA.x + tDir.x * 60, y: pA.y + tDir.y * 60 };
+
+            // 弦切角 ∠BAT：切线方向 AT 与弦 AB 的夹角
+            const bat = angleBetween(pB, pA, T);
+
+            // 圆周角 ∠ACB：C 在弧 AB 上（弦切角所夹的弧的对应圆周角）
+            const acb = angleBetween(pA, pC, pB);
+
+            const isEqual = Math.abs(bat - acb) < 0.8;
+            const green = '#27ae60', orange = '#e67e22';
+
+            elBAT.textContent = bat.toFixed(2);
+            elACB.textContent = acb.toFixed(2);
+            elEqual.innerHTML = isEqual
+                ? `<span style="color:${green}">∠BAT = ∠ACB ✓</span>`
+                : `<span style="color:${orange}">∠BAT ≠ ∠ACB</span>`;
+
+            drawCanvas(pA, pB, pC, T, tDir, bat, acb, isEqual);
+        }
+
+        function drawCanvas(pA, pB, pC, T, tDir, bat, acb, isEqual) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const col = isEqual ? '#27ae60' : '#e74c3c';
+            const colC = isEqual ? '#27ae60' : '#2980b9';
+            const circleStroke = _fg() === '#ffffff' ? '#666' : '#bbb';
+            const auxStroke    = _fg() === '#ffffff' ? '#666' : '#aaa';
+
+            // 圆
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = circleStroke;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 弦 AB
+            ctx.beginPath();
+            ctx.moveTo(pA.x, pA.y);
+            ctx.lineTo(pB.x, pB.y);
+            ctx.strokeStyle = col;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 切线（双向延伸过 A）
+            const tLen = 90;
+            const T2 = { x: pA.x - tDir.x * tLen, y: pA.y - tDir.y * tLen };
+            ctx.beginPath();
+            ctx.moveTo(T.x, T.y);
+            ctx.lineTo(T2.x, T2.y);
+            ctx.strokeStyle = col;
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // CA、CB（圆周角的两条边，虚线）
+            ctx.setLineDash([5, 3]);
+            ctx.strokeStyle = colC;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(pC.x, pC.y); ctx.lineTo(pA.x, pA.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pC.x, pC.y); ctx.lineTo(pB.x, pB.y); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // OA（半径，用于切线垂直标注）
+            ctx.beginPath();
+            ctx.moveTo(cx, cy);
+            ctx.lineTo(pA.x, pA.y);
+            ctx.strokeStyle = auxStroke;
+            ctx.lineWidth = 1.2;
+            ctx.setLineDash([4, 2]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 切线处直角标记（OA ⊥ 切线）
+            const oaDir = { x: cx - pA.x, y: cy - pA.y };
+            const oaLen = Math.hypot(oaDir.x, oaDir.y);
+            drawRightAngle(pA,
+                { x: oaDir.x / oaLen, y: oaDir.y / oaLen },
+                { x: tDir.x, y: tDir.y },
+                10, auxStroke);
+
+            // 弦切角弧（∠BAT，在 A 处）
+            drawAngleArc(pA, pB, T, 24, col);
+
+            // 圆周角弧（∠ACB，在 C 处）
+            drawAngleArc(pC, pA, pB, 22, colC);
+
+            // 圆心 O
+            ctx.beginPath();
+            ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = _fg(); ctx.fill();
+            ctx.font = '14px sans-serif';
+            ctx.fillStyle = _fg();
+            ctx.fillText('O', cx - 15, cy - 8);
+
+            // 点 A、B、C
+            const pts = [
+                { p: pA, label: 'A', color: col },
+                { p: pB, label: 'B', color: col },
+                { p: pC, label: 'C', color: colC },
+            ];
+            pts.forEach(({ p, label, color }) => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = color; ctx.fill();
+                ctx.fillStyle = _fg();
+                // 标签朝圆外偏移
+                const ddx = p.x - cx, ddy = p.y - cy;
+                const ll = Math.hypot(ddx, ddy);
+                ctx.fillText(label, p.x + (ddx / ll) * 14, p.y + (ddy / ll) * 14);
+            });
+
+            // T 标注（切线上的点）
+            ctx.fillStyle = _fg();
+            ctx.font = '13px sans-serif';
+            ctx.fillText('T', T.x + 6, T.y - 6);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (canvas.width / rect.width),
+                y: (e.clientY - rect.top)  * (canvas.height / rect.height)
+            };
+        }
+
+        canvas.addEventListener('mousedown', function(e) {
+            const m = getMousePos(e);
+            const pts = [
+                { label: 'A', p: pt(angleA) },
+                { label: 'B', p: pt(angleB) },
+                { label: 'C', p: pt(angleC) },
+            ];
+            for (const { label, p } of pts) {
+                if (Math.hypot(m.x - p.x, m.y - p.y) < 15) {
+                    dragging = true; dragTarget = label; return;
+                }
+            }
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            if (!dragging) return;
+            const m = getMousePos(e);
+            const deg = r2d(Math.atan2(m.y - cy, m.x - cx));
+            if      (dragTarget === 'A') angleA = deg;
+            else if (dragTarget === 'B') angleB = deg;
+            else if (dragTarget === 'C') angleC = deg;
+            update();
+        });
+
+        window.addEventListener('mouseup',    () => { dragging = false; dragTarget = null; });
+        canvas.addEventListener('mouseleave', () => { dragging = false; dragTarget = null; });
+
+        update();
+        window._clRedraw = function() { update(); };
+    })();
+    </script>
+
+<script>
+(function(){
+    window._CL = { lang:'zh', theme:'light' };
+
+    function applyLang(lang){
+        window._CL.lang = lang;
+        document.querySelectorAll('.zh-text').forEach(function(el){ el.style.display = lang==='zh'?'inline':'none'; });
+        document.querySelectorAll('.en-text').forEach(function(el){ el.style.display = lang==='en'?'inline':'none'; });
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    function applyTheme(theme){
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev){
+        if(!ev.data || ev.data._src!=='circlelab') return;
+        if(ev.data.lang)  applyLang(ev.data.lang);
+        if(ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        try{ if(window.parent._CL_lang)  applyLang(window.parent._CL_lang); }catch(e){}
+        try{ if(window.parent._CL_theme) applyTheme(window.parent._CL_theme); }catch(e){}
+    });
+})();
+</script>
+
+</body>
+</html>

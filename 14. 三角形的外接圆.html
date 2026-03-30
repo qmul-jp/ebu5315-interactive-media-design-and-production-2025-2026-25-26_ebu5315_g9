@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>三角形的外接圆</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; margin: 0; }
+        canvas { display: block; margin: 0 auto; }
+        .descriptions { margin-top: 14px; line-height: 2.4; font-size: 1em; }
+        .conclusion { font-weight: bold; margin-top: 8px; font-size: 1.1em; min-height: 1.6em; }
+
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; }
+        html,body { background:var(--bg)!important; color:var(--fg)!important; transition:background .2s,color .2s; }
+        canvas { background:var(--bg)!important; }
+        h3 { color:var(--fg); margin: 12px 0 6px; }
+
+        .zh-text { display:inline; }
+        .en-text { display:none; }
+    </style>
+</head>
+<body>
+    <h3><span class="zh-text">三角形的外接圆</span><span class="en-text">Circumscribed Circle of a Triangle</span></h3>
+
+    <div>
+        <canvas id="circleCanvas" width="620" height="460"
+                style="border:1px solid #ffffff; background:#ffffff;"></canvas>
+    </div>
+
+    <div class="descriptions">
+        ∠A = <span id="valA">0.0</span>° &nbsp;&nbsp;
+        ∠B = <span id="valB">0.0</span>° &nbsp;&nbsp;
+        ∠C = <span id="valC">0.0</span>° &nbsp;&nbsp;&nbsp;
+        <span class="zh-text">外接圆半径 R = </span><span class="en-text">Circumradius R = </span><span id="valR">0.0</span>
+    </div>
+    <div class="conclusion" id="conclusion">—</div>
+
+    <script>
+    (function () {
+        function _fg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000'; }
+        function _bg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#000000' : '#ffffff'; }
+        function _lang() { return (window._CL && window._CL.lang) || 'zh'; }
+
+        const canvas = document.getElementById('circleCanvas');
+        const ctx    = canvas.getContext('2d');
+
+        // 三顶点初始坐标（锐角三角形）
+        let A = { x: 200, y: 360 };
+        let B = { x: 420, y: 360 };
+        let C = { x: 310, y: 120 };
+
+        let dragging = false, dragTarget = null;
+
+        function dist(p, q) { return Math.hypot(p.x - q.x, p.y - q.y); }
+
+        function triangleAngles(A, B, C) {
+            const a = dist(B, C), b = dist(A, C), c = dist(A, B);
+            const cosA = (b*b + c*c - a*a) / (2*b*c);
+            const cosB = (a*a + c*c - b*b) / (2*a*c);
+            const cosC = (a*a + b*b - c*c) / (2*a*b);
+            return {
+                A: Math.acos(Math.max(-1, Math.min(1, cosA))) * 180 / Math.PI,
+                B: Math.acos(Math.max(-1, Math.min(1, cosB))) * 180 / Math.PI,
+                C: Math.acos(Math.max(-1, Math.min(1, cosC))) * 180 / Math.PI,
+            };
+        }
+
+        function circumcenter(A, B, C) {
+            const D = 2 * (A.x*(B.y-C.y) + B.x*(C.y-A.y) + C.x*(A.y-B.y));
+            if (Math.abs(D) < 1e-9) return null;
+            const ux = ((A.x*A.x+A.y*A.y)*(B.y-C.y) + (B.x*B.x+B.y*B.y)*(C.y-A.y) + (C.x*C.x+C.y*C.y)*(A.y-B.y)) / D;
+            const uy = ((A.x*A.x+A.y*A.y)*(C.x-B.x) + (B.x*B.x+B.y*B.y)*(A.x-C.x) + (C.x*C.x+C.y*C.y)*(B.x-A.x)) / D;
+            return { x: ux, y: uy };
+        }
+
+        function midpoint(p, q) { return { x:(p.x+q.x)/2, y:(p.y+q.y)/2 }; }
+
+        function drawRightAngleMark(vertex, p1, p2, size, color) {
+            const d1 = { x:p1.x-vertex.x, y:p1.y-vertex.y };
+            const d2 = { x:p2.x-vertex.x, y:p2.y-vertex.y };
+            const l1 = Math.hypot(d1.x,d1.y), l2 = Math.hypot(d2.x,d2.y);
+            if (l1 < 1e-9 || l2 < 1e-9) return;
+            const u1 = { x:d1.x/l1, y:d1.y/l1 };
+            const u2 = { x:d2.x/l2, y:d2.y/l2 };
+            const q1 = { x:vertex.x+u1.x*size, y:vertex.y+u1.y*size };
+            const q2 = { x:vertex.x+u2.x*size, y:vertex.y+u2.y*size };
+            const q3 = { x:q1.x+u2.x*size, y:q1.y+u2.y*size };
+            ctx.beginPath();
+            ctx.moveTo(q1.x,q1.y); ctx.lineTo(q3.x,q3.y); ctx.lineTo(q2.x,q2.y);
+            ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.stroke();
+        }
+
+        function update() {
+            const angles = triangleAngles(A, B, C);
+            const O = circumcenter(A, B, C);
+            if (!O) return;
+            const R = dist(O, A);
+
+            document.getElementById('valA').textContent = angles.A.toFixed(1);
+            document.getElementById('valB').textContent = angles.B.toFixed(1);
+            document.getElementById('valC').textContent = angles.C.toFixed(1);
+            document.getElementById('valR').textContent = R.toFixed(1);
+
+            const maxAngle = Math.max(angles.A, angles.B, angles.C);
+            const tol = 0.8;
+            let color, textZh, textEn;
+            if (Math.abs(maxAngle - 90) < tol) {
+                color  = '#27ae60';
+                textZh = '直角三角形：外心在斜边中点';
+                textEn = 'Right triangle: circumcenter is the midpoint of the hypotenuse';
+            } else if (maxAngle < 90) {
+                color  = '#2980b9';
+                textZh = '锐角三角形：外心在三角形内部';
+                textEn = 'Acute triangle: circumcenter is inside the triangle';
+            } else {
+                color  = '#e67e22';
+                textZh = '钝角三角形：外心在三角形外部';
+                textEn = 'Obtuse triangle: circumcenter is outside the triangle';
+            }
+
+            document.getElementById('conclusion').innerHTML =
+                `<span style="color:${color}">${_lang()==='zh' ? textZh : textEn}</span>`;
+
+            drawCanvas(O, R, angles, color);
+        }
+
+        function drawCanvas(O, R, angles, oColor) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const auxColor  = _fg() === '#ffffff' ? '#555' : '#bbb';
+            const auxColor2 = _fg() === '#ffffff' ? '#666' : '#aaa';
+
+            // 外接圆（虚线）
+            ctx.beginPath();
+            ctx.arc(O.x, O.y, R, 0, 2*Math.PI);
+            ctx.strokeStyle = oColor;
+            ctx.lineWidth = 1.8;
+            ctx.setLineDash([7, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 三边垂直平分线
+            const mAB = midpoint(A, B), mBC = midpoint(B, C), mCA = midpoint(C, A);
+            const sides = [
+                { mid: mAB, p1: A, p2: B },
+                { mid: mBC, p1: B, p2: C },
+                { mid: mCA, p1: C, p2: A },
+            ];
+            sides.forEach(({ mid, p1, p2 }) => {
+                const dx = p2.x-p1.x, dy = p2.y-p1.y;
+                const len = Math.hypot(dx, dy);
+                const nx = -dy/len, ny = dx/len;
+                const ext = 90;
+                ctx.beginPath();
+                ctx.moveTo(mid.x+nx*ext, mid.y+ny*ext);
+                ctx.lineTo(mid.x-nx*ext, mid.y-ny*ext);
+                ctx.strokeStyle = auxColor2;
+                ctx.lineWidth = 1.2;
+                ctx.setLineDash([4, 3]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+                // 垂足直角标记
+                const perp = { x: mid.x+nx*20, y: mid.y+ny*20 };
+                drawRightAngleMark(mid, p1, perp, 8, auxColor2);
+            });
+
+            // 外心到三顶点（细虚线）
+            [A, B, C].forEach(v => {
+                ctx.beginPath(); ctx.moveTo(O.x, O.y); ctx.lineTo(v.x, v.y);
+                ctx.strokeStyle = auxColor;
+                ctx.lineWidth = 1;
+                ctx.setLineDash([3, 3]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+            });
+
+            // 三角形边（实线）
+            ctx.beginPath();
+            ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y);
+            ctx.lineTo(C.x, C.y); ctx.closePath();
+            ctx.strokeStyle = _fg();
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // 各顶点角标
+            const corners = [
+                { v:A, p1:B, p2:C, ang:angles.A },
+                { v:B, p1:A, p2:C, ang:angles.B },
+                { v:C, p1:A, p2:B, ang:angles.C },
+            ];
+            corners.forEach(({ v, p1, p2, ang }) => {
+                if (Math.abs(ang - 90) < 0.8) {
+                    drawRightAngleMark(v, p1, p2, 12, '#27ae60');
+                } else {
+                    const a1 = Math.atan2(p1.y-v.y, p1.x-v.x);
+                    const a2 = Math.atan2(p2.y-v.y, p2.x-v.x);
+                    const diff = Math.atan2(Math.sin(a2-a1), Math.cos(a2-a1));
+                    ctx.beginPath();
+                    ctx.arc(v.x, v.y, 18, a1, a2, diff < 0);
+                    ctx.strokeStyle = ang > 90 ? '#e67e22' : '#2980b9';
+                    ctx.lineWidth = 1.5; ctx.stroke();
+                }
+            });
+
+            // 垂足中点（小圆点）
+            [mAB, mBC, mCA].forEach(m => {
+                ctx.beginPath(); ctx.arc(m.x, m.y, 3, 0, 2*Math.PI);
+                ctx.fillStyle = auxColor2; ctx.fill();
+            });
+
+            // 三顶点
+            const gx = (A.x+B.x+C.x)/3, gy = (A.y+B.y+C.y)/3;
+            [{ p:A, l:'A' }, { p:B, l:'B' }, { p:C, l:'C' }].forEach(({ p, l }) => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, 2*Math.PI);
+                ctx.fillStyle = '#e74c3c'; ctx.fill();
+                const ddx = p.x-gx, ddy = p.y-gy;
+                const ll = Math.hypot(ddx, ddy);
+                ctx.fillStyle = _fg(); ctx.font = '14px sans-serif';
+                ctx.fillText(l, p.x+(ddx/ll)*16, p.y+(ddy/ll)*16);
+            });
+
+            // 外心 O
+            ctx.beginPath(); ctx.arc(O.x, O.y, 6, 0, 2*Math.PI);
+            ctx.fillStyle = oColor; ctx.fill();
+            ctx.fillStyle = _fg(); ctx.font = '14px sans-serif';
+            ctx.fillText('O', O.x+9, O.y-6);
+
+            // R 标注
+            const mOA = midpoint(O, A);
+            ctx.fillStyle = oColor; ctx.font = '12px sans-serif';
+            ctx.fillText('R='+R.toFixed(1), mOA.x+6, mOA.y-4);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX-rect.left)*(canvas.width/rect.width),
+                y: (e.clientY-rect.top)*(canvas.height/rect.height)
+            };
+        }
+
+        canvas.addEventListener('mousedown', function(e) {
+            const m = getMousePos(e);
+            if (Math.hypot(m.x-A.x, m.y-A.y) < 15) { dragging=true; dragTarget='A'; return; }
+            if (Math.hypot(m.x-B.x, m.y-B.y) < 15) { dragging=true; dragTarget='B'; return; }
+            if (Math.hypot(m.x-C.x, m.y-C.y) < 15) { dragging=true; dragTarget='C'; return; }
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            if (!dragging) return;
+            const m = getMousePos(e);
+            if      (dragTarget==='A') A = { x:m.x, y:m.y };
+            else if (dragTarget==='B') B = { x:m.x, y:m.y };
+            else if (dragTarget==='C') C = { x:m.x, y:m.y };
+            update();
+        });
+
+        window.addEventListener('mouseup',    () => { dragging=false; dragTarget=null; });
+        canvas.addEventListener('mouseleave', () => { dragging=false; dragTarget=null; });
+
+        update();
+        window._clRedraw = function() { update(); };
+    })();
+    </script>
+
+<script>
+(function(){
+    window._CL = { lang:'zh', theme:'light' };
+
+    function applyLang(lang){
+        window._CL.lang = lang;
+        document.querySelectorAll('.zh-text').forEach(function(el){ el.style.display = lang==='zh'?'inline':'none'; });
+        document.querySelectorAll('.en-text').forEach(function(el){ el.style.display = lang==='en'?'inline':'none'; });
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    function applyTheme(theme){
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev){
+        if(!ev.data || ev.data._src!=='circlelab') return;
+        if(ev.data.lang)  applyLang(ev.data.lang);
+        if(ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        try{ if(window.parent._CL_lang)  applyLang(window.parent._CL_lang); }catch(e){}
+        try{ if(window.parent._CL_theme) applyTheme(window.parent._CL_theme); }catch(e){}
+    });
+})();
+</script>
+
+</body>
+</html>
