@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CircleLab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="nav-shell">
+        <a class="brand" href="#" aria-label="Circle Geometry home">
+          <img src="logo.png" alt="Circle Geometry logo" />
+        </a>
+
+        <nav class="primary-nav" aria-label="Primary">
+          <ul>
+            <li><a class="nav-link is-active" href="#">Home</a></li>
+            <li><a class="nav-link" href="#">Game</a></li>
+            <li><a class="nav-link" href="#">Quiz</a></li>
+          </ul>
+        </nav>
+
+        <nav class="account-nav" aria-label="Account">
+          <ul>
+            <li><a class="nav-link login-btn" href="#">Log in</a></li>
+            <li><a class="nav-link signup-btn" href="#">Sign up</a></li>
+            <li><a class="nav-link setting-btn" href="#">Setting</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="hero-section">
+      <section class="hero-interactive" id="heroInteractive" aria-labelledby="hero-title">
+        <div class="hero-content">
+          <p class="hero-kicker">INTERACTIVE CIRCLE SYSTEM</p>
+          <h1 id="hero-title">Master Circle Geometry with Ease</h1>
+          <p class="hero-intro">
+            Learn the key rules of circle geometry through clear explanations, interactive visuals, and simple practice.
+          </p>
+          <div class="hero-actions">
+            <a class="hero-btn primary" href="#">Start Learning</a>
+            <a class="hero-btn secondary" href="#">Watch Demo</a>
+          </div>
+        </div>
+
+        <div class="hero-background" aria-hidden="true">
+          <svg id="geo-svg" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice">
+            <defs>
+              <linearGradient id="panelGradient" x1="0%" x2="100%" y1="0%" y2="100%">
+                <stop offset="0%" stop-color="oklch(0.16 0.02 250)" />
+                <stop offset="100%" stop-color="oklch(0.1 0.01 250)" />
+              </linearGradient>
+              <radialGradient id="focusGradient" cx="50%" cy="50%" r="52%">
+                <stop offset="0%" stop-color="oklch(0.34 0.1 180 / 0.56)" />
+                <stop offset="100%" stop-color="oklch(0.34 0.1 180 / 0)" />
+              </radialGradient>
+              <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
+                <feGaussianBlur stdDeviation="7.5" />
+              </filter>
+            </defs>
+
+            <rect x="0" y="0" width="1400" height="760" fill="url(#panelGradient)" />
+
+            <g id="geo-bg-layers">
+              <circle id="bgRingA" cx="700" cy="390" r="295" class="geo-bg-ring ring-a" />
+              <circle id="bgRingB" cx="700" cy="390" r="450" class="geo-bg-ring ring-b" />
+              <circle id="bgRingC" cx="700" cy="390" r="610" class="geo-bg-ring ring-c" />
+              <circle id="bgRingD" cx="700" cy="390" r="680" class="geo-bg-ring ring-d" />
+            </g>
+
+            <g id="geo-construct">
+              <image
+                href="logo.png"
+                x="454"
+                y="144"
+                width="492"
+                height="492"
+                class="geo-logo-mark"
+                preserveAspectRatio="xMidYMid meet"
+              />
+
+              <circle cx="700" cy="390" r="140" class="geo-construct-ring r0" />
+              <circle cx="700" cy="390" r="240" class="geo-construct-ring r1" />
+              <circle cx="700" cy="390" r="332" class="geo-construct-ring r2" />
+              <circle cx="700" cy="390" r="520" class="geo-construct-ring r3" />
+
+              <line x1="700" y1="-30" x2="700" y2="810" class="geo-construct-line" />
+              <line x1="250" y1="390" x2="1150" y2="390" class="geo-construct-line" />
+              <line x1="370" y1="120" x2="1030" y2="660" class="geo-construct-line soft" />
+              <line x1="370" y1="660" x2="1030" y2="120" class="geo-construct-line soft" />
+
+              <g id="circleLattice">
+                <circle class="geo-lattice-circle l1" cx="700" cy="390" r="118" />
+                <circle class="geo-lattice-circle l2" cx="700" cy="272" r="118" />
+                <circle class="geo-lattice-circle l3" cx="803" cy="331" r="118" />
+                <circle class="geo-lattice-circle l4" cx="803" cy="449" r="118" />
+                <circle class="geo-lattice-circle l5" cx="700" cy="508" r="118" />
+                <circle class="geo-lattice-circle l6" cx="597" cy="449" r="118" />
+                <circle class="geo-lattice-circle l7" cx="597" cy="331" r="118" />
+                <circle class="geo-lattice-circle l8" cx="700" cy="154" r="118" />
+                <circle class="geo-lattice-circle l9" cx="700" cy="626" r="118" />
+                <circle class="geo-lattice-circle l10" cx="464" cy="390" r="118" />
+                <circle class="geo-lattice-circle l11" cx="936" cy="390" r="118" />
+                <circle class="geo-lattice-circle fade-1 l12" cx="904" cy="508" r="118" />
+                <circle class="geo-lattice-circle fade-1 l13" cx="818" cy="594" r="118" />
+                <circle class="geo-lattice-circle fade-1 l14" cx="582" cy="594" r="118" />
+                <circle class="geo-lattice-circle fade-1 l15" cx="496" cy="508" r="118" />
+                <circle class="geo-lattice-circle fade-1 l16" cx="496" cy="272" r="118" />
+                <circle class="geo-lattice-circle fade-1 l17" cx="582" cy="186" r="118" />
+                <circle class="geo-lattice-circle fade-1 l18" cx="818" cy="186" r="118" />
+                <circle class="geo-lattice-circle fade-1 l19" cx="904" cy="272" r="118" />
+                <circle class="geo-lattice-circle fade-2 l20" cx="1007" cy="567" r="118" />
+                <circle class="geo-lattice-circle fade-2 l21" cx="877" cy="697" r="118" />
+                <circle class="geo-lattice-circle fade-2 l22" cx="700" cy="744" r="118" />
+                <circle class="geo-lattice-circle fade-2 l23" cx="523" cy="697" r="118" />
+                <circle class="geo-lattice-circle fade-2 l24" cx="393" cy="567" r="118" />
+                <circle class="geo-lattice-circle fade-2 l25" cx="346" cy="390" r="118" />
+                <circle class="geo-lattice-circle fade-2 l26" cx="393" cy="213" r="118" />
+                <circle class="geo-lattice-circle fade-2 l27" cx="523" cy="83" r="118" />
+                <circle class="geo-lattice-circle fade-2 l28" cx="700" cy="36" r="118" />
+                <circle class="geo-lattice-circle fade-2 l29" cx="877" cy="83" r="118" />
+                <circle class="geo-lattice-circle fade-2 l30" cx="1007" cy="213" r="118" />
+                <circle class="geo-lattice-circle fade-2 l31" cx="1054" cy="390" r="118" />
+              </g>
+
+              <g id="orbitNodes">
+                <circle id="orbit1" class="geo-orbit-node main" cx="940" cy="390" r="6.2" />
+                <circle id="orbit2" class="geo-orbit-node" cx="700" cy="150" r="5.3" />
+                <circle id="orbit3" class="geo-orbit-node" cx="463" cy="390" r="4.8" />
+                <circle id="orbit4" class="geo-orbit-node" cx="700" cy="630" r="5.5" />
+                <circle id="orbit5" class="geo-orbit-node subtle" cx="1028" cy="390" r="4.4" />
+                <circle id="orbit6" class="geo-orbit-node subtle" cx="700" cy="62" r="4.2" />
+              </g>
+
+              <text class="geo-formula" x="976" y="170">A = &#960;r&#178;</text>
+              <text class="geo-formula" x="240" y="188">C = 2&#960;r</text>
+              <text class="geo-formula" x="1000" y="598">&#952; = s / r</text>
+            </g>
+
+            <circle cx="700" cy="390" r="460" class="geo-focus" fill="url(#focusGradient)" />
+
+            <g id="geo-parallax">
+              <circle id="mainCircle" cx="700" cy="390" r="210" class="geo-circle" />
+              <line id="diameterLine" x1="490" y1="390" x2="910" y2="390" class="geo-diameter" />
+              <line id="radiusLine" x1="700" y1="390" x2="852" y2="245" class="geo-radius" />
+              <line id="chordLine" x1="568" y1="224" x2="875" y2="282" class="geo-chord" />
+              <line id="tangentLine" x1="852" y1="120" x2="852" y2="560" class="geo-tangent" />
+              <path id="arcPath" class="geo-arc" d="" />
+              <path id="anglePath" class="geo-angle" d="" />
+
+              <circle id="centerPoint" cx="700" cy="390" r="7" class="geo-point-center" />
+              <circle id="pointA" cx="852" cy="245" r="8.5" class="geo-point" />
+              <circle id="pointB" cx="875" cy="282" r="7.5" class="geo-point-muted" />
+
+              <text id="radiusLabel" class="geo-label">Radius</text>
+              <text id="chordLabel" class="geo-label">Chord</text>
+              <text id="tangentLabel" class="geo-label">Tangent</text>
+              <text id="arcLabel" class="geo-label">Arc</text>
+              <text id="angleLabel" class="geo-label">&#952;</text>
+            </g>
+          </svg>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>
