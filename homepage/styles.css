@@ -448,8 +448,28 @@ body {
 .geo-diameter {
   stroke: color-mix(in oklch, var(--accent) 58%, white);
   stroke-width: 2.3;
-  stroke-dasharray: 10 8;
+  stroke-dasharray: none;
   opacity: 0.74;
+}
+
+.geo-axis {
+  stroke: color-mix(in oklch, var(--accent) 68%, white);
+  stroke-width: 1.7;
+  opacity: 0.22;
+}
+
+.geo-axis.geo-axis-x {
+  stroke-width: 1.7;
+}
+
+.geo-axis-label {
+  fill: color-mix(in oklch, var(--text) 82%, var(--accent));
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  paint-order: stroke;
+  stroke: color-mix(in oklch, black 76%, var(--panel));
+  stroke-width: 2px;
 }
 
 .geo-radius,
