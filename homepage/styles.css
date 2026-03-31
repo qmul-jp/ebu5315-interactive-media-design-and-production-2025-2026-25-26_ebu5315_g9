@@ -365,9 +365,8 @@ body {
   min-height: 210px;
   padding: clamp(1rem, 2vw, 1.35rem);
   border-radius: 12px;
-  border: 1px solid color-mix(in oklch, var(--accent) 30%, transparent);
-  border-left-width: 5px;
-  background: color-mix(in oklch, var(--chip) 78%, var(--panel));
+  border: 1px solid color-mix(in oklch, white 20%, transparent);
+  background: color-mix(in oklch, var(--panel) 44%, transparent);
   transition:
     border-color 220ms ease,
     background-color 220ms ease;
@@ -375,8 +374,8 @@ body {
 
 .core-feature-card:hover,
 .core-feature-card:focus-within {
-  border-color: color-mix(in oklch, var(--accent) 54%, transparent);
-  background: color-mix(in oklch, var(--chip) 66%, var(--panel));
+  border-color: color-mix(in oklch, white 42%, transparent);
+  background: color-mix(in oklch, var(--panel) 56%, transparent);
 }
 
 .core-feature-card h3 {
@@ -411,23 +410,19 @@ body {
 }
 
 .core-feature-card:nth-child(1) {
-  border-left-color: color-mix(in oklch, var(--accent) 88%, white);
-  background: color-mix(in oklch, var(--chip) 72%, var(--accent) 10%);
+  background: color-mix(in oklch, var(--accent) 18%, transparent);
 }
 
 .core-feature-card:nth-child(2) {
-  border-left-color: color-mix(in oklch, var(--accent-alt) 70%, var(--accent));
-  background: color-mix(in oklch, var(--chip) 72%, var(--accent-alt) 10%);
+  background: color-mix(in oklch, var(--accent-alt) 16%, transparent);
 }
 
 .core-feature-card:nth-child(3) {
-  border-left-color: color-mix(in oklch, var(--text) 50%, var(--accent));
-  background: color-mix(in oklch, var(--chip) 76%, var(--text) 7%);
+  background: color-mix(in oklch, var(--text) 13%, transparent);
 }
 
 .core-feature-card:nth-child(4) {
-  border-left-color: color-mix(in oklch, var(--accent) 54%, var(--accent-alt));
-  background: color-mix(in oklch, var(--chip) 74%, var(--accent) 6%);
+  background: color-mix(in oklch, var(--accent) 14%, transparent);
 }
 
 .geo-focus {
