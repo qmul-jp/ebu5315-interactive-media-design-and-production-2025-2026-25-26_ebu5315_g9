@@ -63,6 +63,15 @@
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const lerp = (from, to, alpha) => from + (to - from) * alpha;
+  const dot = (a, b) => a.x * b.x + a.y * b.y;
+  const normalize = (v) => {
+    const len = Math.hypot(v.x, v.y);
+    if (!len) {
+      return { x: 0, y: 0 };
+    }
+    return { x: v.x / len, y: v.y / len };
+  };
+  const perpendicular = (v) => ({ x: -v.y, y: v.x });
 
   const polarToCartesian = (cx, cy, r, angle) => ({
     x: cx + Math.cos(angle) * r,
@@ -219,20 +228,47 @@
       radius + 34,
       state.angle + state.spread * 0.5
     );
-    const angleMid = polarToCartesian(
-      center.x,
-      center.y,
-      92,
-      axisStart + (state.angle - axisStart) * 0.5
-    );
+    const thetaMidAngle = axisStart + (state.angle - axisStart) * 0.5;
+    const thetaLabelPoint = polarToCartesian(center.x, center.y, 96, thetaMidAngle);
+    const radialDir = normalize({
+      x: pointA.x - center.x,
+      y: pointA.y - center.y,
+    });
+    const radialNormal = perpendicular(radialDir);
+    const chordDir = normalize({
+      x: pointB.x - pointA.x,
+      y: pointB.y - pointA.y,
+    });
+    const rawChordNormal = perpendicular(chordDir);
+    const toCenter = normalize({
+      x: center.x - midChord.x,
+      y: center.y - midChord.y,
+    });
+    const chordNormal =
+      dot(rawChordNormal, toCenter) < 0
+        ? { x: -rawChordNormal.x, y: -rawChordNormal.y }
+        : rawChordNormal;
+    const tangentLabelSide = tangentDir.x >= 0 ? 1 : -1;
     const subjectOffsetX = compactLayout.matches ? 0 : 214;
     const subjectCenterX = center.x + subjectOffsetX;
 
-    setTextPos(refs.radiusLabel, midRadius.x + 14, midRadius.y - 12);
-    setTextPos(refs.chordLabel, midChord.x - 30, midChord.y - 12);
-    setTextPos(refs.tangentLabel, pointA.x + 12, pointA.y - 84);
+    setTextPos(
+      refs.radiusLabel,
+      midRadius.x + radialNormal.x * 18,
+      midRadius.y + radialNormal.y * 18
+    );
+    setTextPos(
+      refs.chordLabel,
+      midChord.x + chordNormal.x * 16 + chordDir.x * 0,
+      midChord.y + chordNormal.y * 16 + chordDir.y * 0
+    );
+    setTextPos(
+      refs.tangentLabel,
+      pointA.x + tangentDir.x * (74 * tangentLabelSide) + radialDir.x * 26,
+      pointA.y + tangentDir.y * (74 * tangentLabelSide) + radialDir.y * 26
+    );
     setTextPos(refs.arcLabel, arcMid.x - 18, arcMid.y + 8);
-    setTextPos(refs.angleLabel, angleMid.x - 16, angleMid.y - 2);
+    setTextPos(refs.angleLabel, thetaLabelPoint.x - 7, thetaLabelPoint.y + 3);
 
     refs.group.setAttribute(
       "transform",
@@ -268,4 +304,55 @@
   };
 
   requestAnimationFrame(render);
+})();
+
+(() => {
+  const titles = Array.from(document.querySelectorAll(".scroll-title-reveal"));
+  if (!titles.length) {
+    return;
+  }
+
+  const reduceMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  const reveal = (el) => {
+    el.classList.add("is-visible");
+  };
+
+  if (reduceMotion || !("IntersectionObserver" in window)) {
+    titles.forEach(reveal);
+    return;
+  }
+
+  titles.forEach((title, index) => {
+    const customDelay = Number.parseInt(
+      title.getAttribute("data-reveal-delay") || "",
+      10
+    );
+    const delay = Number.isFinite(customDelay) ? customDelay : index * 45;
+    title.style.setProperty("--reveal-delay", `${delay}ms`);
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          reveal(entry.target);
+        } else {
+          entry.target.classList.remove("is-visible");
+        }
+      });
+    },
+    {
+      threshold: 0.3,
+      rootMargin: "0px 0px -8% 0px",
+    }
+  );
+
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      titles.forEach((title) => observer.observe(title));
+    });
+  });
 })();
