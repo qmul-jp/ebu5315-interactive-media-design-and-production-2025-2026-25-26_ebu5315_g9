@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>切线的判定与性质</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; }
+        canvas { display: block; margin: 0 auto; }
+        .descriptions { margin-top: 16px; line-height: 2.4; font-size: 1em; }
+        .theorem { font-weight: bold; margin-top: 8px; font-size: 1.1em; }
+    
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; }
+        html,body { background:var(--bg)!important; color:var(--fg)!important; transition:background .2s,color .2s; }
+        canvas { background:var(--bg)!important; }
+        h3 { color:var(--fg); }
+        /* i18n: 只隐藏纯文字标签，数据span不复制 */
+        .zh-text { display:inline; }
+        .en-text { display:none; }
+        .zh-block { display:block; }
+        .en-block { display:none; }
+
+    </style>
+</head>
+<body>
+    <h3><span class="zh-text">切线的判定与性质</span><span class="en-text">Tangent Line: Criterion &amp; Properties</span></h3>
+    <div>
+        <canvas id="circleCanvas" width="620" height="500"
+                style="border:1px solid #ffffff; background:#ffffff;"></canvas>
+    </div>
+    <div class="descriptions">
+        OA = r = <span id="valR">0.00</span> &nbsp;&nbsp;
+        <span class="zh-text">直线与 OA 的夹角</span><span class="en-text">Angle between line and OA</span> = <span id="valAngle">0.00</span>°&nbsp;&nbsp;
+        <span id="perpStatus">—</span><br>
+        <span id="conclusion" style="font-weight:bold; font-size:1.05em;">—</span>
+    </div>
+    <div class="theorem"><span class="zh-text">经过半径外端且垂直于半径的直线是圆的切线；切线垂直于过切点的半径</span><span class="en-text">A line through the endpoint of a radius and perpendicular to it is tangent to the circle.</span></div>
+
+    <script>
+    (function () {
+
+            function _fg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#ffffff':'#000000'; }
+            function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#000000':'#ffffff'; }
+            function _lang(){ return (window._CL&&window._CL.lang)||'zh'; }
+
+        const canvas = document.getElementById('circleCanvas');
+        const ctx    = canvas.getContext('2d');
+
+        const cx = 290, cy = 245;
+
+        // A 可自由移动，OA 长度 = 半径
+        let pA = { x: cx + 150, y: cy };
+
+        // 直线过 A，方向（绝对角度，度）
+        let lineDirDeg = 60;
+
+        const SNAP = 6; // 吸附阈值（度）
+
+        let dragging = false, dragTarget = null;
+        let dragStartMouse = null, dragStartDir = null;
+
+        const elR        = document.getElementById('valR');
+        const elAngle    = document.getElementById('valAngle');
+        const elPerp     = document.getElementById('perpStatus');
+        const elConclude = document.getElementById('conclusion');
+
+        function d2r(d) { return d * Math.PI / 180; }
+        function r2d(r) { return r * 180 / Math.PI; }
+
+        // 延伸直线到画布边缘
+        function extendLine(P, dirDeg, w, h) {
+            const dx = Math.cos(d2r(dirDeg)), dy = Math.sin(d2r(dirDeg));
+            const ts = [];
+            if (Math.abs(dx) > 1e-9) { ts.push(-P.x / dx); ts.push((w - P.x) / dx); }
+            if (Math.abs(dy) > 1e-9) { ts.push(-P.y / dy); ts.push((h - P.y) / dy); }
+            const pts = ts.map(t => ({ x: P.x + t * dx, y: P.y + t * dy }))
+                          .filter(p => p.x >= -1 && p.x <= w+1 && p.y >= -1 && p.y <= h+1);
+            if (pts.length < 2) return [P, P];
+            pts.sort((a, b) => (a.x - b.x) || (a.y - b.y));
+            return [pts[0], pts[pts.length - 1]];
+        }
+
+        // 直角标记
+        function drawRightAngle(vertex, dir1Deg, dir2Deg, size, color) {
+            const r1 = d2r(dir1Deg), r2 = d2r(dir2Deg);
+            const p1 = { x: vertex.x + Math.cos(r1)*size, y: vertex.y + Math.sin(r1)*size };
+            const p2 = { x: vertex.x + Math.cos(r2)*size, y: vertex.y + Math.sin(r2)*size };
+            const p3 = { x: p1.x + Math.cos(r2)*size,    y: p1.y + Math.sin(r2)*size };
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y); ctx.lineTo(p3.x, p3.y); ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = color; ctx.lineWidth = 1.5; ctx.stroke();
+        }
+
+        function update() {
+            const r = Math.hypot(pA.x - cx, pA.y - cy);
+            if (r < 10) return; // 防止 A 过近
+
+            // OA 方向角（度）
+            const oaDirDeg = r2d(Math.atan2(pA.y - cy, pA.x - cx));
+
+            // 直线与 OA 的夹角（锐角 0~90）
+            const radVec  = { x: Math.cos(d2r(oaDirDeg)),   y: Math.sin(d2r(oaDirDeg)) };
+            const lineVec = { x: Math.cos(d2r(lineDirDeg)), y: Math.sin(d2r(lineDirDeg)) };
+            let dot = Math.abs(lineVec.x * radVec.x + lineVec.y * radVec.y);
+            dot = Math.min(1, dot);
+            let angleWithOA = r2d(Math.acos(dot)); // 0=平行, 90=垂直
+
+            // 吸附：接近 90° 时对齐为垂直
+            const isTangent = Math.abs(angleWithOA - 90) < SNAP;
+            if (isTangent) {
+                const perp1 = oaDirDeg + 90, perp2 = oaDirDeg - 90;
+                let d1 = Math.abs(((lineDirDeg - perp1) % 360 + 360) % 360);
+                if (d1 > 180) d1 = 360 - d1;
+                let d2 = Math.abs(((lineDirDeg - perp2) % 360 + 360) % 360);
+                if (d2 > 180) d2 = 360 - d2;
+                lineDirDeg  = d1 < d2 ? perp1 : perp2;
+                angleWithOA = 90;
+            }
+
+            elR.textContent     = r.toFixed(2);
+            elAngle.textContent = angleWithOA.toFixed(1);
+
+            if (isTangent) {
+                elPerp.innerHTML = _lang()==='en'?'<span style="color:#27ae60;font-weight:bold">Line ⊥ OA ✓</span>':'<span style="color:#27ae60;font-weight:bold">直线 ⊥ OA ✓</span>';
+                elConclude.innerHTML = _lang()==='en'?'<span style="color:#27ae60">Line ⊥ radius OA → tangent to ⊙O, A is the tangent point</span>':'<span style="color:#27ae60">直线垂直于半径 OA，直线是⊙O的切线，A 为切点</span>';
+            } else {
+                elPerp.innerHTML = _lang()==='en'?'<span style="color:#e67e22">Line is not ⊥ to OA</span>':'<span style="color:#e67e22">直线与 OA 不垂直</span>';
+                elConclude.innerHTML = _lang()==='en'?'<span style="color:#e67e22">Line not ⊥ to OA → not a tangent</span>':'<span style="color:#e67e22">直线与 OA 不垂直，直线不是⊙O的切线</span>';
+            }
+
+            drawCanvas(r, oaDirDeg, isTangent, angleWithOA);
+        }
+
+        function drawCanvas(r, oaDirDeg, isTangent, angleWithOA) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const lineColor = isTangent ? '#27ae60' : '#e67e22';
+
+            // 圆（半径 = OA）
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, 0, 2 * Math.PI);
+            ctx.strokeStyle = _fg()==='#ffffff'?'#666':'#bbb';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 延伸直线
+            const [ep1, ep2] = extendLine(pA, lineDirDeg, canvas.width, canvas.height);
+            ctx.beginPath();
+            ctx.moveTo(ep1.x, ep1.y); ctx.lineTo(ep2.x, ep2.y);
+            ctx.strokeStyle = lineColor; ctx.lineWidth = 2; ctx.stroke();
+
+            // 半径 OA
+            ctx.beginPath();
+            ctx.moveTo(cx, cy); ctx.lineTo(pA.x, pA.y);
+            ctx.strokeStyle = _fg(); ctx.lineWidth = 1.8; ctx.stroke();
+
+            if (isTangent) {
+                // 直角标记：从A指向O的方向 和 直线方向
+                drawRightAngle(pA, oaDirDeg + 180, lineDirDeg, 12, '#27ae60');
+            } else {
+                // 夹角弧：始终画锐角侧（0~90°）
+                // 两个方向：A→O 方向，以及直线方向（取与A→O夹角为锐角的那个）
+                const oaBack = oaDirDeg + 180; // A→O 方向（度）
+
+                // 直线方向单位向量
+                const lx = Math.cos(d2r(lineDirDeg)), ly = Math.sin(d2r(lineDirDeg));
+                // A→O 方向单位向量
+                const ox = Math.cos(d2r(oaBack)), oy = Math.sin(d2r(oaBack));
+                // 选点积 >= 0 的直线方向（即夹角 <= 90°）
+                const dp = lx * ox + ly * oy;
+                const chosenDirDeg = dp >= 0 ? lineDirDeg : lineDirDeg + 180;
+
+                // 用 atan2 得到有符号角度差（-π ~ π），绝对值即为锐角弧度
+                const startRad = d2r(oaBack);
+                const endRad   = d2r(chosenDirDeg);
+                const signedDiff = Math.atan2(
+                    Math.sin(endRad - startRad),
+                    Math.cos(endRad - startRad)
+                ); // 范围 -π~π，绝对值 <= π/2
+
+                // 只有 |signedDiff| > 0.01 rad 才画弧，避免极小角退化
+                if (Math.abs(signedDiff) > 0.01) {
+                    const ccw = signedDiff < 0;
+                    ctx.beginPath();
+                    ctx.arc(pA.x, pA.y, 20, startRad, endRad, ccw);
+                    ctx.strokeStyle = '#e67e22';
+                    ctx.lineWidth = 1.5;
+                    ctx.stroke();
+                }
+
+                // 角度标注：始终显示，位置在弧中间方向
+                const midRad = startRad + signedDiff / 2;
+                const tx = pA.x + Math.cos(midRad) * 36;
+                const ty = pA.y + Math.sin(midRad) * 36;
+                ctx.fillStyle = '#e67e22';
+                ctx.font = '12px sans-serif';
+                ctx.fillText(angleWithOA.toFixed(1) + '°', tx - 12, ty + 4);
+            }
+
+            // 圆心 O
+            ctx.beginPath();
+            ctx.arc(cx, cy, 4, 0, 2 * Math.PI);
+            ctx.fillStyle = _fg(); ctx.fill();
+            ctx.font = '14px sans-serif'; ctx.fillStyle = _fg();
+            ctx.fillText('O', cx - 15, cy - 8);
+
+            // A 点
+            ctx.beginPath();
+            ctx.arc(pA.x, pA.y, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = isTangent ? '#27ae60' : '#e74c3c'; ctx.fill();
+            ctx.fillStyle = _fg();
+            const dxA = pA.x - cx, dyA = pA.y - cy;
+            const lenA = Math.hypot(dxA, dyA);
+            ctx.fillText('A', pA.x + (dxA / lenA) * 14, pA.y + (dyA / lenA) * 14);
+
+            // B 点（直线旋转手柄）
+            const bHandle = {
+                x: pA.x + Math.cos(d2r(lineDirDeg)) * 80,
+                y: pA.y + Math.sin(d2r(lineDirDeg)) * 80
+            };
+            ctx.beginPath();
+            ctx.arc(bHandle.x, bHandle.y, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = lineColor; ctx.fill();
+            ctx.fillStyle = _fg();
+            ctx.fillText('B', bHandle.x + 8, bHandle.y - 6);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (canvas.width / rect.width),
+                y: (e.clientY - rect.top)  * (canvas.height / rect.height)
+            };
+        }
+
+        function getBHandlePos() {
+            return {
+                x: pA.x + Math.cos(d2r(lineDirDeg)) * 80,
+                y: pA.y + Math.sin(d2r(lineDirDeg)) * 80
+            };
+        }
+
+        canvas.addEventListener('mousedown', function (e) {
+            const m = getMousePos(e);
+            const bH = getBHandlePos();
+            if (Math.hypot(m.x - pA.x, m.y - pA.y) < 15) {
+                dragging = true; dragTarget = 'A'; return;
+            }
+            if (Math.hypot(m.x - bH.x, m.y - bH.y) < 15) {
+                dragging = true; dragTarget = 'B';
+                dragStartMouse = m; dragStartDir = lineDirDeg; return;
+            }
+        });
+
+        window.addEventListener('mousemove', function (e) {
+            if (!dragging) return;
+            const m = getMousePos(e);
+            if (dragTarget === 'A') {
+                pA = { x: m.x, y: m.y };
+            } else if (dragTarget === 'B') {
+                const prevAng = r2d(Math.atan2(dragStartMouse.y - pA.y, dragStartMouse.x - pA.x));
+                const currAng = r2d(Math.atan2(m.y - pA.y, m.x - pA.x));
+                lineDirDeg = dragStartDir + (currAng - prevAng);
+            }
+            update();
+        });
+
+        window.addEventListener('mouseup',    () => { dragging = false; dragTarget = null; });
+        canvas.addEventListener('mouseleave', () => { dragging = false; dragTarget = null; });
+
+        update();
+        window._clRedraw = function(){ update(); };
+    })();
+    </script>
+
+<script>
+(function(){
+    window._CL = { lang:'zh', theme:'light' };
+
+    function applyLang(lang){
+        window._CL.lang = lang;
+        document.querySelectorAll('.zh-text').forEach(function(el){ el.style.display = lang==='zh'?'inline':'none'; });
+        document.querySelectorAll('.en-text').forEach(function(el){ el.style.display = lang==='en'?'inline':'none'; });
+        document.querySelectorAll('.zh-block').forEach(function(el){ el.style.display = lang==='zh'?'block':'none'; });
+        document.querySelectorAll('.en-block').forEach(function(el){ el.style.display = lang==='en'?'block':'none'; });
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    function applyTheme(theme){
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev){
+        if(!ev.data || ev.data._src!=='circlelab') return;
+        if(ev.data.lang)  applyLang(ev.data.lang);
+        if(ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        try{ if(window.parent._CL_lang)  applyLang(window.parent._CL_lang); }catch(e){}
+        try{ if(window.parent._CL_theme) applyTheme(window.parent._CL_theme); }catch(e){}
+    });
+})();
+</script>
+
+</body>
+</html>
