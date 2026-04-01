@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圆的方程</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; margin: 0; }
+        canvas { display: block; margin: 0 auto; }
+        .descriptions { margin-top: 14px; line-height: 2.4; font-size: 1em; }
+        .equation-box {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 24px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--fg);
+            transition: border-color .2s;
+        }
+
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; --border:#d0ccc6; --grid:#e8e4dc; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; --border:#444; --grid:#2a2a2a; }
+        html,body { background:var(--bg)!important; color:var(--fg)!important; transition:background .2s,color .2s; }
+        canvas { background:var(--bg)!important; }
+        h3 { color:var(--fg); margin:12px 0 4px; }
+
+        .zh-text { display:inline; }
+        .en-text { display:none; }
+    </style>
+</head>
+<body>
+    <h3><span class="zh-text">圆的方程</span><span class="en-text">Standard Equation of a Circle</span></h3>
+
+    <div>
+        <canvas id="circleCanvas" width="620" height="460"
+                style="border:1px solid #ffffff; background:#ffffff;"></canvas>
+    </div>
+
+    <div class="descriptions">
+        <span class="zh-text">圆心 O = (</span><span class="en-text">Center O = (</span><span id="vA">0.0</span>, <span id="vB">0.0</span>)
+        &nbsp;&nbsp;
+        <span class="zh-text">半径 r = </span><span class="en-text">Radius r = </span><span id="vR">0.0</span>
+        &nbsp;&nbsp;
+        <span class="zh-text">点 P = (</span><span class="en-text">Point P = (</span><span id="vPx">0.0</span>, <span id="vPy">0.0</span>)
+        <br>
+        <span class="zh-text">|OP|² = </span><span class="en-text">|OP|² = </span><span id="vOP2">0.0</span>
+        &nbsp;&nbsp;
+        r² = <span id="vR2">0.0</span>
+        &nbsp;&nbsp;
+        <span id="pointStatus">—</span>
+    </div>
+
+    <div class="equation-box" id="eqBox">—</div>
+
+    <script>
+    (function () {
+        function _fg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000'; }
+        function _bg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#000000' : '#ffffff'; }
+        function _grid() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#2a2a2a' : '#f0ede6'; }
+        function _lang() { return (window._CL && window._CL.lang) || 'zh'; }
+
+        const canvas = document.getElementById('circleCanvas');
+        const ctx    = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+
+        // 坐标系原点在画布中央，1单位 = SCALE 像素
+        const SCALE = 40;
+        const OX = W / 2, OY = H / 2; // 画布中心 = 坐标原点
+
+        // 圆心 O（坐标系单位），可拖动
+        let oa = 1.5, ob = -1.0; // (a, b)
+        // 圆上一点 A，决定半径，可拖动
+        let aAngle = 30; // 度
+        let aRadius = 3.0; // 单位
+        // 探测点 P，可拖动（初始在圆外）
+        let Px = 5.0, Py = 1.5;
+
+        let dragging = false, dragTarget = null;
+
+        function d2r(d) { return d * Math.PI / 180; }
+        function r2d(r) { return r * 180 / Math.PI; }
+
+        // 坐标系 → 画布
+        function toCanvas(x, y) {
+            return { x: OX + x * SCALE, y: OY - y * SCALE };
+        }
+        // 画布 → 坐标系
+        function toCoord(cx, cy) {
+            return { x: (cx - OX) / SCALE, y: -(cy - OY) / SCALE };
+        }
+
+        // 圆上点 A 的画布坐标
+        function getA() {
+            const ax = oa + aRadius * Math.cos(d2r(aAngle));
+            const ay = ob + aRadius * Math.sin(d2r(aAngle));
+            return toCanvas(ax, ay);
+        }
+
+        // 格式化坐标（保留1位小数）
+        function fmt(v) {
+            const r = Math.round(v * 2) / 2; // 吸附到0.5
+            return r % 1 === 0 ? r.toFixed(0) : r.toFixed(1);
+        }
+
+        function update() {
+            const r = aRadius;
+            const pA = toCanvas(oa, ob);
+            const pP = toCanvas(Px, Py);
+
+            const op2 = (Px - oa) ** 2 + (Py - ob) ** 2;
+            const r2  = r * r;
+            const tol = 0.15;
+            const inside = op2 < r2 - tol;
+            const onCircle = Math.abs(op2 - r2) <= tol;
+
+            document.getElementById('vA').textContent  = fmt(oa);
+            document.getElementById('vB').textContent  = fmt(ob);
+            document.getElementById('vR').textContent  = r.toFixed(2);
+            document.getElementById('vPx').textContent = fmt(Px);
+            document.getElementById('vPy').textContent = fmt(Py);
+            document.getElementById('vOP2').textContent = op2.toFixed(2);
+            document.getElementById('vR2').textContent  = r2.toFixed(2);
+
+            const green = '#27ae60', orange = '#e67e22', blue = '#2980b9';
+            let statusZh, statusEn, statusColor;
+            if (onCircle) {
+                statusZh = '|OP|² = r²，P 在圆上';
+                statusEn = '|OP|² = r², P is on the circle';
+                statusColor = green;
+            } else if (inside) {
+                statusZh = '|OP|² < r²，P 在圆内';
+                statusEn = '|OP|² < r², P is inside the circle';
+                statusColor = blue;
+            } else {
+                statusZh = '|OP|² > r²，P 在圆外';
+                statusEn = '|OP|² > r², P is outside the circle';
+                statusColor = orange;
+            }
+            document.getElementById('pointStatus').innerHTML =
+                `<span style="color:${statusColor}">${_lang()==='zh' ? statusZh : statusEn}</span>`;
+
+            // 方程式
+            const aStr = oa === 0 ? 'x' : (oa > 0 ? `(x − ${fmt(oa)})` : `(x + ${fmt(-oa)})`);
+            const bStr = ob === 0 ? 'y' : (ob > 0 ? `(y − ${fmt(ob)})` : `(y + ${fmt(-ob)})`);
+            document.getElementById('eqBox').textContent =
+                `${aStr}² + ${bStr}² = ${r2.toFixed(2)}`;
+
+            drawCanvas(r, r2, onCircle, inside, statusColor);
+        }
+
+        function drawCanvas(r, r2, onCircle, inside, pColor) {
+            ctx.clearRect(0, 0, W, H);
+
+            // 网格
+            ctx.strokeStyle = _grid();
+            ctx.lineWidth = 1;
+            for (let gx = OX % SCALE; gx < W; gx += SCALE) {
+                ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+            }
+            for (let gy = OY % SCALE; gy < H; gy += SCALE) {
+                ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+            }
+
+            // 坐标轴
+            const axisColor = _fg() === '#ffffff' ? '#888' : '#aaa';
+            ctx.strokeStyle = axisColor; ctx.lineWidth = 1.2;
+            ctx.beginPath(); ctx.moveTo(0, OY); ctx.lineTo(W, OY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(OX, 0); ctx.lineTo(OX, H); ctx.stroke();
+
+            // 轴箭头
+            ctx.fillStyle = axisColor;
+            ctx.beginPath(); ctx.moveTo(W-2, OY); ctx.lineTo(W-10, OY-5); ctx.lineTo(W-10, OY+5); ctx.fill();
+            ctx.beginPath(); ctx.moveTo(OX, 2); ctx.lineTo(OX-5, 10); ctx.lineTo(OX+5, 10); ctx.fill();
+
+            // 轴标签
+            ctx.fillStyle = axisColor; ctx.font = '13px sans-serif';
+            ctx.fillText('x', W - 14, OY - 8);
+            ctx.fillText('y', OX + 8, 14);
+            ctx.fillText('O', OX + 5, OY + 14);
+
+            // 刻度数字
+            ctx.fillStyle = _fg() === '#ffffff' ? '#666' : '#999';
+            ctx.font = '11px sans-serif';
+            for (let i = -Math.floor(OX/SCALE); i <= Math.floor((W-OX)/SCALE); i++) {
+                if (i === 0) continue;
+                const px = OX + i * SCALE;
+                ctx.fillText(i, px - 5, OY + 14);
+            }
+            for (let j = -Math.floor(OY/SCALE); j <= Math.floor((H-OY)/SCALE); j++) {
+                if (j === 0) continue;
+                const py = OY - j * SCALE;
+                ctx.fillText(j, OX + 5, py + 4);
+            }
+
+            const pO = toCanvas(oa, ob); // 圆心画布坐标
+            const rPx = r * SCALE;        // 半径像素
+
+            // 圆
+            ctx.beginPath();
+            ctx.arc(pO.x, pO.y, rPx, 0, 2 * Math.PI);
+            ctx.strokeStyle = '#e74c3c';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.fillStyle = 'rgba(231,76,60,0.06)';
+            ctx.fill();
+
+            // 半径线
+            const pA = getA();
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pA.x, pA.y);
+            ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+            // OP 连线（到探测点）
+            const pP = toCanvas(Px, Py);
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pP.x, pP.y);
+            ctx.strokeStyle = pColor; ctx.lineWidth = 1.2;
+            ctx.setLineDash([4, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+            // 圆心到 x 轴、y 轴的投影虚线（帮助读坐标）
+            ctx.strokeStyle = _fg() === '#ffffff' ? '#555' : '#ccc';
+            ctx.lineWidth = 1; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(pO.x, OY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pO.x, pO.y); ctx.lineTo(OX, pO.y); ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 半径标注
+            const mx = (pO.x + pA.x) / 2, my = (pO.y + pA.y) / 2;
+            ctx.fillStyle = '#e74c3c'; ctx.font = '12px sans-serif';
+            ctx.fillText(`r=${r.toFixed(1)}`, mx + 6, my - 4);
+
+            // 圆心 O
+            ctx.beginPath(); ctx.arc(pO.x, pO.y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = '#e74c3c'; ctx.fill();
+            ctx.fillStyle = _fg(); ctx.font = '13px sans-serif';
+            ctx.fillText(`(${fmt(oa)}, ${fmt(ob)})`, pO.x + 8, pO.y - 8);
+
+            // 圆上点 A
+            ctx.beginPath(); ctx.arc(pA.x, pA.y, 5, 0, 2 * Math.PI);
+            ctx.fillStyle = '#e74c3c'; ctx.fill();
+
+            // 探测点 P
+            ctx.beginPath(); ctx.arc(pP.x, pP.y, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = pColor; ctx.fill();
+            ctx.fillStyle = _fg(); ctx.font = '13px sans-serif';
+            ctx.fillText(`P(${fmt(Px)}, ${fmt(Py)})`, pP.x + 8, pP.y - 8);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                cx: (e.clientX - rect.left) * (W / rect.width),
+                cy: (e.clientY - rect.top)  * (H / rect.height)
+            };
+        }
+
+        // 吸附到0.5单位网格
+        function snap(v) { return Math.round(v * 2) / 2; }
+
+        canvas.addEventListener('mousedown', function(e) {
+            const { cx: mx, cy: my } = getMousePos(e);
+            const pO = toCanvas(oa, ob);
+            const pA = getA();
+            const pP = toCanvas(Px, Py);
+
+            if (Math.hypot(mx - pO.x, my - pO.y) < 14) { dragging=true; dragTarget='O'; return; }
+            if (Math.hypot(mx - pA.x, my - pA.y) < 14) { dragging=true; dragTarget='A'; return; }
+            if (Math.hypot(mx - pP.x, my - pP.y) < 14) { dragging=true; dragTarget='P'; return; }
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            if (!dragging) return;
+            const { cx: mx, cy: my } = getMousePos(e);
+            const coord = toCoord(mx, my);
+
+            if (dragTarget === 'O') {
+                oa = snap(coord.x);
+                ob = snap(coord.y);
+            } else if (dragTarget === 'A') {
+                // A 决定半径：距离圆心的距离
+                const dx = coord.x - oa, dy = coord.y - ob;
+                aRadius = Math.max(0.5, Math.hypot(dx, dy));
+                aAngle  = r2d(Math.atan2(dy, dx));
+            } else if (dragTarget === 'P') {
+                Px = snap(coord.x);
+                Py = snap(coord.y);
+            }
+            update();
+        });
+
+        window.addEventListener('mouseup',    () => { dragging=false; dragTarget=null; });
+        canvas.addEventListener('mouseleave', () => { dragging=false; dragTarget=null; });
+
+        update();
+        window._clRedraw = function() { update(); };
+    })();
+    </script>
+
+<script>
+(function(){
+    window._CL = { lang:'zh', theme:'light' };
+
+    function applyLang(lang){
+        window._CL.lang = lang;
+        document.querySelectorAll('.zh-text').forEach(function(el){ el.style.display = lang==='zh'?'inline':'none'; });
+        document.querySelectorAll('.en-text').forEach(function(el){ el.style.display = lang==='en'?'inline':'none'; });
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    function applyTheme(theme){
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev){
+        if(!ev.data || ev.data._src!=='circlelab') return;
+        if(ev.data.lang)  applyLang(ev.data.lang);
+        if(ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        try{ if(window.parent._CL_lang)  applyLang(window.parent._CL_lang); }catch(e){}
+        try{ if(window.parent._CL_theme) applyTheme(window.parent._CL_theme); }catch(e){}
+    });
+})();
+</script>
+
+</body>
+</html>
