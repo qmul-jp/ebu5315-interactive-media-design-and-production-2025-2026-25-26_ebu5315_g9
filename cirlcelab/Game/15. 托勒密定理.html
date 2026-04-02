@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>托勒密定理</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; margin: 0; }
+        canvas { display: block; margin: 0 auto; }
+        .descriptions { margin-top: 14px; line-height: 2.6; font-size: 1em; }
+        .conclusion { font-weight: bold; margin-top: 8px; font-size: 1.1em; min-height: 1.6em; }
+
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; --border:#e0ddd8; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; --border:#333; }
+        html,body { background:var(--bg)!important; color:var(--fg)!important; transition:background .2s,color .2s; }
+        canvas { background:var(--bg)!important; }
+        h3 { color:var(--fg); margin:12px 0 6px; }
+
+        .zh-text { display:inline; }
+        .en-text { display:none; }
+    </style>
+</head>
+<body>
+    <h3><span class="zh-text">托勒密定理</span><span class="en-text">Ptolemy's Theorem</span></h3>
+
+    <div>
+        <canvas id="circleCanvas" width="620" height="460"
+                style="border:1px solid #ffffff; background:#ffffff;"></canvas>
+    </div>
+
+    <div class="descriptions">
+        <span class="zh-text">对角线：</span><span class="en-text">Diagonals: </span>
+        AC = <span id="vAC">0.00</span> &nbsp;
+        BD = <span id="vBD">0.00</span> &nbsp;
+        AC · BD = <span id="vProd">0.00</span><br>
+
+        <span class="zh-text">对边之积：</span><span class="en-text">Products of opposite sides: </span>
+        AB · CD = <span id="vABCD">0.00</span> &nbsp;+&nbsp;
+        AD · BC = <span id="vADBC">0.00</span> &nbsp;=&nbsp;
+        <span id="vSum">0.00</span><br>
+
+        <span id="equalStatus">—</span>
+    </div>
+
+    <div class="conclusion">
+        <span class="zh-text">AC · BD = AB · CD + AD · BC</span>
+        <span class="en-text">AC · BD = AB · CD + AD · BC</span>
+    </div>
+
+    <script>
+    (function () {
+        function _fg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000'; }
+        function _bg() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#000000' : '#ffffff'; }
+        function _lang() { return (window._CL && window._CL.lang) || 'zh'; }
+
+        const canvas = document.getElementById('circleCanvas');
+        const ctx    = canvas.getContext('2d');
+
+        const cx = 300, cy = 230, radius = 175;
+
+        // 四点初始角度（顺序很重要：ABCD 按圆上顺序排列）
+        let angA = 20, angB = 100, angC = 200, angD = 310;
+
+        const SNAP = 5; // 吸附阈值
+
+        let dragging = false, dragTarget = null;
+
+        function d2r(d) { return d * Math.PI / 180; }
+        function r2d(r) { return r * 180 / Math.PI; }
+
+        function pt(deg) {
+            return { x: cx + radius * Math.cos(d2r(deg)), y: cy + radius * Math.sin(d2r(deg)) };
+        }
+
+        function dist(p, q) { return Math.hypot(p.x - q.x, p.y - q.y); }
+
+        // 标注线段长度（在中点旁）
+        function labelSeg(p1, p2, text, color, side) {
+            const mx = (p1.x + p2.x) / 2;
+            const my = (p1.y + p2.y) / 2;
+            const dx = p2.x - p1.x, dy = p2.y - p1.y;
+            const len = Math.hypot(dx, dy);
+            // 垂直偏移方向
+            const nx = -dy / len * (side || 14);
+            const ny =  dx / len * (side || 14);
+            ctx.fillStyle = color;
+            ctx.font = '12px sans-serif';
+            ctx.fillText(text, mx + nx, my + ny);
+        }
+
+        function update() {
+            // 确保四点按角度顺序排列（避免自交四边形）
+            const angles = [angA, angB, angC, angD];
+            angles.sort((a, b) => ((a % 360 + 360) % 360) - ((b % 360 + 360) % 360));
+            [angA, angB, angC, angD] = angles;
+
+            const pA = pt(angA), pB = pt(angB), pC = pt(angC), pD = pt(angD);
+
+            const AC = dist(pA, pC), BD = dist(pB, pD);
+            const AB = dist(pA, pB), CD = dist(pC, pD);
+            const AD = dist(pA, pD), BC = dist(pB, pC);
+
+            const prod   = AC * BD;
+            const abcd   = AB * CD;
+            const adbc   = AD * BC;
+            const sum    = abcd + adbc;
+            const isEqual = Math.abs(prod - sum) < 1.0;
+
+            document.getElementById('vAC').textContent   = AC.toFixed(2);
+            document.getElementById('vBD').textContent   = BD.toFixed(2);
+            document.getElementById('vProd').textContent = prod.toFixed(2);
+            document.getElementById('vABCD').textContent = abcd.toFixed(2);
+            document.getElementById('vADBC').textContent = adbc.toFixed(2);
+            document.getElementById('vSum').textContent  = sum.toFixed(2);
+
+            const green = '#27ae60', orange = '#e67e22';
+            document.getElementById('equalStatus').innerHTML = isEqual
+                ? `<span style="color:${green}">${_lang()==='zh' ? 'AC·BD = AB·CD + AD·BC ✓' : 'AC·BD = AB·CD + AD·BC ✓'}</span>`
+                : `<span style="color:${orange}">${_lang()==='zh' ? '四点不在同一圆上时不成立' : 'Does not hold when points are not concyclic'}</span>`;
+
+            drawCanvas(pA, pB, pC, pD, AC, BD, AB, CD, AD, BC, isEqual);
+        }
+
+        function drawCanvas(pA, pB, pC, pD, AC, BD, AB, CD, AD, BC, isEqual) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const circleStroke = _fg() === '#ffffff' ? '#666' : '#bbb';
+            const diagColor1 = '#8e44ad'; // 对角线 AC
+            const diagColor2 = '#e67e22'; // 对角线 BD
+            const side1Color = '#e74c3c'; // 边 AB、CD（对边组1）
+            const side2Color = '#2980b9'; // 边 AD、BC（对边组2）
+            const green = '#27ae60';
+
+            // 圆
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = circleStroke;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 四边形填充
+            ctx.beginPath();
+            ctx.moveTo(pA.x, pA.y);
+            ctx.lineTo(pB.x, pB.y);
+            ctx.lineTo(pC.x, pC.y);
+            ctx.lineTo(pD.x, pD.y);
+            ctx.closePath();
+            ctx.fillStyle = _bg();
+            ctx.fill();
+
+            // 对角线（虚线）
+            ctx.setLineDash([6, 3]);
+            ctx.lineWidth = 1.8;
+            ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pC.x, pC.y);
+            ctx.strokeStyle = diagColor1; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pB.x, pB.y); ctx.lineTo(pD.x, pD.y);
+            ctx.strokeStyle = diagColor2; ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 对边组1：AB、CD（红色）
+            ctx.lineWidth = 2.2;
+            ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pB.x, pB.y);
+            ctx.strokeStyle = side1Color; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pC.x, pC.y); ctx.lineTo(pD.x, pD.y);
+            ctx.strokeStyle = side1Color; ctx.stroke();
+
+            // 对边组2：AD、BC（蓝色）
+            ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pD.x, pD.y);
+            ctx.strokeStyle = side2Color; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pB.x, pB.y); ctx.lineTo(pC.x, pC.y);
+            ctx.strokeStyle = side2Color; ctx.stroke();
+
+            // 标注线段长度
+            labelSeg(pA, pC, `AC=${AC.toFixed(1)}`, diagColor1, -16);
+            labelSeg(pB, pD, `BD=${BD.toFixed(1)}`, diagColor2,  16);
+            labelSeg(pA, pB, `AB=${AB.toFixed(1)}`, side1Color, -14);
+            labelSeg(pC, pD, `CD=${CD.toFixed(1)}`, side1Color, -14);
+            labelSeg(pA, pD, `AD=${AD.toFixed(1)}`, side2Color,  14);
+            labelSeg(pB, pC, `BC=${BC.toFixed(1)}`, side2Color,  14);
+
+            // 四个顶点
+            const pts = [
+                { p:pA, l:'A', ang:angA },
+                { p:pB, l:'B', ang:angB },
+                { p:pC, l:'C', ang:angC },
+                { p:pD, l:'D', ang:angD },
+            ];
+            pts.forEach(({ p, l, ang }) => {
+                ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, 2*Math.PI);
+                ctx.fillStyle = isEqual ? green : '#e74c3c';
+                ctx.fill();
+                const ddx = p.x - cx, ddy = p.y - cy;
+                const ll = Math.hypot(ddx, ddy);
+                ctx.fillStyle = _fg(); ctx.font = '14px sans-serif';
+                ctx.fillText(l, p.x + (ddx/ll)*15, p.y + (ddy/ll)*15);
+            });
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                x: (e.clientX - rect.left) * (canvas.width / rect.width),
+                y: (e.clientY - rect.top)  * (canvas.height / rect.height)
+            };
+        }
+
+        canvas.addEventListener('mousedown', function(e) {
+            const m = getMousePos(e);
+            const map = [
+                { t:'A', p:pt(angA) }, { t:'B', p:pt(angB) },
+                { t:'C', p:pt(angC) }, { t:'D', p:pt(angD) },
+            ];
+            for (const { t, p } of map) {
+                if (Math.hypot(m.x - p.x, m.y - p.y) < 15) {
+                    dragging = true; dragTarget = t; return;
+                }
+            }
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            if (!dragging) return;
+            const m = getMousePos(e);
+            const deg = r2d(Math.atan2(m.y - cy, m.x - cx));
+            if      (dragTarget === 'A') angA = deg;
+            else if (dragTarget === 'B') angB = deg;
+            else if (dragTarget === 'C') angC = deg;
+            else if (dragTarget === 'D') angD = deg;
+            update();
+        });
+
+        window.addEventListener('mouseup',    () => { dragging = false; dragTarget = null; });
+        canvas.addEventListener('mouseleave', () => { dragging = false; dragTarget = null; });
+
+        update();
+        window._clRedraw = function() { update(); };
+    })();
+    </script>
+
+<script>
+(function(){
+    window._CL = { lang:'zh', theme:'light' };
+
+    function applyLang(lang){
+        window._CL.lang = lang;
+        document.querySelectorAll('.zh-text').forEach(function(el){ el.style.display = lang==='zh'?'inline':'none'; });
+        document.querySelectorAll('.en-text').forEach(function(el){ el.style.display = lang==='en'?'inline':'none'; });
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    function applyTheme(theme){
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev){
+        if(!ev.data || ev.data._src!=='circlelab') return;
+        if(ev.data.lang)  applyLang(ev.data.lang);
+        if(ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        try{ if(window.parent._CL_lang)  applyLang(window.parent._CL_lang); }catch(e){}
+        try{ if(window.parent._CL_theme) applyTheme(window.parent._CL_theme); }catch(e){}
+    });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圆的基本定义</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: sans-serif;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ffffff;
+            background: #ffffff;
+        }
+        .descriptions {
+            margin-top: 16px;
+            line-height: 2.0;
+        }
+        .theorem {
+            font-weight: bold;
+            margin-top: 12px;
+            font-size: 1.1em;
+        }
+    
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; }
+        html,body {
+            background: var(--bg) !important;
+            color: var(--fg) !important;
+            transition: background .2s, color .2s;
+        }
+        h3 { color: var(--fg); }
+
+        canvas { background: var(--bg) !important; }
+
+    </style>
+</head>
+<body>
+    <div data-cl-zh><h3>圆的基本定义</h3></div><div data-cl-en style="display:none"><h3>Basic Definition of a Circle</h3></div>
+
+    <div>
+        <canvas id="circleCanvas" width="600" height="500"></canvas>
+    </div>
+
+<div data-cl-zh><div class="descriptions">O 是⊙O的圆心<br>OA 是⊙O的一条半径<br>AB 是⊙O的一条直径</div></div><div data-cl-en style="display:none"><div class="descriptions">O is the center of ⊙O<br>OA is a radius of ⊙O<br>AB is a diameter of ⊙O</div></div>
+
+<div data-cl-zh><div class="theorem">圆是平面上到定点（圆心）距离等于定长（半径）的所有点的集合</div></div><div data-cl-en style="display:none"><div class="theorem">A circle is the set of all points in a plane equidistant from a fixed center point.</div></div>
+
+    <script>
+        (function () {
+
+            /* 主题色辅助 */
+            function _fg() { return document.documentElement.getAttribute('data-theme')==='dark' ? '#ffffff' : '#000000'; }
+            function _bg() { return document.documentElement.getAttribute('data-theme')==='dark' ? '#000000' : '#ffffff'; }
+
+            const canvas = document.getElementById('circleCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // O 为圆心，初始位置在画布中央；A 为圆上一点，决定半径大小和方向
+            let O = { x: 300, y: 250 };
+            let angleA = -30; // A 点相对于 O 的角度（度）
+            let radius = 150; // 初始半径（即 |OA|），由 O 和 A 的距离决定
+
+            // 拖拽状态
+            let dragging = false;
+            let dragTarget = null; // 'O' 或 'A'
+
+            // 根据 O、angleA、radius 计算 A 的坐标
+            function getA() {
+                const rad = angleA * Math.PI / 180;
+                return {
+                    x: O.x + radius * Math.cos(rad),
+                    y: O.y + radius * Math.sin(rad)
+                };
+            }
+
+            // B 是 A 关于 O 的对称点（直径另一端）
+            function getB(pA) {
+                return {
+                    x: 2 * O.x - pA.x,
+                    y: 2 * O.y - pA.y
+                };
+            }
+
+            function drawCanvas() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                const pA = getA();
+                const pB = getB(pA);
+
+                // 画圆
+                ctx.beginPath();
+                ctx.arc(O.x, O.y, radius, 0, 2 * Math.PI);
+                ctx.strokeStyle = _fg();
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // 画直径 AB（实线）
+                ctx.beginPath();
+                ctx.moveTo(pA.x, pA.y);
+                ctx.lineTo(pB.x, pB.y);
+                ctx.strokeStyle = _fg();
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // 画半径 OA（用不同颜色区分）
+                ctx.beginPath();
+                ctx.moveTo(O.x, O.y);
+                ctx.lineTo(pA.x, pA.y);
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // 画圆心 O
+                ctx.beginPath();
+                ctx.arc(O.x, O.y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = _fg();
+                ctx.fill();
+                ctx.fillStyle = _fg();
+                ctx.font = '14px sans-serif';
+                ctx.fillText('O', O.x - 16, O.y - 8);
+
+                // 画点 A（红色，可拖动）
+                ctx.beginPath();
+                ctx.arc(pA.x, pA.y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.fillStyle = _fg();
+                ctx.fillText('A', pA.x + 8, pA.y - 8);
+
+                // 画点 B（蓝色）
+                ctx.beginPath();
+                ctx.arc(pB.x, pB.y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = 'blue';
+                ctx.fill();
+                ctx.fillStyle = _fg();
+                ctx.fillText('B', pB.x + 8, pB.y - 8);
+            }
+
+            // --- 鼠标事件 ---
+            function getMousePos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                return {
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top) * scaleY
+                };
+            }
+
+            canvas.addEventListener('mousedown', function (e) {
+                const m = getMousePos(e);
+                const pA = getA();
+
+                const distO = Math.hypot(m.x - O.x, m.y - O.y);
+                const distA = Math.hypot(m.x - pA.x, m.y - pA.y);
+
+                const threshold = 15;
+                if (distO < threshold) {
+                    dragging = true;
+                    dragTarget = 'O';
+                } else if (distA < threshold) {
+                    dragging = true;
+                    dragTarget = 'A';
+                }
+            });
+
+            window.addEventListener('mousemove', function (e) {
+                if (!dragging) return;
+                const m = getMousePos(e);
+
+                if (dragTarget === 'O') {
+                    // 移动圆心 O，A 点随之平移（保持半径和角度不变）
+                    O.x = m.x;
+                    O.y = m.y;
+                } else if (dragTarget === 'A') {
+                    // 移动 A 点：重新计算半径和角度
+                    const dx = m.x - O.x;
+                    const dy = m.y - O.y;
+                    const r = Math.hypot(dx, dy);
+                    if (r > 10) { // 避免半径太小
+                        radius = r;
+                        angleA = Math.atan2(dy, dx) * 180 / Math.PI;
+                    }
+                }
+
+                drawCanvas();
+            });
+
+            window.addEventListener('mouseup', function () {
+                dragging = false;
+                dragTarget = null;
+            });
+
+            canvas.addEventListener('mouseleave', function () {
+                dragging = false;
+                dragTarget = null;
+            });
+
+            // 初始绘制
+            drawCanvas();
+        
+            // expose redraw for theme/lang
+            window._clRedraw = function(){ drawCanvas(); };
+
+        })();
+    </script>
+
+<script>
+/* === CircleLab bridge: 接收主界面的 postMessage === */
+(function(){
+    // 语言和主题状态
+    window._CL = { lang: 'zh', theme: 'light' };
+
+    function applyLang(lang) {
+        window._CL.lang = lang;
+        // 显示/隐藏双语块
+        document.querySelectorAll('[data-cl-zh]').forEach(function(el) {
+            el.style.display = lang === 'zh' ? '' : 'none';
+        });
+        document.querySelectorAll('[data-cl-en]').forEach(function(el) {
+            el.style.display = lang === 'en' ? '' : 'none';
+        });
+        // 重绘canvas（动态文字需要更新）
+        if (typeof _clRedraw === 'function') _clRedraw();
+    }
+
+    function applyTheme(theme) {
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        // 重绘canvas（颜色需要更新）
+        if (typeof _clRedraw === 'function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev) {
+        if (!ev.data || ev.data._src !== 'circlelab') return;
+        if (ev.data.lang)  applyLang(ev.data.lang);
+        if (ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    // 初始化：从父页面读取当前状态
+    window.addEventListener('DOMContentLoaded', function() {
+        try {
+            var p = window.parent;
+            if (p._CL_lang)  applyLang(p._CL_lang);
+            if (p._CL_theme) applyTheme(p._CL_theme);
+        } catch(e) {}
+        applyLang(window._CL.lang);
+        applyTheme(window._CL.theme);
+    });
+})();
+</script>
+
+</body>
+</html>
