@@ -617,7 +617,7 @@ body {
   border-radius: 10px;
   border: 1px solid color-mix(in oklch, white 18%, transparent);
   overflow: hidden;
-  background: color-mix(in oklch, var(--panel) 86%, black);
+  background: #ffffff;
   aspect-ratio: 1 / 1;
 }
 
@@ -635,22 +635,21 @@ body {
   );
 }
 
-.theorem-frame-center-fix .theorem-embed {
-  --theorem-embed-scale: 136.8%;
+.theorem-frame-zoom-01 .theorem-embed {
+  --theorem-embed-scale: 130%;
   --theorem-embed-shift-x: -30px;
-  --theorem-embed-shift-y: 10px;
 }
 
-.theorem-center-lock {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 78px;
-  height: 78px;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: transparent;
-  pointer-events: auto;
+.theorem-frame-zoom-02 .theorem-embed {
+  --theorem-embed-scale: 200%;
+  --theorem-embed-shift-x: 105px;
+  --theorem-embed-shift-y: 135px;
+}
+
+.theorem-frame-zoom-03 .theorem-embed {
+  --theorem-embed-scale: 200%;
+  --theorem-embed-shift-x: 105px;
+  --theorem-embed-shift-y: 135px;
 }
 
 .geo-focus {
