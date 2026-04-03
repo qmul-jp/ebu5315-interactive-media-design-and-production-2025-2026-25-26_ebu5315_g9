@@ -525,8 +525,13 @@ body {
 }
 
 .theorem-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   width: 2.2rem;
   height: 2.2rem;
+  padding: 0;
+  line-height: 1;
   border-radius: 10px;
   border: 1px solid color-mix(in oklch, white 24%, transparent);
   background: color-mix(in oklch, var(--chip) 72%, var(--panel));
@@ -538,6 +543,18 @@ body {
     background-color 200ms ease,
     border-color 200ms ease,
     transform 200ms ease;
+}
+
+.theorem-nav-btn svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
 }
 
 .theorem-nav-btn:hover,
@@ -650,6 +667,24 @@ body {
   --theorem-embed-scale: 200%;
   --theorem-embed-shift-x: 105px;
   --theorem-embed-shift-y: 135px;
+}
+
+.theorem-frame-zoom-04 .theorem-embed {
+  --theorem-embed-scale: 200%;
+  --theorem-embed-shift-x: 105px;
+  --theorem-embed-shift-y: 135px;
+}
+
+.theorem-frame-zoom-05 .theorem-embed {
+  --theorem-embed-scale: 160%;
+  --theorem-embed-shift-x: 65px;
+  --theorem-embed-shift-y: 90px;
+}
+
+.theorem-frame-zoom-06 .theorem-embed {
+  --theorem-embed-scale: 200%;
+  --theorem-embed-shift-x: -60px;
+  --theorem-embed-shift-y: 140px;
 }
 
 .geo-focus {
