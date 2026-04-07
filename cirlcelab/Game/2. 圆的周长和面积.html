@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圆的周长和面积</title>
+    <style>
+        body {
+            text-align: center;
+            font-family: sans-serif;
+        }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border: 1px solid #ffffff;
+            background: #ffffff;
+        }
+        .descriptions {
+            margin-top: 16px;
+            line-height: 2.2;
+        }
+        .theorem {
+            font-weight: bold;
+            margin-top: 12px;
+            font-size: 1.1em;
+        }
+        /* 上标样式，用于 r² 的平方 */
+        sup {
+            font-size: 0.75em;
+        }
+    
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; }
+        html,body { background:var(--bg)!important; color:var(--fg)!important; transition:background .2s,color .2s; }
+        canvas { background:var(--bg)!important; }
+        h3 { color:var(--fg); }
+        /* i18n: 只隐藏纯文字标签，数据span不复制 */
+        .zh-text { display:inline; }
+        .en-text { display:none; }
+        .zh-block { display:block; }
+        .en-block { display:none; }
+
+    </style>
+</head>
+<body>
+    <h3><span class="zh-text">圆的周长和面积</span><span class="en-text">Circumference &amp; Area</span></h3>
+
+    <div>
+        <canvas id="circleCanvas" width="600" height="500"></canvas>
+    </div>
+
+    <div class="descriptions">
+        <span class="zh-text">⊙O 的半径 = </span><span class="en-text">⊙O radius = </span><span id="valRadius">0.00</span> &nbsp;&nbsp;
+        <span class="zh-text">⊙O 的周长 = </span><span class="en-text">⊙O circumference = </span><span id="valCircumference">0.00</span><br>
+        <span class="zh-text">⊙O 的周长 / ⊙O 的半径 = </span><span class="en-text">Circumference / Radius = </span><span id="valRatioC">0.00</span> ≈ 2π<br>
+        <div class="theorem">
+            <span class="zh-text">圆的周长 C = 2πr</span><span class="en-text">Circumference C = 2πr</span>
+        </div>
+        <br>
+        <span class="zh-text">⊙O 的半径 = </span><span class="en-text">⊙O radius = </span><span id="valRadius2">0.00</span> &nbsp;&nbsp;
+        <span class="zh-text">⊙O 的面积 = </span><span class="en-text">⊙O area = </span><span id="valArea">0.00</span><br>
+        <span class="zh-text">⊙O 的面积 / ⊙O 的半径</span><span class="en-text">Area / Radius</span><sup>2</sup> = <span id="valRatioA">0.00</span> ≈ π
+        <div class="theorem">
+            <span class="zh-text">圆的面积 S = πr²</span><span class="en-text">Area S = πr²</span>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+
+            function _fg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#ffffff':'#000000'; }
+            function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#000000':'#ffffff'; }
+            function _lang(){ return (window._CL&&window._CL.lang)||'zh'; }
+
+            const canvas = document.getElementById('circleCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // 固定圆心 O 在画布中央
+            const O = { x: 300, y: 250 };
+            let angleA = -30;  // A 点相对于 O 的角度（度）
+            let radius = 150;  // 初始半径
+
+            // 显示元素
+            const spanRadius        = document.getElementById('valRadius');
+            const spanCircumference = document.getElementById('valCircumference');
+            const spanRatioC        = document.getElementById('valRatioC');
+            const spanRadius2       = document.getElementById('valRadius2');
+            const spanArea          = document.getElementById('valArea');
+            const spanRatioA        = document.getElementById('valRatioA');
+
+            // 拖拽状态
+            let dragging = false;
+
+            function getA() {
+                const rad = angleA * Math.PI / 180;
+                return {
+                    x: O.x + radius * Math.cos(rad),
+                    y: O.y + radius * Math.sin(rad)
+                };
+            }
+
+            function update() {
+                const pA = getA();
+
+                // 计算各值（半径单位为像素，保留2位小数）
+                const r = radius;
+                const C = 2 * Math.PI * r;
+                const S = Math.PI * r * r;
+                const ratioC = C / r;       // ≈ 2π ≈ 6.2832
+                const ratioA = S / (r * r); // ≈ π  ≈ 3.1416
+
+                spanRadius.textContent        = r.toFixed(2);
+                spanCircumference.textContent = C.toFixed(2);
+                spanRatioC.textContent        = ratioC.toFixed(4);
+                spanRadius2.textContent       = r.toFixed(2);
+                spanArea.textContent          = S.toFixed(2);
+                spanRatioA.textContent        = ratioA.toFixed(4);
+
+                drawCanvas(pA);
+            }
+
+            function drawCanvas(pA) {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // 画圆
+                ctx.beginPath();
+                ctx.arc(O.x, O.y, radius, 0, 2 * Math.PI);
+                ctx.strokeStyle = _fg();
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // 画半径 OA（红色）
+                ctx.beginPath();
+                ctx.moveTo(O.x, O.y);
+                ctx.lineTo(pA.x, pA.y);
+                ctx.strokeStyle = '#e74c3c';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                // 画圆心 O
+                ctx.beginPath();
+                ctx.arc(O.x, O.y, 5, 0, 2 * Math.PI);
+                ctx.fillStyle = _fg();
+                ctx.fill();
+                ctx.fillStyle = _fg();
+                ctx.font = '14px sans-serif';
+                ctx.fillText('O', O.x - 16, O.y - 8);
+
+                // 画点 A（红色，可拖动）
+                ctx.beginPath();
+                ctx.arc(pA.x, pA.y, 6, 0, 2 * Math.PI);
+                ctx.fillStyle = 'red';
+                ctx.fill();
+                ctx.fillStyle = _fg();
+                ctx.fillText('A', pA.x + 8, pA.y - 8);
+            }
+
+            // --- 鼠标事件 ---
+            function getMousePos(e) {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                return {
+                    x: (e.clientX - rect.left) * scaleX,
+                    y: (e.clientY - rect.top) * scaleY
+                };
+            }
+
+            canvas.addEventListener('mousedown', function (e) {
+                const m = getMousePos(e);
+                const pA = getA();
+                const distA = Math.hypot(m.x - pA.x, m.y - pA.y);
+                if (distA < 15) {
+                    dragging = true;
+                }
+            });
+
+            window.addEventListener('mousemove', function (e) {
+                if (!dragging) return;
+                const m = getMousePos(e);
+                const dx = m.x - O.x;
+                const dy = m.y - O.y;
+                const r = Math.hypot(dx, dy);
+                if (r > 10) {
+                    radius = r;
+                    angleA = Math.atan2(dy, dx) * 180 / Math.PI;
+                }
+                update();
+            });
+
+            window.addEventListener('mouseup', function () {
+                dragging = false;
+            });
+
+            canvas.addEventListener('mouseleave', function () {
+                dragging = false;
+            });
+
+            update();
+            window._clRedraw = function(){ update(); };
+        })();
+    </script>
+
+<script>
+(function(){
+    window._CL = { lang:'zh', theme:'light' };
+
+    function applyLang(lang){
+        window._CL.lang = lang;
+        document.querySelectorAll('.zh-text').forEach(function(el){ el.style.display = lang==='zh'?'inline':'none'; });
+        document.querySelectorAll('.en-text').forEach(function(el){ el.style.display = lang==='en'?'inline':'none'; });
+        document.querySelectorAll('.zh-block').forEach(function(el){ el.style.display = lang==='zh'?'block':'none'; });
+        document.querySelectorAll('.en-block').forEach(function(el){ el.style.display = lang==='en'?'block':'none'; });
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    function applyTheme(theme){
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev){
+        if(!ev.data || ev.data._src!=='circlelab') return;
+        if(ev.data.lang)  applyLang(ev.data.lang);
+        if(ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        try{ if(window.parent._CL_lang)  applyLang(window.parent._CL_lang); }catch(e){}
+        try{ if(window.parent._CL_theme) applyTheme(window.parent._CL_theme); }catch(e){}
+    });
+})();
+</script>
+
+</body>
+</html>

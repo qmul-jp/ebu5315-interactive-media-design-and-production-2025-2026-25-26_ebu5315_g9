@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>阿波罗尼斯圆</title>
+    <style>
+        body { text-align: center; font-family: sans-serif; margin: 0; }
+        canvas { display: block; margin: 0 auto; }
+        .descriptions { margin-top: 12px; line-height: 2.4; font-size: 1em; }
+        .theorem { font-weight: bold; margin-top: 8px; font-size: 1.05em; }
+
+        /* k 滑块区域 */
+        .slider-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 10px;
+            font-size: 0.95em;
+        }
+        .slider-wrap input[type=range] {
+            width: 220px;
+            accent-color: #8e44ad;
+        }
+        .k-badge {
+            display: inline-block;
+            min-width: 48px;
+            padding: 2px 10px;
+            border-radius: 5px;
+            background: #8e44ad;
+            color: #fff;
+            font-weight: bold;
+            font-size: 1em;
+        }
+
+        /* === theme === */
+        :root { --fg:#000000; --bg:#ffffff; --border:#d0ccc6; --grid:#f0ede6; }
+        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; --border:#444; --grid:#1e1e1e; }
+        html,body { background:var(--bg)!important; color:var(--fg)!important; transition:background .2s,color .2s; }
+        canvas { background:var(--bg)!important; }
+        h3 { color:var(--fg); margin:10px 0 4px; }
+
+        .zh-text { display:inline; }
+        .en-text { display:none; }
+    </style>
+</head>
+<body>
+    <h3><span class="zh-text">阿波罗尼斯圆</span><span class="en-text">Apollonius Circle</span></h3>
+
+    <div>
+        <canvas id="circleCanvas" width="620" height="420"
+                style="border:1px solid #ffffff; background:#ffffff;"></canvas>
+    </div>
+
+    <!-- k 滑块 -->
+    <div class="slider-wrap">
+        <span class="zh-text">比值 k = PA/PB =</span>
+        <span class="en-text">Ratio k = PA/PB =</span>
+        <span class="k-badge" id="kLabel">2.0</span>
+        <input type="range" id="kSlider" min="0.2" max="5.0" step="0.1" value="2.0"
+               oninput="onKChange(this.value)">
+        <span style="color:var(--fg);font-size:0.85em">(k ≠ 1)</span>
+    </div>
+
+    <div class="descriptions">
+        <span class="zh-text">A = (</span><span class="en-text">A = (</span><span id="vAx">0.0</span>, <span id="vAy">0.0</span>)
+        &nbsp;&nbsp;
+        <span class="zh-text">B = (</span><span class="en-text">B = (</span><span id="vBx">0.0</span>, <span id="vBy">0.0</span>)
+        &nbsp;&nbsp;
+        <span class="zh-text">AB = </span><span class="en-text">AB = </span><span id="vAB">0.0</span>
+        <br>
+        <span class="zh-text">阿波罗尼斯圆：圆心 = (</span><span class="en-text">Apollonius circle: center = (</span><span id="vCx">0.0</span>, <span id="vCy">0.0</span>)
+        &nbsp;
+        <span class="zh-text">半径 R = </span><span class="en-text">radius R = </span><span id="vR">0.0</span>
+        <br>
+        <span class="zh-text">探测点 P = (</span><span class="en-text">Probe P = (</span><span id="vPx">0.0</span>, <span id="vPy">0.0</span>)
+        &nbsp;&nbsp;
+        PA/PB = <span id="vRatio">0.00</span>
+        &nbsp;&nbsp;
+        <span id="pStatus">—</span>
+    </div>
+
+    <div class="theorem">
+        <span class="zh-text">到两定点距离之比为定值 k（k≠1）的点的轨迹是一个圆（阿波罗尼斯圆）</span>
+        <span class="en-text">The locus of points whose distances to two fixed points have a constant ratio k (k≠1) is a circle</span>
+    </div>
+
+    <script>
+    (function () {
+        function _fg()   { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#ffffff' : '#000000'; }
+        function _bg()   { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#000000' : '#ffffff'; }
+        function _grid() { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1e1e1e' : '#f0ede6'; }
+        function _lang() { return (window._CL && window._CL.lang) || 'zh'; }
+
+        const canvas = document.getElementById('circleCanvas');
+        const ctx    = canvas.getContext('2d');
+        const W = canvas.width, H = canvas.height;
+        const SCALE = 52;
+        const OX = W / 2, OY = H / 2;
+
+        // 两定点 A、B（坐标系单位），可拖动
+        let Ax = -2.5, Ay = 0;
+        let Bx =  2.5, By = 0;
+
+        // 探测点 P
+        let Px = 0, Py = 3.0;
+
+        // 比值 k
+        let k = 2.0;
+
+        let dragging = false, dragTarget = null;
+
+        function toCanvas(x, y) { return { x: OX + x * SCALE, y: OY - y * SCALE }; }
+        function toCoord(cx, cy) { return { x: (cx - OX) / SCALE, y: -(cy - OY) / SCALE }; }
+        function snap(v) { return Math.round(v * 2) / 2; }
+        function fmt(v) { return (Math.round(v * 10) / 10).toFixed(1); }
+        function dist2(ax, ay, bx, by) { return Math.hypot(ax - bx, ay - by); }
+
+        // 阿波罗尼斯圆的圆心和半径
+        // 设 |PA|/|PB| = k，令 d = |AB|，A=(0,0)，B=(d,0)
+        // 内分点 C1 = A + k/(1+k) * AB，外分点 C2 = A + k/(k-1) * AB（k≠1）
+        // 圆心 = 中点(C1, C2)，半径 = |C1C2|/2
+        function apolloniusCircle() {
+            const dx = Bx - Ax, dy = By - Ay;
+            const d  = Math.hypot(dx, dy);
+            if (d < 1e-6) return null;
+
+            // 内分点（分线段 AB，比例 k:1 从 A 到 B）
+            // PA/PB = k => P 内分 AB 比 = k:1 => C1 = (A + k*B)/(1+k)... 等价于：
+            // 从 A 到 B 方向，C1 在 AB 上满足 AC1/C1B = k
+            // C1 = A + k/(k+1) * (B-A)
+            const t1 = k / (k + 1);
+            const C1x = Ax + t1 * dx, C1y = Ay + t1 * dy;
+
+            // 外分点：C2 = A + k/(k-1) * (B-A)（k>1时在B外侧，k<1时在A外侧）
+            const t2 = k / (k - 1);
+            const C2x = Ax + t2 * dx, C2y = Ay + t2 * dy;
+
+            const cx = (C1x + C2x) / 2, cy = (C1y + C2y) / 2;
+            const R  = dist2(C1x, C1y, C2x, C2y) / 2;
+
+            return { cx, cy, R, C1x, C1y, C2x, C2y };
+        }
+
+        function update() {
+            const ap = apolloniusCircle();
+            if (!ap) return;
+
+            const PA = dist2(Px, Py, Ax, Ay);
+            const PB = dist2(Px, Py, Bx, By);
+            const ratio = PB < 1e-6 ? Infinity : PA / PB;
+            const AB = dist2(Ax, Ay, Bx, By);
+
+            document.getElementById('vAx').textContent = fmt(Ax);
+            document.getElementById('vAy').textContent = fmt(Ay);
+            document.getElementById('vBx').textContent = fmt(Bx);
+            document.getElementById('vBy').textContent = fmt(By);
+            document.getElementById('vAB').textContent = fmt(AB);
+            document.getElementById('vCx').textContent = fmt(ap.cx);
+            document.getElementById('vCy').textContent = fmt(ap.cy);
+            document.getElementById('vR').textContent  = fmt(ap.R);
+            document.getElementById('vPx').textContent = fmt(Px);
+            document.getElementById('vPy').textContent = fmt(Py);
+            document.getElementById('vRatio').textContent = isFinite(ratio) ? ratio.toFixed(2) : '∞';
+
+            // 判断 P 是否在阿波罗尼斯圆上
+            const distToCenter = dist2(Px, Py, ap.cx, ap.cy);
+            const tol = 0.15;
+            const onCircle = Math.abs(distToCenter - ap.R) < tol;
+            const inside   = distToCenter < ap.R - tol;
+            const green = '#27ae60', orange = '#e67e22', blue = '#2980b9';
+
+            let pColor, pTextZh, pTextEn;
+            if (onCircle) {
+                pColor  = green;
+                pTextZh = `PA/PB ≈ ${k.toFixed(1)} ✓，P 在阿波罗尼斯圆上`;
+                pTextEn = `PA/PB ≈ ${k.toFixed(1)} ✓, P is on the Apollonius circle`;
+            } else if (Math.abs(ratio - k) < 0.15) {
+                pColor  = green;
+                pTextZh = `PA/PB ≈ ${k.toFixed(1)} ✓`;
+                pTextEn = `PA/PB ≈ ${k.toFixed(1)} ✓`;
+            } else if (ratio < k) {
+                pColor  = blue;
+                pTextZh = `PA/PB = ${ratio.toFixed(2)} < ${k.toFixed(1)}，P 在圆外`;
+                pTextEn = `PA/PB = ${ratio.toFixed(2)} < ${k.toFixed(1)}, P outside`;
+            } else {
+                pColor  = orange;
+                pTextZh = `PA/PB = ${ratio.toFixed(2)} > ${k.toFixed(1)}，P 在圆内`;
+                pTextEn = `PA/PB = ${ratio.toFixed(2)} > ${k.toFixed(1)}, P inside`;
+            }
+
+            document.getElementById('pStatus').innerHTML =
+                `<span style="color:${pColor}">${_lang()==='zh' ? pTextZh : pTextEn}</span>`;
+
+            drawCanvas(ap, PA, PB, ratio, pColor);
+        }
+
+        function drawCanvas(ap, PA, PB, ratio, pColor) {
+            ctx.clearRect(0, 0, W, H);
+
+            // 网格
+            ctx.strokeStyle = _grid(); ctx.lineWidth = 1;
+            for (let gx = OX % SCALE; gx < W; gx += SCALE) {
+                ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+            }
+            for (let gy = OY % SCALE; gy < H; gy += SCALE) {
+                ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+            }
+
+            // 坐标轴
+            const axisC = _fg() === '#ffffff' ? '#888' : '#aaa';
+            ctx.strokeStyle = axisC; ctx.lineWidth = 1.2;
+            ctx.beginPath(); ctx.moveTo(0, OY); ctx.lineTo(W, OY); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(OX, 0); ctx.lineTo(OX, H); ctx.stroke();
+            ctx.fillStyle = axisC; ctx.font = '13px sans-serif';
+            ctx.fillText('x', W-14, OY-8); ctx.fillText('y', OX+8, 14); ctx.fillText('O', OX+5, OY+14);
+
+            // 刻度
+            ctx.fillStyle = _fg() === '#ffffff' ? '#666' : '#999'; ctx.font = '11px sans-serif';
+            for (let i = -Math.floor(OX/SCALE); i <= Math.floor((W-OX)/SCALE); i++) {
+                if (i===0) continue;
+                ctx.fillText(i, OX + i*SCALE - 4, OY + 14);
+            }
+            for (let j = -Math.floor((H-OY)/SCALE); j <= Math.floor(OY/SCALE); j++) {
+                if (j===0) continue;
+                ctx.fillText(j, OX + 5, OY - j*SCALE + 4);
+            }
+
+            // AB 连线（细虚线）
+            const pA = toCanvas(Ax, Ay), pB = toCanvas(Bx, By);
+            ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pB.x, pB.y);
+            ctx.strokeStyle = _fg() === '#ffffff' ? '#666' : '#ccc';
+            ctx.lineWidth = 1; ctx.setLineDash([4, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+            // 内分点 C1、外分点 C2
+            const pC1 = toCanvas(ap.C1x, ap.C1y);
+            const pC2 = toCanvas(ap.C2x, ap.C2y);
+            ctx.beginPath(); ctx.arc(pC1.x, pC1.y, 4, 0, 2*Math.PI);
+            ctx.fillStyle = '#8e44ad'; ctx.fill();
+            ctx.fillStyle = _fg(); ctx.font = '11px sans-serif';
+            ctx.fillText('C₁', pC1.x + 5, pC1.y - 5);
+
+            ctx.beginPath(); ctx.arc(pC2.x, pC2.y, 4, 0, 2*Math.PI);
+            ctx.fillStyle = '#8e44ad'; ctx.fill();
+            ctx.fillText('C₂', pC2.x + 5, pC2.y - 5);
+
+            // 阿波罗尼斯圆
+            const pAC = toCanvas(ap.cx, ap.cy);
+            const rPx = ap.R * SCALE;
+            ctx.beginPath(); ctx.arc(pAC.x, pAC.y, rPx, 0, 2*Math.PI);
+            ctx.strokeStyle = '#8e44ad'; ctx.lineWidth = 2.2; ctx.stroke();
+            ctx.fillStyle = 'rgba(142,68,173,0.06)'; ctx.fill();
+
+            // PA、PB 连线
+            const pP = toCanvas(Px, Py);
+            ctx.beginPath(); ctx.moveTo(pP.x, pP.y); ctx.lineTo(pA.x, pA.y);
+            ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+            ctx.beginPath(); ctx.moveTo(pP.x, pP.y); ctx.lineTo(pB.x, pB.y);
+            ctx.strokeStyle = '#2980b9'; ctx.lineWidth = 1.5;
+            ctx.setLineDash([5, 3]); ctx.stroke(); ctx.setLineDash([]);
+
+            // PA、PB 长度标注
+            const mPA = { x:(pP.x+pA.x)/2, y:(pP.y+pA.y)/2 };
+            const mPB = { x:(pP.x+pB.x)/2, y:(pP.y+pB.y)/2 };
+            ctx.font = '12px sans-serif';
+            ctx.fillStyle = '#e74c3c';
+            ctx.fillText(`PA=${PA.toFixed(1)}`, mPA.x + 6, mPA.y - 4);
+            ctx.fillStyle = '#2980b9';
+            ctx.fillText(`PB=${PB.toFixed(1)}`, mPB.x + 6, mPB.y + 14);
+
+            // 定点 A、B
+            ctx.beginPath(); ctx.arc(pA.x, pA.y, 6, 0, 2*Math.PI);
+            ctx.fillStyle = '#e74c3c'; ctx.fill();
+            ctx.fillStyle = _fg(); ctx.font = '14px sans-serif';
+            ctx.fillText('A', pA.x - 18, pA.y - 8);
+
+            ctx.beginPath(); ctx.arc(pB.x, pB.y, 6, 0, 2*Math.PI);
+            ctx.fillStyle = '#2980b9'; ctx.fill();
+            ctx.fillStyle = _fg();
+            ctx.fillText('B', pB.x + 10, pB.y - 8);
+
+            // 探测点 P
+            ctx.beginPath(); ctx.arc(pP.x, pP.y, 6, 0, 2*Math.PI);
+            ctx.fillStyle = pColor; ctx.fill();
+            ctx.fillStyle = _fg(); ctx.font = '13px sans-serif';
+            ctx.fillText('P', pP.x + 9, pP.y - 7);
+
+            // 圆心标注
+            ctx.beginPath(); ctx.arc(pAC.x, pAC.y, 4, 0, 2*Math.PI);
+            ctx.fillStyle = '#8e44ad'; ctx.fill();
+            ctx.fillStyle = '#8e44ad'; ctx.font = '12px sans-serif';
+            ctx.fillText(`圆心(${fmt(ap.cx)},${fmt(ap.cy)})  R=${fmt(ap.R)}`, pAC.x + 7, pAC.y - 6);
+        }
+
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            return {
+                cx: (e.clientX - rect.left) * (W / rect.width),
+                cy: (e.clientY - rect.top)  * (H / rect.height)
+            };
+        }
+
+        canvas.addEventListener('mousedown', function(e) {
+            const { cx: mx, cy: my } = getMousePos(e);
+            const pA = toCanvas(Ax, Ay), pB = toCanvas(Bx, By), pP = toCanvas(Px, Py);
+            if (Math.hypot(mx-pA.x, my-pA.y) < 14) { dragging=true; dragTarget='A'; return; }
+            if (Math.hypot(mx-pB.x, my-pB.y) < 14) { dragging=true; dragTarget='B'; return; }
+            if (Math.hypot(mx-pP.x, my-pP.y) < 14) { dragging=true; dragTarget='P'; return; }
+        });
+
+        window.addEventListener('mousemove', function(e) {
+            if (!dragging) return;
+            const { cx: mx, cy: my } = getMousePos(e);
+            const coord = toCoord(mx, my);
+            if (dragTarget === 'A') { Ax = snap(coord.x); Ay = snap(coord.y); }
+            else if (dragTarget === 'B') { Bx = snap(coord.x); By = snap(coord.y); }
+            else if (dragTarget === 'P') { Px = coord.x; Py = coord.y; }
+            update();
+        });
+
+        window.addEventListener('mouseup',    () => { dragging=false; dragTarget=null; });
+        canvas.addEventListener('mouseleave', () => { dragging=false; dragTarget=null; });
+
+        window.onKChange = function(val) {
+            k = parseFloat(val);
+            document.getElementById('kLabel').textContent = k.toFixed(1);
+            update();
+        };
+
+        update();
+        window._clRedraw = function() { update(); };
+    })();
+    </script>
+
+<script>
+(function(){
+    window._CL = { lang:'zh', theme:'light' };
+
+    function applyLang(lang){
+        window._CL.lang = lang;
+        document.querySelectorAll('.zh-text').forEach(function(el){ el.style.display = lang==='zh'?'inline':'none'; });
+        document.querySelectorAll('.en-text').forEach(function(el){ el.style.display = lang==='en'?'inline':'none'; });
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    function applyTheme(theme){
+        window._CL.theme = theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        if(typeof _clRedraw==='function') _clRedraw();
+    }
+
+    window.addEventListener('message', function(ev){
+        if(!ev.data || ev.data._src!=='circlelab') return;
+        if(ev.data.lang)  applyLang(ev.data.lang);
+        if(ev.data.theme) applyTheme(ev.data.theme);
+    });
+
+    window.addEventListener('DOMContentLoaded', function(){
+        try{ if(window.parent._CL_lang)  applyLang(window.parent._CL_lang); }catch(e){}
+        try{ if(window.parent._CL_theme) applyTheme(window.parent._CL_theme); }catch(e){}
+    });
+})();
+</script>
+
+</body>
+</html>

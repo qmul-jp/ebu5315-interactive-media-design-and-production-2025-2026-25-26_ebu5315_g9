@@ -356,3 +356,117 @@
     });
   });
 })();
+
+(() => {
+  const viewport = document.getElementById("theoremsViewport");
+  if (!viewport) {
+    return;
+  }
+
+  const carousel = viewport.closest(".theorems-carousel");
+  if (!carousel) {
+    return;
+  }
+  const track = viewport.querySelector(".theorems-carousel-track");
+  const buttons = Array.from(
+    carousel.querySelectorAll("[data-theorem-nav]")
+  );
+
+  if (!track || !buttons.length) {
+    return;
+  }
+
+  const getGap = () => {
+    const style = window.getComputedStyle(track);
+    const gap = Number.parseFloat(style.columnGap || style.gap || "0");
+    return Number.isFinite(gap) ? gap : 0;
+  };
+
+  const getCardWidth = () => {
+    const firstCard = track.querySelector(".theorem-frame");
+    if (!firstCard) {
+      return 0;
+    }
+    return firstCard.getBoundingClientRect().width;
+  };
+
+  const getVisibleCount = () => {
+    const style = window.getComputedStyle(carousel);
+    const value = Number.parseInt(style.getPropertyValue("--theorem-visible"), 10);
+    return Number.isFinite(value) && value > 0 ? value : 3;
+  };
+
+  const getStep = () => {
+    return getCardWidth() + getGap();
+  };
+
+  const getPageDistance = () => {
+    return getStep() * getVisibleCount();
+  };
+
+  const updateButtons = () => {
+    const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    const current = viewport.scrollLeft;
+
+    buttons.forEach((button) => {
+      const dir = Number.parseInt(button.getAttribute("data-theorem-nav"), 10);
+      if (dir < 0) {
+        button.disabled = current <= 2;
+      } else {
+        button.disabled = current >= maxScroll - 2;
+      }
+    });
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const dir = Number.parseInt(button.getAttribute("data-theorem-nav"), 10) || 1;
+      viewport.scrollBy({
+        left: dir * getPageDistance(),
+        behavior: "smooth",
+      });
+    });
+  });
+
+  viewport.addEventListener("scroll", updateButtons, { passive: true });
+  window.addEventListener("resize", updateButtons);
+  updateButtons();
+})();
+
+(() => {
+  const embed = document.querySelector(
+    ".theorem-frame-center-fix .theorem-embed"
+  );
+  if (!embed) {
+    return;
+  }
+
+  // Cross-origin iframe content can't be edited directly; apply a solid color tint layer.
+  embed.style.backgroundColor = "#243650";
+
+  const iframe = embed.querySelector("iframe");
+  if (iframe) {
+    iframe.style.zIndex = "1";
+  }
+
+  let tint = embed.querySelector("[data-theorem-solid-bg='true']");
+  if (!tint) {
+    tint = document.createElement("div");
+    tint.setAttribute("data-theorem-solid-bg", "true");
+    embed.append(tint);
+  }
+
+  Object.assign(tint.style, {
+    position: "absolute",
+    inset: "0",
+    pointerEvents: "none",
+    zIndex: "2",
+    backgroundColor: "rgba(36, 54, 80, 0.18)",
+    mixBlendMode: "multiply",
+  });
+
+  const lock = embed.querySelector(".theorem-center-lock");
+  if (lock) {
+    lock.style.zIndex = "3";
+  }
+})();
