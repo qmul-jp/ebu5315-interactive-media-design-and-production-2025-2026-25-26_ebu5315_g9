@@ -592,7 +592,14 @@ body {
   padding: clamp(1.1rem, 2vw, 1.4rem);
   border-radius: 12px;
   border: 1px solid color-mix(in oklch, white 18%, transparent);
-  background: color-mix(in oklch, var(--chip) 74%, var(--panel));
+  background:
+    radial-gradient(circle at 84% 14%, oklch(0.84 0.11 85 / 0.04), transparent 34%),
+    radial-gradient(circle at 12% 100%, oklch(0.72 0.12 170 / 0.035), transparent 44%),
+    linear-gradient(
+      162deg,
+      color-mix(in oklch, var(--chip) 90%, var(--accent) 10%) 0%,
+      color-mix(in oklch, var(--panel) 91%, var(--accent-deep) 9%) 100%
+    );
 }
 
 .theorem-frame-no {
