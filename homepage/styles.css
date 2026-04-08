@@ -902,10 +902,11 @@ body {
   position: relative;
   z-index: 1;
   display: flex;
-  align-items: end;
-  justify-content: space-between;
-  gap: 1.4rem;
-  margin-bottom: clamp(1.35rem, 2.5vw, 1.95rem);
+  flex-direction: column;
+  align-items: start;
+  justify-content: flex-start;
+  gap: clamp(1.35rem, 2.3vw, 1.9rem);
+  margin-bottom: clamp(1.45rem, 2.8vw, 2.25rem);
 }
 
 .pricing-copy {
@@ -942,7 +943,9 @@ body {
 .pricing-switch-wrap {
   display: grid;
   gap: 0.5rem;
-  justify-items: end;
+  justify-items: center;
+  align-self: center;
+  text-align: center;
   flex: 0 0 auto;
 }
 
@@ -970,41 +973,97 @@ body {
   gap: 0.28rem;
   padding: 0.28rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in oklch, white 16%, transparent);
-  background: color-mix(in oklch, var(--chip) 88%, transparent);
+  border: 1px solid color-mix(in oklch, white 14%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--chip) 88%, var(--panel)) 0%,
+      color-mix(in oklch, var(--panel) 92%, black) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 8%, transparent),
+    0 10px 18px color-mix(in oklch, black 24%, transparent);
 }
 
 .pricing-view-btn {
   min-height: 2.45rem;
   min-width: 7.15rem;
   padding: 0.48rem 1rem;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 999px;
   background: transparent;
-  color: color-mix(in oklch, var(--muted) 78%, white);
+  color: color-mix(in oklch, var(--muted) 84%, white);
   font-size: 0.94rem;
   font-weight: 700;
   cursor: pointer;
   transition:
     background-color 200ms ease,
     color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
     transform 200ms ease;
 }
 
 .pricing-view-btn:hover,
 .pricing-view-btn:focus-visible {
-  color: var(--text);
-  background: color-mix(in oklch, white 8%, transparent);
+  color: color-mix(in oklch, white 84%, var(--accent) 16%);
+  border-color: color-mix(in oklch, white 14%, transparent);
   outline: none;
 }
 
 .pricing-view-btn.is-active {
-  color: var(--ink-dark);
-  background: color-mix(in oklch, var(--accent) 72%, white);
+  color: color-mix(in oklch, var(--ink-dark) 72%, white 28%);
+}
+
+.pricing-view-btn[data-pricing-view-target="personal"]:hover,
+.pricing-view-btn[data-pricing-view-target="personal"]:focus-visible {
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+.pricing-view-btn[data-pricing-view-target="schools"]:hover,
+.pricing-view-btn[data-pricing-view-target="schools"]:focus-visible {
+  background: color-mix(in oklch, var(--accent-alt) 12%, transparent);
+}
+
+.pricing-view-btn[data-pricing-view-target="personal"].is-active {
+  background: color-mix(in oklch, var(--accent) 68%, white);
+  box-shadow:
+    0 8px 18px color-mix(in oklch, var(--accent) 18%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 22%, transparent);
+}
+
+.pricing-view-btn[data-pricing-view-target="schools"].is-active {
+  background: color-mix(in oklch, var(--accent-alt) 66%, white);
+  box-shadow:
+    0 8px 18px color-mix(in oklch, var(--accent-alt) 20%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 20%, transparent);
+}
+
+.pricing-view-btn:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.pricing-panel {
+  will-change: opacity, transform;
+}
+
+.pricing-panel:not([hidden]) {
+  animation: pricingPanelReveal 260ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .pricing-panel[hidden] {
   display: none;
+}
+
+@keyframes pricingPanelReveal {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 9px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
 }
 
 .pricing-grid {
@@ -1099,6 +1158,11 @@ body {
   gap: 1rem;
 }
 
+.pricing-card-top > div {
+  width: 100%;
+  min-width: 0;
+}
+
 .pricing-card-label {
   margin: 0 0 0.42rem;
   color: color-mix(in oklch, var(--accent-alt) 68%, white);
@@ -1114,6 +1178,21 @@ body {
   line-height: 1.02;
   letter-spacing: -0.03em;
   color: color-mix(in oklch, white 94%, var(--accent) 6%);
+}
+
+.pricing-card-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.pricing-card-badge-inline {
+  margin-bottom: 0;
+  margin-top: 0.6rem;
+  margin-left: auto;
+  flex: 0 0 auto;
 }
 
 .pricing-card-subtitle {
@@ -1633,7 +1712,8 @@ body {
   }
 
   .pricing-switch-wrap {
-    justify-items: start;
+    justify-items: center;
+    align-self: center;
   }
 
   .pricing-grid {
@@ -1708,6 +1788,11 @@ body {
   .pricing-section {
     border-radius: 18px;
     padding: 1rem;
+  }
+
+  .pricing-head {
+    gap: 1.2rem;
+    margin-bottom: 1.35rem;
   }
 
   #pricing-title {
@@ -1799,6 +1884,10 @@ body {
   .pricing-view-btn,
   .pricing-card-cta {
     transition: none;
+  }
+
+  .pricing-panel:not([hidden]) {
+    animation: none;
   }
 
   .theorem-cta-btn,
