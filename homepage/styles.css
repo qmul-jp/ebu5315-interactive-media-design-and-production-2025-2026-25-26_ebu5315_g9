@@ -30,6 +30,10 @@ body {
     var(--bg);
 }
 
+button {
+  font: inherit;
+}
+
 .site-header {
   width: 100%;
   margin: 0;
@@ -1301,7 +1305,7 @@ body {
 }
 
 .pricing-card-cta {
-  margin-top: auto;
+  margin-top: 0.9rem;
   display: inline-flex;
   align-items: center;
   justify-content: center;
