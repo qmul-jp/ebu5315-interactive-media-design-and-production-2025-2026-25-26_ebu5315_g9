@@ -1272,7 +1272,7 @@ button {
   position: relative;
   padding-left: 1.35rem;
   color: color-mix(in oklch, white 82%, var(--muted) 18%);
-  font-size: 1rem;
+  font-size: 1.04rem;
   line-height: 1.5;
 }
 
@@ -1286,6 +1286,35 @@ button {
   border-radius: 50%;
   background: color-mix(in oklch, var(--accent) 74%, white);
   box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--accent) 18%, transparent);
+}
+
+.pricing-card-starter .pricing-feature-list li {
+  padding-left: 1.6rem;
+}
+
+.pricing-card-starter .pricing-feature-list li::before {
+  top: 0.28rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 0;
+  background: url("starter/book.svg") center / contain no-repeat;
+  box-shadow: none;
+}
+
+.pricing-card-starter .pricing-feature-list li:nth-child(2)::before {
+  background-image: url("starter/keyboard.svg");
+}
+
+.pricing-card-starter .pricing-feature-list li:nth-child(3)::before {
+  background-image: url("starter/book-open-check.svg");
+}
+
+.pricing-card-starter .pricing-feature-list li:nth-child(4)::before {
+  background-image: url("starter/info.svg");
+}
+
+.pricing-card-starter .pricing-feature-list li:nth-child(5)::before {
+  background-image: url("starter/clock.svg");
 }
 
 .pricing-card-fit,
@@ -1302,6 +1331,11 @@ button {
 .pricing-card-note {
   margin: 0.92rem 0 0;
   font-size: 0.92rem;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-starter .pricing-card-note {
+  margin-top: auto;
+  padding-top: 1rem;
 }
 
 .pricing-card-cta {
@@ -1844,7 +1878,7 @@ button {
   .pricing-feature-list li,
   .pricing-card-note,
   .pricing-card-fit {
-    font-size: 0.94rem;
+    font-size: 0.96rem;
   }
 
   .theorem-frame-cta {
