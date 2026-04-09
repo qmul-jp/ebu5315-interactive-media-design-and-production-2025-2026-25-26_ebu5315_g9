@@ -86,7 +86,6 @@
             justify-content: center;
             background: var(--card-bg);
         }
-
         canvas {
             display: block;
             margin: 0 auto;
@@ -185,25 +184,16 @@
     </style>
 </head>
 <body>
-<div class="circle-card">
-    <div class="card-header">
-        <div class="title" data-cl-zh>圆的周长和面积</div>
-        <div class="title" data-cl-en style="display:none">Circumference & Area of a Circle</div>
-        <div class="sub-en" data-cl-zh>周长 · 面积 · 圆周率π的探索</div>
-        <div class="sub-en" data-cl-en style="display:none">Perimeter · Area · Exploring π</div>
-    </div>
+    <h3><span class="zh-text">圆的周长和面积</span><span class="en-text">Circumference &amp; Area</span></h3>
 
-    <div class="canvas-container">
-        <canvas id="circleCanvas" width="600" height="500" style="width:100%; height:auto; max-width:600px; aspect-ratio:600/500"></canvas>
+    <div>
+        <canvas id="circleCanvas" width="600" height="500"></canvas>
     </div>
 
     <div class="data-panel" id="dataPanel"></div>
 
-    <div class="interact-hint">
-        <span>🖱️ <span data-cl-zh>拖拽红色点 A 改变半径</span><span data-cl-en style="display:none">Drag red point A to change radius</span></span>
-        <span>📐 <span data-cl-zh>观察周长/半径 → 2π &nbsp;&nbsp; 面积/半径² → π</span><span data-cl-en style="display:none">Observe C/r → 2π &nbsp;&nbsp; A/r² → π</span></span>
-    </div>
-</div>
+    <script>
+        (function () {
 
 <script>
     (function(){
