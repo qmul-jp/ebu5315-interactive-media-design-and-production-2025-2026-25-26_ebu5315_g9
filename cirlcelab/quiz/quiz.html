@@ -35,12 +35,31 @@
       </div>
 
       <div class="mode-row filters motion-item motion-delay-3" id="filtersRow">
-        <label class="select-wrap" for="sectionSelect">
+        <label class="select-wrap" for="sectionSelect" id="sectionFilterWrap">
           <span id="sectionLabel">Section</span>
           <select class="filter-select" id="sectionSelect"></select>
         </label>
         <span class="section-badge" id="levelBadge">Level 1</span>
         <button class="ghost-btn" id="smartNextBtn" type="button">AI推荐下一题</button>
+      </div>
+      <div class="exam-section-picker motion-item motion-delay-3 hidden" id="examSectionPicker">
+        <div class="exam-section-head">
+          <strong id="examSectionLabel">考试章节</strong>
+          <div class="exam-section-actions">
+            <button class="ghost-btn" id="examSectionSelectAllBtn" type="button">全选章节</button>
+            <button class="ghost-btn" id="examSectionClearAllBtn" type="button">全不选</button>
+          </div>
+        </div>
+        <div class="exam-time-row">
+          <label class="exam-time-config" for="examDurationInput">
+            <span id="examTimeLabel">考试时间</span>
+            <input id="examDurationInput" class="exam-time-input" type="number" min="1" max="300" step="1" value="45" />
+            <span id="examTimeUnit">分钟</span>
+          </label>
+          <button class="ghost-btn" id="examApplyTimeBtn" type="button">应用时间</button>
+          <span class="exam-timer-text" id="examTimerValue">剩余时间 45:00</span>
+        </div>
+        <div class="exam-section-list" id="examSectionList"></div>
       </div>
 
       <section class="stats motion-item motion-delay-3" aria-label="stats" id="statsPanel">
@@ -153,6 +172,16 @@
         clearDoneText: "错题本已清空。",
         sectionLabel: "Section",
         allSections: "全部",
+        examSectionLabel: "考试章节",
+        examSectionSelectAll: "全选章节",
+        examSectionClearAll: "全不选",
+        examNeedOneSection: "至少保留一个考试章节。",
+        examTimeLabel: "考试时间",
+        examTimeUnit: "分钟",
+        examApplyTime: "应用时间",
+        examTimeRemaining: "剩余时间 {time}",
+        examTimeUpAutoSubmit: "考试时间结束，已自动交卷。",
+        examNoSectionSelected: "请先选择至少一个考试章节。",
         smartNext: "AI推荐下一题",
         levelPrefix: "Level",
         sectionsPageTitle: "Section 概览",
@@ -235,6 +264,16 @@
         clearDoneText: "Wrong-book records have been cleared.",
         sectionLabel: "Section",
         allSections: "All",
+        examSectionLabel: "Exam Sections",
+        examSectionSelectAll: "Select All",
+        examSectionClearAll: "Select None",
+        examNeedOneSection: "Keep at least one section selected for the exam.",
+        examTimeLabel: "Exam Time",
+        examTimeUnit: "min",
+        examApplyTime: "Apply Time",
+        examTimeRemaining: "Time Left {time}",
+        examTimeUpAutoSubmit: "Time is up. The paper was submitted automatically.",
+        examNoSectionSelected: "Please select at least one exam section.",
         smartNext: "AI Smart Next",
         levelPrefix: "Level",
         sectionsPageTitle: "Section Overview",
@@ -915,7 +954,7 @@
     {
         "type":  "single",
         "section":  "kp05",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "相离",
@@ -948,7 +987,7 @@
     {
         "type":  "single",
         "section":  "kp05",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "大于",
@@ -981,7 +1020,7 @@
     {
         "type":  "multiple",
         "section":  "kp05",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "若圆心到直线的距离大于半径，则直线与圆相离",
@@ -1019,7 +1058,7 @@
     {
         "type":  "blank",
         "section":  "kp05",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1039,7 +1078,7 @@
     {
         "type":  "blank",
         "section":  "kp05",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1059,7 +1098,7 @@
     {
         "type":  "blank",
         "section":  "kp05",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1079,7 +1118,7 @@
     {
         "type":  "single",
         "section":  "kp06",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "AE = BE",
@@ -1112,7 +1151,7 @@
     {
         "type":  "single",
         "section":  "kp06",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "2",
@@ -1145,7 +1184,7 @@
     {
         "type":  "multiple",
         "section":  "kp06",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "垂直于弦的直径平分弦",
@@ -1182,7 +1221,7 @@
     {
         "type":  "blank",
         "section":  "kp06",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1202,7 +1241,7 @@
     {
         "type":  "blank",
         "section":  "kp06",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1222,7 +1261,7 @@
     {
         "type":  "blank",
         "section":  "kp06",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1242,7 +1281,7 @@
     {
         "type":  "single",
         "section":  "kp07",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "相等的圆心角所对的弧相等",
@@ -1275,7 +1314,7 @@
     {
         "type":  "single",
         "section":  "kp07",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "∠AOB = ∠COD",
@@ -1308,7 +1347,7 @@
     {
         "type":  "multiple",
         "section":  "kp07",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "若∠AOB = ∠COD，则弧AB = 弧CD",
@@ -1346,7 +1385,7 @@
     {
         "type":  "blank",
         "section":  "kp07",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1366,7 +1405,7 @@
     {
         "type":  "blank",
         "section":  "kp07",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1386,7 +1425,7 @@
     {
         "type":  "blank",
         "section":  "kp07",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1406,7 +1445,7 @@
     {
         "type":  "single",
         "section":  "kp08",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "50°",
@@ -1439,7 +1478,7 @@
     {
         "type":  "single",
         "section":  "kp08",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "圆周角的度数等于圆心角度数的一半",
@@ -1472,7 +1511,7 @@
     {
         "type":  "multiple",
         "section":  "kp08",
-        "level":  2,
+        "level":  1,
         "options":  [
                         {
                             "zh":  "半圆所对的圆周角是直角",
@@ -1510,7 +1549,7 @@
     {
         "type":  "blank",
         "section":  "kp08",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1530,7 +1569,7 @@
     {
         "type":  "blank",
         "section":  "kp08",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -1550,7 +1589,7 @@
     {
         "type":  "blank",
         "section":  "kp08",
-        "level":  2,
+        "level":  1,
         "options":  [
 
                     ],
@@ -2228,7 +2267,7 @@
     {
         "type":  "single",
         "section":  "kp13",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "6",
@@ -2261,7 +2300,7 @@
     {
         "type":  "single",
         "section":  "kp13",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "6",
@@ -2294,7 +2333,7 @@
     {
         "type":  "multiple",
         "section":  "kp13",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "圆内两条相交弦，被交点分成的两条线段长的积相等",
@@ -2331,7 +2370,7 @@
     {
         "type":  "blank",
         "section":  "kp13",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2351,7 +2390,7 @@
     {
         "type":  "blank",
         "section":  "kp13",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2371,7 +2410,7 @@
     {
         "type":  "blank",
         "section":  "kp13",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2391,7 +2430,7 @@
     {
         "type":  "blank",
         "section":  "kp13",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2411,7 +2450,7 @@
     {
         "type":  "single",
         "section":  "kp14",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "8",
@@ -2444,7 +2483,7 @@
     {
         "type":  "single",
         "section":  "kp14",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "12",
@@ -2477,7 +2516,7 @@
     {
         "type":  "multiple",
         "section":  "kp14",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "从圆外一点引圆的切线和割线，切线长是这点到割线与圆交点的两条线段长的比例中项",
@@ -2513,7 +2552,7 @@
     {
         "type":  "blank",
         "section":  "kp14",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2533,7 +2572,7 @@
     {
         "type":  "blank",
         "section":  "kp14",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2553,7 +2592,7 @@
     {
         "type":  "blank",
         "section":  "kp14",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2573,7 +2612,7 @@
     {
         "type":  "single",
         "section":  "kp15",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "4",
@@ -2606,7 +2645,7 @@
     {
         "type":  "single",
         "section":  "kp15",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "4",
@@ -2639,7 +2678,7 @@
     {
         "type":  "multiple",
         "section":  "kp15",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "从圆外一点引圆的两条割线，这一点到每条割线与圆的交点的两条线段长的积相等",
@@ -2676,7 +2715,7 @@
     {
         "type":  "blank",
         "section":  "kp15",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2696,7 +2735,7 @@
     {
         "type":  "blank",
         "section":  "kp15",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2716,7 +2755,7 @@
     {
         "type":  "blank",
         "section":  "kp15",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2736,7 +2775,7 @@
     {
         "type":  "single",
         "section":  "kp16",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "10",
@@ -2769,7 +2808,7 @@
     {
         "type":  "single",
         "section":  "kp16",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "9",
@@ -2802,7 +2841,7 @@
     {
         "type":  "multiple",
         "section":  "kp16",
-        "level":  3,
+        "level":  2,
         "options":  [
                         {
                             "zh":  "过点P的任意直线与圆交于A、B，则 \\( PA \\cdot PB \\) 为定值",
@@ -2840,7 +2879,7 @@
     {
         "type":  "blank",
         "section":  "kp16",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2860,7 +2899,7 @@
     {
         "type":  "blank",
         "section":  "kp16",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2880,7 +2919,7 @@
     {
         "type":  "blank",
         "section":  "kp16",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2900,7 +2939,7 @@
     {
         "type":  "blank",
         "section":  "kp16",
-        "level":  3,
+        "level":  2,
         "options":  [
 
                     ],
@@ -2920,7 +2959,7 @@
     {
         "type":  "single",
         "section":  "kp17",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "外离",
@@ -2953,7 +2992,7 @@
     {
         "type":  "single",
         "section":  "kp17",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "外离",
@@ -2986,7 +3025,7 @@
     {
         "type":  "multiple",
         "section":  "kp17",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "若两圆外离，则 \\( d \u003e R + r \\)",
@@ -3024,7 +3063,7 @@
     {
         "type":  "blank",
         "section":  "kp17",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3044,7 +3083,7 @@
     {
         "type":  "blank",
         "section":  "kp17",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3064,7 +3103,7 @@
     {
         "type":  "blank",
         "section":  "kp17",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3432,7 +3471,7 @@
     {
         "type":  "single",
         "section":  "kp20",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "π",
@@ -3465,7 +3504,7 @@
     {
         "type":  "single",
         "section":  "kp20",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "12π",
@@ -3498,7 +3537,7 @@
     {
         "type":  "multiple",
         "section":  "kp20",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "弧长公式为 \\( l = \\frac{n\\pi r}{180} \\)",
@@ -3536,7 +3575,7 @@
     {
         "type":  "blank",
         "section":  "kp20",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3556,7 +3595,7 @@
     {
         "type":  "blank",
         "section":  "kp20",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3576,7 +3615,7 @@
     {
         "type":  "blank",
         "section":  "kp20",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3596,7 +3635,7 @@
     {
         "type":  "blank",
         "section":  "kp20",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3616,7 +3655,7 @@
     {
         "type":  "single",
         "section":  "kp22",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "三角形的外心是三条角平分线的交点",
@@ -3649,7 +3688,7 @@
     {
         "type":  "single",
         "section":  "kp22",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "5",
@@ -3682,7 +3721,7 @@
     {
         "type":  "multiple",
         "section":  "kp22",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "外心是三角形三边垂直平分线的交点",
@@ -3720,7 +3759,7 @@
     {
         "type":  "blank",
         "section":  "kp22",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3740,7 +3779,7 @@
     {
         "type":  "blank",
         "section":  "kp22",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3760,7 +3799,7 @@
     {
         "type":  "blank",
         "section":  "kp22",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3780,7 +3819,7 @@
     {
         "type":  "single",
         "section":  "kp23",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "三角形的内心是三条边垂直平分线的交点",
@@ -3813,7 +3852,7 @@
     {
         "type":  "single",
         "section":  "kp23",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "2",
@@ -3846,7 +3885,7 @@
     {
         "type":  "multiple",
         "section":  "kp23",
-        "level":  2,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "内心是三条角平分线的交点",
@@ -3884,7 +3923,7 @@
     {
         "type":  "blank",
         "section":  "kp23",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3904,7 +3943,7 @@
     {
         "type":  "blank",
         "section":  "kp23",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -3924,7 +3963,7 @@
     {
         "type":  "blank",
         "section":  "kp23",
-        "level":  2,
+        "level":  3,
         "options":  [
 
                     ],
@@ -4107,7 +4146,7 @@
     {
         "type":  "single",
         "section":  "kp25",
-        "level":  4,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "30",
@@ -4140,7 +4179,7 @@
     {
         "type":  "single",
         "section":  "kp25",
-        "level":  4,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "80",
@@ -4173,7 +4212,7 @@
     {
         "type":  "multiple",
         "section":  "kp25",
-        "level":  4,
+        "level":  3,
         "options":  [
                         {
                             "zh":  "适用于任意四边形",
@@ -4210,7 +4249,7 @@
     {
         "type":  "blank",
         "section":  "kp25",
-        "level":  4,
+        "level":  3,
         "options":  [
 
                     ],
@@ -4230,7 +4269,7 @@
     {
         "type":  "blank",
         "section":  "kp25",
-        "level":  4,
+        "level":  3,
         "options":  [
 
                     ],
@@ -4250,7 +4289,7 @@
     {
         "type":  "blank",
         "section":  "kp25",
-        "level":  4,
+        "level":  3,
         "options":  [
 
                     ],
@@ -4270,7 +4309,7 @@
     {
         "type":  "blank",
         "section":  "kp25",
-        "level":  4,
+        "level":  3,
         "options":  [
 
                     ],
@@ -4290,7 +4329,7 @@
     {
         "type":  "single",
         "section":  "kp26",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "\\((3, -2)\\)，4",
@@ -4323,7 +4362,7 @@
     {
         "type":  "single",
         "section":  "kp26",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "\\((x+1)^2 + (y-2)^2 = 5\\)",
@@ -4356,7 +4395,7 @@
     {
         "type":  "multiple",
         "section":  "kp26",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "方程 \\((x-2)^2 + (y+3)^2 = 9\\) 表示圆心为 \\((2, -3)\\)，半径为 3 的圆",
@@ -4393,7 +4432,7 @@
     {
         "type":  "blank",
         "section":  "kp26",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4413,7 +4452,7 @@
     {
         "type":  "blank",
         "section":  "kp26",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4433,7 +4472,7 @@
     {
         "type":  "blank",
         "section":  "kp26",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4453,7 +4492,7 @@
     {
         "type":  "single",
         "section":  "kp27",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "\\((-2, 3)\\)",
@@ -4486,7 +4525,7 @@
     {
         "type":  "single",
         "section":  "kp27",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "圆心为 \\((-1, 2)\\) 的圆",
@@ -4519,7 +4558,7 @@
     {
         "type":  "multiple",
         "section":  "kp27",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "当 \\(D^2 + E^2 - 4F \u003e 0\\) 时，表示圆",
@@ -4557,7 +4596,7 @@
     {
         "type":  "blank",
         "section":  "kp27",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4577,7 +4616,7 @@
     {
         "type":  "blank",
         "section":  "kp27",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4597,7 +4636,7 @@
     {
         "type":  "blank",
         "section":  "kp27",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4617,7 +4656,7 @@
     {
         "type":  "single",
         "section":  "kp28",
-        "level":  2,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "点在圆内",
@@ -4650,7 +4689,7 @@
     {
         "type":  "single",
         "section":  "kp28",
-        "level":  2,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "内部",
@@ -4683,7 +4722,7 @@
     {
         "type":  "multiple",
         "section":  "kp28",
-        "level":  2,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "点 \\((2, 3)\\) 在圆内",
@@ -4720,7 +4759,7 @@
     {
         "type":  "blank",
         "section":  "kp28",
-        "level":  2,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4740,7 +4779,7 @@
     {
         "type":  "blank",
         "section":  "kp28",
-        "level":  2,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4760,7 +4799,7 @@
     {
         "type":  "blank",
         "section":  "kp28",
-        "level":  2,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4780,7 +4819,7 @@
     {
         "type":  "single",
         "section":  "kp29",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "相离",
@@ -4813,7 +4852,7 @@
     {
         "type":  "single",
         "section":  "kp29",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "\\(\\pm 5\\)",
@@ -4846,7 +4885,7 @@
     {
         "type":  "multiple",
         "section":  "kp29",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "联立方程后，若 \\(\\Delta \u003e 0\\)，则直线与圆相交",
@@ -4884,7 +4923,7 @@
     {
         "type":  "blank",
         "section":  "kp29",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4904,7 +4943,7 @@
     {
         "type":  "blank",
         "section":  "kp29",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4924,7 +4963,7 @@
     {
         "type":  "blank",
         "section":  "kp29",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -4944,7 +4983,7 @@
     {
         "type":  "single",
         "section":  "kp30",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "\\(3x + 4y - 25 = 0\\)",
@@ -4977,7 +5016,7 @@
     {
         "type":  "single",
         "section":  "kp30",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "0 条",
@@ -5010,7 +5049,7 @@
     {
         "type":  "multiple",
         "section":  "kp30",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "可设切线方程为点斜式，利用圆心到直线距离等于半径求解",
@@ -5048,7 +5087,7 @@
     {
         "type":  "blank",
         "section":  "kp30",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -5068,7 +5107,7 @@
     {
         "type":  "blank",
         "section":  "kp30",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -5088,7 +5127,7 @@
     {
         "type":  "blank",
         "section":  "kp30",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -5435,7 +5474,7 @@
     {
         "type":  "single",
         "section":  "kp33",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "\\((2, -1)\\)，3",
@@ -5468,7 +5507,7 @@
     {
         "type":  "single",
         "section":  "kp33",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "\\(\\begin{cases} x = 2 + 2\\cos\\theta \\\\ y = -1 + 2\\sin\\theta \\end{cases}\\)",
@@ -5501,7 +5540,7 @@
     {
         "type":  "multiple",
         "section":  "kp33",
-        "level":  3,
+        "level":  4,
         "options":  [
                         {
                             "zh":  "参数 \\(\\theta\\) 表示圆心角",
@@ -5538,7 +5577,7 @@
     {
         "type":  "blank",
         "section":  "kp33",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -5558,7 +5597,7 @@
     {
         "type":  "blank",
         "section":  "kp33",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -5580,7 +5619,7 @@
     {
         "type":  "blank",
         "section":  "kp33",
-        "level":  3,
+        "level":  4,
         "options":  [
 
                     ],
@@ -5764,7 +5803,7 @@
     {
         "type":  "single",
         "section":  "kp35",
-        "level":  4,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "\\(x^2 + y^2 + 4x - 8 = 0\\)",
@@ -5797,7 +5836,7 @@
     {
         "type":  "single",
         "section":  "kp35",
-        "level":  4,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "到两定点距离之和为定值的点的轨迹",
@@ -5830,7 +5869,7 @@
     {
         "type":  "multiple",
         "section":  "kp35",
-        "level":  4,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "当 \\(k = 1\\) 时，轨迹是线段的中垂线",
@@ -5868,7 +5907,7 @@
     {
         "type":  "blank",
         "section":  "kp35",
-        "level":  4,
+        "level":  5,
         "options":  [
 
                     ],
@@ -5888,7 +5927,7 @@
     {
         "type":  "blank",
         "section":  "kp35",
-        "level":  4,
+        "level":  5,
         "options":  [
 
                     ],
@@ -5908,7 +5947,7 @@
     {
         "type":  "blank",
         "section":  "kp35",
-        "level":  4,
+        "level":  5,
         "options":  [
 
                     ],
@@ -5928,7 +5967,7 @@
     {
         "type":  "single",
         "section":  "kp36",
-        "level":  3,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "3",
@@ -5961,7 +6000,7 @@
     {
         "type":  "single",
         "section":  "kp36",
-        "level":  3,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "\\(\\sqrt{2}\\)",
@@ -5994,7 +6033,7 @@
     {
         "type":  "multiple",
         "section":  "kp36",
-        "level":  3,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "圆上点到定点距离的最大值为圆心到该点距离加半径",
@@ -6032,7 +6071,7 @@
     {
         "type":  "blank",
         "section":  "kp36",
-        "level":  3,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6052,7 +6091,7 @@
     {
         "type":  "blank",
         "section":  "kp36",
-        "level":  3,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6072,7 +6111,7 @@
     {
         "type":  "blank",
         "section":  "kp36",
-        "level":  3,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6093,7 +6132,7 @@
     {
         "type":  "single",
         "section":  "kp37",
-        "level":  4,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "圆",
@@ -6126,7 +6165,7 @@
     {
         "type":  "single",
         "section":  "kp37",
-        "level":  4,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "\\(3x - 3y = 0\\)",
@@ -6159,7 +6198,7 @@
     {
         "type":  "multiple",
         "section":  "kp37",
-        "level":  4,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "两圆的根轴是一条直线",
@@ -6197,7 +6236,7 @@
     {
         "type":  "blank",
         "section":  "kp37",
-        "level":  4,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6217,7 +6256,7 @@
     {
         "type":  "blank",
         "section":  "kp37",
-        "level":  4,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6237,7 +6276,7 @@
     {
         "type":  "blank",
         "section":  "kp37",
-        "level":  4,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6257,7 +6296,7 @@
     {
         "type":  "single",
         "section":  "kp38",
-        "level":  3,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "\\(3x - 3y + 5 = 0\\)",
@@ -6290,7 +6329,7 @@
     {
         "type":  "single",
         "section":  "kp38",
-        "level":  3,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "\\(2\\)",
@@ -6323,7 +6362,7 @@
     {
         "type":  "multiple",
         "section":  "kp38",
-        "level":  3,
+        "level":  5,
         "options":  [
                         {
                             "zh":  "两圆相交时，公共弦所在直线可由两圆方程相减得到",
@@ -6361,7 +6400,7 @@
     {
         "type":  "blank",
         "section":  "kp38",
-        "level":  3,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6381,7 +6420,7 @@
     {
         "type":  "blank",
         "section":  "kp38",
-        "level":  3,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6401,7 +6440,7 @@
     {
         "type":  "blank",
         "section":  "kp38",
-        "level":  3,
+        "level":  5,
         "options":  [
 
                     ],
@@ -6842,6 +6881,21 @@
     const LANG_KEY = "quiz_lang_v1";
     const THEME_KEY = "quiz_theme_v1";
     const MAX_LEVEL = Math.max(...questionBank.map((q) => q.level || 1));
+    const sectionIds = Object.keys(sectionMap);
+    const sectionStats = buildSectionStats();
+
+    function buildSectionStats() {
+      const stats = {};
+      sectionIds.forEach((sectionId) => {
+        stats[sectionId] = { count: 0, levels: new Set() };
+      });
+      questionBank.forEach((question) => {
+        if (!stats[question.section]) return;
+        stats[question.section].count += 1;
+        stats[question.section].levels.add(question.level || 1);
+      });
+      return stats;
+    }
 
     const els = {
       heroSection: document.getElementById("heroSection"),
@@ -6854,6 +6908,8 @@
       pageTabs: document.getElementById("pageTabs"),
       modeControls: document.getElementById("modeControls"),
       filtersRow: document.getElementById("filtersRow"),
+      sectionFilterWrap: document.getElementById("sectionFilterWrap"),
+      examSectionPicker: document.getElementById("examSectionPicker"),
       allModeBtn: document.getElementById("allModeBtn"), wrongModeBtn: document.getElementById("wrongModeBtn"),
       examModeBtn: document.getElementById("examModeBtn"),
       clearWrongBtn: document.getElementById("clearWrongBtn"),
@@ -6863,6 +6919,15 @@
       langToggleBtn: document.getElementById("langToggleBtn"),
       sectionLabel: document.getElementById("sectionLabel"),
       sectionSelect: document.getElementById("sectionSelect"),
+      examSectionLabel: document.getElementById("examSectionLabel"),
+      examSectionSelectAllBtn: document.getElementById("examSectionSelectAllBtn"),
+      examSectionClearAllBtn: document.getElementById("examSectionClearAllBtn"),
+      examTimeLabel: document.getElementById("examTimeLabel"),
+      examDurationInput: document.getElementById("examDurationInput"),
+      examTimeUnit: document.getElementById("examTimeUnit"),
+      examApplyTimeBtn: document.getElementById("examApplyTimeBtn"),
+      examTimerValue: document.getElementById("examTimerValue"),
+      examSectionList: document.getElementById("examSectionList"),
       levelBadge: document.getElementById("levelBadge"),
       smartNextBtn: document.getElementById("smartNextBtn"),
       statsPanel: document.getElementById("statsPanel"),
@@ -6898,6 +6963,9 @@
 
     const answerRecords = {};
     const wrongSet = new Set(loadWrongBook());
+    const examSectionSet = new Set();
+    const MIN_EXAM_MINUTES = 1;
+    const MAX_EXAM_MINUTES = 300;
     let mode = "all";
     let activePage = "home";
     let currentIndex = 0;
@@ -6909,9 +6977,14 @@
     let examMode = false;
     let examSubmitted = false;
     let examSummary = null;
+    let examDurationMinutes = 45;
+    let examRemainingSeconds = examDurationMinutes * 60;
+    let examTimerId = null;
     let pendingClearConfirm = false;
     let visitTick = 0;
     let lastRenderedQuestionId = null;
+    let lastRenderedWrongListKey = "";
+    let lastRenderedSectionsLang = "";
     let themePreference = loadThemePreference();
     const questionMeta = {};
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
@@ -7015,12 +7088,10 @@
         pool = pool.filter((q) => wrongSet.has(q.id));
       }
 
-      if (selectedSection !== "all") {
+      if (examMode) {
+        pool = pool.filter((q) => isSectionIncludedInExam(q.section));
+      } else if (selectedSection !== "all") {
         pool = pool.filter((q) => q.section === selectedSection);
-      }
-
-      if (!examMode && mode !== "wrong") {
-        pool = pool.filter((q) => (q.level || 1) <= currentLevel);
       }
 
       if (smartMode && !examMode && mode === "all") {
@@ -7075,19 +7146,123 @@
       els.sectionSelect.value = selectedSection;
     }
 
+    function clampExamMinutes(value) {
+      const numeric = Number(value);
+      if (!Number.isFinite(numeric)) return examDurationMinutes;
+      return Math.max(MIN_EXAM_MINUTES, Math.min(MAX_EXAM_MINUTES, Math.round(numeric)));
+    }
+
+    function formatTimeClock(totalSeconds) {
+      const safe = Math.max(0, totalSeconds);
+      const mins = Math.floor(safe / 60);
+      const secs = safe % 60;
+      return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+    }
+
+    function updateExamTimerDisplay() {
+      const clock = formatTimeClock(examRemainingSeconds);
+      els.examTimerValue.textContent = t("examTimeRemaining", { time: clock });
+    }
+
+    function stopExamTimer() {
+      if (examTimerId) {
+        clearInterval(examTimerId);
+        examTimerId = null;
+      }
+    }
+
+    function startExamTimer(resetTime = false) {
+      stopExamTimer();
+      if (resetTime) {
+        examRemainingSeconds = examDurationMinutes * 60;
+      }
+      updateExamTimerDisplay();
+      if (!examMode || examSubmitted) return;
+      examTimerId = window.setInterval(() => {
+        if (!examMode || examSubmitted) {
+          stopExamTimer();
+          return;
+        }
+        examRemainingSeconds = Math.max(0, examRemainingSeconds - 1);
+        updateExamTimerDisplay();
+        if (examRemainingSeconds <= 0) {
+          stopExamTimer();
+          submitPaper();
+          showInfoFeedback(t("tip"), t("examTimeUpAutoSubmit"));
+        }
+      }, 1000);
+    }
+
+    function applyExamDuration(resetTime = true) {
+      examDurationMinutes = clampExamMinutes(els.examDurationInput.value);
+      els.examDurationInput.value = String(examDurationMinutes);
+      if (resetTime) {
+        startExamTimer(true);
+      } else {
+        updateExamTimerDisplay();
+      }
+    }
+
+    function resetExamSections() {
+      examSectionSet.clear();
+      if (selectedSection !== "all" && sectionMap[selectedSection]) {
+        examSectionSet.add(selectedSection);
+        return;
+      }
+      sectionIds.forEach((id) => examSectionSet.add(id));
+    }
+
+    function isSectionIncludedInExam(sectionId) {
+      return examSectionSet.has(sectionId);
+    }
+
+    function renderExamSectionPicker() {
+      if (!examMode) {
+        els.examSectionList.innerHTML = "";
+        return;
+      }
+      const fragment = document.createDocumentFragment();
+      sectionIds.forEach((sectionId) => {
+        const label = document.createElement("label");
+        label.className = "exam-section-item";
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.value = sectionId;
+        input.checked = examSectionSet.has(sectionId);
+        input.disabled = examSubmitted;
+        input.addEventListener("change", () => {
+          if (input.checked) examSectionSet.add(sectionId);
+          else examSectionSet.delete(sectionId);
+
+          currentIndex = 0;
+          refreshQuestionPool();
+          render();
+        });
+
+        const text = document.createElement("span");
+        text.textContent = getSectionLabelById(sectionId);
+        label.append(input, text);
+        fragment.appendChild(label);
+      });
+      els.examSectionList.innerHTML = "";
+      els.examSectionList.appendChild(fragment);
+    }
+
     function updateSectionOwnerBadge() {
       els.levelBadge.textContent = `${t("levelPrefix")} ${currentLevel}`;
     }
 
-    function renderSectionsPage() {
-      const cards = Object.keys(sectionMap).map((sectionId) => {
-        const list = questionBank.filter((q) => q.section === sectionId);
-        const levels = [...new Set(list.map((q) => q.level || 1))].sort((a, b) => a - b).join(", ");
+    function renderSectionsPage(force = false) {
+      if (!force && lastRenderedSectionsLang === lang) return;
+      lastRenderedSectionsLang = lang;
+      const cards = sectionIds.map((sectionId) => {
+        const stat = sectionStats[sectionId] || { count: 0, levels: new Set() };
+        const levels = [...stat.levels].sort((a, b) => a - b).join(", ") || "-";
         const wrapper = document.createElement("div");
         wrapper.className = "section-card";
         wrapper.innerHTML = `
           <b>${getSectionLabelById(sectionId)}</b>
-          <span>${t("sectionCount", { count: list.length })}</span>
+          <span>${t("sectionCount", { count: stat.count })}</span>
           <span>${t("sectionLevels", { levels })}</span>
         `;
         const btn = document.createElement("button");
@@ -7121,9 +7296,27 @@
       return String(userAnswer || "").trim() === "";
     }
 
+    function renderFeedback(style, title, rows) {
+      els.feedback.className = `feedback ${style}`;
+      els.feedback.textContent = "";
+      const heading = document.createElement("h3");
+      heading.textContent = title;
+      els.feedback.appendChild(heading);
+
+      rows.forEach((row) => {
+        const p = document.createElement("p");
+        if (row.label) {
+          const strong = document.createElement("strong");
+          strong.textContent = row.label;
+          p.appendChild(strong);
+        }
+        p.appendChild(document.createTextNode(row.text || ""));
+        els.feedback.appendChild(p);
+      });
+    }
+
     function showInfoFeedback(title, text) {
-      els.feedback.className = "feedback info";
-      els.feedback.innerHTML = `<h3>${title}</h3><p>${text}</p>`;
+      renderFeedback("info", title, [{ text }]);
     }
 
     function runQuestionTransition(updateFn) {
@@ -7162,14 +7355,20 @@
       els.pureModeBtn.classList.toggle("active", pureMode);
       els.wrongModeBtn.disabled = examMode;
       els.clearWrongBtn.disabled = examMode;
-      els.sectionSelect.disabled = examMode && mode === "wrong";
+      els.sectionSelect.disabled = examMode;
       els.showAnswerBtn.disabled = examMode && !examSubmitted;
       els.smartNextBtn.disabled = !onPracticePage || examMode;
+      els.examSectionSelectAllBtn.disabled = !examMode || examSubmitted;
+      els.examSectionClearAllBtn.disabled = !examMode || examSubmitted;
+      els.examDurationInput.disabled = !examMode || examSubmitted;
+      els.examApplyTimeBtn.disabled = !examMode || examSubmitted;
       els.submitPaperBtn.classList.toggle("hidden", !(examMode && !examSubmitted));
       els.heroSection.classList.toggle("hidden", !onHomePage || pureMode);
       els.sidePanel.classList.toggle("hidden", !onPracticePage || pureMode);
       els.modeControls.classList.toggle("hidden", !onPracticePage);
       els.filtersRow.classList.toggle("hidden", !onPracticePage);
+      els.sectionFilterWrap.classList.toggle("hidden", examMode);
+      els.examSectionPicker.classList.toggle("hidden", !(onPracticePage && examMode));
       els.statsPanel.classList.toggle("hidden", !onPracticePage || pureMode);
       els.questionWrap.classList.toggle("hidden", !onPracticePage);
       els.homePage.classList.toggle("hidden", !onHomePage);
@@ -7186,6 +7385,7 @@
     function setExamMode(nextExamMode) {
       if (nextExamMode === examMode) return;
       const wasSubmitted = examSubmitted;
+      stopExamTimer();
       examMode = nextExamMode;
       activePage = "practice";
       setClearConfirmState(false);
@@ -7194,14 +7394,18 @@
         examSummary = null;
         mode = "all";
         currentIndex = 0;
+        resetExamSections();
+        applyExamDuration(true);
         clearAnswerRecords();
         refreshQuestionPool();
       } else {
+        examSectionSet.clear();
         if (!wasSubmitted) {
           clearAnswerRecords();
         }
         examSubmitted = false;
         examSummary = null;
+        examRemainingSeconds = examDurationMinutes * 60;
         refreshQuestionPool();
       }
       render();
@@ -7300,31 +7504,25 @@
     }
 
     function showFeedback(question, record, style) {
-      els.feedback.className = `feedback ${style}`;
-      els.feedback.innerHTML = `
-        <h3>${record.isCorrect ? t("feedbackCorrect") : t("feedbackIncorrect")}</h3>
-        <p><strong>${t("yourAnswer")}</strong>${formatUserAnswer(question, record.userAnswer)}</p>
-        <p><strong>${t("rightAnswer")}</strong>${formatAnswer(question, question.answer)}</p>
-        <p><strong>${t("analysis")}</strong>${getText(question.analysis)}</p>
-      `;
+      renderFeedback(style, record.isCorrect ? t("feedbackCorrect") : t("feedbackIncorrect"), [
+        { label: t("yourAnswer"), text: formatUserAnswer(question, record.userAnswer) },
+        { label: t("rightAnswer"), text: formatAnswer(question, question.answer) },
+        { label: t("analysis"), text: getText(question.analysis) }
+      ]);
     }
 
     function showSavedFeedback(question, record) {
-      els.feedback.className = "feedback info";
-      els.feedback.innerHTML = `
-        <h3>${t("examSavedTitle")}</h3>
-        <p><strong>${t("yourAnswer")}</strong>${formatUserAnswer(question, record.userAnswer)}</p>
-        <p>${t("examSavedText")}</p>
-      `;
+      renderFeedback("info", t("examSavedTitle"), [
+        { label: t("yourAnswer"), text: formatUserAnswer(question, record.userAnswer) },
+        { text: t("examSavedText") }
+      ]);
     }
 
     function showAnswerOnly(question) {
-      els.feedback.className = "feedback info";
-      els.feedback.innerHTML = `
-        <h3>${t("answerAndAnalysis")}</h3>
-        <p><strong>${t("rightAnswer")}</strong>${formatAnswer(question, question.answer)}</p>
-        <p><strong>${t("analysis")}</strong>${getText(question.analysis)}</p>
-      `;
+      renderFeedback("info", t("answerAndAnalysis"), [
+        { label: t("rightAnswer"), text: formatAnswer(question, question.answer) },
+        { label: t("analysis"), text: getText(question.analysis) }
+      ]);
     }
 
     function applyStaticTexts() {
@@ -7345,6 +7543,12 @@
       els.themeToggleBtn.textContent = getResolvedTheme() === "dark" ? t("themeToLight") : t("themeToDark");
       els.langToggleBtn.textContent = lang === "zh" ? "EN" : "中文";
       els.sectionLabel.textContent = t("sectionLabel");
+      els.examSectionLabel.textContent = t("examSectionLabel");
+      els.examSectionSelectAllBtn.textContent = t("examSectionSelectAll");
+      els.examSectionClearAllBtn.textContent = t("examSectionClearAll");
+      els.examTimeLabel.textContent = t("examTimeLabel");
+      els.examTimeUnit.textContent = t("examTimeUnit");
+      els.examApplyTimeBtn.textContent = t("examApplyTime");
       els.smartNextBtn.textContent = t("smartNext");
       els.statTotalLabel.textContent = t("statTotalLabel");
       els.statAnsweredLabel.textContent = t("statAnsweredLabel");
@@ -7371,19 +7575,24 @@
       els.sectionsPageDesc.textContent = t("sectionsPageDesc");
       populateSectionSelect();
       updateSectionOwnerBadge();
+      updateExamTimerDisplay();
     }
 
     function renderStats() {
       const answered = currentQuestions.filter((q) => answerRecords[q.id] && !isAnswerEmpty(q, answerRecords[q.id].userAnswer)).length;
       const correct = currentQuestions.filter((q) => answerRecords[q.id] && answerRecords[q.id].isCorrect).length;
       const unanswered = currentQuestions.length - answered;
-      els.statTotal.textContent = String(currentQuestions.length);
-      els.statAnswered.textContent = String(answered);
-      els.statCorrect.textContent = examMode && !examSubmitted ? "-" : String(correct);
-      els.statWrong.textContent = examMode && !examSubmitted ? String(unanswered) : String(wrongSet.size);
+      const usingExamSummary = examMode && examSubmitted && examSummary;
+      els.statTotal.textContent = usingExamSummary ? String(examSummary.total) : String(currentQuestions.length);
+      els.statAnswered.textContent = usingExamSummary ? String(examSummary.answered) : String(answered);
+      els.statCorrect.textContent = examMode && !examSubmitted ? "-" : String(usingExamSummary ? examSummary.correct : correct);
+      els.statWrong.textContent = examMode && !examSubmitted ? String(unanswered) : String(usingExamSummary ? examSummary.wrong : wrongSet.size);
     }
 
-    function renderWrongList() {
+    function renderWrongList(force = false) {
+      const key = `${lang}|${[...wrongSet].sort().join(",")}`;
+      if (!force && key === lastRenderedWrongListKey) return;
+      lastRenderedWrongListKey = key;
       els.wrongList.innerHTML = "";
       if (!wrongSet.size) {
         els.wrongHint.textContent = t("wrongHintEmpty");
@@ -7411,6 +7620,7 @@
     function render() {
       refreshQuestionPool();
       applyStaticTexts();
+      renderExamSectionPicker();
       syncControlState();
       renderWrongList();
       renderSectionsPage();
@@ -7425,7 +7635,11 @@
       if (!currentQuestions.length) {
         els.questionWrap.classList.add("hidden");
         els.emptyState.classList.remove("hidden");
-        els.emptyState.textContent = mode === "wrong" ? t("emptyWrong") : t("emptyAll");
+        if (examMode && !examSectionSet.size) {
+          els.emptyState.textContent = t("examNoSectionSelected");
+        } else {
+          els.emptyState.textContent = mode === "wrong" ? t("emptyWrong") : t("emptyAll");
+        }
         return;
       }
 
@@ -7450,7 +7664,7 @@
         showSavedFeedback(question, record);
       } else {
         els.feedback.className = "feedback hidden";
-        els.feedback.innerHTML = "";
+        els.feedback.textContent = "";
       }
     }
 
@@ -7518,6 +7732,7 @@
 
       saveWrongBook();
       examSubmitted = true;
+      stopExamTimer();
       examSummary = {
         total: currentQuestions.length,
         answered,
@@ -7627,6 +7842,25 @@
         render();
       });
     });
+    els.examSectionSelectAllBtn.addEventListener("click", () => {
+      sectionIds.forEach((id) => examSectionSet.add(id));
+      currentIndex = 0;
+      refreshQuestionPool();
+      render();
+    });
+    els.examSectionClearAllBtn.addEventListener("click", () => {
+      examSectionSet.clear();
+      currentIndex = 0;
+      refreshQuestionPool();
+      render();
+    });
+    els.examApplyTimeBtn.addEventListener("click", () => {
+      applyExamDuration(true);
+      render();
+    });
+    els.examDurationInput.addEventListener("change", () => {
+      applyExamDuration(false);
+    });
     els.allModeBtn.addEventListener("click", () => setMode("all"));
     els.wrongModeBtn.addEventListener("click", () => setMode("wrong"));
     els.examModeBtn.addEventListener("click", () => setExamMode(!examMode));
@@ -7647,6 +7881,9 @@
     els.themeToggleBtn.addEventListener("click", toggleTheme);
     els.submitPaperBtn.addEventListener("click", submitPaper);
     els.langToggleBtn.addEventListener("click", toggleLang);
+
+    els.examDurationInput.value = String(examDurationMinutes);
+    updateExamTimerDisplay();
 
     if (typeof prefersDarkScheme.addEventListener === "function") {
       prefersDarkScheme.addEventListener("change", handleSystemThemeChange);
