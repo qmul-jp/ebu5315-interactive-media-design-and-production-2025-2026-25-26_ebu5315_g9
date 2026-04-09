@@ -1,444 +1,241 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>垂径定理：垂直于弦的直径平分弦及其所对的弧</title>
+    <title>垂径定理 - CircleLab</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        /* 极简居中样式，仅用于对齐，无额外设计元素 */
+        :root {
+            --bg:        #f7f5f0;
+            --card-bg:   #ffffff;
+            --text:      #1a1a1a;
+            --text-sub:  #888;
+            --accent2:   #c8502a;
+            --border:    #e8e4dc;
+            --hover-bg:  #f0ede6;
+            --shadow:    0 1px 12px rgba(0,0,0,0.06);
+        }
+        [data-theme="dark"] {
+            --bg:        #141414;
+            --card-bg:   #1c1c1c;
+            --text:      #e8e4dc;
+            --text-sub:  #666;
+            --accent2:   #e8724a;
+            --border:    #2a2a2a;
+            --hover-bg:  #242424;
+            --shadow:    0 1px 12px rgba(0,0,0,0.3);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            text-align: center;
-            font-family: sans-serif;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft YaHei", sans-serif;
+            background: var(--bg); color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            padding: 20px 24px 28px; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
         }
+        .circle-card {
+            max-width: 820px; width: 100%;
+            background: var(--card-bg); border-radius: 24px;
+            box-shadow: var(--shadow); border: 1px solid var(--border);
+            overflow: hidden; transition: background 0.3s, border-color 0.3s;
+        }
+        .card-header { padding: 20px 28px 12px; border-bottom: 1px solid var(--border); }
+        .card-header .title { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--text); }
+        .card-header .sub-en { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; }
+        .canvas-container { padding: 28px 28px 16px; display: flex; justify-content: center; background: var(--card-bg); }
         canvas {
-            display: block;
-            margin: 0 auto;
-            border: 1px solid #ffffff;
-            background: #ffffff;
+            display: block; margin: 0 auto; border-radius: 16px; background: var(--card-bg);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03); border: 1px solid var(--border);
+            transition: background 0.2s, border-color 0.2s;
         }
-        .measurements {
-            margin-top: 16px;
-            line-height: 2.2;
+        .data-panel {
+            margin: 8px 28px 8px; background: var(--hover-bg);
+            border-radius: 20px; padding: 16px 20px; transition: background 0.2s;
+        }
+        .formula-row {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            align-items: baseline; gap: 24px; margin-bottom: 10px;
+            padding-bottom: 10px; border-bottom: 1px dashed var(--border); text-align: center;
+        }
+        .formula-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .metric { font-size: 0.9rem; font-weight: 500; color: var(--text); display: flex; align-items: baseline; gap: 6px; }
+        .metric-value {
+            font-weight: 600; background: var(--card-bg); padding: 2px 10px;
+            border-radius: 24px; color: var(--accent2); font-size: 0.95rem;
         }
         .theorem {
-            font-weight: bold;
-            margin-top: 20px;
-            font-size: 1.1em;
+            margin: 8px 28px 28px; background: var(--hover-bg);
+            border-left: 4px solid var(--accent2); padding: 16px 20px;
+            border-radius: 14px; font-size: 0.9rem; line-height: 1.5;
+            color: var(--text); text-align: center; transition: background 0.2s;
         }
-
-        /* 弧符号容器：inline-block，相对定位，使弧符号能绝对定位到字母上方 */
-        .arc-label {
-            display: inline-block;
-            position: relative;
-            padding-top: 0;   /* 为顶部弧符号留出空间 */
+        .interact-hint {
+            margin: 0 28px 24px; font-size: 0.7rem; color: var(--text-sub);
+            display: flex; gap: 18px; justify-content: center;
+            border-top: 1px solid var(--border); padding-top: 16px;
         }
-
-        /* 弧符号本身：绝对定位，居中显示在文字正上方 */
+        .arc-label { display: inline-block; position: relative; padding-top: 0.3em; }
         .arc-label .arc-symbol {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%) scaleX(1.3);
-            font-size: 0.75em;
-            line-height: 1;
+            position: absolute; top: 0; left: 50%;
+            transform: translateX(-50%) scaleX(1.3); font-size: 0.75em; line-height: 1;
         }
-    
-        /* === theme === */
-        :root { --fg:#000000; --bg:#ffffff; }
-        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; }
-        html,body {
-            background: var(--bg) !important;
-            color: var(--fg) !important;
-            transition: background .2s, color .2s;
-        }
-        h3 { color: var(--fg); }
-
-        canvas { background: var(--bg) !important; }
-
     </style>
 </head>
 <body>
-    <div data-cl-zh><h3>垂径定理：垂直于弦的直径平分弦，并且平分弦所对的两条弧</h3></div><div data-cl-en style="display:none"><h3>Perpendicular Chord Theorem: A diameter ⊥ to a chord bisects the chord and its arcs</h3></div>
-
-    <!-- 画布区域 - 用于绘制圆、弦、直径 -->
-    <div>
-        <canvas id="circleCanvas" width="600" height="500"></canvas>
+<div class="circle-card">
+    <div class="card-header">
+        <div class="title" data-cl-zh>垂径定理</div>
+        <div class="title" data-cl-en style="display:none">Perpendicular Chord Theorem</div>
+        <div class="sub-en" data-cl-zh>垂直于弦的直径平分弦及其所对的弧</div>
+        <div class="sub-en" data-cl-en style="display:none">A diameter ⊥ to a chord bisects the chord and its arcs</div>
     </div>
-
-    <!-- 测量数据显示区域 -->
-    <div class="measurements">
-        AE = <span id="lenAE">0.00</span> &nbsp;&nbsp; BE = <span id="lenBE">0.00</span><br>
-
-        <!-- 弧AC：弧符号在"AC"上方 -->
-        <span class="arc-label"><span class="arc-symbol">⌢</span>AC</span> = <span id="arcAC">0.00</span>
-        &nbsp;&nbsp;
-        <!-- 弧BC：弧符号在"BC"上方 -->
-        <span class="arc-label"><span class="arc-symbol">⌢</span>BC</span> = <span id="arcBC">0.00</span><br>
-
-        <!-- 弧AD：弧符号在"AD"上方 -->
-        <span class="arc-label"><span class="arc-symbol">⌢</span>AD</span> = <span id="arcAD">0.00</span>
-        &nbsp;&nbsp;
-        <!-- 弧BD：弧符号在"BD"上方 -->
-        <span class="arc-label"><span class="arc-symbol">⌢</span>BD</span> = <span id="arcBD">0.00</span>
+    <div class="canvas-container">
+        <canvas id="circleCanvas" width="600" height="500" style="width:100%; height:auto; max-width:600px; aspect-ratio:600/500"></canvas>
     </div>
-
-<div data-cl-zh><div class="theorem">垂直于弦的直径平分弦，并且平分弦所对的两条弧</div></div><div data-cl-en style="display:none"><div class="theorem">A diameter perpendicular to a chord bisects the chord and both arcs</div></div>
-
-    <script>
-        (function() {
-
-            /* 主题色辅助 */
-            function _fg() { return document.documentElement.getAttribute('data-theme')==='dark' ? '#ffffff' : '#000000'; }
-            function _bg() { return document.documentElement.getAttribute('data-theme')==='dark' ? '#000000' : '#ffffff'; }
-
-            // 固定圆心 (300, 250)，半径 180
-            const center = { x: 300, y: 250 };
-            const radius = 180;
-
-            // 两个动点 A 和 B 的初始角度 (度)
-            let angleA = 30;
-            let angleB = 120;   // 确保 A 和 B 不重合，便于观察
-
-            // 画布和上下文
-            const canvas = document.getElementById('circleCanvas');
-            const ctx = canvas.getContext('2d');
-
-            // 显示元素
-            const spanAE = document.getElementById('lenAE');
-            const spanBE = document.getElementById('lenBE');
-            const spanArcAC = document.getElementById('arcAC');
-            const spanArcBC = document.getElementById('arcBC');
-            const spanArcAD = document.getElementById('arcAD');
-            const spanArcBD = document.getElementById('arcBD');
-
-            // 拖拽状态
-            let dragging = false;
-            let dragPoint = null;   // 'A' 或 'B'
-
-            // --- 辅助函数：根据角度(度)获取圆上点坐标 ---
-            function getPointFromAngle(deg) {
-                const rad = deg * Math.PI / 180;
-                return {
-                    x: center.x + radius * Math.cos(rad),
-                    y: center.y + radius * Math.sin(rad)
-                };
-            }
-
-            // --- 计算两点间的圆心角(劣弧) 返回角度制 0~180 ---
-            function centralAngle(deg1, deg2) {
-                let diff = Math.abs(deg1 - deg2) % 360;
-                if (diff > 180) diff = 360 - diff;
-                return diff;
-            }
-
-            // --- 计算弦AB的中点坐标（垂足E） ---
-            function computeMidpointChord(pA, pB) {
-                return {
-                    x: (pA.x + pB.x) / 2,
-                    y: (pA.y + pB.y) / 2
-                };
-            }
-
-            // --- 计算两点间距离 ---
-            function distance(p1, p2) {
-                return Math.hypot(p1.x - p2.x, p1.y - p2.y);
-            }
-
-            // --- 根据角度计算弧长（半径固定） 弧长 = 半径 * 圆心角(弧度) ---
-            function arcLength(angleDeg) {
-                return radius * (angleDeg * Math.PI / 180);
-            }
-
-            // --- 获取C、D两点：过圆心O且垂直于弦AB的直线与圆的交点 ---
-            function getPerpendicularPoints(pA, pB) {
-                const vAB = { x: pB.x - pA.x, y: pB.y - pA.y };
-                let perp = { x: -vAB.y, y: vAB.x };
-                const len = Math.hypot(perp.x, perp.y);
-                if (len < 1e-9) {
-                    perp = { x: 1, y: 0 };
-                } else {
-                    perp.x /= len;
-                    perp.y /= len;
-                }
-
-                const C = {
-                    x: center.x + radius * perp.x,
-                    y: center.y + radius * perp.y
-                };
-                const D = {
-                    x: center.x - radius * perp.x,
-                    y: center.y - radius * perp.y
-                };
-                return { C, D };
-            }
-
-            // --- 计算从角度1到角度2的劣弧圆心角 (取小) ---
-            function smallCentralAngle(deg1, deg2) {
-                let diff = Math.abs(deg1 - deg2) % 360;
-                if (diff > 180) diff = 360 - diff;
-                return diff;
-            }
-
-            // --- 绘制垂直符号（直角标记）在E点处 ---
-            function drawRightAngle(pA, pB, E) {
-                const vEA = { x: pA.x - E.x, y: pA.y - E.y };
-                const vEO = { x: center.x - E.x, y: center.y - E.y };
-                
-                const size = 8;
-                
-                let perp = { x: vEA.y, y: -vEA.x };
-                
-                const dot = perp.x * vEO.x + perp.y * vEO.y;
-                if (dot < 0) {
-                    perp.x = -perp.x;
-                    perp.y = -perp.y;
-                }
-                
-                const lenPerp = Math.hypot(perp.x, perp.y);
-                if (lenPerp < 1e-9) return;
-                perp.x /= lenPerp;
-                perp.y /= lenPerp;
-                
-                const lenEA = Math.hypot(vEA.x, vEA.y);
-                if (lenEA < 1e-9) return;
-                const dirEA = { x: vEA.x / lenEA, y: vEA.y / lenEA };
-                
-                const p1 = { x: E.x + dirEA.x * size, y: E.y + dirEA.y * size };
-                const p2 = { x: E.x + perp.x * size, y: E.y + perp.y * size };
-                const p3 = { x: p1.x + perp.x * size, y: p1.y + perp.y * size };
-                
-                ctx.beginPath();
-                ctx.moveTo(p1.x, p1.y);
-                ctx.lineTo(p3.x, p3.y);
-                ctx.lineTo(p2.x, p2.y);
-                ctx.strokeStyle = _fg();
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-            }
-
-            // --- 更新所有测量值和绘图 ---
-            function update() {
-                const pA = getPointFromAngle(angleA);
-                const pB = getPointFromAngle(angleB);
-
-                const E = computeMidpointChord(pA, pB);
-
-                const AE = distance(pA, E);
-                const BE = distance(pB, E);
-                spanAE.textContent = AE.toFixed(2);
-                spanBE.textContent = BE.toFixed(2);
-
-                const { C, D } = getPerpendicularPoints(pA, pB);
-                const angleC = (Math.atan2(C.y - center.y, C.x - center.x) * 180 / Math.PI + 360) % 360;
-                const angleD = (Math.atan2(D.y - center.y, D.x - center.x) * 180 / Math.PI + 360) % 360;
-
-                const arcAC_angle = smallCentralAngle(angleA, angleC);
-                const arcBC_angle = smallCentralAngle(angleB, angleC);
-                const arcAD_angle = smallCentralAngle(angleA, angleD);
-                const arcBD_angle = smallCentralAngle(angleB, angleD);
-
-                const arcAC_len = radius * (arcAC_angle * Math.PI / 180);
-                const arcBC_len = radius * (arcBC_angle * Math.PI / 180);
-                const arcAD_len = radius * (arcAD_angle * Math.PI / 180);
-                const arcBD_len = radius * (arcBD_angle * Math.PI / 180);
-
-                spanArcAC.textContent = arcAC_len.toFixed(2);
-                spanArcBC.textContent = arcBC_len.toFixed(2);
-                spanArcAD.textContent = arcAD_len.toFixed(2);
-                spanArcBD.textContent = arcBD_len.toFixed(2);
-
-                drawCanvas(pA, pB, E, C, D);
-            }
-
-            // --- 绘制图形 ---
-            function drawCanvas(pA, pB, E, C, D) {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                ctx.beginPath();
-                ctx.arc(center.x, center.y, radius, 0, 2 * Math.PI);
-                ctx.strokeStyle = _fg();
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.arc(center.x, center.y, 4, 0, 2 * Math.PI);
-                ctx.fillStyle = _fg();
-                ctx.fill();
-                ctx.fillStyle = _fg();
-                ctx.font = '14px sans-serif';
-                ctx.fillText('O', center.x - 15, center.y - 10);
-
-                ctx.beginPath();
-                ctx.moveTo(C.x, C.y);
-                ctx.lineTo(D.x, D.y);
-                ctx.strokeStyle = '#888';
-                ctx.setLineDash([5, 3]);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                ctx.beginPath();
-                ctx.moveTo(pA.x, pA.y);
-                ctx.lineTo(pB.x, pB.y);
-                ctx.strokeStyle = _fg();
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                ctx.beginPath();
-                ctx.moveTo(center.x, center.y);
-                ctx.lineTo(E.x, E.y);
-                ctx.strokeStyle = '#aaa';
-                ctx.setLineDash([4, 2]);
-                ctx.stroke();
-                ctx.setLineDash([]);
-
-                drawRightAngle(pA, pB, E);
-
-                ctx.beginPath();
-                ctx.arc(pA.x, pA.y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = 'red';
-                ctx.fill();
-                ctx.fillStyle = _fg();
-                ctx.fillText('A', pA.x + 8, pA.y - 8);
-
-                ctx.beginPath();
-                ctx.arc(pB.x, pB.y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = 'blue';
-                ctx.fill();
-                ctx.fillText('B', pB.x + 8, pB.y - 8);
-
-                ctx.beginPath();
-                ctx.arc(C.x, C.y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = 'green';
-                ctx.fill();
-                ctx.fillText('C', C.x + 8, C.y - 8);
-
-                ctx.beginPath();
-                ctx.arc(D.x, D.y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = 'purple';
-                ctx.fill();
-                ctx.fillText('D', D.x + 8, D.y - 8);
-
-                ctx.beginPath();
-                ctx.arc(E.x, E.y, 4, 0, 2 * Math.PI);
-                ctx.fillStyle = '#f39c12';
-                ctx.fill();
-                ctx.fillStyle = _fg();
-                ctx.fillText('E', E.x + 8, E.y - 8);
-            }
-
-            // --- 鼠标交互：拖拽A、B点 ---
-            function handleMouseDown(e) {
-                const rect = canvas.getBoundingClientRect();
-                const scaleX = canvas.width / rect.width;
-                const scaleY = canvas.height / rect.height;
-
-                const mouseX = (e.clientX - rect.left) * scaleX;
-                const mouseY = (e.clientY - rect.top) * scaleY;
-
-                const pA = getPointFromAngle(angleA);
-                const pB = getPointFromAngle(angleB);
-
-                const distA = Math.hypot(mouseX - pA.x, mouseY - pA.y);
-                const distB = Math.hypot(mouseX - pB.x, mouseY - pB.y);
-
-                const threshold = 15;
-                if (distA < threshold) {
-                    dragging = true;
-                    dragPoint = 'A';
-                } else if (distB < threshold) {
-                    dragging = true;
-                    dragPoint = 'B';
-                }
-            }
-
-            function handleMouseMove(e) {
-                if (!dragging || !dragPoint) return;
-
-                const rect = canvas.getBoundingClientRect();
-                const scaleX = canvas.width / rect.width;
-                const scaleY = canvas.height / rect.height;
-
-                const mouseX = (e.clientX - rect.left) * scaleX;
-                const mouseY = (e.clientY - rect.top) * scaleY;
-
-                const dx = mouseX - center.x;
-                const dy = mouseY - center.y;
-                let angleRad = Math.atan2(dy, dx);
-                let angleDeg = angleRad * 180 / Math.PI;
-
-                if (dragPoint === 'A') {
-                    angleA = angleDeg;
-                } else if (dragPoint === 'B') {
-                    angleB = angleDeg;
-                }
-
-                update();
-            }
-
-            function handleMouseUp() {
-                dragging = false;
-                dragPoint = null;
-            }
-
-            canvas.addEventListener('mousedown', handleMouseDown);
-            window.addEventListener('mousemove', handleMouseMove);
-            window.addEventListener('mouseup', handleMouseUp);
-            canvas.addEventListener('mouseleave', () => {
-                dragging = false;
-                dragPoint = null;
-            });
-
-            update();
-        
-            // expose redraw for theme/lang
-            window._clRedraw = function(){ update(); };
-
-        })();
-    </script>
-
+    <div class="data-panel" id="dataPanel"></div>
+    <div class="theorem" data-cl-zh>📐 垂直于弦的直径平分弦，并且平分弦所对的两条弧</div>
+    <div class="theorem" data-cl-en style="display:none">📐 A diameter perpendicular to a chord bisects the chord and both arcs it subtends</div>
+    <div class="interact-hint">
+        <span>🖱️ <span data-cl-zh>拖拽 A、B 两点改变弦</span><span data-cl-en style="display:none">Drag points A, B to change the chord</span></span>
+    </div>
+</div>
 <script>
-/* === CircleLab bridge: 接收主界面的 postMessage === */
 (function(){
-    // 语言和主题状态
-    window._CL = { lang: 'zh', theme: 'light' };
+    function _fg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#e8e4dc':'#1a1a1a'; }
+    function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#1c1c1c':'#ffffff'; }
+    function _lang(){ return (window._CL&&window._CL.lang)||'zh'; }
 
-    function applyLang(lang) {
-        window._CL.lang = lang;
-        // 显示/隐藏双语块
-        document.querySelectorAll('[data-cl-zh]').forEach(function(el) {
-            el.style.display = lang === 'zh' ? '' : 'none';
-        });
-        document.querySelectorAll('[data-cl-en]').forEach(function(el) {
-            el.style.display = lang === 'en' ? '' : 'none';
-        });
-        // 重绘canvas（动态文字需要更新）
-        if (typeof _clRedraw === 'function') _clRedraw();
+    const canvas=document.getElementById('circleCanvas'), ctx=canvas.getContext('2d');
+    const center={x:300,y:250}, radius=180;
+    let angleA=30, angleB=120;
+    let dragging=false, dragPoint=null;
+
+    function pt(deg){ const r=deg*Math.PI/180; return {x:center.x+radius*Math.cos(r),y:center.y+radius*Math.sin(r)}; }
+    function smallAngle(a,b){ let d=Math.abs(a-b)%360; if(d>180)d=360-d; return d; }
+    function perpPoints(pA,pB){
+        const vAB={x:pB.x-pA.x,y:pB.y-pA.y};
+        let perp={x:-vAB.y,y:vAB.x};
+        const len=Math.hypot(perp.x,perp.y);
+        if(len<1e-9){perp={x:1,y:0};} else {perp.x/=len;perp.y/=len;}
+        return {C:{x:center.x+radius*perp.x,y:center.y+radius*perp.y}, D:{x:center.x-radius*perp.x,y:center.y-radius*perp.y}};
+    }
+    function drawRightAngle(pA,pB,E){
+        const vEA={x:pA.x-E.x,y:pA.y-E.y};
+        const vEO={x:center.x-E.x,y:center.y-E.y};
+        const size=8;
+        let perp={x:vEA.y,y:-vEA.x};
+        if(perp.x*vEO.x+perp.y*vEO.y<0){perp.x=-perp.x;perp.y=-perp.y;}
+        const lenP=Math.hypot(perp.x,perp.y); if(lenP<1e-9) return;
+        perp.x/=lenP;perp.y/=lenP;
+        const lenEA=Math.hypot(vEA.x,vEA.y); if(lenEA<1e-9) return;
+        const dir={x:vEA.x/lenEA,y:vEA.y/lenEA};
+        const p1={x:E.x+dir.x*size,y:E.y+dir.y*size};
+        const p2={x:E.x+perp.x*size,y:E.y+perp.y*size};
+        const p3={x:p1.x+perp.x*size,y:p1.y+perp.y*size};
+        ctx.beginPath();ctx.moveTo(p1.x,p1.y);ctx.lineTo(p3.x,p3.y);ctx.lineTo(p2.x,p2.y);
+        ctx.strokeStyle=_fg();ctx.lineWidth=1.5;ctx.stroke();
     }
 
-    function applyTheme(theme) {
-        window._CL.theme = theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        // 重绘canvas（颜色需要更新）
-        if (typeof _clRedraw === 'function') _clRedraw();
+    function update(){
+        const pA=pt(angleA), pB=pt(angleB);
+        const E={x:(pA.x+pB.x)/2,y:(pA.y+pB.y)/2};
+        const AE=Math.hypot(pA.x-E.x,pA.y-E.y), BE=Math.hypot(pB.x-E.x,pB.y-E.y);
+        const {C,D}=perpPoints(pA,pB);
+        const aC=(Math.atan2(C.y-center.y,C.x-center.x)*180/Math.PI+360)%360;
+        const aD=(Math.atan2(D.y-center.y,D.x-center.x)*180/Math.PI+360)%360;
+        const arcAC=radius*(smallAngle(angleA,aC)*Math.PI/180);
+        const arcBC=radius*(smallAngle(angleB,aC)*Math.PI/180);
+        const arcAD=radius*(smallAngle(angleA,aD)*Math.PI/180);
+        const arcBD=radius*(smallAngle(angleB,aD)*Math.PI/180);
+        const isZh=_lang()==='zh';
+
+        document.getElementById('dataPanel').innerHTML=`
+            <div class="formula-row">
+                <div class="metric">AE = <span class="metric-value">${AE.toFixed(2)}</span></div>
+                <div class="metric">BE = <span class="metric-value">${BE.toFixed(2)}</span></div>
+                <div class="metric" style="color:${Math.abs(AE-BE)<1.5?'#27ae60':'inherit'}">AE ${Math.abs(AE-BE)<1.5?'=':'≠'} BE</div>
+            </div>
+            <div class="formula-row">
+                <div class="metric"><span class="arc-label"><span class="arc-symbol">⌢</span>AC</span> = <span class="metric-value">${arcAC.toFixed(2)}</span></div>
+                <div class="metric"><span class="arc-label"><span class="arc-symbol">⌢</span>BC</span> = <span class="metric-value">${arcBC.toFixed(2)}</span></div>
+                <div class="metric" style="color:${Math.abs(arcAC-arcBC)<1?'#27ae60':'inherit'}"><span class="arc-label"><span class="arc-symbol">⌢</span>AC</span> ${Math.abs(arcAC-arcBC)<1?'=':'≠'} <span class="arc-label"><span class="arc-symbol">⌢</span>BC</span></div>
+            </div>
+            <div class="formula-row">
+                <div class="metric"><span class="arc-label"><span class="arc-symbol">⌢</span>AD</span> = <span class="metric-value">${arcAD.toFixed(2)}</span></div>
+                <div class="metric"><span class="arc-label"><span class="arc-symbol">⌢</span>BD</span> = <span class="metric-value">${arcBD.toFixed(2)}</span></div>
+                <div class="metric" style="color:${Math.abs(arcAD-arcBD)<1?'#27ae60':'inherit'}"><span class="arc-label"><span class="arc-symbol">⌢</span>AD</span> ${Math.abs(arcAD-arcBD)<1?'=':'≠'} <span class="arc-label"><span class="arc-symbol">⌢</span>BD</span></div>
+            </div>`;
+
+        drawCanvas(pA,pB,E,C,D);
     }
 
-    window.addEventListener('message', function(ev) {
-        if (!ev.data || ev.data._src !== 'circlelab') return;
-        if (ev.data.lang)  applyLang(ev.data.lang);
-        if (ev.data.theme) applyTheme(ev.data.theme);
-    });
+    function drawCanvas(pA,pB,E,C,D){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle=_bg();ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    // 初始化：从父页面读取当前状态
-    window.addEventListener('DOMContentLoaded', function() {
-        try {
-            var p = window.parent;
-            if (p._CL_lang)  applyLang(p._CL_lang);
-            if (p._CL_theme) applyTheme(p._CL_theme);
-        } catch(e) {}
-        applyLang(window._CL.lang);
-        applyTheme(window._CL.theme);
+        ctx.beginPath();ctx.arc(center.x,center.y,radius,0,2*Math.PI);
+        ctx.strokeStyle=_fg();ctx.lineWidth=1.8;ctx.stroke();
+
+        ctx.beginPath();ctx.moveTo(C.x,C.y);ctx.lineTo(D.x,D.y);
+        ctx.strokeStyle='#888';ctx.lineWidth=1.2;ctx.setLineDash([5,3]);ctx.stroke();ctx.setLineDash([]);
+
+        ctx.beginPath();ctx.moveTo(pA.x,pA.y);ctx.lineTo(pB.x,pB.y);
+        ctx.strokeStyle=_fg();ctx.lineWidth=1.8;ctx.stroke();
+
+        ctx.beginPath();ctx.moveTo(center.x,center.y);ctx.lineTo(E.x,E.y);
+        ctx.strokeStyle='#aaa';ctx.lineWidth=1.2;ctx.setLineDash([4,2]);ctx.stroke();ctx.setLineDash([]);
+        drawRightAngle(pA,pB,E);
+
+        ctx.beginPath();ctx.arc(center.x,center.y,4,0,2*Math.PI);ctx.fillStyle=_fg();ctx.fill();
+        ctx.font='500 14px "DM Sans",Arial,sans-serif';ctx.fillStyle=_fg();
+        ctx.fillText('O',center.x-15,center.y-10);
+
+        [[pA,'A','#e74c3c'],[pB,'B','#3498db'],[C,'C','#27ae60'],[D,'D','#9b59b6']].forEach(([p,l,c])=>{
+            ctx.beginPath();ctx.arc(p.x,p.y,6,0,2*Math.PI);ctx.fillStyle=c;ctx.fill();
+            ctx.fillStyle=_fg();ctx.fillText(l,p.x+8,p.y-8);
+        });
+        ctx.beginPath();ctx.arc(E.x,E.y,5,0,2*Math.PI);ctx.fillStyle='#f39c12';ctx.fill();
+        ctx.fillStyle=_fg();ctx.fillText('E',E.x+8,E.y-8);
+    }
+
+    function getMousePos(e){
+        const rect=canvas.getBoundingClientRect();
+        return {x:(e.clientX-rect.left)*(600/rect.width),y:(e.clientY-rect.top)*(500/rect.height)};
+    }
+    canvas.addEventListener('mousedown',e=>{
+        const m=getMousePos(e);
+        if(Math.hypot(m.x-pt(angleA).x,m.y-pt(angleA).y)<15){dragging=true;dragPoint='A';}
+        else if(Math.hypot(m.x-pt(angleB).x,m.y-pt(angleB).y)<15){dragging=true;dragPoint='B';}
     });
+    window.addEventListener('mousemove',e=>{
+        if(!dragging) return;
+        const m=getMousePos(e);
+        const deg=Math.atan2(m.y-center.y,m.x-center.x)*180/Math.PI;
+        if(dragPoint==='A') angleA=deg; else if(dragPoint==='B') angleB=deg;
+        update();
+    });
+    window.addEventListener('mouseup',()=>{dragging=false;dragPoint=null;});
+
+    const obs=new MutationObserver(()=>update());
+    obs.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+    window.addEventListener('message',ev=>{
+        if(!ev.data||ev.data._src!=='circlelab') return;
+        if(ev.data.theme) document.documentElement.setAttribute('data-theme',ev.data.theme);
+        if(ev.data.lang){
+            if(!window._CL) window._CL={};
+            window._CL.lang=ev.data.lang;
+            const zh=ev.data.lang==='zh';
+            document.querySelectorAll('[data-cl-zh]').forEach(el=>el.style.display=zh?'':'none');
+            document.querySelectorAll('[data-cl-en]').forEach(el=>el.style.display=zh?'none':'');
+        }
+        update();
+    });
+    window._clRedraw=update;
+    window.addEventListener('load',update);
+    update();
 })();
 </script>
-
 </body>
 </html>
