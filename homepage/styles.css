@@ -1207,6 +1207,16 @@ button {
   line-height: 1.56;
 }
 
+.pricing-panel[data-pricing-panel="personal"] .pricing-card h3,
+.pricing-panel[data-pricing-panel="personal"] .pricing-card .pricing-card-subtitle {
+  white-space: nowrap;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card .pricing-card-subtitle {
+  max-width: none;
+  font-size: 0.96rem;
+}
+
 .pricing-card-billing {
   flex: 0 0 auto;
   padding-top: 0.3rem;
@@ -1317,6 +1327,43 @@ button {
   background-image: url("starter/clock.svg");
 }
 
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li {
+  padding-left: 1.6rem;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li::before {
+  top: 0.28rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 0;
+  background: url("pro/book-copy.svg?v=2") center / contain no-repeat;
+  box-shadow: none;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li:nth-child(2)::before {
+  background-image: url("pro/gamepad-2.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li:nth-child(3)::before {
+  background-image: url("pro/mouse-pointer-click.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li:nth-child(4)::before {
+  background-image: url("pro/list-checks.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li:nth-child(5)::before {
+  background-image: url("pro/messages-square.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li:nth-child(6)::before {
+  background-image: url("pro/search-check.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li:nth-child(7)::before {
+  background-image: url("pro/tv-minimal-play.svg?v=2");
+}
+
 .pricing-card-fit,
 .pricing-card-note {
   color: color-mix(in oklch, var(--muted) 76%, white);
@@ -1334,6 +1381,11 @@ button {
 }
 
 .pricing-panel[data-pricing-panel="personal"] .pricing-card-starter .pricing-card-note {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-card-note {
   margin-top: auto;
   padding-top: 1rem;
 }
