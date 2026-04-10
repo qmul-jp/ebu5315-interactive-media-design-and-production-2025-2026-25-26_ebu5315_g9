@@ -3,257 +3,313 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>圆的基本定义</title>
+    <title>圆的基本定义 - CircleLab</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        body {
-            text-align: center;
-            font-family: sans-serif;
+        :root {
+            --bg:        #f7f5f0;
+            --card-bg:   #ffffff;
+            --text:      #1a1a1a;
+            --text-sub:  #888;
+            --accent:    #1a1a1a;
+            --accent2:   #c8502a;
+            --border:    #e8e4dc;
+            --hover-bg:  #f0ede6;
+            --active-bg: #1a1a1a;
+            --active-text:#ffffff;
+            --shadow:    0 1px 12px rgba(0,0,0,0.06);
         }
+        [data-theme="dark"] {
+            --bg:        #141414;
+            --card-bg:   #1c1c1c;
+            --text:      #e8e4dc;
+            --text-sub:  #666;
+            --accent:    #e8e4dc;
+            --accent2:   #e8724a;
+            --border:    #2a2a2a;
+            --hover-bg:  #242424;
+            --active-bg: #e8e4dc;
+            --active-text:#141414;
+            --shadow:    0 1px 12px rgba(0,0,0,0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            padding: 20px 24px 28px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circle-card {
+            max-width: 820px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .card-header {
+            padding: 20px 28px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-header .title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.35rem;
+            color: var(--text);
+        }
+        .card-header .sub-en {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+
+        .canvas-container {
+            padding: 28px 28px 16px;
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+        }
+
         canvas {
             display: block;
             margin: 0 auto;
-            border: 1px solid #ffffff;
-            background: #ffffff;
+            border-radius: 16px;
+            background: var(--card-bg);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border);
+            transition: background 0.2s, border-color 0.2s;
         }
+
+        /* 描述区域 - 居中显示 */
         .descriptions {
-            margin-top: 16px;
-            line-height: 2.0;
+            margin: 12px 28px 8px;
+            line-height: 1.8;
+            font-size: 0.9rem;
+            color: var(--text);
+            display: flex;
+            gap: 16px;
+            justify-content: center; /* 水平居中 */
+            flex-wrap: wrap;
+            border-top: 1px dashed var(--border);
+            padding-top: 18px;
         }
+        .desc-item {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            background: var(--hover-bg);
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .desc-symbol {
+            font-weight: 600;
+            color: var(--accent2);
+            font-family: 'DM Sans', Arial, sans-serif;
+        }
+
+        /* 定理块 - 居中显示 */
         .theorem {
-            font-weight: bold;
-            margin-top: 12px;
-            font-size: 1.1em;
+            margin: 8px 28px 28px;
+            background: var(--hover-bg);
+            border-left: 4px solid var(--accent2);
+            padding: 16px 20px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text);
+            text-align: center; /* 文字居中 */
+            transition: background 0.2s;
         }
-    
-        /* === theme === */
-        :root { --fg:#000000; --bg:#ffffff; }
-        [data-theme="dark"] { --fg:#ffffff; --bg:#000000; }
-        html,body {
-            background: var(--bg) !important;
-            color: var(--fg) !important;
-            transition: background .2s, color .2s;
+
+        .interact-hint {
+            margin: 0 28px 24px;
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
         }
-        h3 { color: var(--fg); }
 
-        canvas { background: var(--bg) !important; }
-
+        @media (max-width: 600px) {
+            .descriptions { gap: 8px; }
+            .desc-item { padding: 4px 12px; }
+        }
     </style>
 </head>
 <body>
-    <div data-cl-zh><h3>圆的基本定义</h3></div><div data-cl-en style="display:none"><h3>Basic Definition of a Circle</h3></div>
-
-    <div>
-        <canvas id="circleCanvas" width="600" height="500"></canvas>
+<div class="circle-card">
+    <div class="card-header">
+        <div class="title" data-cl-zh>圆的基本定义</div>
+        <div class="title" data-cl-en style="display:none">Basic Definition of a Circle</div>
+        <div class="sub-en" data-cl-zh>圆心 · 半径 · 直径</div>
+        <div class="sub-en" data-cl-en style="display:none">Center · Radius · Diameter</div>
     </div>
-
-<div data-cl-zh><div class="descriptions">O 是⊙O的圆心<br>OA 是⊙O的一条半径<br>AB 是⊙O的一条直径</div></div><div data-cl-en style="display:none"><div class="descriptions">O is the center of ⊙O<br>OA is a radius of ⊙O<br>AB is a diameter of ⊙O</div></div>
-
-<div data-cl-zh><div class="theorem">圆是平面上到定点（圆心）距离等于定长（半径）的所有点的集合</div></div><div data-cl-en style="display:none"><div class="theorem">A circle is the set of all points in a plane equidistant from a fixed center point.</div></div>
-
-    <script>
-        (function () {
-
-            /* 主题色辅助 */
-            function _fg() { return document.documentElement.getAttribute('data-theme')==='dark' ? '#ffffff' : '#000000'; }
-            function _bg() { return document.documentElement.getAttribute('data-theme')==='dark' ? '#000000' : '#ffffff'; }
-
-            const canvas = document.getElementById('circleCanvas');
-            const ctx = canvas.getContext('2d');
-
-            // O 为圆心，初始位置在画布中央；A 为圆上一点，决定半径大小和方向
-            let O = { x: 300, y: 250 };
-            let angleA = -30; // A 点相对于 O 的角度（度）
-            let radius = 150; // 初始半径（即 |OA|），由 O 和 A 的距离决定
-
-            // 拖拽状态
-            let dragging = false;
-            let dragTarget = null; // 'O' 或 'A'
-
-            // 根据 O、angleA、radius 计算 A 的坐标
-            function getA() {
-                const rad = angleA * Math.PI / 180;
-                return {
-                    x: O.x + radius * Math.cos(rad),
-                    y: O.y + radius * Math.sin(rad)
-                };
-            }
-
-            // B 是 A 关于 O 的对称点（直径另一端）
-            function getB(pA) {
-                return {
-                    x: 2 * O.x - pA.x,
-                    y: 2 * O.y - pA.y
-                };
-            }
-
-            function drawCanvas() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                const pA = getA();
-                const pB = getB(pA);
-
-                // 画圆
-                ctx.beginPath();
-                ctx.arc(O.x, O.y, radius, 0, 2 * Math.PI);
-                ctx.strokeStyle = _fg();
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                // 画直径 AB（实线）
-                ctx.beginPath();
-                ctx.moveTo(pA.x, pA.y);
-                ctx.lineTo(pB.x, pB.y);
-                ctx.strokeStyle = _fg();
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                // 画半径 OA（用不同颜色区分）
-                ctx.beginPath();
-                ctx.moveTo(O.x, O.y);
-                ctx.lineTo(pA.x, pA.y);
-                ctx.strokeStyle = '#e74c3c';
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
-
-                // 画圆心 O
-                ctx.beginPath();
-                ctx.arc(O.x, O.y, 5, 0, 2 * Math.PI);
-                ctx.fillStyle = _fg();
-                ctx.fill();
-                ctx.fillStyle = _fg();
-                ctx.font = '14px sans-serif';
-                ctx.fillText('O', O.x - 16, O.y - 8);
-
-                // 画点 A（红色，可拖动）
-                ctx.beginPath();
-                ctx.arc(pA.x, pA.y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = 'red';
-                ctx.fill();
-                ctx.fillStyle = _fg();
-                ctx.fillText('A', pA.x + 8, pA.y - 8);
-
-                // 画点 B（蓝色）
-                ctx.beginPath();
-                ctx.arc(pB.x, pB.y, 6, 0, 2 * Math.PI);
-                ctx.fillStyle = 'blue';
-                ctx.fill();
-                ctx.fillStyle = _fg();
-                ctx.fillText('B', pB.x + 8, pB.y - 8);
-            }
-
-            // --- 鼠标事件 ---
-            function getMousePos(e) {
-                const rect = canvas.getBoundingClientRect();
-                const scaleX = canvas.width / rect.width;
-                const scaleY = canvas.height / rect.height;
-                return {
-                    x: (e.clientX - rect.left) * scaleX,
-                    y: (e.clientY - rect.top) * scaleY
-                };
-            }
-
-            canvas.addEventListener('mousedown', function (e) {
-                const m = getMousePos(e);
-                const pA = getA();
-
-                const distO = Math.hypot(m.x - O.x, m.y - O.y);
-                const distA = Math.hypot(m.x - pA.x, m.y - pA.y);
-
-                const threshold = 15;
-                if (distO < threshold) {
-                    dragging = true;
-                    dragTarget = 'O';
-                } else if (distA < threshold) {
-                    dragging = true;
-                    dragTarget = 'A';
-                }
-            });
-
-            window.addEventListener('mousemove', function (e) {
-                if (!dragging) return;
-                const m = getMousePos(e);
-
-                if (dragTarget === 'O') {
-                    // 移动圆心 O，A 点随之平移（保持半径和角度不变）
-                    O.x = m.x;
-                    O.y = m.y;
-                } else if (dragTarget === 'A') {
-                    // 移动 A 点：重新计算半径和角度
-                    const dx = m.x - O.x;
-                    const dy = m.y - O.y;
-                    const r = Math.hypot(dx, dy);
-                    if (r > 10) { // 避免半径太小
-                        radius = r;
-                        angleA = Math.atan2(dy, dx) * 180 / Math.PI;
-                    }
-                }
-
-                drawCanvas();
-            });
-
-            window.addEventListener('mouseup', function () {
-                dragging = false;
-                dragTarget = null;
-            });
-
-            canvas.addEventListener('mouseleave', function () {
-                dragging = false;
-                dragTarget = null;
-            });
-
-            // 初始绘制
-            drawCanvas();
-        
-            // expose redraw for theme/lang
-            window._clRedraw = function(){ drawCanvas(); };
-
-        })();
-    </script>
+    <div class="canvas-container">
+        <canvas id="circleCanvas" width="600" height="500" style="width:100%; height:auto; max-width:600px; aspect-ratio:600/500"></canvas>
+    </div>
+    <div class="descriptions" id="descArea"></div>
+    <div class="theorem" id="theoremText"></div>
+    <div class="interact-hint">
+        <span>🖱️ <span data-cl-zh>拖拽红点 A 改变半径</span><span data-cl-en style="display:none">Drag point A</span></span>
+        <span>🔘 <span data-cl-zh>拖拽圆心 O 平移</span><span data-cl-en style="display:none">Drag center O</span></span>
+    </div>
+</div>
 
 <script>
-/* === CircleLab bridge: 接收主界面的 postMessage === */
-(function(){
-    // 语言和主题状态
-    window._CL = { lang: 'zh', theme: 'light' };
+    (function(){
+        const canvas = document.getElementById('circleCanvas');
+        const ctx = canvas.getContext('2d');
+        const CANVAS_FONT = '500 14px "DM Sans", -apple-system, Arial, sans-serif';
 
-    function applyLang(lang) {
-        window._CL.lang = lang;
-        // 显示/隐藏双语块
-        document.querySelectorAll('[data-cl-zh]').forEach(function(el) {
-            el.style.display = lang === 'zh' ? '' : 'none';
+        let O = { x: 300, y: 250 };
+        let radius = 150, angleA = -30, dragging = false, dragTarget = null;
+        
+        function getA() {
+            const rad = angleA * Math.PI / 180;
+            return { x: O.x + radius * Math.cos(rad), y: O.y + radius * Math.sin(rad) };
+        }
+        function getB(pA) { return { x: 2 * O.x - pA.x, y: 2 * O.y - pA.y }; }
+        
+        function drawCanvas() {
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const fgColor = isDark ? '#e8e4dc' : '#1a1a1a';
+            
+            // 清除并设置背景色（适配夜间模式）
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            const pA = getA(), pB = getB(pA);
+            
+            // 1. 画圆
+            ctx.beginPath();
+            ctx.arc(O.x, O.y, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = fgColor;
+            ctx.lineWidth = 1.8;
+            ctx.stroke();
+            
+            // 2. 画直径 AB
+            ctx.beginPath();
+            ctx.moveTo(pA.x, pA.y); ctx.lineTo(pB.x, pB.y);
+            ctx.strokeStyle = fgColor; ctx.lineWidth = 1.2;
+            ctx.setLineDash([5, 5]); // 虚线表示
+            ctx.stroke();
+            ctx.setLineDash([]); // 恢复实线
+            
+            // 3. 画半径 OA
+            ctx.beginPath();
+            ctx.moveTo(O.x, O.y); ctx.lineTo(pA.x, pA.y);
+            ctx.strokeStyle = isDark ? '#e8724a' : '#c8502a';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+            
+            // 4. 画圆心 O
+            ctx.fillStyle = fgColor;
+            ctx.beginPath(); ctx.arc(O.x, O.y, 5, 0, 2 * Math.PI); ctx.fill();
+            ctx.font = CANVAS_FONT;
+            ctx.fillText('O', O.x - 16, O.y - 8);
+            
+            // 5. 画点 A
+            ctx.fillStyle = '#e74c3c';
+            ctx.beginPath(); ctx.arc(pA.x, pA.y, 7, 0, 2 * Math.PI); ctx.fill();
+            ctx.fillStyle = fgColor;
+            ctx.fillText('A', pA.x + 10, pA.y - 8);
+            
+            // 6. 画点 B
+            ctx.fillStyle = '#3498db';
+            ctx.beginPath(); ctx.arc(pB.x, pB.y, 6, 0, 2 * Math.PI); ctx.fill();
+            ctx.fillStyle = fgColor;
+            ctx.fillText('B', pB.x + 10, pB.y - 8);
+        }
+
+        function updateTexts() {
+            const isZh = (window._CL && window._CL.lang === 'zh') || 
+                        (!window._CL && document.querySelector('[data-cl-zh]')?.style.display !== 'none');
+            const desc = document.getElementById('descArea');
+            if(isZh) {
+                desc.innerHTML = `<div class="desc-item"><span class="desc-symbol">O</span> 是圆心</div>
+                                 <div class="desc-item"><span class="desc-symbol">OA</span> 是半径 (r)</div>
+                                 <div class="desc-item"><span class="desc-symbol">AB</span> 是直径 (d)</div>`;
+                document.getElementById('theoremText').innerHTML = "📐 圆是平面上到定点（圆心）距离等于定长（半径）的所有点的集合";
+            } else {
+                desc.innerHTML = `<div class="desc-item"><span class="desc-symbol">O</span> is Center</div>
+                                 <div class="desc-item"><span class="desc-symbol">OA</span> is Radius</div>
+                                 <div class="desc-item"><span class="desc-symbol">AB</span> is Diameter</div>`;
+                document.getElementById('theoremText').innerHTML = "📐 A circle is the set of all points in a plane equidistant from a fixed center.";
+            }
+        }
+
+        // 交互逻辑
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) * (600 / rect.width),
+                y: (clientY - rect.top) * (500 / rect.height)
+            };
+        }
+
+        function handleStart(e) {
+            const m = getMousePos(e);
+            const pA = getA();
+            if(Math.hypot(m.x-O.x, m.y-O.y) < 20) { dragging=true; dragTarget='O'; }
+            else if(Math.hypot(m.x-pA.x, m.y-pA.y) < 20) { dragging=true; dragTarget='A'; }
+        }
+
+        function handleMove(e) {
+            if(!dragging) return;
+            const m = getMousePos(e);
+            if(dragTarget==='O') { O.x = m.x; O.y = m.y; }
+            else { 
+                radius = Math.max(10, Math.hypot(m.x-O.x, m.y-O.y)); 
+                angleA = Math.atan2(m.y-O.y, m.x-O.x)*180/Math.PI; 
+            }
+            drawCanvas();
+        }
+
+        canvas.addEventListener('mousedown', handleStart);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', () => dragging=false);
+        canvas.addEventListener('touchstart', handleStart, {passive:false});
+        window.addEventListener('touchmove', handleMove, {passive:false});
+        window.addEventListener('touchend', () => dragging=false);
+
+        // 主题与语言同步核心
+        const observer = new MutationObserver(() => {
+            drawCanvas();
+            updateTexts();
         });
-        document.querySelectorAll('[data-cl-en]').forEach(function(el) {
-            el.style.display = lang === 'en' ? '' : 'none';
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+        window.addEventListener('message', (ev) => {
+            if (!ev.data || ev.data._src !== 'circlelab') return;
+            if (ev.data.theme) document.documentElement.setAttribute('data-theme', ev.data.theme);
+            if (ev.data.lang) {
+                const isZh = ev.data.lang === 'zh';
+                document.querySelectorAll('[data-cl-zh]').forEach(el => el.style.display = isZh ? '' : 'none');
+                document.querySelectorAll('[data-cl-en]').forEach(el => el.style.display = isZh ? 'none' : '');
+                updateTexts();
+            }
         });
-        // 重绘canvas（动态文字需要更新）
-        if (typeof _clRedraw === 'function') _clRedraw();
-    }
 
-    function applyTheme(theme) {
-        window._CL.theme = theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        // 重绘canvas（颜色需要更新）
-        if (typeof _clRedraw === 'function') _clRedraw();
-    }
-
-    window.addEventListener('message', function(ev) {
-        if (!ev.data || ev.data._src !== 'circlelab') return;
-        if (ev.data.lang)  applyLang(ev.data.lang);
-        if (ev.data.theme) applyTheme(ev.data.theme);
-    });
-
-    // 初始化：从父页面读取当前状态
-    window.addEventListener('DOMContentLoaded', function() {
-        try {
-            var p = window.parent;
-            if (p._CL_lang)  applyLang(p._CL_lang);
-            if (p._CL_theme) applyTheme(p._CL_theme);
-        } catch(e) {}
-        applyLang(window._CL.lang);
-        applyTheme(window._CL.theme);
-    });
-})();
+        window.addEventListener('load', () => { updateTexts(); drawCanvas(); });
+        // 初始调用
+        updateTexts();
+        drawCanvas();
+    })();
 </script>
-
 </body>
 </html>
