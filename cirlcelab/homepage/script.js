@@ -434,6 +434,49 @@
 })();
 
 (() => {
+  const pricing = document.querySelector(".pricing-section");
+  if (!pricing) {
+    return;
+  }
+
+  const buttons = Array.from(
+    pricing.querySelectorAll("[data-pricing-view-target]")
+  );
+  const panels = Array.from(pricing.querySelectorAll("[data-pricing-panel]"));
+
+  if (!buttons.length || !panels.length) {
+    return;
+  }
+
+  const setView = (view) => {
+    pricing.setAttribute("data-pricing-view", view);
+
+    buttons.forEach((button) => {
+      const active =
+        button.getAttribute("data-pricing-view-target") === view;
+
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-selected", active ? "true" : "false");
+    });
+
+    panels.forEach((panel) => {
+      panel.hidden = panel.getAttribute("data-pricing-panel") !== view;
+    });
+  };
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const view = button.getAttribute("data-pricing-view-target");
+      if (view) {
+        setView(view);
+      }
+    });
+  });
+
+  setView(pricing.getAttribute("data-pricing-view") || "personal");
+})();
+
+(() => {
   const embed = document.querySelector(
     ".theorem-frame-center-fix .theorem-embed"
   );
