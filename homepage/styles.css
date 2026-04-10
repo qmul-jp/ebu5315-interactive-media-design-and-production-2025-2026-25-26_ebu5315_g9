@@ -1364,6 +1364,35 @@ button {
   background-image: url("pro/tv-minimal-play.svg?v=2");
 }
 
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-feature-list li {
+  padding-left: 1.6rem;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-feature-list li::before {
+  top: 0.28rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 0;
+  background: url("premium/route.svg?v=2") center / contain no-repeat;
+  box-shadow: none;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-feature-list li:nth-child(2)::before {
+  background-image: url("premium/chart-line.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-feature-list li:nth-child(3)::before {
+  background-image: url("premium/infinity.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-feature-list li:nth-child(4)::before {
+  background-image: url("premium/send.svg?v=2");
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-feature-list li:nth-child(5)::before {
+  background-image: url("premium/lock-keyhole-open.svg?v=2");
+}
+
 .pricing-card-fit,
 .pricing-card-note {
   color: color-mix(in oklch, var(--muted) 76%, white);
@@ -1386,6 +1415,11 @@ button {
 }
 
 .pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-card-note {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-card-note {
   margin-top: auto;
   padding-top: 1rem;
 }
