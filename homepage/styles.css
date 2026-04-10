@@ -909,7 +909,7 @@ button {
   flex-direction: column;
   align-items: start;
   justify-content: flex-start;
-  gap: clamp(1.35rem, 2.3vw, 1.9rem);
+  gap: clamp(2.7rem, 4.6vw, 3.8rem);
   margin-bottom: clamp(1.45rem, 2.8vw, 2.25rem);
 }
 
@@ -1082,8 +1082,8 @@ button {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 100%;
-  padding: clamp(1.1rem, 2vw, 1.45rem);
+  min-height: clamp(36rem, 45vw, 41rem);
+  padding: clamp(1.2rem, 2.2vw, 1.7rem);
   border-radius: 22px;
   border: 1px solid color-mix(in oklch, white 14%, transparent);
   background:
@@ -1141,6 +1141,50 @@ button {
     );
 }
 
+.pricing-panel[data-pricing-panel="schools"] .pricing-card {
+  border-color: color-mix(in oklch, var(--accent-alt) 26%, transparent);
+  background:
+    radial-gradient(circle at 84% 14%, oklch(0.86 0.1 85 / 0.1), transparent 32%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--panel) 93%, black) 0%,
+      color-mix(in oklch, var(--chip) 82%, var(--accent-alt) 18%) 100%
+    );
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card-starter {
+  border-color: color-mix(in oklch, var(--accent-alt) 12%, transparent);
+  background:
+    radial-gradient(circle at 84% 14%, oklch(0.82 0.08 85 / 0.04), transparent 32%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--panel) 96%, black) 0%,
+      color-mix(in oklch, var(--chip) 92%, var(--accent-alt) 8%) 100%
+    );
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card-pro {
+  border-color: color-mix(in oklch, var(--accent-alt) 38%, transparent);
+  background:
+    radial-gradient(circle at 82% 14%, oklch(0.84 0.12 85 / 0.2), transparent 34%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--panel) 88%, black) 12%,
+      color-mix(in oklch, var(--chip) 74%, var(--accent-alt) 26%) 100%
+    );
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card-premium {
+  border-color: color-mix(in oklch, var(--accent-alt) 14%, transparent);
+  background:
+    radial-gradient(circle at 86% 12%, oklch(0.82 0.08 85 / 0.05), transparent 30%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--panel) 95%, black) 0%,
+      color-mix(in oklch, var(--chip) 90%, var(--accent-alt) 10%) 100%
+    );
+}
+
 .pricing-card-badge {
   align-self: flex-start;
   margin-bottom: 0.9rem;
@@ -1153,6 +1197,12 @@ button {
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card-badge {
+  border-color: color-mix(in oklch, var(--accent-alt) 38%, transparent);
+  background: color-mix(in oklch, var(--accent-alt) 16%, transparent);
+  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
 }
 
 .pricing-card-top {
@@ -1182,6 +1232,10 @@ button {
   line-height: 1.02;
   letter-spacing: -0.03em;
   color: color-mix(in oklch, white 94%, var(--accent) 6%);
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card h3 {
+  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
 }
 
 .pricing-card-title-row {
@@ -1232,6 +1286,11 @@ button {
   height: 1px;
   margin: 1.35rem 0;
   background: color-mix(in oklch, white 12%, transparent);
+}
+
+.pricing-card-top + .pricing-card-divider {
+  margin-top: 1.85rem;
+  margin-bottom: 1.75rem;
 }
 
 .pricing-card-price-row {
@@ -1393,6 +1452,19 @@ button {
   background-image: url("premium/lock-keyhole-open.svg?v=2");
 }
 
+.pricing-panel[data-pricing-panel="schools"] .pricing-feature-list li {
+  padding-left: 1.35rem;
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-feature-list li::before {
+  top: 0.47rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: color-mix(in oklch, var(--accent-alt) 72%, white);
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--accent-alt) 22%, transparent);
+}
+
 .pricing-card-fit,
 .pricing-card-note {
   color: color-mix(in oklch, var(--muted) 76%, white);
@@ -1422,6 +1494,146 @@ button {
 .pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-card-note {
   margin-top: auto;
   padding-top: 1rem;
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card .pricing-card-note {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.callout-section {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-height: 100svh;
+  margin: clamp(3rem, 6vw, 5.8rem) calc(50% - 50vw) 0;
+  padding: clamp(3.8rem, 8vw, 6.8rem) clamp(1.2rem, 4vw, 2.8rem);
+  border: none;
+  border-radius: 0;
+  background:
+    radial-gradient(circle at 18% 22%, color-mix(in oklch, var(--accent-alt) 16%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 82% 76%, color-mix(in oklch, var(--accent) 18%, transparent) 0%, transparent 38%),
+    linear-gradient(160deg, color-mix(in oklch, var(--panel) 92%, black 8%) 0%, color-mix(in oklch, var(--chip) 82%, black 18%) 100%);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.callout-section::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto auto 50%;
+  width: min(78%, 820px);
+  height: 1px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, white 22%, var(--accent) 78%), transparent);
+  opacity: 0.14;
+}
+
+.callout-section::after {
+  content: "";
+  position: absolute;
+  right: -6%;
+  top: -16%;
+  width: clamp(12rem, 22vw, 20rem);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in oklch, var(--accent-alt) 26%, transparent) 0%, transparent 68%);
+  filter: blur(18px);
+  opacity: 0.44;
+  pointer-events: none;
+}
+
+.callout-shell {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 1120px);
+  margin: 0 auto;
+  display: grid;
+  justify-items: center;
+  gap: clamp(2rem, 4vw, 3rem);
+  text-align: center;
+}
+
+.callout-title {
+  margin: 0;
+  display: grid;
+  gap: 0.26em;
+  font-size: clamp(1.9rem, 5.1vw, 3.85rem);
+  line-height: 1.08;
+  letter-spacing: -0.034em;
+  font-weight: 700;
+  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  text-wrap: balance;
+}
+
+.callout-line {
+  display: block;
+}
+
+.callout-line:nth-child(2) {
+  color: color-mix(in oklch, white 88%, var(--accent-alt) 12%);
+}
+
+.callout-line:nth-child(4) {
+  color: color-mix(in oklch, white 86%, var(--accent) 14%);
+}
+
+.callout-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.95rem;
+}
+
+.callout-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 11.5rem;
+  min-height: 3.15rem;
+  padding: 0.78rem 1.55rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  text-decoration: none;
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.callout-btn:hover,
+.callout-btn:focus-visible {
+  transform: translateY(-2px);
+}
+
+.callout-btn-primary {
+  color: var(--ink-dark);
+  border-color: color-mix(in oklch, var(--accent) 26%, transparent);
+  background: color-mix(in oklch, var(--accent) 78%, white);
+  box-shadow: 0 18px 36px color-mix(in oklch, var(--accent) 24%, transparent);
+}
+
+.callout-btn-primary:hover,
+.callout-btn-primary:focus-visible {
+  background: color-mix(in oklch, var(--accent) 70%, white);
+}
+
+.callout-btn-secondary {
+  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
+  border-color: color-mix(in oklch, white 14%, transparent);
+  background: color-mix(in oklch, var(--chip) 86%, transparent);
+}
+
+.callout-btn-secondary:hover,
+.callout-btn-secondary:focus-visible {
+  background: color-mix(in oklch, var(--chip-hover) 88%, transparent);
+  border-color: color-mix(in oklch, white 22%, transparent);
 }
 
 .pricing-card-cta {
@@ -1454,6 +1666,18 @@ button {
   outline: none;
 }
 
+.pricing-panel[data-pricing-panel="schools"] .pricing-card-cta {
+  border-color: color-mix(in oklch, var(--accent-alt) 28%, transparent);
+  background: color-mix(in oklch, var(--chip) 78%, var(--accent-alt) 22%);
+  color: color-mix(in oklch, white 92%, var(--accent-alt) 8%);
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card-cta:hover,
+.pricing-panel[data-pricing-panel="schools"] .pricing-card-cta:focus-visible {
+  border-color: color-mix(in oklch, var(--accent-alt) 42%, transparent);
+  background: color-mix(in oklch, var(--chip-hover) 74%, var(--accent-alt) 26%);
+}
+
 .pricing-card.is-featured .pricing-card-cta {
   color: var(--ink-dark);
   background: color-mix(in oklch, var(--accent) 72%, white);
@@ -1463,6 +1687,17 @@ button {
 .pricing-card.is-featured .pricing-card-cta:hover,
 .pricing-card.is-featured .pricing-card-cta:focus-visible {
   background: color-mix(in oklch, var(--accent) 82%, white);
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta {
+  background: color-mix(in oklch, var(--accent-alt) 72%, white);
+  border-color: color-mix(in oklch, var(--accent-alt) 32%, transparent);
+  color: color-mix(in oklch, var(--ink-dark) 86%, oklch(0.34 0.03 85));
+}
+
+.pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta:hover,
+.pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta:focus-visible {
+  background: color-mix(in oklch, var(--accent-alt) 82%, white);
 }
 
 .geo-focus {
@@ -1848,6 +2083,10 @@ button {
     grid-column: 1 / -1;
   }
 
+  .pricing-card {
+    min-height: clamp(33rem, 72vw, 37rem);
+  }
+
 }
 
 @media (max-width: 620px) {
@@ -1915,7 +2154,7 @@ button {
   }
 
   .pricing-head {
-    gap: 1.2rem;
+    gap: 2.4rem;
     margin-bottom: 1.35rem;
   }
 
@@ -1943,6 +2182,7 @@ button {
 
   .pricing-card {
     border-radius: 18px;
+    min-height: auto;
     padding: 1rem;
   }
 
@@ -1965,6 +2205,25 @@ button {
   .pricing-card-note,
   .pricing-card-fit {
     font-size: 0.96rem;
+  }
+
+  .callout-section {
+    min-height: 100svh;
+    margin-top: 2.4rem;
+    padding: 2.8rem 1rem 3rem;
+  }
+
+  .callout-title {
+    font-size: clamp(1.55rem, 6.9vw, 2.3rem);
+    line-height: 1.1;
+  }
+
+  .callout-actions {
+    width: 100%;
+  }
+
+  .callout-btn {
+    width: min(100%, 18rem);
   }
 
   .theorem-frame-cta {
