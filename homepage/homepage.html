@@ -457,40 +457,49 @@
 
               <div class="ai-chat-composer" aria-label="AI chat composer">
                 <div class="ai-chat-draft" role="textbox" aria-label="Draft prompt" aria-readonly="true">
-                  Show the radius joins and turn this into a four-line proof.
+                  How can I help you today?
                 </div>
 
                 <div class="ai-chat-toolbar">
                   <button class="ai-chat-icon-btn" type="button" aria-label="Add attachment">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 5v14M5 12h14" />
+                      <path d="M12 6.5v11" />
+                      <path d="M6.5 12h11" />
                     </svg>
                   </button>
 
-                  <button class="ai-chat-option" type="button">
-                    <span>Circle Tutor</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="m7 10 5 5 5-5" />
-                    </svg>
-                  </button>
+                  <details class="ai-chat-model-picker">
+                    <summary class="ai-chat-model-picker-trigger" aria-label="Select model">
+                      <span class="ai-chat-model-picker-value">GPT-5.4</span>
+                      <svg class="ai-chat-model-picker-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="m7 10 5 5 5-5" />
+                      </svg>
+                    </summary>
 
-                  <button class="ai-chat-option" type="button">
-                    <span>Exam Depth</span>
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="m7 10 5 5 5-5" />
-                    </svg>
-                  </button>
+                    <div class="ai-chat-model-menu" role="listbox" aria-label="Select model">
+                      <p class="ai-chat-model-menu-label">Select model</p>
 
-                  <button class="ai-chat-option ai-chat-option-context" type="button">
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 3.8 13.7 8l4.5 1.9-4.3 1.8-1.9 4.5-1.8-4.3L5.8 10l4.3-1.9z" />
-                    </svg>
-                    <span>Diagram context</span>
-                  </button>
+                      <button class="ai-chat-model-menu-item is-selected" type="button" role="option" aria-selected="true">
+                        <span>GPT-5.4</span>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M20 7 10 17l-5-5" />
+                        </svg>
+                      </button>
+
+                      <button class="ai-chat-model-menu-item" type="button" role="option" aria-selected="false">
+                        <span>Gemini 3 Pro</span>
+                      </button>
+
+                      <button class="ai-chat-model-menu-item" type="button" role="option" aria-selected="false">
+                        <span>Claude Sonnet 4.6</span>
+                      </button>
+                    </div>
+                  </details>
 
                   <button class="ai-chat-send" type="button" aria-label="Send message">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 19V5M6 11l6-6 6 6" />
+                      <path d="M12 18V6" />
+                      <path d="m7 11 5-5 5 5" />
                     </svg>
                   </button>
                 </div>

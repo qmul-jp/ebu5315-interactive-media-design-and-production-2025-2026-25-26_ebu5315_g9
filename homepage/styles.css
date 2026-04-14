@@ -894,52 +894,15 @@ button {
   gap: clamp(1.4rem, 3vw, 2.5rem);
   margin-top: clamp(2.2rem, 5vw, 4.2rem);
   padding: clamp(1.35rem, 3vw, 2rem);
-  border-radius: 24px;
-  border: 1px solid color-mix(in oklch, white 9%, transparent);
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 82% 14%, oklch(0.75 0.1 85 / 0.08), transparent 26%),
-    radial-gradient(circle at 18% 100%, oklch(0.22 0.07 170 / 0.2), transparent 34%),
-    linear-gradient(
-      145deg,
-      color-mix(in oklch, var(--panel) 90%, black) 0%,
-      color-mix(in oklch, var(--chip) 88%, var(--panel)) 52%,
-      color-mix(in oklch, var(--panel) 94%, black) 100%
-    );
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
 }
 
 .ai-study-section::before,
 .ai-study-section::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-}
-
-.ai-study-section::before {
-  inset: 0;
-  background-image:
-    linear-gradient(
-      to right,
-      color-mix(in oklch, var(--accent) 18%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--accent-alt) 14%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 68px 68px;
-  opacity: 0.12;
-  mask-image: linear-gradient(135deg, black 18%, transparent 88%);
-}
-
-.ai-study-section::after {
-  inset: auto auto -5.5rem -4.6rem;
-  width: 14rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 1px solid color-mix(in oklch, var(--accent) 22%, transparent);
-  opacity: 0.34;
+  display: none;
 }
 
 .ai-study-copy,
@@ -1028,32 +991,13 @@ button {
   min-height: clamp(32rem, 40vw, 38rem);
   padding: clamp(1rem, 1.9vw, 1.3rem);
   border-radius: 30px;
-  border: 1px solid color-mix(in oklch, white 12%, transparent);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, oklch(0.18 0.01 252) 95%, black) 0%,
-      color-mix(in oklch, var(--chip) 86%, var(--panel)) 100%
-    );
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 10%, transparent),
-    0 24px 44px color-mix(in oklch, black 34%, transparent);
+  border: 1px solid color-mix(in oklch, var(--accent) 16%, transparent);
+  background: color-mix(in oklch, oklch(0.21 0.03 215) 72%, var(--panel));
+  box-shadow: none;
 }
 
 .ai-chat-shell::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in oklch, white 10%, transparent) 0,
-      transparent 24%,
-      transparent 76%,
-      color-mix(in oklch, white 4%, transparent) 100%
-    );
-  pointer-events: none;
+  display: none;
 }
 
 .ai-chat-header {
@@ -1139,13 +1083,8 @@ button {
   min-height: clamp(19rem, 24vw, 23rem);
   margin-bottom: clamp(1rem, 1.6vw, 1.3rem);
   border-radius: 24px;
-  border: 1px dashed color-mix(in oklch, white 10%, transparent);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 3%, transparent) 0%,
-      color-mix(in oklch, black 12%, transparent) 100%
-    );
+  border: 1px solid color-mix(in oklch, var(--accent) 14%, transparent);
+  background: color-mix(in oklch, oklch(0.18 0.025 214) 78%, var(--chip));
   overflow: hidden;
 }
 
@@ -1174,49 +1113,26 @@ button {
 }
 
 .ai-chat-transcript::after {
-  inset: auto auto -2.8rem -1.8rem;
-  width: 8.5rem;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in oklch, var(--accent) 14%, transparent), transparent 72%);
-  filter: blur(10px);
-  opacity: 0.72;
+  display: none;
 }
 
 .ai-chat-composer {
   position: relative;
   padding: 1rem;
-  border-radius: 32px;
-  border: 1px solid color-mix(in oklch, white 10%, transparent);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, var(--chip) 88%, var(--panel)) 0%,
-      color-mix(in oklch, var(--panel) 96%, black) 100%
-    );
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 8%, transparent),
-    0 16px 36px color-mix(in oklch, black 24%, transparent);
+  border-radius: 28px;
+  border: 1px solid color-mix(in oklch, var(--accent-alt) 18%, transparent);
+  background: color-mix(in oklch, oklch(0.24 0.035 190) 72%, var(--chip));
+  box-shadow: none;
 }
 
 .ai-chat-composer::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 6%, transparent) 0%,
-      transparent 38%
-    );
+  display: none;
 }
 
 .ai-chat-draft {
   min-height: 4.9rem;
   margin-bottom: 0.8rem;
-  color: color-mix(in oklch, white 84%, var(--muted) 16%);
+  color: color-mix(in oklch, white 88%, var(--accent-alt) 12%);
   font-size: clamp(1rem, 1.35vw, 1.16rem);
   line-height: 1.42;
   letter-spacing: -0.015em;
@@ -1231,7 +1147,6 @@ button {
 }
 
 .ai-chat-icon-btn,
-.ai-chat-option,
 .ai-chat-send {
   border: 0;
   cursor: pointer;
@@ -1246,49 +1161,171 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.6rem;
-  height: 2.6rem;
-  padding: 0;
-  border-radius: 999px;
+  width: auto;
+  height: auto;
+  padding: 0.2rem 0.35rem 0.2rem 0;
+  border-radius: 0;
   background: transparent;
   color: color-mix(in oklch, var(--muted) 82%, white);
 }
 
 .ai-chat-icon-btn:hover,
 .ai-chat-icon-btn:focus-visible {
-  background: color-mix(in oklch, white 6%, transparent);
   color: color-mix(in oklch, white 92%, var(--accent) 8%);
   transform: translateY(-1px);
   outline: none;
 }
 
-.ai-chat-option {
+.ai-chat-model-picker {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
+  margin-left: 0.5rem;
   min-height: 2.45rem;
-  padding: 0.52rem 0.84rem;
-  border-radius: 999px;
-  border: 1px solid color-mix(in oklch, white 10%, transparent);
-  background: color-mix(in oklch, white 3%, transparent);
   color: color-mix(in oklch, var(--muted) 84%, white);
-  font-size: 0.92rem;
-  font-weight: 700;
   min-width: 0;
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
 }
 
-.ai-chat-option:hover,
-.ai-chat-option:focus-visible {
-  border-color: color-mix(in oklch, white 18%, transparent);
-  background: color-mix(in oklch, white 6%, transparent);
+.ai-chat-model-picker summary {
+  list-style: none;
+}
+
+.ai-chat-model-picker summary::-webkit-details-marker {
+  display: none;
+}
+
+.ai-chat-model-picker-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  min-height: 2.45rem;
+  padding: 0.52rem 0.12rem 0.52rem 0.12rem;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.98rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ai-chat-model-picker-value {
+  display: inline-flex;
+  align-items: center;
+  transition:
+    color 180ms ease,
+    transform 220ms ease;
+}
+
+.ai-chat-model-picker:hover,
+.ai-chat-model-picker:focus-within,
+.ai-chat-model-picker[open] {
   color: color-mix(in oklch, white 92%, var(--accent) 8%);
   transform: translateY(-1px);
+}
+
+.ai-chat-model-picker.is-updated .ai-chat-model-picker-value {
+  color: color-mix(in oklch, white 94%, var(--accent-alt) 6%);
+  transform: translateY(-1px);
+}
+
+.ai-chat-model-picker-trigger:focus {
   outline: none;
 }
 
-.ai-chat-option-context {
-  color: color-mix(in oklch, white 82%, var(--accent) 18%);
+.ai-chat-model-picker-chevron {
+  width: 1.02rem;
+  height: 1.02rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 220ms ease;
+}
+
+.ai-chat-model-picker[open] .ai-chat-model-picker-chevron {
+  transform: rotate(180deg);
+}
+
+.ai-chat-model-menu {
+  position: absolute;
+  left: -0.4rem;
+  bottom: calc(100% + 0.7rem);
+  z-index: 20;
+  width: clamp(13.25rem, 19vw, 15.5rem);
+  padding: 0.7rem;
+  border-radius: 1.55rem;
+  border: 1px solid color-mix(in oklch, white 9%, transparent);
+  background: color-mix(in oklch, oklch(0.19 0.015 250) 88%, var(--panel));
+  box-shadow: 0 18px 34px color-mix(in oklch, black 26%, transparent);
+}
+
+.ai-chat-model-menu-label {
+  margin: 0;
+  padding: 0.2rem 0.8rem 0.62rem;
+  color: color-mix(in oklch, var(--muted) 78%, white);
+  font-size: 0.82rem;
+  line-height: 1.3;
+}
+
+.ai-chat-model-menu-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.72rem 0.82rem;
+  border: 0;
+  border-radius: 1rem;
+  background: transparent;
+  color: color-mix(in oklch, white 88%, var(--accent) 12%);
+  font: inherit;
+  font-size: 0.94rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
+  transition: box-shadow 180ms ease;
+}
+
+.ai-chat-model-menu-item:hover,
+.ai-chat-model-menu-item:focus-visible {
+  box-shadow: 0 10px 22px color-mix(in oklch, black 26%, transparent);
+  outline: none;
+}
+
+.ai-chat-model-menu-item.is-selected {
+  background: color-mix(in oklch, white 6%, transparent);
+}
+
+.ai-chat-model-menu-item svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+  opacity: 0;
+  transform: scale(0.82);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.ai-chat-model-menu-item.is-selected svg {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .ai-chat-send {
@@ -1301,22 +1338,19 @@ button {
   padding: 0;
   border-radius: 999px;
   border: 1px solid color-mix(in oklch, white 12%, transparent);
-  background: color-mix(in oklch, white 84%, var(--panel) 16%);
+  background: color-mix(in oklch, var(--accent) 66%, white 34%);
   color: color-mix(in oklch, var(--ink-dark) 82%, var(--panel) 18%);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 30%, transparent),
-    0 10px 24px color-mix(in oklch, black 18%, transparent);
+  box-shadow: none;
 }
 
 .ai-chat-send:hover,
 .ai-chat-send:focus-visible {
-  background: color-mix(in oklch, white 92%, var(--accent) 8%);
+  background: color-mix(in oklch, var(--accent) 72%, white 28%);
   transform: translateY(-1px);
   outline: none;
 }
 
 .ai-chat-icon-btn svg,
-.ai-chat-option svg,
 .ai-chat-send svg {
   width: 1.02rem;
   height: 1.02rem;
@@ -1329,9 +1363,10 @@ button {
   flex: 0 0 auto;
 }
 
-.ai-chat-option-context svg {
-  stroke: none;
-  fill: currentColor;
+.ai-chat-icon-btn svg,
+.ai-chat-send svg {
+  width: 1.46rem;
+  height: 1.46rem;
 }
 
 @keyframes aiChatPulse {
@@ -1360,8 +1395,17 @@ button {
     gap: 0.46rem;
   }
 
-  .ai-chat-option {
+  .ai-chat-model-picker {
     flex: 1 1 auto;
+  }
+
+  .ai-chat-model-picker-trigger {
+    width: 100%;
+  }
+
+  .ai-chat-model-menu {
+    left: 0;
+    width: min(15.5rem, calc(100vw - 3rem));
   }
 
   .ai-chat-send {
@@ -2802,7 +2846,6 @@ button {
   }
 
   .ai-study-section {
-    border-radius: 18px;
     padding: 1rem;
   }
 
@@ -2841,7 +2884,7 @@ button {
 
   .ai-chat-composer {
     padding: 0.85rem;
-    border-radius: 24px;
+    border-radius: 22px;
   }
 
   .ai-chat-draft {
@@ -2850,7 +2893,8 @@ button {
     font-size: 0.98rem;
   }
 
-  .ai-chat-option {
+  .ai-chat-model-picker-trigger,
+  .ai-chat-model-menu-item {
     font-size: 0.84rem;
   }
 
@@ -3035,8 +3079,10 @@ button {
   .theorem-cta-btn,
   .theorem-cta-btn-icon,
   .ai-chat-glow,
+  .ai-chat-model-picker,
+  .ai-chat-model-picker-chevron,
+  .ai-chat-model-menu-item,
   .ai-chat-icon-btn,
-  .ai-chat-option,
   .ai-chat-send {
     transition: none;
   }

@@ -513,3 +513,64 @@
     lock.style.zIndex = "3";
   }
 })();
+
+(() => {
+  const picker = document.querySelector(".ai-chat-model-picker");
+  if (!picker) {
+    return;
+  }
+
+  const triggerValue = picker.querySelector(".ai-chat-model-picker-value");
+  const options = Array.from(
+    picker.querySelectorAll(".ai-chat-model-menu-item")
+  );
+
+  if (!triggerValue || !options.length) {
+    return;
+  }
+
+  let feedbackTimeout = 0;
+
+  const setSelectedModel = (label) => {
+    triggerValue.textContent = label;
+
+    options.forEach((option) => {
+      const optionLabel = option.textContent.trim();
+      const isSelected = optionLabel === label;
+
+      option.classList.toggle("is-selected", isSelected);
+      option.setAttribute("aria-selected", isSelected ? "true" : "false");
+    });
+
+    picker.classList.remove("is-updated");
+    window.clearTimeout(feedbackTimeout);
+
+    requestAnimationFrame(() => {
+      picker.classList.add("is-updated");
+      feedbackTimeout = window.setTimeout(() => {
+        picker.classList.remove("is-updated");
+      }, 720);
+    });
+  };
+
+  options.forEach((option) => {
+    option.addEventListener("click", () => {
+      setSelectedModel(option.textContent.trim());
+      picker.open = false;
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!picker.open || picker.contains(event.target)) {
+      return;
+    }
+
+    picker.open = false;
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      picker.open = false;
+    }
+  });
+})();
