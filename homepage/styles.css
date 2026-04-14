@@ -3153,6 +3153,375 @@ button {
   }
 }
 
+body.is-signup-open {
+  overflow: hidden;
+}
+
+.signup-overlay[hidden] {
+  display: none;
+}
+
+.signup-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 2.6rem);
+  background: color-mix(in oklch, var(--bg) 72%, black 28%);
+  backdrop-filter: blur(10px);
+  animation: signupOverlayIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.signup-modal {
+  --signup-shell: color-mix(in oklch, var(--panel) 90%, black 10%);
+  --signup-panel: color-mix(in oklch, var(--chip) 72%, var(--panel) 28%);
+  --signup-showcase: color-mix(in oklch, var(--panel) 78%, black 22%);
+  --signup-input-bg: color-mix(in oklch, var(--chip) 84%, black 16%);
+  --signup-border: color-mix(in oklch, var(--accent) 16%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--accent) 28%, transparent);
+  --signup-text-strong: color-mix(in oklch, white 92%, var(--accent) 8%);
+  --signup-text-muted: color-mix(in oklch, white 70%, var(--accent) 10%);
+  position: relative;
+  width: min(1000px, 100%);
+  min-height: min(630px, calc(100vh - 2.8rem));
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--signup-border);
+  background: var(--signup-shell);
+  box-shadow:
+    0 28px 70px color-mix(in oklch, black 36%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 5%, transparent);
+  animation: signupModalIn 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.signup-modal-showcase,
+.signup-modal-panel {
+  position: relative;
+  min-width: 0;
+}
+
+.signup-modal-showcase {
+  padding: clamp(1.15rem, 3vw, 1.8rem);
+  background:
+    radial-gradient(circle at 82% 18%, color-mix(in oklch, var(--accent) 32%, transparent), transparent 24%),
+    radial-gradient(circle at 18% 100%, color-mix(in oklch, var(--accent-deep) 40%, transparent), transparent 42%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--chip) 56%, black 44%) 0%,
+      var(--signup-showcase) 100%
+    );
+  overflow: hidden;
+}
+
+.signup-modal-showcase::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 100px,
+      color-mix(in oklch, var(--accent) 10%, transparent) 100px 104px
+    );
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+.signup-modal-showcase::after {
+  content: "";
+  position: absolute;
+  left: -10%;
+  bottom: -24%;
+  width: 88%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(
+      circle,
+      color-mix(in oklch, white 18%, var(--accent) 82%) 0%,
+      color-mix(in oklch, var(--accent) 62%, transparent) 18%,
+      color-mix(in oklch, var(--accent-deep) 28%, transparent) 46%,
+      transparent 74%
+    );
+  filter: blur(16px);
+  pointer-events: none;
+}
+
+.signup-modal-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.15rem, 2.8vw, 2rem);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--signup-panel) 94%, black 6%) 0%,
+      color-mix(in oklch, var(--signup-shell) 84%, var(--chip) 16%) 100%
+    );
+  color: var(--signup-text-strong);
+}
+
+.signup-modal-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in oklch, white 6%, transparent);
+  color: var(--signup-text-muted);
+  cursor: pointer;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.signup-modal-close:hover,
+.signup-modal-close:focus-visible {
+  background: color-mix(in oklch, white 10%, transparent);
+  color: var(--signup-text-strong);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.signup-modal-close svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.signup-modal-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: clamp(5.8rem, 14vw, 7rem);
+  transform: translateY(-0.32rem);
+  margin-bottom: 0.52rem;
+}
+
+.signup-modal-badge img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.signup-modal-title {
+  margin: 0.08rem 0 0;
+  font-size: clamp(1.85rem, 2.9vw, 2.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  color: var(--signup-text-strong);
+}
+
+.signup-modal-intro {
+  margin: 0.6rem 0 0;
+  max-width: 32ch;
+  font-size: clamp(0.9rem, 0.98vw, 0.96rem);
+  line-height: 1.56;
+  color: var(--signup-text-muted);
+}
+
+.signup-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: clamp(1.7rem, 3.4vw, 2.2rem);
+}
+
+.signup-field {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.signup-field span {
+  color: var(--signup-text-strong);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.signup-input {
+  width: 100%;
+  min-height: 3.05rem;
+  padding: 0.7rem 0.92rem;
+  border-radius: 0.86rem;
+  border: 1px solid var(--signup-border);
+  background: color-mix(in oklch, var(--signup-input-bg) 86%, white 14%);
+  color: var(--signup-text-strong);
+  font: inherit;
+  font-size: 0.94rem;
+  line-height: 1.4;
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.signup-input::placeholder {
+  color: color-mix(in oklch, var(--muted) 88%, white 12%);
+}
+
+.signup-input:focus-visible {
+  border-color: var(--signup-border-strong);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--accent) 18%, transparent);
+  outline: none;
+}
+
+.signup-input[aria-invalid="true"] {
+  border-color: color-mix(in oklch, var(--accent-alt) 30%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--accent-alt) 12%, transparent);
+}
+
+.signup-input[aria-invalid="true"]:focus-visible {
+  border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--accent-alt) 14%, transparent);
+}
+
+.signup-submit {
+  min-height: 3.15rem;
+  margin-top: 0.64rem;
+  border: 1px solid color-mix(in oklch, var(--accent) 16%, transparent);
+  border-radius: 0.88rem;
+  background: color-mix(in oklch, var(--accent) 52%, var(--signup-input-bg) 48%);
+  color: var(--signup-text-strong);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.signup-submit:hover,
+.signup-submit:focus-visible {
+  background: color-mix(in oklch, var(--accent) 58%, var(--signup-input-bg) 42%);
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px color-mix(in oklch, var(--accent) 16%, transparent);
+  outline: none;
+}
+
+.signup-form-status {
+  margin: 0.28rem 0 0;
+  padding: 0.78rem 0.92rem;
+  border: 1px solid transparent;
+  border-radius: 0.82rem;
+  background: color-mix(in oklch, var(--chip) 84%, black 16%);
+  color: color-mix(in oklch, var(--accent) 82%, white);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.signup-form-status.is-success {
+  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
+  background: color-mix(in oklch, var(--chip-hover) 74%, var(--accent) 26%);
+  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+}
+
+.signup-form-status.is-error {
+  border-color: color-mix(in oklch, var(--accent-alt) 26%, transparent);
+  background: color-mix(in oklch, var(--chip-hover) 78%, var(--accent-alt) 22%);
+  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
+}
+
+.signup-modal-helper {
+  margin: 0.82rem 0 0;
+  color: var(--signup-text-muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.signup-modal-helper a {
+  color: color-mix(in oklch, var(--accent) 86%, white);
+  font-weight: 800;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+
+.signup-modal-helper a:hover,
+.signup-modal-helper a:focus-visible {
+  color: var(--signup-text-strong);
+  outline: none;
+}
+
+@keyframes signupOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes signupModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (max-width: 980px) {
+  .signup-modal {
+    min-height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .signup-modal-showcase {
+    min-height: 16.5rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .signup-overlay {
+    padding: 0.8rem;
+  }
+
+  .signup-modal {
+    border-radius: 20px;
+  }
+
+  .signup-modal-showcase,
+  .signup-modal-panel {
+    padding: 1rem;
+  }
+
+  .signup-modal-showcase {
+    min-height: 13.8rem;
+  }
+
+  .signup-modal-close {
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .signup-input,
+  .signup-submit {
+    min-height: 2.95rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll-title-reveal {
     opacity: 1;
@@ -3177,7 +3546,14 @@ button {
   .ai-chat-model-picker-chevron,
   .ai-chat-model-menu-item,
   .ai-chat-icon-btn,
-  .ai-chat-send {
+  .ai-chat-send,
+  .signup-modal-close,
+  .signup-submit {
     transition: none;
+  }
+
+  .signup-overlay,
+  .signup-modal {
+    animation: none;
   }
 }

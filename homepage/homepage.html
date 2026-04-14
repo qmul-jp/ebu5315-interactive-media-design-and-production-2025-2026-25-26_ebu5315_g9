@@ -30,7 +30,7 @@
         <nav class="account-nav" aria-label="Account">
           <ul>
             <li><a class="nav-link login-btn" href="#">Log in</a></li>
-            <li><a class="nav-link signup-btn" href="#">Sign up</a></li>
+            <li><a class="nav-link signup-btn" href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Sign up</a></li>
             <li><a class="nav-link setting-btn" href="#">Setting</a></li>
           </ul>
         </nav>
@@ -46,7 +46,7 @@
             Learn the key rules of circle geometry through clear explanations, interactive visuals, and simple practice.
           </p>
           <div class="hero-actions">
-            <a class="hero-btn primary" href="#">Start Learning</a>
+            <a class="hero-btn primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Start Learning</a>
             <a class="hero-btn secondary" href="#">Watch Demo</a>
           </div>
         </div>
@@ -724,7 +724,7 @@
             <span class="callout-line">Quizzes that inspire. Play that enlightens.</span>
           </h2>
           <div class="callout-actions">
-            <a class="callout-btn callout-btn-primary" href="#">Start Learning</a>
+            <a class="callout-btn callout-btn-primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Start Learning</a>
             <a class="callout-btn callout-btn-secondary" href="#">Contact Us</a>
           </div>
         </div>
@@ -782,6 +782,74 @@
         </div>
       </div>
     </footer>
+
+    <div class="signup-overlay" id="signupOverlay" data-signup-overlay hidden>
+      <div class="signup-modal" role="dialog" aria-modal="true" aria-labelledby="signupModalTitle">
+        <div class="signup-modal-showcase" aria-hidden="true"></div>
+
+        <section class="signup-modal-panel">
+          <button class="signup-modal-close" type="button" data-signup-close aria-label="Close sign up">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6 18 18" />
+              <path d="M18 6 6 18" />
+            </svg>
+          </button>
+
+          <div class="signup-modal-badge" aria-hidden="true">
+            <img src="logowhite.png" alt="" />
+          </div>
+
+          <h2 class="signup-modal-title" id="signupModalTitle">Create account</h2>
+          <p class="signup-modal-intro">Welcome to your CircleLab workspace.</p>
+
+          <form class="signup-form" data-signup-form novalidate>
+            <label class="signup-field" for="signupEmail">
+              <span>Email address</span>
+              <input
+                class="signup-input"
+                id="signupEmail"
+                name="email"
+                type="email"
+                autocomplete="email"
+                aria-describedby="signupFormFeedback"
+                placeholder="you@circlelab.com"
+                required
+              />
+            </label>
+
+            <label class="signup-field" for="signupPassword">
+              <span>Password</span>
+              <input
+                class="signup-input"
+                id="signupPassword"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                aria-describedby="signupFormFeedback"
+                minlength="8"
+                placeholder="At least 8 characters"
+                required
+              />
+            </label>
+
+            <button class="signup-submit" type="submit">Create free acount</button>
+            <p
+              class="signup-form-status"
+              id="signupFormFeedback"
+              data-signup-feedback
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              hidden
+            ></p>
+          </form>
+
+          <p class="signup-modal-helper">
+            Already have account? <a href="#" data-signup-close>Log in</a>
+          </p>
+        </section>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>

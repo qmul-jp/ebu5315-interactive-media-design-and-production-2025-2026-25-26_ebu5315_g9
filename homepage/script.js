@@ -709,3 +709,176 @@
   syncSendState();
   scrollTranscriptToBottom("auto");
 })();
+
+(() => {
+  const overlay = document.querySelector("[data-signup-overlay]");
+  if (!overlay) {
+    return;
+  }
+
+  const openButtons = Array.from(document.querySelectorAll("[data-open-signup]"));
+  const closeButtons = Array.from(overlay.querySelectorAll("[data-signup-close]"));
+  const form = overlay.querySelector("[data-signup-form]");
+  const emailInput = overlay.querySelector("#signupEmail");
+  const passwordInput = overlay.querySelector("#signupPassword");
+  const feedback = overlay.querySelector("[data-signup-feedback]");
+
+  if (
+    !openButtons.length ||
+    !(form instanceof HTMLFormElement) ||
+    !(emailInput instanceof HTMLInputElement) ||
+    !(passwordInput instanceof HTMLInputElement) ||
+    !feedback
+  ) {
+    return;
+  }
+
+  let lastTrigger = null;
+  let activeValidationField = null;
+  const fields = [emailInput, passwordInput];
+
+  const clearFieldError = (input) => {
+    input.removeAttribute("aria-invalid");
+  };
+
+  const showFeedback = (message, state) => {
+    feedback.hidden = false;
+    feedback.textContent = message;
+    feedback.classList.toggle("is-error", state === "error");
+    feedback.classList.toggle("is-success", state === "success");
+  };
+
+  const clearFeedback = () => {
+    feedback.hidden = true;
+    feedback.textContent = "";
+    feedback.classList.remove("is-error", "is-success");
+    activeValidationField = null;
+  };
+
+  const getValidationMessage = (input) => {
+    if (input.validity.valueMissing) {
+      return input.validationMessage;
+    }
+
+    if (input.validity.typeMismatch) {
+      return input.validationMessage;
+    }
+
+    if (input.validity.tooShort) {
+      return input.validationMessage;
+    }
+
+    return input.validationMessage || "Please check this field and try again.";
+  };
+
+  const validateField = (input) => {
+    input.setCustomValidity("");
+    const isValid = input.checkValidity();
+
+    if (isValid) {
+      clearFieldError(input);
+      return "";
+    }
+
+    input.setAttribute("aria-invalid", "true");
+    return getValidationMessage(input);
+  };
+
+  const validateForm = () => {
+    for (const input of fields) {
+      const message = validateField(input);
+      if (message) {
+        activeValidationField = input;
+        return { input, message };
+      }
+    }
+
+    return null;
+  };
+
+  const openSignupOverlay = (trigger) => {
+    lastTrigger = trigger instanceof HTMLElement ? trigger : null;
+    overlay.hidden = false;
+    document.body.classList.add("is-signup-open");
+    form.reset();
+    clearFeedback();
+    fields.forEach(clearFieldError);
+
+    requestAnimationFrame(() => {
+      emailInput.focus();
+    });
+  };
+
+  const closeSignupOverlay = () => {
+    overlay.hidden = true;
+    document.body.classList.remove("is-signup-open");
+    clearFeedback();
+    fields.forEach(clearFieldError);
+
+    if (lastTrigger instanceof HTMLElement) {
+      lastTrigger.focus();
+    }
+  };
+
+  openButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      openSignupOverlay(button);
+    });
+  });
+
+  closeButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeSignupOverlay();
+    });
+  });
+
+  overlay.addEventListener("click", (event) => {
+    if (event.target === overlay) {
+      closeSignupOverlay();
+    }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (!overlay.hidden && event.key === "Escape") {
+      closeSignupOverlay();
+    }
+  });
+
+  fields.forEach((input) => {
+    input.addEventListener("input", () => {
+      if (feedback.classList.contains("is-success")) {
+        clearFeedback();
+      }
+
+      if (activeValidationField === input || input.getAttribute("aria-invalid") === "true") {
+        const message = validateField(input);
+
+        if (message) {
+          activeValidationField = input;
+          showFeedback(message, "error");
+          return;
+        }
+
+        clearFeedback();
+      }
+    });
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const invalidField = validateForm();
+    if (invalidField) {
+      showFeedback(invalidField.message, "error");
+      invalidField.input.focus();
+      return;
+    }
+
+    form.reset();
+    clearFeedback();
+    fields.forEach(clearFieldError);
+    closeSignupOverlay();
+  });
+})();
