@@ -77,16 +77,6 @@
             </g>
 
             <g id="geo-construct">
-              <image
-                href="logowhite.png"
-                x="454"
-                y="144"
-                width="492"
-                height="492"
-                class="geo-logo-mark"
-                preserveAspectRatio="xMidYMid meet"
-              />
-
               <circle cx="700" cy="390" r="140" class="geo-construct-ring r0" />
               <circle cx="700" cy="390" r="240" class="geo-construct-ring r1" />
               <circle cx="700" cy="390" r="332" class="geo-construct-ring r2" />
@@ -429,10 +419,11 @@
         <div class="ai-study-copy">
           <p class="ai-study-kicker">AI STUDY COPILOT</p>
           <h2 id="ai-study-title" class="scroll-title-reveal">
-            Ask one question. See the theorem click into place.
+            Get stuck?<br />
+            Ask ArcMind.
           </h2>
           <p class="ai-study-subtitle">
-            Get context-aware help with arcs, tangents, and circle-theorem proofs.
+            Your AI guide to circle theorems and proofs, from first ideas to complete reasoning.
           </p>
         </div>
 
@@ -443,22 +434,35 @@
 
             <div class="ai-chat-shell" aria-label="AI chat demonstration">
               <div class="ai-chat-header">
-                <div class="ai-chat-presence">
-                  <span class="ai-chat-avatar" aria-hidden="true"></span>
-                  <div>
-                    <p class="ai-chat-title">Circle Tutor</p>
-                    <p class="ai-chat-subtitle">Live proof support for theorem practice</p>
-                  </div>
+                <div>
+                  <p class="ai-chat-title">ArcMind</p>
+                  <p class="ai-chat-subtitle">Help with theorems and proof practice</p>
                 </div>
-                <span class="ai-chat-status-pill">Context linked</span>
               </div>
 
-              <div class="ai-chat-transcript" aria-hidden="true"></div>
-
-              <div class="ai-chat-composer" aria-label="AI chat composer">
-                <div class="ai-chat-draft" role="textbox" aria-label="Draft prompt" aria-readonly="true">
-                  How can I help you today?
+              <div class="ai-chat-transcript" role="log" aria-live="polite" aria-label="AI chat transcript">
+                <div class="ai-chat-messages" data-ai-chat-messages>
+                  <article class="ai-chat-message is-assistant">
+                    <p class="ai-chat-message-meta">ArcMind</p>
+                    <p class="ai-chat-message-bubble">
+                      Ask a question about circle geometry and I'll help you think it through.
+                    </p>
+                  </article>
                 </div>
+              </div>
+
+              <form class="ai-chat-composer" aria-label="AI chat composer">
+                <label class="sr-only" for="aiChatInput">Ask ArcMind</label>
+                <textarea
+                  class="ai-chat-draft"
+                  id="aiChatInput"
+                  name="prompt"
+                  rows="1"
+                  maxlength="280"
+                  placeholder="Ask anything about circle"
+                  aria-describedby="aiChatHint aiChatDisclaimer"
+                ></textarea>
+                <p class="sr-only" id="aiChatHint">Press Enter to send. Press Shift plus Enter to start a new line.</p>
 
                 <div class="ai-chat-toolbar">
                   <button class="ai-chat-icon-btn" type="button" aria-label="Add attachment">
@@ -496,14 +500,18 @@
                     </div>
                   </details>
 
-                  <button class="ai-chat-send" type="button" aria-label="Send message">
+                  <button class="ai-chat-send" type="submit" aria-label="Send message" disabled>
                     <svg viewBox="0 0 24 24" aria-hidden="true">
                       <path d="M12 18V6" />
                       <path d="m7 11 5-5 5 5" />
                     </svg>
                   </button>
                 </div>
-              </div>
+              </form>
+
+              <p class="ai-chat-disclaimer" id="aiChatDisclaimer">
+                AI can make mistakes. Please check important information.
+              </p>
             </div>
           </div>
         </div>

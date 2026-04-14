@@ -574,3 +574,138 @@
     }
   });
 })();
+
+(() => {
+  const chatShell = document.querySelector(".ai-chat-shell");
+  if (!chatShell) {
+    return;
+  }
+
+  const form = chatShell.querySelector(".ai-chat-composer");
+  const input = chatShell.querySelector(".ai-chat-draft");
+  const sendButton = chatShell.querySelector(".ai-chat-send");
+  const transcript = chatShell.querySelector(".ai-chat-transcript");
+  const messages = chatShell.querySelector("[data-ai-chat-messages]");
+  const modelValue = chatShell.querySelector(".ai-chat-model-picker-value");
+  const attachButton = chatShell.querySelector(".ai-chat-icon-btn");
+  const prefersReducedMotion = typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false };
+
+  if (
+    !form ||
+    !(form instanceof HTMLFormElement) ||
+    !input ||
+    !(input instanceof HTMLTextAreaElement) ||
+    !sendButton ||
+    !(sendButton instanceof HTMLButtonElement) ||
+    !transcript ||
+    !messages ||
+    !modelValue
+  ) {
+    return;
+  }
+
+  const maxComposerHeight = 172;
+
+  const autoResizeInput = () => {
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, maxComposerHeight)}px`;
+    input.style.overflowY = input.scrollHeight > maxComposerHeight ? "auto" : "hidden";
+  };
+
+  const syncSendState = () => {
+    sendButton.disabled = input.value.trim().length === 0;
+  };
+
+  const scrollTranscriptToBottom = (behavior = "smooth") => {
+    const nextTop = transcript.scrollHeight;
+
+    if (prefersReducedMotion.matches || typeof transcript.scrollTo !== "function") {
+      transcript.scrollTop = nextTop;
+      return;
+    }
+
+    transcript.scrollTo({
+      top: nextTop,
+      behavior,
+    });
+  };
+
+  const createMessage = (role, label, text) => {
+    const message = document.createElement("article");
+    message.className = `ai-chat-message is-${role}`;
+
+    const meta = document.createElement("p");
+    meta.className = "ai-chat-message-meta";
+    meta.textContent = label;
+
+    const bubble = document.createElement("p");
+    bubble.className = "ai-chat-message-bubble";
+    bubble.textContent = text;
+
+    message.append(meta, bubble);
+    return message;
+  };
+
+  const buildTutorReply = () =>
+    "Ask a question about circle geometry and I'll help you think it through.";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const prompt = input.value.trim();
+    if (!prompt) {
+      syncSendState();
+      input.focus();
+      return;
+    }
+
+    messages.append(createMessage("user", "You", prompt));
+    messages.append(
+      createMessage(
+        "assistant",
+        `ArcMind - ${modelValue.textContent.trim()}`,
+        buildTutorReply()
+      )
+    );
+
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+    requestAnimationFrame(() => {
+      scrollTranscriptToBottom();
+    });
+    input.focus();
+  });
+
+  input.addEventListener("input", () => {
+    autoResizeInput();
+    syncSendState();
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey || event.isComposing) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (typeof form.requestSubmit === "function") {
+      form.requestSubmit();
+      return;
+    }
+
+    sendButton.click();
+  });
+
+  if (attachButton instanceof HTMLButtonElement) {
+    attachButton.addEventListener("click", () => {
+      input.focus();
+    });
+  }
+
+  autoResizeInput();
+  syncSendState();
+  scrollTranscriptToBottom("auto");
+})();
