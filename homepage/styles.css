@@ -1635,7 +1635,7 @@ button {
   line-height: 1.06;
   letter-spacing: -0.024em;
   color: color-mix(in oklch, white 92%, var(--accent) 8%);
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .pricing-intro {
