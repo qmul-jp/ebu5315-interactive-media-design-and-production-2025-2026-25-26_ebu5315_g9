@@ -721,6 +721,7 @@
   const form = overlay.querySelector("[data-signup-form]");
   const emailInput = overlay.querySelector("#signupEmail");
   const passwordInput = overlay.querySelector("#signupPassword");
+  const consentInput = overlay.querySelector("#signupConsent");
   const feedback = overlay.querySelector("[data-signup-feedback]");
 
   if (
@@ -728,6 +729,7 @@
     !(form instanceof HTMLFormElement) ||
     !(emailInput instanceof HTMLInputElement) ||
     !(passwordInput instanceof HTMLInputElement) ||
+    !(consentInput instanceof HTMLInputElement) ||
     !feedback
   ) {
     return;
@@ -735,7 +737,7 @@
 
   let lastTrigger = null;
   let activeValidationField = null;
-  const fields = [emailInput, passwordInput];
+  const fields = [emailInput, passwordInput, consentInput];
 
   const clearFieldError = (input) => {
     input.removeAttribute("aria-invalid");
@@ -757,6 +759,10 @@
 
   const getValidationMessage = (input) => {
     if (input.validity.valueMissing) {
+      if (input.type === "checkbox") {
+        return "Please agree to the Terms and Conditions and Privacy Policy.";
+      }
+
       return input.validationMessage;
     }
 
@@ -847,7 +853,7 @@
   });
 
   fields.forEach((input) => {
-    input.addEventListener("input", () => {
+    const updateValidation = () => {
       if (feedback.classList.contains("is-success")) {
         clearFeedback();
       }
@@ -863,7 +869,13 @@
 
         clearFeedback();
       }
-    });
+    };
+
+    input.addEventListener("input", updateValidation);
+
+    if (input.type === "checkbox") {
+      input.addEventListener("change", updateValidation);
+    }
   });
 
   form.addEventListener("submit", (event) => {
