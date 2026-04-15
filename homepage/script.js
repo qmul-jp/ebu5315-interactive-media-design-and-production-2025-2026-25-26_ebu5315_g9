@@ -613,90 +613,180 @@
 })();
 
 (() => {
-  const overlay = document.querySelector("[data-signup-overlay]");
-  if (!overlay) {
+  const header = document.querySelector(".site-header");
+  if (!(header instanceof HTMLElement)) {
     return;
   }
 
-  const openButtons = Array.from(document.querySelectorAll("[data-open-signup]"));
-  const closeButtons = Array.from(overlay.querySelectorAll("[data-signup-close]"));
-  const form = overlay.querySelector("[data-signup-form]");
-  const emailInput = overlay.querySelector("#signupEmail");
-  const passwordInput = overlay.querySelector("#signupPassword");
-  const consentInput = overlay.querySelector("#signupConsent");
-  const feedback = overlay.querySelector("[data-signup-feedback]");
+  const measureScrollbarWidth = () => {
+    const scrollProbe = document.createElement("div");
+    scrollProbe.style.position = "absolute";
+    scrollProbe.style.top = "-9999px";
+    scrollProbe.style.width = "120px";
+    scrollProbe.style.height = "120px";
+    scrollProbe.style.overflow = "scroll";
+    scrollProbe.style.pointerEvents = "none";
+    document.body.append(scrollProbe);
+    const scrollbarWidth = scrollProbe.offsetWidth - scrollProbe.clientWidth;
+    scrollProbe.remove();
+    return Math.max(0, scrollbarWidth);
+  };
 
-  if (
-    !openButtons.length ||
-    !(form instanceof HTMLFormElement) ||
-    !(emailInput instanceof HTMLInputElement) ||
-    !(passwordInput instanceof HTMLInputElement) ||
-    !(consentInput instanceof HTMLInputElement) ||
-    !feedback
-  ) {
+  const syncViewportMetrics = () => {
+    const offset = Math.ceil(header.getBoundingClientRect().height + 12);
+    document.documentElement.style.setProperty("--auth-header-offset", `${offset}px`);
+    document.documentElement.style.setProperty(
+      "--scrollbar-compensation",
+      `${measureScrollbarWidth()}px`
+    );
+  };
+
+  syncViewportMetrics();
+  window.addEventListener("load", syncViewportMetrics, { once: true });
+  window.addEventListener("resize", syncViewportMetrics);
+})();
+
+(() => {
+  const overlaySelector = "[data-signup-overlay], [data-login-overlay]";
+  const signupOverlay = document.querySelector("[data-signup-overlay]");
+  const loginOverlay = document.querySelector("[data-login-overlay]");
+
+  if (!signupOverlay && !loginOverlay) {
     return;
   }
 
-  let lastTrigger = null;
-  let activeValidationField = null;
-  const fields = [emailInput, passwordInput, consentInput];
+  const setHash = (hash) => {
+    if (window.location.hash === hash) {
+      return;
+    }
 
-  const clearFieldError = (input) => {
-    input.removeAttribute("aria-invalid");
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}${hash}`
+    );
   };
 
-  const showFeedback = (message, state) => {
-    feedback.hidden = false;
-    feedback.textContent = message;
-    feedback.classList.toggle("is-error", state === "error");
-    feedback.classList.toggle("is-success", state === "success");
+  const clearHash = (hash) => {
+    if (window.location.hash !== hash) {
+      return;
+    }
+
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}`
+    );
   };
 
-  const clearFeedback = () => {
-    feedback.hidden = true;
-    feedback.textContent = "";
-    feedback.classList.remove("is-error", "is-success");
-    activeValidationField = null;
+  const shouldRememberTrigger = (trigger) =>
+    trigger instanceof HTMLElement && !trigger.closest(overlaySelector);
+
+  const isAnyOverlayOpen = () =>
+    [signupOverlay, loginOverlay].some(
+      (overlay) => overlay instanceof HTMLElement && !overlay.hidden
+    );
+
+  const syncBodyState = () => {
+    document.body.classList.toggle("is-auth-open", isAnyOverlayOpen());
   };
 
-  const getValidationMessage = (input) => {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const overlayCloseCleanupMap = new WeakMap();
+  const overlayOpenCleanupMap = new WeakMap();
+
+  const getValidationMessage = (input, checkboxMessage) => {
     if (input.validity.valueMissing) {
       if (input.type === "checkbox") {
-        return "Please agree to the Terms and Conditions and Privacy Policy.";
+        return checkboxMessage;
       }
 
       return input.validationMessage;
     }
 
-    if (input.validity.typeMismatch) {
-      return input.validationMessage;
-    }
-
-    if (input.validity.tooShort) {
+    if (input.validity.typeMismatch || input.validity.tooShort) {
       return input.validationMessage;
     }
 
     return input.validationMessage || "Please check this field and try again.";
   };
 
-  const validateField = (input) => {
-    input.setCustomValidity("");
-    const isValid = input.checkValidity();
+  let lastTrigger = null;
 
-    if (isValid) {
-      clearFieldError(input);
+  const signupForm = signupOverlay
+    ? signupOverlay.querySelector("[data-signup-form]")
+    : null;
+  const signupEmailInput = signupOverlay
+    ? signupOverlay.querySelector("#signupEmail")
+    : null;
+  const signupPasswordInput = signupOverlay
+    ? signupOverlay.querySelector("#signupPassword")
+    : null;
+  const signupConsentInput = signupOverlay
+    ? signupOverlay.querySelector("#signupConsent")
+    : null;
+  const signupFeedback = signupOverlay
+    ? signupOverlay.querySelector("[data-signup-feedback]")
+    : null;
+  const signupOpenButtons = Array.from(document.querySelectorAll("[data-open-signup]"));
+  const signupCloseButtons = signupOverlay
+    ? Array.from(signupOverlay.querySelectorAll("[data-signup-close]"))
+    : [];
+  const signupFields =
+    signupEmailInput instanceof HTMLInputElement &&
+    signupPasswordInput instanceof HTMLInputElement &&
+    signupConsentInput instanceof HTMLInputElement
+      ? [signupEmailInput, signupPasswordInput, signupConsentInput]
+      : [];
+
+  let activeSignupValidationField = null;
+
+  const clearSignupFieldError = (input) => {
+    input.removeAttribute("aria-invalid");
+  };
+
+  const showSignupFeedback = (message, state) => {
+    if (!signupFeedback) {
+      return;
+    }
+
+    signupFeedback.hidden = false;
+    signupFeedback.textContent = message;
+    signupFeedback.classList.toggle("is-error", state === "error");
+    signupFeedback.classList.toggle("is-success", state === "success");
+  };
+
+  const clearSignupFeedback = () => {
+    if (!signupFeedback) {
+      return;
+    }
+
+    signupFeedback.hidden = true;
+    signupFeedback.textContent = "";
+    signupFeedback.classList.remove("is-error", "is-success");
+    activeSignupValidationField = null;
+  };
+
+  const validateSignupField = (input) => {
+    input.setCustomValidity("");
+
+    if (input.checkValidity()) {
+      clearSignupFieldError(input);
       return "";
     }
 
     input.setAttribute("aria-invalid", "true");
-    return getValidationMessage(input);
+    return getValidationMessage(
+      input,
+      "Please agree to the Terms and Conditions and Privacy Policy."
+    );
   };
 
-  const validateForm = () => {
-    for (const input of fields) {
-      const message = validateField(input);
+  const validateSignupForm = () => {
+    for (const input of signupFields) {
+      const message = validateSignupField(input);
       if (message) {
-        activeValidationField = input;
+        activeSignupValidationField = input;
         return { input, message };
       }
     }
@@ -704,95 +794,627 @@
     return null;
   };
 
-  const openSignupOverlay = (trigger) => {
-    lastTrigger = trigger instanceof HTMLElement ? trigger : null;
-    overlay.hidden = false;
-    document.body.classList.add("is-signup-open");
-    form.reset();
-    clearFeedback();
-    fields.forEach(clearFieldError);
+  const resetSignupState = () => {
+    if (!(signupForm instanceof HTMLFormElement)) {
+      return;
+    }
 
-    requestAnimationFrame(() => {
-      emailInput.focus();
+    signupForm.reset();
+    clearSignupFeedback();
+    signupFields.forEach(clearSignupFieldError);
+  };
+
+  const loginForm = loginOverlay
+    ? loginOverlay.querySelector("[data-login-form]")
+    : null;
+  const loginEmailInput = loginOverlay
+    ? loginOverlay.querySelector("#loginEmail")
+    : null;
+  const loginPasswordInput = loginOverlay
+    ? loginOverlay.querySelector("#loginPassword")
+    : null;
+  const loginFeedback = loginOverlay
+    ? loginOverlay.querySelector("[data-login-feedback]")
+    : null;
+  const loginHelpButton = loginOverlay
+    ? loginOverlay.querySelector("[data-login-help]")
+    : null;
+  const loginOpenButtons = Array.from(document.querySelectorAll("[data-open-login]"));
+  const loginCloseButtons = loginOverlay
+    ? Array.from(loginOverlay.querySelectorAll("[data-login-close]"))
+    : [];
+  const loginFields =
+    loginEmailInput instanceof HTMLInputElement &&
+    loginPasswordInput instanceof HTMLInputElement
+      ? [loginEmailInput, loginPasswordInput]
+      : [];
+
+  let activeLoginValidationField = null;
+
+  const clearLoginFieldError = (input) => {
+    input.removeAttribute("aria-invalid");
+  };
+
+  const showLoginFeedback = (message, state = "info") => {
+    if (!loginFeedback) {
+      return;
+    }
+
+    loginFeedback.hidden = false;
+    loginFeedback.textContent = message;
+    loginFeedback.classList.toggle("is-error", state === "error");
+    loginFeedback.classList.toggle("is-success", state === "success");
+  };
+
+  const clearLoginFeedback = () => {
+    if (!loginFeedback) {
+      return;
+    }
+
+    loginFeedback.hidden = true;
+    loginFeedback.textContent = "";
+    loginFeedback.classList.remove("is-error", "is-success");
+    activeLoginValidationField = null;
+  };
+
+  const validateLoginField = (input) => {
+    input.setCustomValidity("");
+
+    if (input.checkValidity()) {
+      clearLoginFieldError(input);
+      return "";
+    }
+
+    input.setAttribute("aria-invalid", "true");
+    return getValidationMessage(input, "");
+  };
+
+  const validateLoginForm = () => {
+    for (const input of loginFields) {
+      const message = validateLoginField(input);
+      if (message) {
+        activeLoginValidationField = input;
+        return { input, message };
+      }
+    }
+
+    return null;
+  };
+
+  const resetLoginState = () => {
+    if (!(loginForm instanceof HTMLFormElement)) {
+      return;
+    }
+
+    loginForm.reset();
+    clearLoginFeedback();
+    loginFields.forEach(clearLoginFieldError);
+  };
+
+  const cancelOverlayClose = (overlay) => {
+    if (!(overlay instanceof HTMLElement)) {
+      return;
+    }
+
+    const cleanup = overlayCloseCleanupMap.get(overlay);
+    if (cleanup) {
+      cleanup();
+      overlayCloseCleanupMap.delete(overlay);
+    }
+
+    overlay.classList.remove("is-closing");
+  };
+
+  const cancelOverlayOpen = (overlay) => {
+    if (!(overlay instanceof HTMLElement)) {
+      return;
+    }
+
+    const cleanup = overlayOpenCleanupMap.get(overlay);
+    if (cleanup) {
+      cleanup();
+      overlayOpenCleanupMap.delete(overlay);
+    }
+
+    overlay.classList.remove("is-opening");
+  };
+
+  const startOverlayOpen = (overlay) => {
+    if (!(overlay instanceof HTMLElement) || reduceMotion) {
+      return;
+    }
+
+    cancelOverlayOpen(overlay);
+    overlay.classList.add("is-opening");
+
+    const timeoutId = window.setTimeout(() => {
+      cancelOverlayOpen(overlay);
+    }, 360);
+
+    overlayOpenCleanupMap.set(overlay, () => {
+      window.clearTimeout(timeoutId);
     });
   };
 
-  const closeSignupOverlay = () => {
-    overlay.hidden = true;
-    document.body.classList.remove("is-signup-open");
-    clearFeedback();
-    fields.forEach(clearFieldError);
+  const finalizeOverlayHide = (overlay, hash, resetState, clearUrl) => {
+    if (!(overlay instanceof HTMLElement)) {
+      return;
+    }
 
-    if (lastTrigger instanceof HTMLElement) {
+    cancelOverlayOpen(overlay);
+    cancelOverlayClose(overlay);
+    overlay.hidden = true;
+    resetState();
+
+    if (clearUrl) {
+      clearHash(hash);
+    }
+
+    syncBodyState();
+  };
+
+  const hideOverlay = (
+    overlay,
+    hash,
+    resetState,
+    { clearUrl = true, immediate = false } = {}
+  ) => {
+    if (!(overlay instanceof HTMLElement) || overlay.hidden) {
+      return;
+    }
+
+    if (immediate || reduceMotion) {
+      finalizeOverlayHide(overlay, hash, resetState, clearUrl);
+      return;
+    }
+
+    cancelOverlayClose(overlay);
+    overlay.classList.add("is-closing");
+
+    const modal = overlay.querySelector(".signup-modal");
+    const animationTarget = modal instanceof HTMLElement ? modal : overlay;
+
+    const completeClose = () => {
+      finalizeOverlayHide(overlay, hash, resetState, clearUrl);
+    };
+
+    const handleAnimationEnd = (event) => {
+      if (event.target !== animationTarget) {
+        return;
+      }
+
+      completeClose();
+    };
+
+    const timeoutId = window.setTimeout(completeClose, 260);
+
+    animationTarget.addEventListener("animationend", handleAnimationEnd);
+
+    overlayCloseCleanupMap.set(overlay, () => {
+      window.clearTimeout(timeoutId);
+      animationTarget.removeEventListener("animationend", handleAnimationEnd);
+    });
+  };
+
+  const closeOverlay = (
+    overlay,
+    hash,
+    resetState,
+    { restoreFocus = true, clearUrl = true } = {}
+  ) => {
+    if (!(overlay instanceof HTMLElement) || overlay.hidden) {
+      return;
+    }
+
+    hideOverlay(overlay, hash, resetState, { clearUrl });
+
+    if (!isAnyOverlayOpen() && restoreFocus && lastTrigger instanceof HTMLElement) {
       lastTrigger.focus();
     }
   };
 
-  openButtons.forEach((button) => {
+  const switchOverlay = ({
+    fromOverlay,
+    fromHash,
+    fromResetState,
+    toOverlay,
+    toHash,
+    toResetState,
+    focusInput,
+    direction,
+  }) => {
+    if (
+      !(fromOverlay instanceof HTMLElement) ||
+      !(toOverlay instanceof HTMLElement) ||
+      !(focusInput instanceof HTMLElement)
+    ) {
+      return false;
+    }
+
+    const fromModal = fromOverlay.querySelector(".signup-modal");
+    const toModal = toOverlay.querySelector(".signup-modal");
+
+    if (
+      reduceMotion ||
+      !(fromModal instanceof HTMLElement) ||
+      !(toModal instanceof HTMLElement) ||
+      typeof fromModal.animate !== "function" ||
+      typeof toModal.animate !== "function"
+    ) {
+      return false;
+    }
+
+    cancelOverlayClose(fromOverlay);
+    cancelOverlayClose(toOverlay);
+    cancelOverlayOpen(fromOverlay);
+    cancelOverlayOpen(toOverlay);
+    toResetState();
+    toOverlay.classList.add("is-switch-target");
+    toOverlay.hidden = false;
+    document.body.classList.add("is-auth-switching");
+    setHash(toHash);
+    syncBodyState();
+
+    const enterOffset = direction > 0 ? 34 : -34;
+    const exitOffset = direction > 0 ? -28 : 28;
+
+    const enterAnimation = toModal.animate(
+      [
+        {
+          opacity: 0,
+          transform: `translate3d(${enterOffset}px, 0, 0) scale(0.986)`,
+          filter: "blur(7px)",
+        },
+        {
+          opacity: 1,
+          transform: "translate3d(0, 0, 0) scale(1)",
+          filter: "blur(0px)",
+        },
+      ],
+      {
+        duration: 300,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "both",
+      }
+    );
+
+    const exitAnimation = fromModal.animate(
+      [
+        {
+          opacity: 1,
+          transform: "translate3d(0, 0, 0) scale(1)",
+          filter: "blur(0px)",
+        },
+        {
+          opacity: 0,
+          transform: `translate3d(${exitOffset}px, 0, 0) scale(0.986)`,
+          filter: "blur(7px)",
+        },
+      ],
+      {
+        duration: 220,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fill: "both",
+      }
+    );
+
+    let isFinalized = false;
+    const finalizeSwitch = () => {
+      if (isFinalized) {
+        return;
+      }
+
+      isFinalized = true;
+      document.body.classList.remove("is-auth-switching");
+      toOverlay.classList.remove("is-switch-target");
+      enterAnimation.cancel();
+      exitAnimation.cancel();
+      hideOverlay(fromOverlay, fromHash, fromResetState, {
+        clearUrl: false,
+        immediate: true,
+      });
+
+      requestAnimationFrame(() => {
+        focusInput.focus();
+      });
+    };
+
+    Promise.allSettled([enterAnimation.finished, exitAnimation.finished]).then(
+      finalizeSwitch
+    );
+    window.setTimeout(finalizeSwitch, 340);
+
+    return true;
+  };
+
+  const openSignupOverlay = (trigger) => {
+    if (
+      !(signupOverlay instanceof HTMLElement) ||
+      !(signupForm instanceof HTMLFormElement) ||
+      !(signupEmailInput instanceof HTMLInputElement)
+    ) {
+      return;
+    }
+
+    if (shouldRememberTrigger(trigger)) {
+      lastTrigger = trigger;
+    }
+
+    if (
+      loginOverlay instanceof HTMLElement &&
+      !loginOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: loginOverlay,
+        fromHash: "#loginOverlay",
+        fromResetState: resetLoginState,
+        toOverlay: signupOverlay,
+        toHash: "#signupOverlay",
+        toResetState: resetSignupState,
+        focusInput: signupEmailInput,
+        direction: -1,
+      })
+    ) {
+      return;
+    }
+
+    hideOverlay(loginOverlay, "#loginOverlay", resetLoginState, {
+      clearUrl: false,
+      immediate: true,
+    });
+    cancelOverlayClose(signupOverlay);
+    cancelOverlayOpen(signupOverlay);
+    signupOverlay.hidden = false;
+    startOverlayOpen(signupOverlay);
+    setHash("#signupOverlay");
+    syncBodyState();
+    resetSignupState();
+
+    requestAnimationFrame(() => {
+      signupEmailInput.focus();
+    });
+  };
+
+  const closeSignupOverlay = (options) => {
+    closeOverlay(signupOverlay, "#signupOverlay", resetSignupState, options);
+  };
+
+  const openLoginOverlay = (trigger) => {
+    if (
+      !(loginOverlay instanceof HTMLElement) ||
+      !(loginForm instanceof HTMLFormElement) ||
+      !(loginEmailInput instanceof HTMLInputElement)
+    ) {
+      return;
+    }
+
+    if (shouldRememberTrigger(trigger)) {
+      lastTrigger = trigger;
+    }
+
+    if (
+      signupOverlay instanceof HTMLElement &&
+      !signupOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: signupOverlay,
+        fromHash: "#signupOverlay",
+        fromResetState: resetSignupState,
+        toOverlay: loginOverlay,
+        toHash: "#loginOverlay",
+        toResetState: resetLoginState,
+        focusInput: loginEmailInput,
+        direction: 1,
+      })
+    ) {
+      return;
+    }
+
+    hideOverlay(signupOverlay, "#signupOverlay", resetSignupState, {
+      clearUrl: false,
+      immediate: true,
+    });
+    cancelOverlayClose(loginOverlay);
+    cancelOverlayOpen(loginOverlay);
+    loginOverlay.hidden = false;
+    startOverlayOpen(loginOverlay);
+    setHash("#loginOverlay");
+    syncBodyState();
+    resetLoginState();
+
+    requestAnimationFrame(() => {
+      loginEmailInput.focus();
+    });
+  };
+
+  const closeLoginOverlay = (options) => {
+    closeOverlay(loginOverlay, "#loginOverlay", resetLoginState, options);
+  };
+
+  const setupFieldValidation = (
+    fields,
+    feedback,
+    validateField,
+    setActiveValidationField,
+    getActiveValidationField
+  ) => {
+    fields.forEach((input) => {
+      const updateValidation = () => {
+        if (feedback.classList.contains("is-success")) {
+          feedback.hidden = true;
+          feedback.textContent = "";
+          feedback.classList.remove("is-error", "is-success");
+        }
+
+        if (
+          getActiveValidationField() === input ||
+          input.getAttribute("aria-invalid") === "true"
+        ) {
+          const message = validateField(input);
+
+          if (message) {
+            setActiveValidationField(input);
+            feedback.hidden = false;
+            feedback.textContent = message;
+            feedback.classList.add("is-error");
+            feedback.classList.remove("is-success");
+            return;
+          }
+
+          feedback.hidden = true;
+          feedback.textContent = "";
+          feedback.classList.remove("is-error", "is-success");
+          setActiveValidationField(null);
+        }
+      };
+
+      input.addEventListener("input", updateValidation);
+
+      if (input.type === "checkbox") {
+        input.addEventListener("change", updateValidation);
+      }
+    });
+  };
+
+  signupOpenButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
       openSignupOverlay(button);
     });
   });
 
-  closeButtons.forEach((button) => {
+  signupCloseButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
       closeSignupOverlay();
     });
   });
 
-  overlay.addEventListener("click", (event) => {
-    if (event.target === overlay) {
-      closeSignupOverlay();
-    }
+  loginOpenButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      openLoginOverlay(button);
+    });
   });
+
+  loginCloseButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeLoginOverlay();
+    });
+  });
+
+  if (signupOverlay instanceof HTMLElement) {
+    signupOverlay.addEventListener("click", (event) => {
+      if (event.target === signupOverlay) {
+        closeSignupOverlay();
+      }
+    });
+  }
+
+  if (loginOverlay instanceof HTMLElement) {
+    loginOverlay.addEventListener("click", (event) => {
+      if (event.target === loginOverlay) {
+        closeLoginOverlay();
+      }
+    });
+  }
 
   document.addEventListener("keydown", (event) => {
-    if (!overlay.hidden && event.key === "Escape") {
-      closeSignupOverlay();
-    }
-  });
-
-  fields.forEach((input) => {
-    const updateValidation = () => {
-      if (feedback.classList.contains("is-success")) {
-        clearFeedback();
-      }
-
-      if (activeValidationField === input || input.getAttribute("aria-invalid") === "true") {
-        const message = validateField(input);
-
-        if (message) {
-          activeValidationField = input;
-          showFeedback(message, "error");
-          return;
-        }
-
-        clearFeedback();
-      }
-    };
-
-    input.addEventListener("input", updateValidation);
-
-    if (input.type === "checkbox") {
-      input.addEventListener("change", updateValidation);
-    }
-  });
-
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const invalidField = validateForm();
-    if (invalidField) {
-      showFeedback(invalidField.message, "error");
-      invalidField.input.focus();
+    if (event.key !== "Escape") {
       return;
     }
 
-    form.reset();
-    clearFeedback();
-    fields.forEach(clearFieldError);
-    closeSignupOverlay();
+    if (loginOverlay instanceof HTMLElement && !loginOverlay.hidden) {
+      closeLoginOverlay();
+      return;
+    }
+
+    if (signupOverlay instanceof HTMLElement && !signupOverlay.hidden) {
+      closeSignupOverlay();
+    }
   });
+
+  const applyHashState = () => {
+    if (window.location.hash === "#loginOverlay") {
+      openLoginOverlay(null);
+      return;
+    }
+
+    if (window.location.hash === "#signupOverlay") {
+      openSignupOverlay(null);
+      return;
+    }
+
+    closeLoginOverlay({ restoreFocus: false, clearUrl: false });
+    closeSignupOverlay({ restoreFocus: false, clearUrl: false });
+  };
+
+  window.addEventListener("hashchange", applyHashState);
+
+  if (
+    signupForm instanceof HTMLFormElement &&
+    signupFeedback &&
+    signupFields.length === 3
+  ) {
+    setupFieldValidation(
+      signupFields,
+      signupFeedback,
+      validateSignupField,
+      (input) => {
+        activeSignupValidationField = input;
+      },
+      () => activeSignupValidationField
+    );
+
+    signupForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const invalidField = validateSignupForm();
+      if (invalidField) {
+        showSignupFeedback(invalidField.message, "error");
+        invalidField.input.focus();
+        return;
+      }
+
+      closeSignupOverlay();
+    });
+  }
+
+  if (
+    loginForm instanceof HTMLFormElement &&
+    loginFeedback &&
+    loginFields.length === 2
+  ) {
+    setupFieldValidation(
+      loginFields,
+      loginFeedback,
+      validateLoginField,
+      (input) => {
+        activeLoginValidationField = input;
+      },
+      () => activeLoginValidationField
+    );
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const invalidField = validateLoginForm();
+      if (invalidField) {
+        showLoginFeedback(invalidField.message, "error");
+        invalidField.input.focus();
+        return;
+      }
+
+      closeLoginOverlay();
+    });
+  }
+
+  if (loginHelpButton instanceof HTMLButtonElement) {
+    loginHelpButton.addEventListener("click", () => {
+      showLoginFeedback(
+        "Password recovery is not connected yet in this static build. Hook this button to your email reset flow when the auth service is ready."
+      );
+    });
+  }
+
+  applyHashState();
 })();

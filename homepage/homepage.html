@@ -29,7 +29,7 @@
 
         <nav class="account-nav" aria-label="Account">
           <ul>
-            <li><a class="nav-link login-btn" href="#">Log in</a></li>
+            <li><a class="nav-link login-btn" href="#loginOverlay" data-open-login aria-controls="loginOverlay">Log in</a></li>
             <li><a class="nav-link signup-btn" href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Sign up</a></li>
             <li>
               <a class="nav-link setting-btn" href="#" aria-label="Settings">
@@ -774,7 +774,7 @@
       </div>
     </footer>
 
-    <div class="signup-overlay" id="signupOverlay" data-signup-overlay hidden>
+    <div class="signup-overlay auth-overlay" id="signupOverlay" data-signup-overlay hidden>
       <div class="signup-modal" role="dialog" aria-modal="true" aria-labelledby="signupModalTitle">
         <div class="signup-modal-showcase" aria-hidden="true">
           <svg class="signup-modal-geometry" viewBox="0 -16 636 654" role="presentation" focusable="false">
@@ -854,7 +854,7 @@
               </span>
             </label>
 
-            <button class="signup-submit" type="submit">Create free acount</button>
+            <button class="signup-submit" type="submit">Create free account</button>
             <p
               class="signup-form-status"
               id="signupFormFeedback"
@@ -867,7 +867,110 @@
           </form>
 
           <p class="signup-modal-helper">
-            Already have account? <a href="#" data-signup-close>Log in</a>
+            Already have an account? <a href="#loginOverlay" data-open-login aria-controls="loginOverlay">Log in</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <div class="signup-overlay auth-overlay" id="loginOverlay" data-login-overlay hidden>
+      <div class="signup-modal" role="dialog" aria-modal="true" aria-labelledby="loginModalTitle">
+        <div class="signup-modal-showcase" aria-hidden="true">
+          <svg class="signup-modal-geometry" viewBox="0 -16 636 654" role="presentation" focusable="false">
+            <g class="signup-modal-geometry-circles">
+              <circle cx="440" cy="176" r="180" />
+              <circle cx="330" cy="254" r="156" />
+              <circle cx="242" cy="340" r="128" />
+              <circle cx="202" cy="428" r="106" />
+              <circle cx="208" cy="500" r="88" />
+              <circle cx="248" cy="558" r="70" />
+              <circle cx="316" cy="582" r="56" />
+              <circle cx="385" cy="544" r="45" />
+              <circle cx="432" cy="504" r="36" />
+              <circle cx="462" cy="452" r="28" />
+              <circle cx="456" cy="400" r="24" />
+            </g>
+          </svg>
+        </div>
+
+        <section class="signup-modal-panel">
+          <button class="signup-modal-close" type="button" data-login-close aria-label="Close log in">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6 18 18" />
+              <path d="M18 6 6 18" />
+            </svg>
+          </button>
+
+          <div class="signup-modal-badge" aria-hidden="true">
+            <img src="logowhite.png" alt="" />
+          </div>
+
+          <p class="auth-panel-kicker">Professional. Clear. Trustworthy.</p>
+          <h2 class="signup-modal-title" id="loginModalTitle">Welcome back</h2>
+          <p class="signup-modal-intro">
+            Log in to continue with your saved study sessions, geometry notes, and quiz rhythm.
+          </p>
+
+          <form class="signup-form" data-login-form novalidate>
+            <label class="signup-field" for="loginEmail">
+              <span>Email address</span>
+              <input
+                class="signup-input"
+                id="loginEmail"
+                name="email"
+                type="email"
+                autocomplete="email"
+                aria-describedby="loginFormFeedback"
+                placeholder="you@circlelab.com"
+                required
+              />
+            </label>
+
+            <label class="signup-field" for="loginPassword">
+              <span>Password</span>
+              <input
+                class="signup-input"
+                id="loginPassword"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                aria-describedby="loginFormFeedback"
+                minlength="8"
+                placeholder="Enter your password"
+                required
+              />
+            </label>
+
+            <div class="login-form-meta">
+              <label class="signup-consent login-remember" for="loginRemember">
+                <input
+                  class="signup-consent-checkbox"
+                  id="loginRemember"
+                  name="remember"
+                  type="checkbox"
+                />
+                <span class="signup-consent-copy">Remember this browser</span>
+              </label>
+
+              <button class="login-forgot-link" type="button" data-login-help>
+                Forgot password?
+              </button>
+            </div>
+
+            <button class="signup-submit" type="submit">Log in</button>
+            <p
+              class="signup-form-status"
+              id="loginFormFeedback"
+              data-login-feedback
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              hidden
+            ></p>
+          </form>
+
+          <p class="signup-modal-helper">
+            Need an account? <a href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Create one here</a>
           </p>
         </section>
       </div>
