@@ -15,17 +15,6 @@
     angle: document.getElementById("anglePath"),
     pointA: document.getElementById("pointA"),
     pointB: document.getElementById("pointB"),
-    radiusLabel: document.getElementById("radiusLabel"),
-    chordLabel: document.getElementById("chordLabel"),
-    tangentLabel: document.getElementById("tangentLabel"),
-    arcLabel: document.getElementById("arcLabel"),
-    angleLabel: document.getElementById("angleLabel"),
-    orbit1: document.getElementById("orbit1"),
-    orbit2: document.getElementById("orbit2"),
-    orbit3: document.getElementById("orbit3"),
-    orbit4: document.getElementById("orbit4"),
-    orbit5: document.getElementById("orbit5"),
-    orbit6: document.getElementById("orbit6"),
   };
 
   if (Object.values(refs).some((node) => !node)) {
@@ -63,15 +52,6 @@
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const lerp = (from, to, alpha) => from + (to - from) * alpha;
-  const dot = (a, b) => a.x * b.x + a.y * b.y;
-  const normalize = (v) => {
-    const len = Math.hypot(v.x, v.y);
-    if (!len) {
-      return { x: 0, y: 0 };
-    }
-    return { x: v.x / len, y: v.y / len };
-  };
-  const perpendicular = (v) => ({ x: -v.y, y: v.x });
 
   const polarToCartesian = (cx, cy, r, angle) => ({
     x: cx + Math.cos(angle) * r,
@@ -92,16 +72,6 @@
     el.setAttribute("y1", p1.y.toFixed(2));
     el.setAttribute("x2", p2.x.toFixed(2));
     el.setAttribute("y2", p2.y.toFixed(2));
-  };
-
-  const setTextPos = (el, x, y) => {
-    el.setAttribute("x", x.toFixed(2));
-    el.setAttribute("y", y.toFixed(2));
-  };
-
-  const setCirclePos = (el, x, y) => {
-    el.setAttribute("cx", x.toFixed(2));
-    el.setAttribute("cy", y.toFixed(2));
   };
 
   const updateTargetsFromPointer = (event) => {
@@ -214,61 +184,8 @@
     refs.arc.style.strokeWidth = (3 + energy * 0.9).toFixed(2);
     refs.angle.style.opacity = (0.48 + energy * 0.42).toFixed(2);
 
-    const midRadius = {
-      x: (center.x + pointA.x) * 0.5,
-      y: (center.y + pointA.y) * 0.5,
-    };
-    const midChord = {
-      x: (pointA.x + pointB.x) * 0.5,
-      y: (pointA.y + pointB.y) * 0.5,
-    };
-    const arcMid = polarToCartesian(
-      center.x,
-      center.y,
-      radius + 34,
-      state.angle + state.spread * 0.5
-    );
-    const thetaMidAngle = axisStart + (state.angle - axisStart) * 0.5;
-    const thetaLabelPoint = polarToCartesian(center.x, center.y, 96, thetaMidAngle);
-    const radialDir = normalize({
-      x: pointA.x - center.x,
-      y: pointA.y - center.y,
-    });
-    const radialNormal = perpendicular(radialDir);
-    const chordDir = normalize({
-      x: pointB.x - pointA.x,
-      y: pointB.y - pointA.y,
-    });
-    const rawChordNormal = perpendicular(chordDir);
-    const toCenter = normalize({
-      x: center.x - midChord.x,
-      y: center.y - midChord.y,
-    });
-    const chordNormal =
-      dot(rawChordNormal, toCenter) < 0
-        ? { x: -rawChordNormal.x, y: -rawChordNormal.y }
-        : rawChordNormal;
-    const tangentLabelSide = tangentDir.x >= 0 ? 1 : -1;
     const subjectOffsetX = compactLayout.matches ? 0 : 214;
     const subjectCenterX = center.x + subjectOffsetX;
-
-    setTextPos(
-      refs.radiusLabel,
-      midRadius.x + radialNormal.x * 18,
-      midRadius.y + radialNormal.y * 18
-    );
-    setTextPos(
-      refs.chordLabel,
-      midChord.x + chordNormal.x * 16 + chordDir.x * 0,
-      midChord.y + chordNormal.y * 16 + chordDir.y * 0
-    );
-    setTextPos(
-      refs.tangentLabel,
-      pointA.x + tangentDir.x * (74 * tangentLabelSide) + radialDir.x * 26,
-      pointA.y + tangentDir.y * (74 * tangentLabelSide) + radialDir.y * 26
-    );
-    setTextPos(refs.arcLabel, arcMid.x - 18, arcMid.y + 8);
-    setTextPos(refs.angleLabel, thetaLabelPoint.x - 7, thetaLabelPoint.y + 3);
 
     refs.group.setAttribute(
       "transform",
@@ -284,21 +201,6 @@
       "transform",
       `translate(${(subjectOffsetX + state.layerX * 0.62).toFixed(2)} ${(state.layerY * 0.62).toFixed(2)}) rotate(${(state.nx * -2.3).toFixed(2)} ${subjectCenterX.toFixed(2)} 390)`
     );
-
-    const orbitBase = t * 0.44;
-    const orbit = [
-      { el: refs.orbit1, r: 240, a: orbitBase * 1.2 + 0.1 },
-      { el: refs.orbit2, r: 240, a: orbitBase * 1.2 + Math.PI / 2 },
-      { el: refs.orbit3, r: 240, a: orbitBase * 1.2 + Math.PI },
-      { el: refs.orbit4, r: 240, a: orbitBase * 1.2 + (Math.PI * 3) / 2 },
-      { el: refs.orbit5, r: 332, a: orbitBase * 0.86 + 0.7 },
-      { el: refs.orbit6, r: 332, a: orbitBase * 0.86 + 0.7 + Math.PI },
-    ];
-
-    orbit.forEach((item) => {
-      const p = polarToCartesian(center.x, center.y, item.r, item.a);
-      setCirclePos(item.el, p.x, p.y);
-    });
 
     requestAnimationFrame(render);
   };

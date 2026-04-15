@@ -2553,37 +2553,6 @@ button {
   animation: spinSlow 33s linear infinite;
 }
 
-.geo-orbit-node {
-  fill: color-mix(in oklch, var(--accent) 84%, white);
-  opacity: 0.78;
-  filter: url(#softGlow);
-}
-
-.geo-orbit-node.main {
-  fill: color-mix(in oklch, var(--accent-alt) 70%, white);
-}
-
-.geo-orbit-node.subtle {
-  opacity: 0.46;
-}
-
-.geo-formula {
-  fill: color-mix(in oklch, var(--muted) 72%, white);
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  opacity: 0.32;
-  animation: formulaDrift 8s ease-in-out infinite;
-}
-
-.geo-formula:nth-of-type(2) {
-  animation-delay: -2.2s;
-}
-
-.geo-formula:nth-of-type(3) {
-  animation-delay: -4.6s;
-}
-
 .geo-circle {
   fill: none;
   stroke: color-mix(in oklch, var(--accent) 74%, white);
@@ -2662,28 +2631,6 @@ button {
 
 .geo-point-muted {
   fill: color-mix(in oklch, var(--accent-alt) 80%, white);
-}
-
-.geo-label {
-  fill: color-mix(in oklch, var(--text) 88%, var(--accent));
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: 0.012em;
-  paint-order: stroke;
-  stroke: color-mix(in oklch, black 75%, var(--panel));
-  stroke-width: 2px;
-}
-
-@keyframes formulaDrift {
-  0%,
-  100% {
-    opacity: 0.25;
-    transform: translateY(0px);
-  }
-  50% {
-    opacity: 0.45;
-    transform: translateY(-5px);
-  }
 }
 
 @keyframes spinSlow {
@@ -2890,10 +2837,6 @@ button {
   .hero-btn {
     min-height: 2.65rem;
     padding: 0.5rem 1rem;
-  }
-
-  .geo-label {
-    font-size: 15px;
   }
 
   .core-features {
