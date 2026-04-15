@@ -28,7 +28,7 @@
 
   const center = { x: 700, y: 390 };
   const radius = 210;
-  const axisStart = -0.16;
+  const axisStart = 0;
 
   const state = {
     pointerInside: false,
@@ -40,10 +40,6 @@
     targetAngle: -0.85,
     spread: 1.18,
     targetSpread: 1.18,
-    layerX: 0,
-    layerY: 0,
-    targetLayerX: 0,
-    targetLayerY: 0,
     shapeX: 0,
     shapeY: 0,
     targetShapeX: 0,
@@ -52,6 +48,12 @@
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const lerp = (from, to, alpha) => from + (to - from) * alpha;
+  const getAxisProximity = (angle) =>
+    clamp(1 - Math.abs(Math.sin(angle)), 0, 1);
+  const getChordSpread = (angle, focusBoost = 0) =>
+    0.48 + (1 - getAxisProximity(angle)) * 0.88 + clamp(focusBoost, 0, 1) * 0.18;
+  const getTangentHalfLength = (angle) =>
+    170 + getAxisProximity(angle) * 150;
 
   const polarToCartesian = (cx, cy, r, angle) => ({
     x: cx + Math.cos(angle) * r,
@@ -86,12 +88,10 @@
     state.targetNy = clampedY;
 
     state.targetAngle = -0.95 + clampedX * 0.82 + clampedY * 0.28;
-    state.targetSpread = 1.12 + (1 - distance) * 0.32;
+    state.targetSpread = getChordSpread(state.targetAngle, 1 - distance);
 
     state.targetShapeX = clampedX * 7;
     state.targetShapeY = clampedY * 5;
-    state.targetLayerX = clampedX * 12;
-    state.targetLayerY = clampedY * 9;
   };
 
   hero.addEventListener("pointerenter", (event) => {
@@ -115,11 +115,12 @@
       state.targetNx = Math.sin(t * 0.52) * 0.42;
       state.targetNy = Math.cos(t * 0.33) * 0.34;
       state.targetAngle = -0.98 + Math.sin(t * 0.62) * 0.58;
-      state.targetSpread = 1.2 + (Math.sin(t * 0.42) + 1) * 0.14;
+      state.targetSpread = getChordSpread(
+        state.targetAngle,
+        (Math.sin(t * 0.42) + 1) * 0.5
+      );
       state.targetShapeX = state.targetNx * 5.4;
       state.targetShapeY = state.targetNy * 4.2;
-      state.targetLayerX = state.targetNx * 9;
-      state.targetLayerY = state.targetNy * 7;
     }
 
     const easing = reduceMotion ? 0.2 : 0.06;
@@ -129,8 +130,6 @@
     state.spread = lerp(state.spread, state.targetSpread, easing);
     state.shapeX = lerp(state.shapeX, state.targetShapeX, easing);
     state.shapeY = lerp(state.shapeY, state.targetShapeY, easing);
-    state.layerX = lerp(state.layerX, state.targetLayerX, easing * 0.8);
-    state.layerY = lerp(state.layerY, state.targetLayerY, easing * 0.8);
 
     const pointA = polarToCartesian(center.x, center.y, radius, state.angle);
     const pointB = polarToCartesian(
@@ -147,7 +146,8 @@
       x: -Math.sin(state.angle),
       y: Math.cos(state.angle),
     };
-    const tangentLength = 210;
+    // As the moving radius approaches the x-axis, tighten the chord and extend the tangent.
+    const tangentLength = getTangentHalfLength(state.angle);
     setLine(
       refs.tangent,
       {
@@ -185,7 +185,6 @@
     refs.angle.style.opacity = (0.48 + energy * 0.42).toFixed(2);
 
     const subjectOffsetX = compactLayout.matches ? 0 : 214;
-    const subjectCenterX = center.x + subjectOffsetX;
 
     refs.group.setAttribute(
       "transform",
@@ -194,12 +193,13 @@
 
     refs.bgLayers.setAttribute(
       "transform",
-      `translate(${state.layerX.toFixed(2)} ${state.layerY.toFixed(2)}) rotate(${(state.nx * 3.6).toFixed(2)} 700 390)`
+      "translate(0 0)"
     );
 
+    // Keep the background construction anchored so only the focal diagram tracks the pointer.
     refs.construct.setAttribute(
       "transform",
-      `translate(${(subjectOffsetX + state.layerX * 0.62).toFixed(2)} ${(state.layerY * 0.62).toFixed(2)}) rotate(${(state.nx * -2.3).toFixed(2)} ${subjectCenterX.toFixed(2)} 390)`
+      `translate(${subjectOffsetX.toFixed(2)} 0)`
     );
 
     requestAnimationFrame(render);
