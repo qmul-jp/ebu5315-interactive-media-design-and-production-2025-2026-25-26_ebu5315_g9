@@ -125,7 +125,7 @@ button {
 
 body.is-scrolled .site-header,
 body.is-auth-open .site-header {
-  background: color-mix(in oklch, var(--bg) 68%, transparent);
+  background: color-mix(in oklch, var(--bg) 62%, transparent);
   backdrop-filter: blur(16px) saturate(1.04);
   box-shadow: 0 8px 20px color-mix(in oklch, black 14%, transparent);
 }
@@ -284,7 +284,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .hero-section {
-  padding: clamp(0.15rem, 0.6vw, 0.55rem) var(--page-gutter) clamp(2.5rem, 6vw, 5rem);
+  padding: 0 var(--page-gutter) clamp(2.5rem, 6vw, 5rem);
 }
 
 .hero-interactive {
@@ -292,10 +292,12 @@ body.is-auth-switching .auth-overlay {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   align-items: stretch;
-  min-height: clamp(620px, calc(100vh - 6.4rem), 1000px);
-  min-height: clamp(620px, calc(100svh - 6.4rem), 1000px);
+  margin-top: calc((var(--auth-header-offset) - 12px) * -1);
+  margin-inline: calc(var(--page-gutter) * -1);
+  min-height: max(620px, 100vh);
+  min-height: max(620px, 100svh);
   border: none;
-  border-radius: 26px;
+  border-radius: 0;
   overflow: hidden;
   isolation: isolate;
   background: color-mix(in oklch, var(--panel) 86%, black);
@@ -370,9 +372,12 @@ body.is-auth-switching .auth-overlay {
   z-index: 2;
   width: min(640px, 94%);
   margin: 0;
+  margin-inline-start: clamp(1.9rem, 3.9vw, 3.7rem);
   align-self: center;
   justify-self: start;
-  padding: clamp(3.2rem, 8vw, 6rem) clamp(1.3rem, 3vw, 2.5rem);
+  padding-block: clamp(3.2rem, 8vw, 6rem);
+  padding-inline: clamp(1.3rem, 3vw, 2.5rem);
+  padding-inline-start: max(var(--page-gutter), clamp(1.3rem, 3vw, 2.5rem));
   text-align: left;
 }
 
@@ -390,7 +395,8 @@ body.is-auth-switching .auth-overlay {
   line-height: 1.08;
   letter-spacing: -0.022em;
   color: color-mix(in oklch, white 89%, var(--accent) 11%);
-  text-wrap: balance;
+  white-space: pre-line;
+  text-wrap: pretty;
 }
 
 .scroll-title-reveal {
@@ -1050,40 +1056,40 @@ body.is-auth-switching .auth-overlay {
 .ai-study-section {
   --ai-chat-surface: color-mix(
     in oklch,
-    var(--panel) 70%,
-    oklch(0.22 0.024 210) 30%
+    var(--panel) 66%,
+    oklch(0.235 0.024 212) 34%
   );
   --ai-chat-surface-raised: color-mix(
     in oklch,
-    var(--chip) 52%,
-    oklch(0.25 0.03 198) 48%
+    var(--chip) 48%,
+    oklch(0.278 0.028 202) 52%
   );
   --ai-chat-surface-deep: color-mix(
     in oklch,
-    var(--chip) 68%,
-    oklch(0.18 0.024 212) 32%
+    oklch(0.16 0.018 216) 56%,
+    var(--panel) 44%
   );
-  --ai-chat-border: color-mix(in oklch, var(--accent) 18%, white 8%);
-  --ai-chat-border-strong: color-mix(in oklch, var(--accent) 28%, white 10%);
-  --ai-chat-text-strong: color-mix(in oklch, white 90%, var(--accent) 10%);
-  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 74%, white 26%);
+  --ai-chat-border: color-mix(in oklch, var(--accent) 20%, white 10%);
+  --ai-chat-border-strong: color-mix(in oklch, var(--accent) 30%, white 12%);
+  --ai-chat-text-strong: color-mix(in oklch, white 96%, var(--accent) 4%);
+  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 68%, white 32%);
   --ai-chat-assistant-bubble: color-mix(
     in oklch,
-    oklch(0.27 0.024 205) 88%,
+    oklch(0.29 0.022 206) 90%,
     white 12%
   );
   --ai-chat-user-bubble: color-mix(
     in oklch,
-    var(--accent) 44%,
-    oklch(0.84 0.03 180) 56%
+    var(--accent) 50%,
+    oklch(0.84 0.03 180) 50%
   );
   --ai-chat-user-text: color-mix(
     in oklch,
-    var(--ink-dark) 88%,
-    oklch(0.3 0.02 190) 12%
+    var(--ink-dark) 94%,
+    oklch(0.3 0.02 190) 6%
   );
-  --ai-chat-action: color-mix(in oklch, var(--accent) 56%, white 44%);
-  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 62%, white 38%);
+  --ai-chat-action: color-mix(in oklch, var(--accent) 62%, white 38%);
+  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 68%, white 32%);
   --ai-chat-action-muted: color-mix(in oklch, var(--accent) 14%, transparent);
   position: relative;
   isolation: isolate;
@@ -1139,7 +1145,7 @@ body.is-auth-switching .auth-overlay {
   max-width: 34ch;
   font-size: clamp(0.98rem, 1.18vw, 1.08rem);
   line-height: 1.7;
-  color: color-mix(in oklch, var(--muted) 82%, white);
+  color: color-mix(in oklch, var(--muted) 74%, white 26%);
   text-wrap: balance;
 }
 
@@ -1162,7 +1168,7 @@ body.is-auth-switching .auth-overlay {
   position: absolute;
   border-radius: 50%;
   filter: blur(18px);
-  opacity: 0.26;
+  opacity: 0.22;
   pointer-events: none;
   animation: aiChatPulse 10s ease-in-out infinite;
 }
@@ -1207,10 +1213,12 @@ body.is-auth-switching .auth-overlay {
   background:
     linear-gradient(
       180deg,
-      color-mix(in oklch, var(--ai-chat-surface) 92%, white 8%),
+      color-mix(in oklch, var(--ai-chat-surface) 93%, white 7%),
       var(--ai-chat-surface)
     );
-  box-shadow: none;
+  box-shadow:
+    0 12px 28px color-mix(in oklch, black 10%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 7%, transparent);
   overflow: hidden;
 }
 
@@ -1265,8 +1273,13 @@ body.is-auth-switching .auth-overlay {
   margin-bottom: 0;
   padding: 0.18rem;
   border-radius: 18px;
-  border: 0;
-  background: var(--ai-chat-surface-deep);
+  border: 1px solid color-mix(in oklch, var(--ai-chat-border) 62%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--ai-chat-surface-deep) 92%, black 8%),
+      var(--ai-chat-surface-deep)
+    );
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-gutter: stable;
@@ -1295,7 +1308,7 @@ body.is-auth-switching .auth-overlay {
       transparent 1px
     );
   background-size: 46px 46px;
-  opacity: 0.14;
+  opacity: 0.1;
 }
 
 .ai-chat-transcript::after {
@@ -1338,7 +1351,7 @@ body.is-auth-switching .auth-overlay {
   margin: 0;
   padding: 0.85rem 0.96rem;
   border-radius: 1.18rem;
-  border: 1px solid color-mix(in oklch, white 7%, transparent);
+  border: 1px solid color-mix(in oklch, var(--ai-chat-border) 42%, transparent);
   background: var(--ai-chat-assistant-bubble);
   color: var(--ai-chat-text-strong);
   font-size: 0.95rem;
@@ -1352,7 +1365,7 @@ body.is-auth-switching .auth-overlay {
 
 .ai-chat-message.is-user .ai-chat-message-bubble {
   border-top-right-radius: 0.45rem;
-  border-color: color-mix(in oklch, var(--accent) 20%, white 14%);
+  border-color: var(--ai-chat-border-strong);
   background: var(--ai-chat-user-bubble);
   color: var(--ai-chat-user-text);
 }
@@ -1395,7 +1408,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .ai-chat-draft::placeholder {
-  color: color-mix(in oklch, var(--ai-chat-text-muted) 90%, white 10%);
+  color: color-mix(in oklch, var(--ai-chat-text-muted) 96%, white 4%);
 }
 
 .ai-chat-draft:focus-visible {
@@ -1535,18 +1548,18 @@ body.is-auth-switching .auth-overlay {
   width: clamp(11.8rem, 17vw, 13.9rem);
   padding: 0.5rem;
   border-radius: 1.18rem;
-  border: 0;
-  background: color-mix(in oklch, var(--ai-chat-surface-deep) 88%, white 12%);
+  border: 1px solid color-mix(in oklch, var(--ai-chat-border) 66%, transparent);
+  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, white 10%);
   overflow: hidden;
   isolation: isolate;
-  box-shadow: none;
+  box-shadow: 0 14px 28px color-mix(in oklch, black 12%, transparent);
 }
 
 .ai-chat-model-menu::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: color-mix(in oklch, var(--ai-chat-surface-deep) 88%, white 12%);
+  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, white 10%);
   z-index: -1;
 }
 
@@ -1589,7 +1602,7 @@ body.is-auth-switching .auth-overlay {
 
 .ai-chat-model-menu-item:hover,
 .ai-chat-model-menu-item:focus-visible {
-  background: color-mix(in oklch, white 5%, var(--accent) 7%);
+  background: color-mix(in oklch, white 6%, var(--accent) 8%);
   color: var(--ai-chat-text-strong);
   outline: none;
 }
@@ -1629,7 +1642,7 @@ body.is-auth-switching .auth-overlay {
   height: 3rem;
   padding: 0;
   border-radius: 999px;
-  border: 1px solid color-mix(in oklch, var(--accent) 22%, white 10%);
+  border: 1px solid color-mix(in oklch, var(--accent) 24%, white 12%);
   background: var(--ai-chat-action);
   color: var(--ai-chat-user-text);
   box-shadow: none;
@@ -1644,7 +1657,7 @@ body.is-auth-switching .auth-overlay {
 .ai-chat-send:disabled {
   cursor: not-allowed;
   background: var(--ai-chat-action-muted);
-  border-color: color-mix(in oklch, white 10%, transparent);
+  border-color: color-mix(in oklch, var(--ai-chat-border) 44%, transparent);
   color: var(--ai-chat-text-muted);
   transform: none;
 }
@@ -2444,15 +2457,16 @@ body.is-auth-switching .auth-overlay {
 }
 
 .callout-btn-secondary {
-  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
-  border-color: color-mix(in oklch, white 14%, transparent);
-  background: color-mix(in oklch, var(--chip) 86%, transparent);
+  color: color-mix(in oklch, white 76%, var(--accent-alt) 24%);
+  border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
+  background: color-mix(in oklch, var(--accent-alt) 15%, var(--chip) 85%);
+  box-shadow: 0 14px 28px color-mix(in oklch, var(--accent-alt) 10%, transparent);
 }
 
 .callout-btn-secondary:hover,
 .callout-btn-secondary:focus-visible {
-  background: color-mix(in oklch, var(--chip-hover) 88%, transparent);
-  border-color: color-mix(in oklch, white 22%, transparent);
+  background: color-mix(in oklch, var(--accent-alt) 24%, var(--chip-hover) 76%);
+  border-color: color-mix(in oklch, var(--accent-alt) 48%, transparent);
 }
 
 .site-footer {
@@ -2900,12 +2914,13 @@ body.is-auth-switching .auth-overlay {
 
   .hero-interactive {
     grid-template-columns: 1fr;
-    min-height: clamp(540px, calc(100vh - 8.3rem), 900px);
-    min-height: clamp(540px, calc(100svh - 8.3rem), 900px);
+    min-height: max(540px, 100vh);
+    min-height: max(540px, 100svh);
   }
 
   .hero-content {
     width: min(92%, 760px);
+    margin-inline-start: 0;
     justify-self: center;
     text-align: center;
     padding: clamp(3.1rem, 8vw, 4.5rem) 0 1.4rem;
@@ -3033,13 +3048,13 @@ body.is-auth-switching .auth-overlay {
   }
 
   .hero-interactive {
-    border-radius: 18px;
-    min-height: clamp(500px, calc(100vh - 10.2rem), 860px);
-    min-height: clamp(500px, calc(100svh - 10.2rem), 860px);
+    min-height: max(500px, 100vh);
+    min-height: max(500px, 100svh);
   }
 
   .hero-content {
     width: min(92%, 560px);
+    margin-inline-start: 0;
     padding: 3.3rem 0 1rem;
   }
 
@@ -3474,6 +3489,90 @@ body.is-auth-open {
   outline: none;
 }
 
+.contact-modal .signup-modal-intro {
+  max-width: 40ch;
+  white-space: pre-line;
+}
+
+.contact-form {
+  margin-top: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+.contact-form-grid > .signup-field {
+  min-width: 0;
+}
+
+.contact-select-wrap {
+  position: relative;
+  display: block;
+}
+
+.contact-select-native {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.9rem;
+  cursor: pointer;
+}
+
+.contact-select-native::-ms-expand {
+  display: none;
+}
+
+.contact-select-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.88rem;
+  width: 1.38rem;
+  height: 1.38rem;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0.78;
+  transform: translateY(-50%);
+  transition: opacity 220ms ease;
+}
+
+.contact-select-icon svg {
+  width: 1.24rem;
+  height: 1.24rem;
+  display: block;
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(0.25, 1, 0.5, 1), opacity 220ms ease;
+}
+
+.contact-select-icon path {
+  fill: none;
+  stroke: color-mix(in oklch, var(--signup-text-muted) 84%, var(--auth-accent) 16%);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-select-wrap:hover .contact-select-icon,
+.contact-select-wrap:focus-within .contact-select-icon {
+  opacity: 1;
+}
+
+.contact-select-wrap.is-turning .contact-select-icon svg {
+  transform: rotate(180deg);
+}
+
+.contact-textarea {
+  min-height: 8.6rem;
+  padding-block: 0.8rem;
+  resize: vertical;
+}
+
+:root[data-theme="light"] .contact-select-icon path {
+  stroke: color-mix(in oklch, var(--text) 72%, var(--auth-accent) 28%);
+}
+
 .auth-overlay[hidden] {
   display: none;
 }
@@ -3888,7 +3987,7 @@ body.is-auth-open {
 
 :root[data-theme="light"] body.is-scrolled .site-header,
 :root[data-theme="light"] body.is-auth-open .site-header {
-  background: color-mix(in oklch, var(--bg) 74%, transparent);
+  background: color-mix(in oklch, var(--bg) 68%, transparent);
   box-shadow: 0 10px 24px color-mix(in oklch, var(--accent) 5%, transparent);
 }
 
@@ -3905,7 +4004,7 @@ body.is-auth-open {
       color-mix(in oklch, white 72%, var(--panel) 28%) 0%,
       color-mix(in oklch, var(--panel) 78%, var(--accent) 22%) 100%
     );
-  box-shadow: 0 24px 48px color-mix(in oklch, var(--accent) 8%, transparent);
+  box-shadow: none;
 }
 
 :root[data-theme="light"] .hero-interactive::before {
@@ -4036,11 +4135,17 @@ body.is-auth-open {
 
 :root[data-theme="light"] .core-feature-chat-btn,
 :root[data-theme="light"] .theorem-nav-btn,
-:root[data-theme="light"] .pricing-card-cta,
-:root[data-theme="light"] .callout-btn-secondary {
+:root[data-theme="light"] .pricing-card-cta {
   border-color: color-mix(in oklch, var(--accent) 16%, transparent);
   background: color-mix(in oklch, white 58%, var(--chip) 42%);
   color: color-mix(in oklch, var(--text) 86%, var(--accent) 14%);
+}
+
+:root[data-theme="light"] .callout-btn-secondary {
+  border-color: color-mix(in oklch, var(--accent-alt) 26%, transparent);
+  background: color-mix(in oklch, white 70%, var(--accent-alt) 30%);
+  color: color-mix(in oklch, var(--text) 88%, var(--accent-alt) 12%);
+  box-shadow: 0 16px 30px color-mix(in oklch, var(--accent-alt) 10%, transparent);
 }
 
 :root[data-theme="light"] .core-feature-chat-btn:hover,
@@ -4048,11 +4153,15 @@ body.is-auth-open {
 :root[data-theme="light"] .theorem-nav-btn:hover,
 :root[data-theme="light"] .theorem-nav-btn:focus-visible,
 :root[data-theme="light"] .pricing-card-cta:hover,
-:root[data-theme="light"] .pricing-card-cta:focus-visible,
-:root[data-theme="light"] .callout-btn-secondary:hover,
-:root[data-theme="light"] .callout-btn-secondary:focus-visible {
+:root[data-theme="light"] .pricing-card-cta:focus-visible {
   border-color: color-mix(in oklch, var(--accent) 24%, transparent);
   background: color-mix(in oklch, white 40%, var(--chip-hover) 60%);
+}
+
+:root[data-theme="light"] .callout-btn-secondary:hover,
+:root[data-theme="light"] .callout-btn-secondary:focus-visible {
+  border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
+  background: color-mix(in oklch, white 58%, var(--accent-alt) 42%);
 }
 
 :root[data-theme="light"] .theorems-carousel {
@@ -4134,19 +4243,19 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .ai-study-section {
-  --ai-chat-surface: color-mix(in oklch, white 74%, var(--panel) 26%);
-  --ai-chat-surface-raised: color-mix(in oklch, white 72%, var(--chip) 28%);
-  --ai-chat-surface-deep: color-mix(in oklch, white 62%, var(--panel) 38%);
-  --ai-chat-border: color-mix(in oklch, var(--accent) 14%, oklch(0.78 0.018 248 / 0.7));
-  --ai-chat-border-strong: color-mix(in oklch, var(--accent) 22%, transparent);
-  --ai-chat-text-strong: color-mix(in oklch, var(--text) 92%, var(--accent) 8%);
-  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 86%, var(--text) 14%);
-  --ai-chat-assistant-bubble: color-mix(in oklch, white 70%, var(--panel) 30%);
-  --ai-chat-user-bubble: color-mix(in oklch, var(--accent) 22%, white 78%);
-  --ai-chat-user-text: color-mix(in oklch, var(--ink-dark) 92%, var(--accent) 8%);
-  --ai-chat-action: color-mix(in oklch, var(--accent) 18%, white 82%);
-  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 24%, white 76%);
-  --ai-chat-action-muted: color-mix(in oklch, var(--accent) 8%, transparent);
+  --ai-chat-surface: color-mix(in oklch, white 70%, var(--panel) 30%);
+  --ai-chat-surface-raised: color-mix(in oklch, white 74%, var(--chip) 26%);
+  --ai-chat-surface-deep: color-mix(in oklch, white 58%, var(--panel) 42%);
+  --ai-chat-border: color-mix(in oklch, var(--accent) 18%, oklch(0.74 0.02 248 / 0.82));
+  --ai-chat-border-strong: color-mix(in oklch, var(--accent-deep) 26%, var(--text) 12%);
+  --ai-chat-text-strong: color-mix(in oklch, var(--text) 94%, var(--accent) 6%);
+  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 80%, var(--text) 20%);
+  --ai-chat-assistant-bubble: color-mix(in oklch, white 76%, var(--panel) 24%);
+  --ai-chat-user-bubble: color-mix(in oklch, var(--accent) 28%, white 72%);
+  --ai-chat-user-text: color-mix(in oklch, var(--ink-dark) 96%, var(--accent) 4%);
+  --ai-chat-action: color-mix(in oklch, var(--accent) 38%, white 62%);
+  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 44%, white 56%);
+  --ai-chat-action-muted: color-mix(in oklch, var(--accent) 10%, transparent);
 }
 
 :root[data-theme="light"] .ai-chat-model-menu {
@@ -4466,6 +4575,10 @@ body.is-auth-open {
     width: min(118%, 26rem);
     transform: translate3d(-4.3rem, 0.14rem, 0) rotate(-45deg);
   }
+
+  .contact-form-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 620px) {
@@ -4517,6 +4630,10 @@ body.is-auth-open {
   .signup-submit {
     min-height: 2.95rem;
   }
+
+  .contact-textarea {
+    min-height: 7.4rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -4545,6 +4662,8 @@ body.is-auth-open {
   .ai-chat-icon-btn,
   .ai-chat-send,
   .account-nav .nav-link.setting-btn svg,
+  .contact-select-icon,
+  .contact-select-icon svg,
   .signup-modal-close,
   .signup-submit {
     transition: none;

@@ -13,6 +13,27 @@
 
   const dictionaries = {
     en: {
+      "document.contact": "CircleLab | Get in Touch",
+      "contact.title": "Get in touch",
+      "contact.intro":
+        "We'd love to hear from you.\nShare your questions, ideas, or feedback anytime.",
+      "contact.name": "Your name",
+      "contact.name_placeholder": "What should we call you?",
+      "contact.topic": "Topic",
+      "contact.topic_placeholder": "Choose a topic",
+      "contact.topic_learning": "Learning support",
+      "contact.topic_feedback": "Product feedback",
+      "contact.topic_bug": "Bug report",
+      "contact.topic_school": "School or partnership",
+      "contact.message": "Message",
+      "contact.message_placeholder": "Let us know how we can help.",
+      "contact.submit": "Send message",
+      "contact.helper_prefix": "Need quick help instead?",
+      "contact.helper_link": "Try the ArcMind",
+      "feedback.contact_length":
+        "Please add a little more detail so we know how to help.",
+      "feedback.contact_success":
+        "Thanks for reaching out. This static page validated your message in the browser. Connect this form to email or your preferred form service when you're ready.",
       "document.home": "CircleLab",
       "document.login": "CircleLab | Log in",
       "nav.home": "Home",
@@ -62,6 +83,28 @@
         "Password recovery is not connected yet in this static build. Hook this button to your email reset flow when the auth service is ready.",
     },
     zh: {
+      "document.contact": "CircleLab | \u8054\u7cfb\u6211\u4eec",
+      "contact.title": "\u8054\u7cfb\u6211\u4eec",
+      "contact.intro":
+        "\u544a\u8bc9\u6211\u4eec\u4f60\u6b63\u5728\u5b66\u4ec0\u4e48\uff0c\u54ea\u91cc\u89c9\u5f97\u4e0d\u591f\u6e05\u695a\uff0c\u6216\u8005\u4f60\u5e0c\u671b CircleLab \u600e\u6837\u6539\u8fdb\u3002",
+      "contact.name": "\u4f60\u7684\u59d3\u540d",
+      "contact.name_placeholder": "\u6211\u4eec\u5e94\u8be5\u600e\u4e48\u79f0\u547c\u4f60\uff1f",
+      "contact.topic": "\u4e3b\u9898",
+      "contact.topic_placeholder": "\u9009\u62e9\u4e00\u4e2a\u4e3b\u9898",
+      "contact.topic_learning": "\u5b66\u4e60\u95ee\u9898",
+      "contact.topic_feedback": "\u4ea7\u54c1\u53cd\u9988",
+      "contact.topic_bug": "\u6545\u969c\u62a5\u544a",
+      "contact.topic_school": "\u5b66\u6821\u6216\u5408\u4f5c",
+      "contact.message": "\u6d88\u606f\u5185\u5bb9",
+      "contact.message_placeholder":
+        "\u7528\u51e0\u53e5\u8bdd\u8bf4\u660e\u4f60\u7684\u95ee\u9898\uff0c\u60f3\u6cd5\u6216\u9047\u5230\u7684\u60c5\u51b5\u3002",
+      "contact.submit": "\u53d1\u9001\u6d88\u606f",
+      "contact.helper_prefix": "\u60f3\u5feb\u901f\u5f97\u5230\u5e2e\u52a9\uff1f",
+      "contact.helper_link": "\u8bd5\u8bd5 ArcMind",
+      "feedback.contact_length":
+        "\u8bf7\u518d\u8865\u5145\u4e00\u70b9\u7ec6\u8282\uff0c\u8fd9\u6837\u6211\u4eec\u66f4\u597d\u5e2e\u5230\u4f60\u3002",
+      "feedback.contact_success":
+        "\u611f\u8c22\u4f60\u7684\u7559\u8a00\u3002\u8fd9\u4e2a\u9759\u6001\u9875\u9762\u5df2\u5728\u6d4f\u89c8\u5668\u4e2d\u5b8c\u6210\u8868\u5355\u6821\u9a8c\uff1b\u5f53\u4f60\u51c6\u5907\u597d\u540e\uff0c\u53ef\u4ee5\u518d\u628a\u5b83\u63a5\u5230\u90ae\u4ef6\u6216\u8868\u5355\u670d\u52a1\u3002",
       "document.home": "CircleLab | 圆几何",
       "document.login": "CircleLab | 登录",
       "nav.home": "首页",
@@ -110,6 +153,15 @@
     },
   };
 
+  const multilineCopy = {
+    en: {
+      "hero.title": "Master\nCircle\nwith Ease",
+    },
+    zh: {
+      "hero.title": "\u8f7b\u677e\u638c\u63e1\n\u5706\u51e0\u4f55",
+    },
+  };
+
   const normalizeLanguage = (value) => (value === "zh" ? "zh" : "en");
   const normalizeTheme = (value) => {
     if (value === "light" || value === "solar") {
@@ -139,7 +191,12 @@
   let currentTheme = normalizeTheme(readStoredPreference(STORAGE_KEYS.theme));
 
   const translate = (key, fallback = "") =>
-    dictionaries[currentLanguage]?.[key] ?? dictionaries.en[key] ?? fallback ?? key;
+    multilineCopy[currentLanguage]?.[key] ??
+    dictionaries[currentLanguage]?.[key] ??
+    multilineCopy.en[key] ??
+    dictionaries.en[key] ??
+    fallback ??
+    key;
 
   const syncLanguageButtons = () => {
     document.querySelectorAll("[data-language-option]").forEach((button) => {
