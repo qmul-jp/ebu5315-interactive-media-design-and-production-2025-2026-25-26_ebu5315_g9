@@ -7,6 +7,23 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header class="app-header motion-item motion-delay-1">
+    <nav class="top-nav" id="pageTabs" aria-label="main navigation">
+      <div class="nav-cluster nav-cluster-pages">
+        <button class="tab-btn active" id="homePageBtn" type="button">首页</button>
+        <button class="tab-btn" id="practicePageBtn" type="button">练习页</button>
+        <button class="tab-btn" id="sectionsPageBtn" type="button">Sections页</button>
+      </div>
+      <div class="nav-cluster nav-cluster-tools">
+        <button class="tab-btn" id="wrongModeBtn" type="button">错题本</button>
+        <button class="tab-btn" id="examModeBtn" type="button">考试模式</button>
+        <button class="ghost-btn" id="themeToggleBtn" type="button">深色模式</button>
+        <button class="ghost-btn" id="langToggleBtn" type="button">EN</button>
+        <button class="ghost-btn" id="pureModeBtn" type="button">纯净模式</button>
+      </div>
+    </nav>
+  </header>
+
   <main class="page">
     <section class="hero motion-item motion-delay-1" id="heroSection">
       <h1 id="heroTitle">圆相关知识点的习题</h1>
@@ -14,24 +31,11 @@
     </section>
 
     <section class="panel question-panel motion-item motion-delay-2">
-      <div class="mode-row motion-item motion-delay-2" id="pageTabs">
-        <button class="tab-btn active" id="homePageBtn" type="button">首页</button>
-        <button class="tab-btn" id="practicePageBtn" type="button">练习页</button>
-        <button class="tab-btn" id="sectionsPageBtn" type="button">Sections页</button>
-        <span class="spacer"></span>
-        <button class="ghost-btn" id="pureModeBtn" type="button">纯净模式</button>
-      </div>
-
-      <div class="mode-row motion-item motion-delay-2" id="modeControls">
+      <div class="mode-row practice-toolbar motion-item motion-delay-2" id="modeControls">
         <button class="tab-btn active" id="allModeBtn" type="button">全部题目</button>
-        <button class="tab-btn" id="wrongModeBtn" type="button">错题本练习</button>
-        <button class="tab-btn" id="examModeBtn" type="button">考试模式</button>
         <button class="ghost-btn" id="clearWrongBtn" type="button">清空错题本</button>
         <button class="ghost-btn danger hidden" id="confirmClearWrongBtn" type="button">确认清空</button>
         <button class="ghost-btn hidden" id="cancelClearWrongBtn" type="button">取消</button>
-        <span class="spacer"></span>
-        <button class="ghost-btn" id="themeToggleBtn" type="button">深色模式</button>
-        <button class="ghost-btn" id="langToggleBtn" type="button">EN</button>
       </div>
 
       <div class="mode-row filters motion-item motion-delay-3" id="filtersRow">
@@ -60,6 +64,10 @@
           <span class="exam-timer-text" id="examTimerValue">剩余时间 45:00</span>
         </div>
         <div class="exam-section-list" id="examSectionList"></div>
+        <div class="exam-start-panel" id="examStartPanel">
+          <p id="examStartHint">点击开始考试后才正式计时，并进入专注答题模式。</p>
+          <button class="action-btn primary" id="examStartBtn" type="button">开始考试</button>
+        </div>
       </div>
 
       <section class="stats motion-item motion-delay-3" aria-label="stats" id="statsPanel">
@@ -67,6 +75,16 @@
         <div class="stat-item"><b id="statAnswered">0</b><span id="statAnsweredLabel">已作答</span></div>
         <div class="stat-item"><b id="statCorrect">0</b><span id="statCorrectLabel">答对</span></div>
         <div class="stat-item"><b id="statWrong">0</b><span id="statWrongLabel">错题本</span></div>
+      </section>
+
+      <section class="exam-navigator motion-item motion-delay-3 hidden" id="examNavigator" aria-label="exam navigator">
+        <div class="exam-nav-head">
+          <div>
+            <strong id="examNavigatorTitle">题号导航</strong>
+            <p id="examNavigatorHint">已作答题目会高亮，可点击跳转。</p>
+          </div>
+        </div>
+        <div class="exam-nav-grid" id="examNavigatorGrid"></div>
       </section>
 
       <div id="questionWrap" class="motion-item motion-delay-4">
@@ -94,9 +112,82 @@
 
       <div id="emptyState" class="empty hidden"></div>
 
+      <section id="examResultsPage" class="subpage exam-results motion-item motion-delay-4 hidden">
+        <div class="exam-results-head">
+          <div>
+            <h3 id="examResultsTitle">考试结果</h3>
+            <p id="examResultsDesc">本次考试已完成，下面是总体表现与逐题复盘。</p>
+          </div>
+          <div class="exam-results-actions">
+            <button class="action-btn primary" id="examRetryBtn" type="button">重新考试</button>
+          </div>
+        </div>
+        <section class="exam-results-overview" aria-label="exam results overview">
+          <article class="home-metric">
+            <span id="examResultsCorrectLabel">答对题数</span>
+            <b id="examResultsCorrectValue">0</b>
+          </article>
+          <article class="home-metric">
+            <span id="examResultsWrongLabel">答错题数</span>
+            <b id="examResultsWrongValue">0</b>
+          </article>
+          <article class="home-metric">
+            <span id="examResultsUnansweredLabel">未作答题数</span>
+            <b id="examResultsUnansweredValue">0</b>
+          </article>
+          <article class="home-metric">
+            <span id="examResultsAccuracyLabel">正确率</span>
+            <b id="examResultsAccuracyValue">0%</b>
+          </article>
+        </section>
+        <section class="exam-results-map" aria-label="exam results map">
+          <div class="exam-review-copy">
+            <strong id="examResultsReviewTitle">逐题复盘</strong>
+            <span id="examResultsReviewDesc">可查看每题作答情况、正确答案与解析。</span>
+          </div>
+          <div class="exam-nav-grid exam-results-status-grid" id="examResultsStatusGrid"></div>
+        </section>
+        <div class="exam-review-list" id="examResultsReviewList"></div>
+      </section>
+
       <section id="homePage" class="subpage home-page motion-item motion-delay-4">
         <h3 id="homePageTitle">欢迎来到做题主页</h3>
         <p id="homePageDesc">你可以从这里快速进入练习、考试或章节学习。想专注作答可启用纯净模式。</p>
+        <section class="home-overview" aria-label="home overview">
+          <article class="home-metric">
+            <span id="homeMetricQuestionsLabel">题库总题数</span>
+            <b id="homeMetricQuestionsValue">0</b>
+          </article>
+          <article class="home-metric">
+            <span id="homeMetricSectionsLabel">覆盖章节</span>
+            <b id="homeMetricSectionsValue">0</b>
+          </article>
+          <article class="home-metric">
+            <span id="homeMetricWrongLabel">当前错题数</span>
+            <b id="homeMetricWrongValue">0</b>
+          </article>
+          <article class="home-metric">
+            <span id="homeMetricLevelLabel">当前训练等级</span>
+            <b id="homeMetricLevelValue">1</b>
+          </article>
+        </section>
+        <section class="home-progress" aria-label="home progress">
+          <div class="home-progress-head">
+            <strong id="homeProgressTitle">总体进度</strong>
+            <span id="homeProgressText">已完成 0 / 0（0%）</span>
+          </div>
+          <div class="home-progress-track">
+            <span id="homeProgressFill"></span>
+          </div>
+        </section>
+        <section class="home-guide" aria-label="home guide">
+          <h4 id="homeGuideTitle">建议学习路径</h4>
+          <div class="home-guide-list">
+            <p id="homeGuideStep1">1. 先从“开始练习”建立基础，再看解析查缺补漏。</p>
+            <p id="homeGuideStep2">2. 完成一轮后进入“考试模式”，检查综合掌握情况。</p>
+            <p id="homeGuideStep3">3. 针对错题回到章节学习，逐步提升 Level。</p>
+          </div>
+        </section>
         <div class="home-actions">
           <article class="home-card">
             <div>
@@ -130,9 +221,16 @@
     </section>
 
     <aside class="panel side-panel motion-item motion-delay-3" id="sidePanel">
-      <h3 class="side-title" id="wrongTitle">错题本</h3>
-      <p class="side-tip" id="wrongHint">答错题目会自动加入错题本。</p>
-      <div class="wrong-list" id="wrongList"></div>
+      <div class="side-panel-head">
+        <div class="side-panel-copy">
+          <h3 class="side-title" id="wrongTitle">错题本</h3>
+          <p class="side-tip" id="wrongHint">答错题目会自动加入错题本。</p>
+        </div>
+        <button class="ghost-btn sidebar-toggle-btn" id="wrongPanelToggleBtn" type="button" aria-expanded="true">收起错题本</button>
+      </div>
+      <div class="side-panel-body" id="sidePanelBody">
+        <div class="wrong-list" id="wrongList"></div>
+      </div>
     </aside>
   </main>
 
@@ -145,6 +243,7 @@
         pageHome: "首页",
         pagePractice: "练习页",
         pageSections: "Sections页",
+        navWrong: "错题本",
         pureModeOn: "纯净模式",
         pureModeOff: "退出纯净模式",
         themeToDark: "深色模式",
@@ -160,6 +259,16 @@
         homeCardSectionTitle: "按章节学习",
         homeCardSectionDesc: "浏览 Section 和题量，按章节进行训练。",
         homeCardSectionBtn: "查看 Sections",
+        homeMetricQuestionsLabel: "题库总题数",
+        homeMetricSectionsLabel: "覆盖章节",
+        homeMetricWrongLabel: "当前错题数",
+        homeMetricLevelLabel: "当前训练等级",
+        homeProgressTitle: "总体进度",
+        homeProgressText: "已完成 {answered} / {total}（{percent}%）",
+        homeGuideTitle: "建议学习路径",
+        homeGuideStep1: "1. 先从“开始练习”建立基础，再看解析查缺补漏。",
+        homeGuideStep2: "2. 完成一轮后进入“考试模式”，检查综合掌握情况。",
+        homeGuideStep3: "3. 针对错题回到章节学习，逐步提升 Level。",
         modeAll: "全部题目",
         modeWrong: "错题本练习",
         enterExamMode: "考试模式",
@@ -179,9 +288,19 @@
         examTimeLabel: "考试时间",
         examTimeUnit: "分钟",
         examApplyTime: "应用时间",
+        examReadyTime: "开始后计时 {time}",
         examTimeRemaining: "剩余时间 {time}",
         examTimeUpAutoSubmit: "考试时间结束，已自动交卷。",
         examNoSectionSelected: "请先选择至少一个考试章节。",
+        examStartHint: "点击开始考试后才正式计时，并进入专注答题模式。",
+        examStartBtn: "开始考试",
+        examRestoredTitle: "考试已恢复",
+        examRestoredText: "已恢复上次未完成的考试进度。",
+        examWarningTenMinutes: "距离交卷还有 10 分钟。",
+        examWarningFiveMinutes: "距离交卷还有 5 分钟。",
+        examWarningOneMinute: "距离交卷还有 1 分钟，请尽快检查。",
+        examNavigatorTitle: "题号导航",
+        examNavigatorHint: "已作答题目会高亮，可点击跳转。",
         smartNext: "AI推荐下一题",
         levelPrefix: "Level",
         sectionsPageTitle: "Section 概览",
@@ -207,6 +326,8 @@
         prev: "上一题",
         next: "下一题",
         wrongTitle: "错题本",
+        wrongCollapse: "收起错题本",
+        wrongExpand: "展开错题本",
         wrongHintDefault: "答错题目会自动加入错题本。",
         wrongHintEmpty: "目前错题本为空，继续保持。",
         wrongHintCount: "共 {count} 题，点击可跳转。",
@@ -228,7 +349,25 @@
         examSavedText: "当前为考试模式，交卷后统一判分。",
         examSubmittedTitle: "交卷完成",
         examSubmittedSummary: "共 {total} 题，已作答 {answered} 题，答对 {correct} 题，答错 {wrong} 题，未作答 {unanswered} 题。",
-        examAlreadySubmitted: "已交卷。如需重考，请先退出再重新进入考试模式。"
+        examAlreadySubmitted: "已交卷。如需重考，请先退出再重新进入考试模式。",
+        examExitConfirmText: "当前考试尚未交卷。\n已保存 {answered} / {total} 题，剩余时间 {time}。\n确认退出考试模式并丢弃本次考试记录吗？",
+        examResultsTitle: "考试结果",
+        examResultsDesc: "本次考试已完成，下面是总体表现与逐题复盘。",
+        examResultsCorrect: "答对题数",
+        examResultsWrong: "答错题数",
+        examResultsUnanswered: "未作答题数",
+        examResultsAccuracy: "正确率",
+        examResultsReviewTitle: "逐题复盘",
+        examResultsReviewDesc: "可查看每题作答情况、正确答案与解析。",
+        examResultsRetry: "重新考试",
+        examResultsReviewEmpty: "本次考试没有错题或漏答，继续保持。",
+        examStatusCurrent: "当前",
+        examStatusAnswered: "已保存",
+        examStatusPending: "未作答",
+        examStatusCorrect: "正确",
+        examStatusWrong: "错误",
+        examStatusUnanswered: "未作答",
+        examReviewQuestion: "第 {index} 题"
       },
       en: {
         pageTitle: "Exercises on Circle-Related Concepts",
@@ -237,6 +376,7 @@
         pageHome: "Home",
         pagePractice: "Practice",
         pageSections: "Sections",
+        navWrong: "Wrong Book",
         pureModeOn: "Pure Mode",
         pureModeOff: "Exit Pure Mode",
         themeToDark: "Dark Mode",
@@ -252,6 +392,16 @@
         homeCardSectionTitle: "Learn by Section",
         homeCardSectionDesc: "Browse sections and question volume, then train chapter by chapter.",
         homeCardSectionBtn: "View Sections",
+        homeMetricQuestionsLabel: "Question Bank Size",
+        homeMetricSectionsLabel: "Covered Sections",
+        homeMetricWrongLabel: "Current Wrong Count",
+        homeMetricLevelLabel: "Current Training Level",
+        homeProgressTitle: "Overall Progress",
+        homeProgressText: "Completed {answered} / {total} ({percent}%)",
+        homeGuideTitle: "Suggested Study Path",
+        homeGuideStep1: "1. Start with Practice to build the basics, then use analysis to close gaps.",
+        homeGuideStep2: "2. After one pass, switch to Exam Mode to check integrated mastery.",
+        homeGuideStep3: "3. Return to section learning for wrong questions and raise your Level steadily.",
         modeAll: "All Questions",
         modeWrong: "Wrong Book",
         enterExamMode: "Exam Mode",
@@ -271,9 +421,19 @@
         examTimeLabel: "Exam Time",
         examTimeUnit: "min",
         examApplyTime: "Apply Time",
+        examReadyTime: "Timer starts at {time}",
         examTimeRemaining: "Time Left {time}",
         examTimeUpAutoSubmit: "Time is up. The paper was submitted automatically.",
         examNoSectionSelected: "Please select at least one exam section.",
+        examStartHint: "The timer starts only after you press Start Exam, then the interface switches to focus mode.",
+        examStartBtn: "Start Exam",
+        examRestoredTitle: "Exam Restored",
+        examRestoredText: "Your unfinished exam has been restored.",
+        examWarningTenMinutes: "10 minutes remaining before submission.",
+        examWarningFiveMinutes: "5 minutes remaining before submission.",
+        examWarningOneMinute: "1 minute remaining. Please review quickly.",
+        examNavigatorTitle: "Question Navigator",
+        examNavigatorHint: "Saved answers are highlighted. Click to jump.",
         smartNext: "AI Smart Next",
         levelPrefix: "Level",
         sectionsPageTitle: "Section Overview",
@@ -299,6 +459,8 @@
         prev: "Previous",
         next: "Next",
         wrongTitle: "Wrong-answer Notebook",
+        wrongCollapse: "Collapse Notebook",
+        wrongExpand: "Expand Notebook",
         wrongHintDefault: "Wrong answers are automatically saved here.",
         wrongHintEmpty: "No wrong questions yet. Keep it up.",
         wrongHintCount: "{count} question(s), click to jump.",
@@ -320,11 +482,29 @@
         examSavedText: "You are in exam mode. Grading happens after submission.",
         examSubmittedTitle: "Paper Submitted",
         examSubmittedSummary: "Total {total}, answered {answered}, correct {correct}, wrong {wrong}, unanswered {unanswered}.",
-        examAlreadySubmitted: "Paper already submitted. Exit and re-enter exam mode to retake."
+        examAlreadySubmitted: "Paper already submitted. Exit and re-enter exam mode to retake.",
+        examExitConfirmText: "This exam has not been submitted yet.\nSaved {answered} / {total} answers, time left {time}.\nExit exam mode and discard this exam attempt?",
+        examResultsTitle: "Exam Results",
+        examResultsDesc: "This exam is complete. Review your overall performance and question-by-question recap below.",
+        examResultsCorrect: "Correct",
+        examResultsWrong: "Wrong",
+        examResultsUnanswered: "Unanswered",
+        examResultsAccuracy: "Accuracy",
+        examResultsReviewTitle: "Question Review",
+        examResultsReviewDesc: "Review each question status, the correct answer, and the analysis.",
+        examResultsRetry: "Retry Exam",
+        examResultsReviewEmpty: "No wrong or missed questions in this exam. Keep it up.",
+        examStatusCurrent: "Current",
+        examStatusAnswered: "Saved",
+        examStatusPending: "Pending",
+        examStatusCorrect: "Correct",
+        examStatusWrong: "Wrong",
+        examStatusUnanswered: "Unanswered",
+        examReviewQuestion: "Question {index}"
       }
     };
 
-    const questionBank = [
+    const rawQuestionBank = [
     {
         "type":  "single",
         "section":  "kp01",
@@ -6646,6 +6826,12 @@
     }
 ];
 
+    const questionBank = rawQuestionBank.filter((question) => {
+      const stem = question ? question.stem : null;
+      if (typeof stem === "string") return !stem.includes("如图");
+      return ![stem && stem.zh, stem && stem.en].some((text) => typeof text === "string" && text.includes("如图"));
+    });
+
     const sectionMap = {
     "kp01":  {
                  "label":  {
@@ -6880,6 +7066,9 @@
     const STORAGE_KEY = "quiz_wrong_book_v1";
     const LANG_KEY = "quiz_lang_v1";
     const THEME_KEY = "quiz_theme_v1";
+    const WRONG_PANEL_KEY = "quiz_wrong_panel_collapsed_v1";
+    const EXAM_STATE_KEY = "quiz_exam_state_v1";
+    const EXAM_WARNING_THRESHOLDS = [600, 300, 60];
     const MAX_LEVEL = Math.max(...questionBank.map((q) => q.level || 1));
     const sectionIds = Object.keys(sectionMap);
     const sectionStats = buildSectionStats();
@@ -6928,6 +7117,13 @@
       examApplyTimeBtn: document.getElementById("examApplyTimeBtn"),
       examTimerValue: document.getElementById("examTimerValue"),
       examSectionList: document.getElementById("examSectionList"),
+      examStartPanel: document.getElementById("examStartPanel"),
+      examStartHint: document.getElementById("examStartHint"),
+      examStartBtn: document.getElementById("examStartBtn"),
+      examNavigator: document.getElementById("examNavigator"),
+      examNavigatorTitle: document.getElementById("examNavigatorTitle"),
+      examNavigatorHint: document.getElementById("examNavigatorHint"),
+      examNavigatorGrid: document.getElementById("examNavigatorGrid"),
       levelBadge: document.getElementById("levelBadge"),
       smartNextBtn: document.getElementById("smartNextBtn"),
       statsPanel: document.getElementById("statsPanel"),
@@ -6941,11 +7137,44 @@
       statTotal: document.getElementById("statTotal"), statAnswered: document.getElementById("statAnswered"),
       statCorrect: document.getElementById("statCorrect"), statWrong: document.getElementById("statWrong"),
       wrongTitle: document.getElementById("wrongTitle"), wrongHint: document.getElementById("wrongHint"),
+      wrongPanelToggleBtn: document.getElementById("wrongPanelToggleBtn"),
+      sidePanelBody: document.getElementById("sidePanelBody"),
       wrongList: document.getElementById("wrongList"), questionWrap: document.getElementById("questionWrap"),
       emptyState: document.getElementById("emptyState"),
+      examResultsPage: document.getElementById("examResultsPage"),
+      examResultsTitle: document.getElementById("examResultsTitle"),
+      examResultsDesc: document.getElementById("examResultsDesc"),
+      examResultsCorrectLabel: document.getElementById("examResultsCorrectLabel"),
+      examResultsCorrectValue: document.getElementById("examResultsCorrectValue"),
+      examResultsWrongLabel: document.getElementById("examResultsWrongLabel"),
+      examResultsWrongValue: document.getElementById("examResultsWrongValue"),
+      examResultsUnansweredLabel: document.getElementById("examResultsUnansweredLabel"),
+      examResultsUnansweredValue: document.getElementById("examResultsUnansweredValue"),
+      examResultsAccuracyLabel: document.getElementById("examResultsAccuracyLabel"),
+      examResultsAccuracyValue: document.getElementById("examResultsAccuracyValue"),
+      examResultsReviewTitle: document.getElementById("examResultsReviewTitle"),
+      examResultsReviewDesc: document.getElementById("examResultsReviewDesc"),
+      examResultsStatusGrid: document.getElementById("examResultsStatusGrid"),
+      examResultsReviewList: document.getElementById("examResultsReviewList"),
+      examRetryBtn: document.getElementById("examRetryBtn"),
       homePage: document.getElementById("homePage"),
       homePageTitle: document.getElementById("homePageTitle"),
       homePageDesc: document.getElementById("homePageDesc"),
+      homeMetricQuestionsLabel: document.getElementById("homeMetricQuestionsLabel"),
+      homeMetricSectionsLabel: document.getElementById("homeMetricSectionsLabel"),
+      homeMetricWrongLabel: document.getElementById("homeMetricWrongLabel"),
+      homeMetricLevelLabel: document.getElementById("homeMetricLevelLabel"),
+      homeMetricQuestionsValue: document.getElementById("homeMetricQuestionsValue"),
+      homeMetricSectionsValue: document.getElementById("homeMetricSectionsValue"),
+      homeMetricWrongValue: document.getElementById("homeMetricWrongValue"),
+      homeMetricLevelValue: document.getElementById("homeMetricLevelValue"),
+      homeProgressTitle: document.getElementById("homeProgressTitle"),
+      homeProgressText: document.getElementById("homeProgressText"),
+      homeProgressFill: document.getElementById("homeProgressFill"),
+      homeGuideTitle: document.getElementById("homeGuideTitle"),
+      homeGuideStep1: document.getElementById("homeGuideStep1"),
+      homeGuideStep2: document.getElementById("homeGuideStep2"),
+      homeGuideStep3: document.getElementById("homeGuideStep3"),
       homeCardPracticeTitle: document.getElementById("homeCardPracticeTitle"),
       homeCardPracticeDesc: document.getElementById("homeCardPracticeDesc"),
       homeStartPracticeBtn: document.getElementById("homeStartPracticeBtn"),
@@ -6975,12 +7204,18 @@
     let currentLevel = 1;
     let smartMode = true;
     let examMode = false;
+    let examStarted = false;
     let examSubmitted = false;
     let examSummary = null;
     let examDurationMinutes = 45;
     let examRemainingSeconds = examDurationMinutes * 60;
     let examTimerId = null;
+    let examDeadlineTs = null;
+    let examWarningSet = new Set();
     let pendingClearConfirm = false;
+    let pendingExamRestored = false;
+    let pendingExamAutoSubmit = false;
+    let wrongPanelCollapsed = loadWrongPanelPreference();
     let visitTick = 0;
     let lastRenderedQuestionId = null;
     let lastRenderedWrongListKey = "";
@@ -6989,7 +7224,7 @@
     const questionMeta = {};
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    let currentQuestions = getCurrentQuestions();
+    let currentQuestions = [];
 
     function loadWrongBook() {
       try {
@@ -7002,6 +7237,43 @@
     }
 
     function saveWrongBook() { localStorage.setItem(STORAGE_KEY, JSON.stringify([...wrongSet])); }
+    function loadWrongPanelPreference() {
+      return localStorage.getItem(WRONG_PANEL_KEY) === "1";
+    }
+    function saveWrongPanelPreference() {
+      localStorage.setItem(WRONG_PANEL_KEY, wrongPanelCollapsed ? "1" : "0");
+    }
+    function clearExamState() { localStorage.removeItem(EXAM_STATE_KEY); }
+    function loadExamState() {
+      try {
+        const data = JSON.parse(localStorage.getItem(EXAM_STATE_KEY) || "null");
+        if (!data || typeof data !== "object") return null;
+
+        const sections = Array.isArray(data.sections) ? data.sections.filter((id) => sectionMap[id]) : [...sectionIds];
+        const answers = {};
+        const questionIds = new Set(questionBank.map((question) => question.id));
+        if (data.answers && typeof data.answers === "object") {
+          Object.entries(data.answers).forEach(([id, userAnswer]) => {
+            if (!questionIds.has(id)) return;
+            answers[id] = userAnswer;
+          });
+        }
+
+        const duration = clampExamMinutes(data.duration);
+        const endsAt = Number(data.endsAt);
+        if (!Number.isFinite(endsAt)) return null;
+
+        return {
+          sections,
+          answers,
+          currentQuestionId: typeof data.currentQuestionId === "string" ? data.currentQuestionId : null,
+          duration,
+          endsAt
+        };
+      } catch {
+        return null;
+      }
+    }
     function loadLang() { return localStorage.getItem(LANG_KEY) === "en" ? "en" : "zh"; }
     function saveLang() { localStorage.setItem(LANG_KEY, lang); }
     function loadThemePreference() {
@@ -7161,7 +7433,49 @@
 
     function updateExamTimerDisplay() {
       const clock = formatTimeClock(examRemainingSeconds);
-      els.examTimerValue.textContent = t("examTimeRemaining", { time: clock });
+      els.examTimerValue.textContent = examMode && !examStarted && !examSubmitted
+        ? t("examReadyTime", { time: clock })
+        : t("examTimeRemaining", { time: clock });
+    }
+
+    function persistExamState() {
+      if (!examMode || !examStarted || examSubmitted) {
+        clearExamState();
+        return;
+      }
+
+      const answers = {};
+      currentQuestions.forEach((question) => {
+        const record = answerRecords[question.id];
+        if (record && !isAnswerEmpty(question, record.userAnswer)) {
+          answers[question.id] = record.userAnswer;
+        }
+      });
+
+      const payload = {
+        sections: [...examSectionSet],
+        currentQuestionId: currentQuestions[currentIndex] ? currentQuestions[currentIndex].id : null,
+        duration: examDurationMinutes,
+        endsAt: examDeadlineTs,
+        answers
+      };
+
+      localStorage.setItem(EXAM_STATE_KEY, JSON.stringify(payload));
+    }
+
+    function primeExamWarnings() {
+      examWarningSet = new Set(EXAM_WARNING_THRESHOLDS.filter((threshold) => examRemainingSeconds < threshold));
+    }
+
+    function maybeWarnExamTime() {
+      if (!examMode || !examStarted || examSubmitted || pendingExamAutoSubmit) return;
+      EXAM_WARNING_THRESHOLDS.forEach((threshold) => {
+        if (examRemainingSeconds <= threshold && !examWarningSet.has(threshold)) {
+          examWarningSet.add(threshold);
+          const key = threshold === 600 ? "examWarningTenMinutes" : threshold === 300 ? "examWarningFiveMinutes" : "examWarningOneMinute";
+          showInfoFeedback(t("tip"), t(key));
+        }
+      });
     }
 
     function stopExamTimer() {
@@ -7174,17 +7488,24 @@
     function startExamTimer(resetTime = false) {
       stopExamTimer();
       if (resetTime) {
-        examRemainingSeconds = examDurationMinutes * 60;
+        examDeadlineTs = Date.now() + (examDurationMinutes * 60 * 1000);
+        examWarningSet = new Set();
+      } else if (!examDeadlineTs) {
+        examDeadlineTs = Date.now() + (examDurationMinutes * 60 * 1000);
       }
+      examRemainingSeconds = Math.max(0, Math.ceil((examDeadlineTs - Date.now()) / 1000));
       updateExamTimerDisplay();
-      if (!examMode || examSubmitted) return;
+      persistExamState();
+      if (!examMode || !examStarted || examSubmitted) return;
       examTimerId = window.setInterval(() => {
         if (!examMode || examSubmitted) {
           stopExamTimer();
           return;
         }
-        examRemainingSeconds = Math.max(0, examRemainingSeconds - 1);
+        examRemainingSeconds = Math.max(0, Math.ceil((examDeadlineTs - Date.now()) / 1000));
         updateExamTimerDisplay();
+        maybeWarnExamTime();
+        persistExamState();
         if (examRemainingSeconds <= 0) {
           stopExamTimer();
           submitPaper();
@@ -7200,7 +7521,39 @@
         startExamTimer(true);
       } else {
         updateExamTimerDisplay();
+        persistExamState();
       }
+    }
+
+    function restoreExamState() {
+      const state = loadExamState();
+      if (!state) return false;
+
+      clearAnswerRecords();
+      examMode = true;
+      examStarted = true;
+      examSubmitted = false;
+      examSummary = null;
+      mode = "all";
+      activePage = "practice";
+      pureMode = false;
+      examDurationMinutes = state.duration;
+      examDeadlineTs = state.endsAt;
+      examSectionSet.clear();
+      state.sections.forEach((id) => examSectionSet.add(id));
+
+      Object.entries(state.answers).forEach(([questionId, userAnswer]) => {
+        answerRecords[questionId] = { userAnswer, isCorrect: null };
+      });
+
+      currentQuestions = getCurrentQuestions();
+      currentIndex = Math.max(0, currentQuestions.findIndex((question) => question.id === state.currentQuestionId));
+      if (currentIndex < 0) currentIndex = 0;
+      examRemainingSeconds = Math.max(0, Math.ceil((examDeadlineTs - Date.now()) / 1000));
+      primeExamWarnings();
+      pendingExamRestored = true;
+      pendingExamAutoSubmit = examRemainingSeconds <= 0;
+      return true;
     }
 
     function resetExamSections() {
@@ -7236,6 +7589,7 @@
 
           currentIndex = 0;
           refreshQuestionPool();
+          persistExamState();
           render();
         });
 
@@ -7296,6 +7650,171 @@
       return String(userAnswer || "").trim() === "";
     }
 
+    function clearFeedback() {
+      els.feedback.className = "feedback hidden";
+      els.feedback.textContent = "";
+    }
+
+    function getExamAnsweredCount() {
+      return currentQuestions.filter((question) => {
+        const record = answerRecords[question.id];
+        return record && !isAnswerEmpty(question, record.userAnswer);
+      }).length;
+    }
+
+    function saveExamDraft(question, options = {}) {
+      if (!examMode || !examStarted || examSubmitted || !question) return false;
+      const userAnswer = collectUserAnswer(question);
+
+      if (isAnswerEmpty(question, userAnswer)) {
+        delete answerRecords[question.id];
+        if (activePage === "practice") {
+          renderStats();
+          renderExamNavigator();
+          if (options.showFeedback) clearFeedback();
+        }
+        persistExamState();
+        return false;
+      }
+
+      answerRecords[question.id] = { userAnswer, isCorrect: null };
+      if (activePage === "practice") {
+        renderStats();
+        renderExamNavigator();
+        if (options.showFeedback) {
+          showSavedFeedback(question, answerRecords[question.id]);
+        }
+      }
+      persistExamState();
+      return true;
+    }
+
+    function confirmExamExit() {
+      if (!examMode || !examStarted || examSubmitted) return true;
+      return window.confirm(t("examExitConfirmText", {
+        answered: getExamAnsweredCount(),
+        total: currentQuestions.length,
+        time: formatTimeClock(examRemainingSeconds)
+      }));
+    }
+
+    function leaveExamModeForNavigation() {
+      if (!examMode) return true;
+      if (!examSubmitted && !confirmExamExit()) return false;
+      setExamMode(false);
+      return true;
+    }
+
+    function getExamQuestionStatus(question) {
+      const record = answerRecords[question.id];
+      if (!record || isAnswerEmpty(question, record.userAnswer)) return "unanswered";
+      if (typeof record.isCorrect === "boolean") return record.isCorrect ? "correct" : "wrong";
+      return "answered";
+    }
+
+    function jumpToQuestion(index) {
+      if (!currentQuestions.length) return;
+      if (index < 0 || index > currentQuestions.length - 1 || index === currentIndex) return;
+      saveExamDraft(currentQuestions[currentIndex]);
+      runQuestionTransition(() => {
+        currentIndex = index;
+        render();
+      });
+    }
+
+    function renderExamNavigator() {
+      if (!examMode || !examStarted || examSubmitted) {
+        els.examNavigatorGrid.innerHTML = "";
+        return;
+      }
+
+      els.examNavigatorGrid.innerHTML = "";
+      currentQuestions.forEach((question, index) => {
+        const status = getExamQuestionStatus(question);
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `exam-nav-btn ${status === "answered" ? "is-answered" : "is-pending"}${index === currentIndex ? " is-current" : ""}`;
+        btn.textContent = String(index + 1);
+        btn.title = index === currentIndex ? t("examStatusCurrent") : status === "answered" ? t("examStatusAnswered") : t("examStatusPending");
+        btn.addEventListener("click", () => jumpToQuestion(index));
+        els.examNavigatorGrid.appendChild(btn);
+      });
+    }
+
+    function renderExamResults() {
+      if (!(examMode && examSubmitted && examSummary)) {
+        els.examResultsStatusGrid.innerHTML = "";
+        els.examResultsReviewList.innerHTML = "";
+        return;
+      }
+
+      const accuracy = examSummary.total ? Math.round((examSummary.correct / examSummary.total) * 100) : 0;
+      els.examResultsCorrectValue.textContent = String(examSummary.correct);
+      els.examResultsWrongValue.textContent = String(examSummary.wrong);
+      els.examResultsUnansweredValue.textContent = String(examSummary.unanswered);
+      els.examResultsAccuracyValue.textContent = `${accuracy}%`;
+      els.examResultsStatusGrid.innerHTML = "";
+      els.examResultsReviewList.innerHTML = "";
+
+      const reviewEntries = [];
+      currentQuestions.forEach((question, index) => {
+        const status = getExamQuestionStatus(question);
+        const chip = document.createElement("span");
+        chip.className = `exam-nav-btn is-static ${status === "correct" ? "is-correct" : status === "wrong" ? "is-wrong" : "is-pending"}`;
+        chip.textContent = String(index + 1);
+        chip.title = t(status === "correct" ? "examStatusCorrect" : status === "wrong" ? "examStatusWrong" : "examStatusUnanswered");
+        els.examResultsStatusGrid.appendChild(chip);
+
+        if (status === "correct") return;
+        reviewEntries.push({ question, index, status });
+      });
+
+      if (!reviewEntries.length) {
+        const empty = document.createElement("p");
+        empty.className = "exam-review-empty";
+        empty.textContent = t("examResultsReviewEmpty");
+        els.examResultsReviewList.appendChild(empty);
+        return;
+      }
+
+      reviewEntries.forEach(({ question, index, status }) => {
+        const record = answerRecords[question.id] || { userAnswer: null };
+        const card = document.createElement("article");
+        card.className = "exam-review-card";
+
+        const head = document.createElement("div");
+        head.className = "exam-review-head";
+        const title = document.createElement("strong");
+        title.textContent = t("examReviewQuestion", { index: index + 1 });
+        const badge = document.createElement("span");
+        badge.className = `exam-result-badge ${status === "wrong" ? "is-wrong" : "is-pending"}`;
+        badge.textContent = t(status === "wrong" ? "examStatusWrong" : "examStatusUnanswered");
+        head.append(title, badge);
+
+        const stem = document.createElement("p");
+        stem.className = "exam-review-stem";
+        stem.textContent = getText(question.stem);
+
+        const yourAnswer = document.createElement("p");
+        const yourAnswerLabel = document.createElement("strong");
+        yourAnswerLabel.textContent = `${t("yourAnswer")} `;
+        yourAnswer.append(yourAnswerLabel, document.createTextNode(formatUserAnswer(question, record.userAnswer)));
+
+        const rightAnswer = document.createElement("p");
+        const rightAnswerLabel = document.createElement("strong");
+        rightAnswerLabel.textContent = `${t("rightAnswer")} `;
+        rightAnswer.append(rightAnswerLabel, document.createTextNode(formatAnswer(question, question.answer)));
+
+        const analysis = document.createElement("p");
+        const analysisLabel = document.createElement("strong");
+        analysisLabel.textContent = `${t("analysis")} `;
+        analysis.append(analysisLabel, document.createTextNode(getText(question.analysis)));
+
+        card.append(head, stem, yourAnswer, rightAnswer, analysis);
+        els.examResultsReviewList.appendChild(card);
+      });
+    }
+
     function renderFeedback(style, title, rows) {
       els.feedback.className = `feedback ${style}`;
       els.feedback.textContent = "";
@@ -7317,6 +7836,26 @@
 
     function showInfoFeedback(title, text) {
       renderFeedback("info", title, [{ text }]);
+    }
+
+    function startExamSession() {
+      if (!examMode || examStarted || examSubmitted) return;
+      if (!examSectionSet.size) {
+        showInfoFeedback(t("tip"), t("examNoSectionSelected"));
+        return;
+      }
+      examStarted = true;
+      currentIndex = 0;
+      refreshQuestionPool();
+      if (!currentQuestions.length) {
+        examStarted = false;
+        showInfoFeedback(t("tip"), t("examNoSectionSelected"));
+        render();
+        return;
+      }
+      clearFeedback();
+      render();
+      startExamTimer(true);
     }
 
     function runQuestionTransition(updateFn) {
@@ -7345,7 +7884,10 @@
       const onHomePage = activePage === "home";
       const onPracticePage = activePage === "practice";
       const onSectionsPage = activePage === "sections";
+      document.body.classList.toggle("overview-mode", onHomePage || onSectionsPage);
       document.body.classList.toggle("pure-mode", pureMode);
+      document.body.classList.toggle("exam-focus-mode", examMode && examStarted && !examSubmitted);
+      document.body.classList.toggle("wrong-panel-collapsed", onPracticePage && !pureMode && !examMode && wrongPanelCollapsed);
       els.homePageBtn.classList.toggle("active", onHomePage);
       els.practicePageBtn.classList.toggle("active", onPracticePage);
       els.sectionsPageBtn.classList.toggle("active", onSectionsPage);
@@ -7358,19 +7900,23 @@
       els.sectionSelect.disabled = examMode;
       els.showAnswerBtn.disabled = examMode && !examSubmitted;
       els.smartNextBtn.disabled = !onPracticePage || examMode;
-      els.examSectionSelectAllBtn.disabled = !examMode || examSubmitted;
-      els.examSectionClearAllBtn.disabled = !examMode || examSubmitted;
-      els.examDurationInput.disabled = !examMode || examSubmitted;
-      els.examApplyTimeBtn.disabled = !examMode || examSubmitted;
-      els.submitPaperBtn.classList.toggle("hidden", !(examMode && !examSubmitted));
+      els.examSectionSelectAllBtn.disabled = !examMode || examStarted || examSubmitted;
+      els.examSectionClearAllBtn.disabled = !examMode || examStarted || examSubmitted;
+      els.examDurationInput.disabled = !examMode || examStarted || examSubmitted;
+      els.examApplyTimeBtn.disabled = !examMode || examStarted || examSubmitted;
+      els.examStartBtn.disabled = !examMode || examStarted || examSubmitted;
+      els.submitPaperBtn.classList.toggle("hidden", !(examMode && examStarted && !examSubmitted));
       els.heroSection.classList.toggle("hidden", !onHomePage || pureMode);
-      els.sidePanel.classList.toggle("hidden", !onPracticePage || pureMode);
+      els.sidePanel.classList.toggle("hidden", !onPracticePage || pureMode || examMode);
       els.modeControls.classList.toggle("hidden", !onPracticePage);
       els.filtersRow.classList.toggle("hidden", !onPracticePage);
       els.sectionFilterWrap.classList.toggle("hidden", examMode);
-      els.examSectionPicker.classList.toggle("hidden", !(onPracticePage && examMode));
+      els.examSectionPicker.classList.toggle("hidden", !(onPracticePage && examMode && !examStarted));
       els.statsPanel.classList.toggle("hidden", !onPracticePage || pureMode);
-      els.questionWrap.classList.toggle("hidden", !onPracticePage);
+      els.examNavigator.classList.add("hidden");
+      els.questionWrap.classList.toggle("hidden", !onPracticePage || (examMode && (!examStarted || examSubmitted)));
+      els.examResultsPage.classList.toggle("hidden", !(onPracticePage && examMode && examSubmitted));
+      els.showAnswerBtn.classList.toggle("hidden", examMode && examStarted && !examSubmitted);
       els.homePage.classList.toggle("hidden", !onHomePage);
       els.sectionsPage.classList.toggle("hidden", !onSectionsPage);
       if (examMode) {
@@ -7380,43 +7926,52 @@
         els.confirmClearWrongBtn.classList.add("hidden");
         els.cancelClearWrongBtn.classList.add("hidden");
       }
+      syncWrongPanelState();
     }
 
     function setExamMode(nextExamMode) {
       if (nextExamMode === examMode) return;
-      const wasSubmitted = examSubmitted;
       stopExamTimer();
       examMode = nextExamMode;
       activePage = "practice";
       setClearConfirmState(false);
       if (examMode) {
+        examStarted = false;
         examSubmitted = false;
         examSummary = null;
+        pendingExamRestored = false;
+        pendingExamAutoSubmit = false;
         mode = "all";
         currentIndex = 0;
         resetExamSections();
-        applyExamDuration(true);
         clearAnswerRecords();
         refreshQuestionPool();
+        examDeadlineTs = null;
+        examWarningSet = new Set();
+        examRemainingSeconds = examDurationMinutes * 60;
+        updateExamTimerDisplay();
+        clearExamState();
       } else {
         examSectionSet.clear();
-        if (!wasSubmitted) {
-          clearAnswerRecords();
-        }
+        clearAnswerRecords();
+        examStarted = false;
         examSubmitted = false;
         examSummary = null;
         examRemainingSeconds = examDurationMinutes * 60;
+        examDeadlineTs = null;
+        examWarningSet = new Set();
+        pendingExamRestored = false;
+        pendingExamAutoSubmit = false;
         refreshQuestionPool();
+        clearExamState();
       }
       render();
-      if (examMode) {
-        showInfoFeedback(t("examStartedTipTitle"), t("examStartedTipText"));
-      }
     }
 
     function setMode(nextMode) {
       if (examMode && nextMode === "wrong") return;
       mode = nextMode;
+      activePage = "practice";
       setClearConfirmState(false);
       currentIndex = 0;
       refreshQuestionPool();
@@ -7478,6 +8033,7 @@
         input.placeholder = t("placeholder");
         if (record) input.value = record.userAnswer || "";
         input.disabled = examMode && examSubmitted;
+        input.addEventListener("input", () => saveExamDraft(question));
         els.answerForm.appendChild(input);
         return;
       }
@@ -7490,6 +8046,7 @@
         input.name = question.type === "single" ? "single-answer" : "multiple-answer";
         input.value = String(index);
         input.disabled = examMode && examSubmitted;
+        input.addEventListener("change", () => saveExamDraft(question));
 
         if (record) {
           if (question.type === "single" && record.userAnswer === index) input.checked = true;
@@ -7535,7 +8092,7 @@
       els.sectionsPageBtn.textContent = t("pageSections");
       els.pureModeBtn.textContent = pureMode ? t("pureModeOff") : t("pureModeOn");
       els.allModeBtn.textContent = t("modeAll");
-      els.wrongModeBtn.textContent = t("modeWrong");
+      els.wrongModeBtn.textContent = t("navWrong");
       els.examModeBtn.textContent = examMode ? t("exitExamMode") : t("enterExamMode");
       els.clearWrongBtn.textContent = t("clearWrong");
       els.confirmClearWrongBtn.textContent = t("clearConfirm");
@@ -7549,6 +8106,10 @@
       els.examTimeLabel.textContent = t("examTimeLabel");
       els.examTimeUnit.textContent = t("examTimeUnit");
       els.examApplyTimeBtn.textContent = t("examApplyTime");
+      els.examStartHint.textContent = t("examStartHint");
+      els.examStartBtn.textContent = t("examStartBtn");
+      els.examNavigatorTitle.textContent = t("examNavigatorTitle");
+      els.examNavigatorHint.textContent = t("examNavigatorHint");
       els.smartNextBtn.textContent = t("smartNext");
       els.statTotalLabel.textContent = t("statTotalLabel");
       els.statAnsweredLabel.textContent = t("statAnsweredLabel");
@@ -7560,8 +8121,18 @@
       els.prevBtn.textContent = t("prev");
       els.nextBtn.textContent = t("next");
       els.wrongTitle.textContent = t("wrongTitle");
+      els.wrongPanelToggleBtn.textContent = t(wrongPanelCollapsed ? "wrongExpand" : "wrongCollapse");
       els.homePageTitle.textContent = t("homePageTitle");
       els.homePageDesc.textContent = t("homePageDesc");
+      els.homeMetricQuestionsLabel.textContent = t("homeMetricQuestionsLabel");
+      els.homeMetricSectionsLabel.textContent = t("homeMetricSectionsLabel");
+      els.homeMetricWrongLabel.textContent = t("homeMetricWrongLabel");
+      els.homeMetricLevelLabel.textContent = t("homeMetricLevelLabel");
+      els.homeProgressTitle.textContent = t("homeProgressTitle");
+      els.homeGuideTitle.textContent = t("homeGuideTitle");
+      els.homeGuideStep1.textContent = t("homeGuideStep1");
+      els.homeGuideStep2.textContent = t("homeGuideStep2");
+      els.homeGuideStep3.textContent = t("homeGuideStep3");
       els.homeCardPracticeTitle.textContent = t("homeCardPracticeTitle");
       els.homeCardPracticeDesc.textContent = t("homeCardPracticeDesc");
       els.homeStartPracticeBtn.textContent = t("homeCardPracticeBtn");
@@ -7573,9 +8144,19 @@
       els.homeOpenSectionsBtn.textContent = t("homeCardSectionBtn");
       els.sectionsPageTitle.textContent = t("sectionsPageTitle");
       els.sectionsPageDesc.textContent = t("sectionsPageDesc");
+      els.examResultsTitle.textContent = t("examResultsTitle");
+      els.examResultsDesc.textContent = t("examResultsDesc");
+      els.examResultsCorrectLabel.textContent = t("examResultsCorrect");
+      els.examResultsWrongLabel.textContent = t("examResultsWrong");
+      els.examResultsUnansweredLabel.textContent = t("examResultsUnanswered");
+      els.examResultsAccuracyLabel.textContent = t("examResultsAccuracy");
+      els.examResultsReviewTitle.textContent = t("examResultsReviewTitle");
+      els.examResultsReviewDesc.textContent = t("examResultsReviewDesc");
+      els.examRetryBtn.textContent = t("examResultsRetry");
       populateSectionSelect();
       updateSectionOwnerBadge();
       updateExamTimerDisplay();
+      syncWrongPanelState();
     }
 
     function renderStats() {
@@ -7587,6 +8168,32 @@
       els.statAnswered.textContent = usingExamSummary ? String(examSummary.answered) : String(answered);
       els.statCorrect.textContent = examMode && !examSubmitted ? "-" : String(usingExamSummary ? examSummary.correct : correct);
       els.statWrong.textContent = examMode && !examSubmitted ? String(unanswered) : String(usingExamSummary ? examSummary.wrong : wrongSet.size);
+    }
+
+    function renderHomeOverview() {
+      const answered = questionBank.filter((q) => {
+        const record = answerRecords[q.id];
+        return record && !isAnswerEmpty(q, record.userAnswer);
+      }).length;
+      const total = questionBank.length;
+      const percent = total ? Math.round((answered / total) * 100) : 0;
+
+      els.homeMetricQuestionsValue.textContent = String(total);
+      els.homeMetricSectionsValue.textContent = String(sectionIds.length);
+      els.homeMetricWrongValue.textContent = String(wrongSet.size);
+      els.homeMetricLevelValue.textContent = String(currentLevel);
+      els.homeProgressText.textContent = t("homeProgressText", { answered, total, percent });
+      els.homeProgressFill.style.width = `${percent}%`;
+    }
+
+    function syncWrongPanelState() {
+      const canCollapse = activePage === "practice" && !pureMode && !examMode;
+      const collapsed = canCollapse && wrongPanelCollapsed;
+      document.body.classList.toggle("wrong-panel-collapsed", collapsed);
+      els.sidePanelBody.classList.toggle("hidden", collapsed);
+      els.wrongPanelToggleBtn.textContent = t(collapsed ? "wrongExpand" : "wrongCollapse");
+      els.wrongPanelToggleBtn.setAttribute("aria-expanded", String(!collapsed));
+      els.sidePanelBody.setAttribute("aria-hidden", String(collapsed));
     }
 
     function renderWrongList(force = false) {
@@ -7617,13 +8224,22 @@
       });
     }
 
+    function toggleWrongPanel() {
+      wrongPanelCollapsed = !wrongPanelCollapsed;
+      saveWrongPanelPreference();
+      syncWrongPanelState();
+    }
+
     function render() {
       refreshQuestionPool();
       applyStaticTexts();
       renderExamSectionPicker();
       syncControlState();
+      renderHomeOverview();
       renderWrongList();
       renderSectionsPage();
+      renderExamNavigator();
+      renderExamResults();
 
       if (activePage !== "practice") {
         els.emptyState.classList.add("hidden");
@@ -7631,6 +8247,16 @@
       }
 
       renderStats();
+
+      if (examMode && examSubmitted) {
+        els.emptyState.classList.add("hidden");
+        return;
+      }
+
+      if (examMode && !examStarted) {
+        els.emptyState.classList.add("hidden");
+        return;
+      }
 
       if (!currentQuestions.length) {
         els.questionWrap.classList.add("hidden");
@@ -7684,9 +8310,7 @@
       }
 
       if (examMode && !examSubmitted) {
-        answerRecords[question.id] = { userAnswer, isCorrect: null };
-        showSavedFeedback(question, answerRecords[question.id]);
-        render();
+        saveExamDraft(question, { showFeedback: true });
         return;
       }
 
@@ -7706,6 +8330,7 @@
 
     function submitPaper() {
       if (!examMode || examSubmitted || !currentQuestions.length) return;
+      saveExamDraft(currentQuestions[currentIndex]);
 
       let answered = 0;
       let correct = 0;
@@ -7733,6 +8358,7 @@
       saveWrongBook();
       examSubmitted = true;
       stopExamTimer();
+      examWarningSet = new Set();
       examSummary = {
         total: currentQuestions.length,
         answered,
@@ -7740,6 +8366,7 @@
         wrong,
         unanswered
       };
+      clearExamState();
 
       render();
       showInfoFeedback(
@@ -7753,6 +8380,7 @@
       if (!currentQuestions.length) return;
       const next = currentIndex + step;
       if (next < 0 || next > currentQuestions.length - 1) return;
+      saveExamDraft(currentQuestions[currentIndex]);
       runQuestionTransition(() => {
         currentIndex = next;
         render();
@@ -7792,6 +8420,7 @@
 
     els.submitBtn.addEventListener("click", submitAnswer);
     els.homePageBtn.addEventListener("click", () => {
+      if (!leaveExamModeForNavigation()) return;
       pureMode = false;
       activePage = "home";
       render();
@@ -7801,6 +8430,7 @@
       render();
     });
     els.sectionsPageBtn.addEventListener("click", () => {
+      if (!leaveExamModeForNavigation()) return;
       pureMode = false;
       activePage = "sections";
       render();
@@ -7819,6 +8449,7 @@
       }
     });
     els.homeOpenSectionsBtn.addEventListener("click", () => {
+      if (!leaveExamModeForNavigation()) return;
       pureMode = false;
       activePage = "sections";
       render();
@@ -7846,12 +8477,14 @@
       sectionIds.forEach((id) => examSectionSet.add(id));
       currentIndex = 0;
       refreshQuestionPool();
+      persistExamState();
       render();
     });
     els.examSectionClearAllBtn.addEventListener("click", () => {
       examSectionSet.clear();
       currentIndex = 0;
       refreshQuestionPool();
+      persistExamState();
       render();
     });
     els.examApplyTimeBtn.addEventListener("click", () => {
@@ -7863,7 +8496,10 @@
     });
     els.allModeBtn.addEventListener("click", () => setMode("all"));
     els.wrongModeBtn.addEventListener("click", () => setMode("wrong"));
-    els.examModeBtn.addEventListener("click", () => setExamMode(!examMode));
+    els.examModeBtn.addEventListener("click", () => {
+      if (examMode && !confirmExamExit()) return;
+      setExamMode(!examMode);
+    });
     els.clearWrongBtn.addEventListener("click", () => {
       if (examMode) return;
       setClearConfirmState(true);
@@ -7878,8 +8514,14 @@
       showInfoFeedback(t("tip"), t("clearDoneText"));
     });
     els.cancelClearWrongBtn.addEventListener("click", () => setClearConfirmState(false));
+    els.wrongPanelToggleBtn.addEventListener("click", toggleWrongPanel);
     els.themeToggleBtn.addEventListener("click", toggleTheme);
     els.submitPaperBtn.addEventListener("click", submitPaper);
+    els.examStartBtn.addEventListener("click", startExamSession);
+    els.examRetryBtn.addEventListener("click", () => {
+      setExamMode(false);
+      setExamMode(true);
+    });
     els.langToggleBtn.addEventListener("click", toggleLang);
 
     els.examDurationInput.value = String(examDurationMinutes);
@@ -7893,7 +8535,21 @@
 
     applyTheme();
     setupMicroInteractions();
+    if (!restoreExamState()) {
+      currentQuestions = getCurrentQuestions();
+    }
     render();
+    if (pendingExamAutoSubmit) {
+      pendingExamAutoSubmit = false;
+      submitPaper();
+      showInfoFeedback(t("tip"), t("examTimeUpAutoSubmit"));
+    } else if (examMode && !examSubmitted) {
+      startExamTimer(false);
+      if (pendingExamRestored) {
+        pendingExamRestored = false;
+        showInfoFeedback(t("examRestoredTitle"), t("examRestoredText"));
+      }
+    }
   </script>
 </body>
 </html>
