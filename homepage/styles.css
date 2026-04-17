@@ -3216,19 +3216,6 @@ body.is-auth-open {
   margin: 0 auto;
 }
 
-.auth-panel-kicker {
-  margin: 0;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  font-size: 0.76rem;
-  font-weight: 800;
-}
-
-.auth-panel-kicker {
-  margin-bottom: 0.4rem;
-  color: color-mix(in oklch, var(--accent) 74%, white 26%);
-}
-
 .auth-back-link {
   text-decoration: none;
 }
@@ -3260,7 +3247,7 @@ body.is-auth-open {
   padding: 0;
   border: 0;
   background: transparent;
-  color: color-mix(in oklch, var(--accent) 86%, white);
+  color: color-mix(in oklch, var(--auth-accent, var(--accent)) 86%, white);
   font: inherit;
   font-size: 0.83rem;
   font-weight: 800;
@@ -3295,6 +3282,10 @@ body.is-auth-open {
   overscroll-behavior: contain;
 }
 
+.auth-overlay.login-overlay {
+  background: color-mix(in oklch, var(--bg) 74%, oklch(0.15 0.03 236) 26%);
+}
+
 .auth-overlay.is-opening {
   animation: signupOverlayIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -3311,14 +3302,19 @@ body.is-auth-open {
 }
 
 .signup-modal {
+  --auth-accent: var(--accent);
+  --auth-accent-deep: var(--accent-deep);
+  --auth-accent-alt: var(--accent-alt);
   --signup-shell: color-mix(in oklch, var(--panel) 90%, black 10%);
   --signup-panel: color-mix(in oklch, var(--chip) 72%, var(--panel) 28%);
   --signup-showcase: color-mix(in oklch, var(--panel) 78%, black 22%);
   --signup-input-bg: color-mix(in oklch, var(--chip) 84%, black 16%);
-  --signup-border: color-mix(in oklch, var(--accent) 16%, transparent);
-  --signup-border-strong: color-mix(in oklch, var(--accent) 28%, transparent);
-  --signup-text-strong: color-mix(in oklch, white 92%, var(--accent) 8%);
-  --signup-text-muted: color-mix(in oklch, white 70%, var(--accent) 10%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+  --signup-text-strong: color-mix(in oklch, white 92%, var(--auth-accent) 8%);
+  --signup-text-muted: color-mix(in oklch, white 70%, var(--auth-accent) 10%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 52%, var(--signup-input-bg) 48%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 58%, var(--signup-input-bg) 42%);
   position: relative;
   width: min(1000px, 100%);
   min-height: min(630px, calc(100vh - 2.8rem));
@@ -3331,6 +3327,20 @@ body.is-auth-open {
   box-shadow:
     0 28px 70px color-mix(in oklch, black 36%, transparent),
     inset 0 1px 0 color-mix(in oklch, white 5%, transparent);
+}
+
+.login-modal {
+  --auth-accent: oklch(0.76 0.08 238);
+  --auth-accent-deep: oklch(0.57 0.065 232);
+  --auth-accent-alt: oklch(0.81 0.045 92);
+  --signup-shell: color-mix(in oklch, oklch(0.12 0.018 244) 86%, black 14%);
+  --signup-panel: color-mix(in oklch, oklch(0.19 0.024 238) 72%, var(--signup-shell) 28%);
+  --signup-showcase: color-mix(in oklch, oklch(0.17 0.038 236) 72%, black 28%);
+  --signup-input-bg: color-mix(in oklch, oklch(0.18 0.02 238) 82%, black 18%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 18%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 30%, transparent);
+  --signup-text-strong: color-mix(in oklch, white 93%, var(--auth-accent) 7%);
+  --signup-text-muted: color-mix(in oklch, white 72%, var(--auth-accent) 9%);
 }
 
 .auth-overlay.is-opening .signup-modal {
@@ -3356,15 +3366,15 @@ body.is-auth-open {
   place-items: center;
   padding: clamp(1.15rem, 3vw, 1.8rem);
   background:
-    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--accent) 18%, transparent), transparent 30%),
-    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--accent-alt) 10%, transparent), transparent 26%),
-    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--accent-deep) 14%, transparent), transparent 34%),
+    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--auth-accent) 18%, transparent), transparent 30%),
+    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--auth-accent-alt) 10%, transparent), transparent 26%),
+    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--auth-accent-deep) 14%, transparent), transparent 34%),
     linear-gradient(
       165deg,
       color-mix(in oklch, var(--chip) 50%, black 50%) 0%,
       color-mix(in oklch, var(--signup-showcase) 90%, var(--chip) 10%) 42%,
-      color-mix(in oklch, var(--signup-showcase) 78%, var(--accent-deep) 10%) 74%,
-      color-mix(in oklch, var(--signup-showcase) 70%, var(--accent) 12%) 100%
+      color-mix(in oklch, var(--signup-showcase) 78%, var(--auth-accent-deep) 10%) 74%,
+      color-mix(in oklch, var(--signup-showcase) 70%, var(--auth-accent) 12%) 100%
     );
   overflow: hidden;
 }
@@ -3372,9 +3382,10 @@ body.is-auth-open {
 .signup-modal-geometry {
   position: relative;
   z-index: 1;
-  width: min(100%, 29rem);
+  width: min(144%, 41rem);
   height: auto;
-  transform: translate3d(-0.32rem, 0.04rem, 0);
+  transform-origin: center;
+  transform: translate3d(-4.95rem, 0.6rem, 0) rotate(-45deg);
   opacity: 0.92;
   filter: drop-shadow(0 16px 28px color-mix(in oklch, black 20%, transparent));
 }
@@ -3387,9 +3398,9 @@ body.is-auth-open {
 }
 
 .signup-modal-geometry-circles circle {
-  stroke: color-mix(in oklch, white 82%, var(--accent) 18%);
-  stroke-width: 1.28;
-  opacity: 0.72;
+  stroke: color-mix(in oklch, white 82%, var(--auth-accent) 18%);
+  stroke-width: 1.18;
+  opacity: 0.68;
 }
 
 .signup-modal-panel {
@@ -3527,18 +3538,22 @@ body.is-auth-open {
 }
 
 .signup-consent-checkbox:checked {
-  border-color: color-mix(in oklch, var(--accent) 28%, transparent);
-  background-color: color-mix(in oklch, var(--accent) 56%, var(--signup-input-bg) 44%);
+  border-color: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+  background-color: color-mix(in oklch, var(--auth-accent) 56%, var(--signup-input-bg) 44%);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.4 6.7 11.4 12.6 4.8' fill='none' stroke='%230b2320' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.login-modal .signup-consent-checkbox:checked {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.4 6.7 11.4 12.6 4.8' fill='none' stroke='%2311263d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 .signup-consent-checkbox:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--accent) 16%, transparent);
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--auth-accent) 16%, transparent);
 }
 
 .signup-consent-checkbox[aria-invalid="true"] {
-  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--accent-alt) 12%, transparent);
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--auth-accent-alt) 12%, transparent);
 }
 
 .signup-consent-copy {
@@ -3546,7 +3561,7 @@ body.is-auth-open {
 }
 
 .signup-consent-copy a {
-  color: color-mix(in oklch, var(--accent) 86%, white);
+  color: color-mix(in oklch, var(--auth-accent) 86%, white);
   text-decoration: none;
 }
 
@@ -3579,26 +3594,26 @@ body.is-auth-open {
 
 .signup-input:focus-visible {
   border-color: var(--signup-border-strong);
-  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--accent) 18%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--auth-accent) 18%, transparent);
   outline: none;
 }
 
 .signup-input[aria-invalid="true"] {
-  border-color: color-mix(in oklch, var(--accent-alt) 30%, transparent);
-  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--accent-alt) 12%, transparent);
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 30%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--auth-accent-alt) 12%, transparent);
 }
 
 .signup-input[aria-invalid="true"]:focus-visible {
-  border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
-  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--accent-alt) 14%, transparent);
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 36%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--auth-accent-alt) 14%, transparent);
 }
 
 .signup-submit {
   min-height: 3.15rem;
   margin-top: 0.64rem;
-  border: 1px solid color-mix(in oklch, var(--accent) 16%, transparent);
+  border: 1px solid color-mix(in oklch, var(--auth-accent) 16%, transparent);
   border-radius: 0.88rem;
-  background: color-mix(in oklch, var(--accent) 52%, var(--signup-input-bg) 48%);
+  background: var(--auth-submit-bg);
   color: var(--signup-text-strong);
   font-size: 0.95rem;
   font-weight: 800;
@@ -3612,9 +3627,9 @@ body.is-auth-open {
 
 .signup-submit:hover,
 .signup-submit:focus-visible {
-  background: color-mix(in oklch, var(--accent) 58%, var(--signup-input-bg) 42%);
+  background: var(--auth-submit-bg-hover);
   transform: translateY(-1px);
-  box-shadow: 0 12px 24px color-mix(in oklch, var(--accent) 16%, transparent);
+  box-shadow: 0 12px 24px color-mix(in oklch, var(--auth-accent) 16%, transparent);
   outline: none;
 }
 
@@ -3624,21 +3639,21 @@ body.is-auth-open {
   border: 1px solid transparent;
   border-radius: 0.82rem;
   background: color-mix(in oklch, var(--chip) 84%, black 16%);
-  color: color-mix(in oklch, var(--accent) 82%, white);
+  color: color-mix(in oklch, var(--auth-accent) 82%, white);
   font-size: 0.84rem;
   line-height: 1.55;
 }
 
 .signup-form-status.is-success {
-  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
-  background: color-mix(in oklch, var(--chip-hover) 74%, var(--accent) 26%);
-  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  border-color: color-mix(in oklch, var(--auth-accent) 22%, transparent);
+  background: color-mix(in oklch, var(--chip-hover) 74%, var(--auth-accent) 26%);
+  color: color-mix(in oklch, white 92%, var(--auth-accent) 8%);
 }
 
 .signup-form-status.is-error {
-  border-color: color-mix(in oklch, var(--accent-alt) 26%, transparent);
-  background: color-mix(in oklch, var(--chip-hover) 78%, var(--accent-alt) 22%);
-  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 26%, transparent);
+  background: color-mix(in oklch, var(--chip-hover) 78%, var(--auth-accent-alt) 22%);
+  color: color-mix(in oklch, white 90%, var(--auth-accent-alt) 10%);
 }
 
 .signup-modal-helper {
@@ -3651,7 +3666,7 @@ body.is-auth-open {
 
 .signup-modal-helper a {
   margin-left: 0.18rem;
-  color: color-mix(in oklch, var(--accent) 86%, white);
+  color: color-mix(in oklch, var(--auth-accent) 86%, white);
   font-weight: 800;
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.16em;
@@ -3722,8 +3737,8 @@ body.is-auth-open {
   }
 
   .signup-modal-geometry {
-    width: min(100%, 24rem);
-    transform: translate3d(-0.34rem, -0.04rem, 0);
+    width: min(118%, 26rem);
+    transform: translate3d(-4.3rem, 0.14rem, 0) rotate(-45deg);
   }
 }
 
@@ -3761,8 +3776,8 @@ body.is-auth-open {
   }
 
   .signup-modal-geometry {
-    width: min(100%, 18rem);
-    transform: translate3d(-0.28rem, -0.08rem, 0);
+    width: min(116%, 19.6rem);
+    transform: translate3d(-4.02rem, 0.04rem, 0) rotate(-45deg);
   }
 
   .signup-modal-close {
