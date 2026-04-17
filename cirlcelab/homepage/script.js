@@ -15,17 +15,6 @@
     angle: document.getElementById("anglePath"),
     pointA: document.getElementById("pointA"),
     pointB: document.getElementById("pointB"),
-    radiusLabel: document.getElementById("radiusLabel"),
-    chordLabel: document.getElementById("chordLabel"),
-    tangentLabel: document.getElementById("tangentLabel"),
-    arcLabel: document.getElementById("arcLabel"),
-    angleLabel: document.getElementById("angleLabel"),
-    orbit1: document.getElementById("orbit1"),
-    orbit2: document.getElementById("orbit2"),
-    orbit3: document.getElementById("orbit3"),
-    orbit4: document.getElementById("orbit4"),
-    orbit5: document.getElementById("orbit5"),
-    orbit6: document.getElementById("orbit6"),
   };
 
   if (Object.values(refs).some((node) => !node)) {
@@ -39,7 +28,7 @@
 
   const center = { x: 700, y: 390 };
   const radius = 210;
-  const axisStart = -0.16;
+  const axisStart = 0;
 
   const state = {
     pointerInside: false,
@@ -51,10 +40,6 @@
     targetAngle: -0.85,
     spread: 1.18,
     targetSpread: 1.18,
-    layerX: 0,
-    layerY: 0,
-    targetLayerX: 0,
-    targetLayerY: 0,
     shapeX: 0,
     shapeY: 0,
     targetShapeX: 0,
@@ -63,15 +48,12 @@
 
   const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
   const lerp = (from, to, alpha) => from + (to - from) * alpha;
-  const dot = (a, b) => a.x * b.x + a.y * b.y;
-  const normalize = (v) => {
-    const len = Math.hypot(v.x, v.y);
-    if (!len) {
-      return { x: 0, y: 0 };
-    }
-    return { x: v.x / len, y: v.y / len };
-  };
-  const perpendicular = (v) => ({ x: -v.y, y: v.x });
+  const getAxisProximity = (angle) =>
+    clamp(1 - Math.abs(Math.sin(angle)), 0, 1);
+  const getChordSpread = (angle, focusBoost = 0) =>
+    0.48 + (1 - getAxisProximity(angle)) * 0.88 + clamp(focusBoost, 0, 1) * 0.18;
+  const getTangentHalfLength = (angle) =>
+    170 + getAxisProximity(angle) * 150;
 
   const polarToCartesian = (cx, cy, r, angle) => ({
     x: cx + Math.cos(angle) * r,
@@ -94,16 +76,6 @@
     el.setAttribute("y2", p2.y.toFixed(2));
   };
 
-  const setTextPos = (el, x, y) => {
-    el.setAttribute("x", x.toFixed(2));
-    el.setAttribute("y", y.toFixed(2));
-  };
-
-  const setCirclePos = (el, x, y) => {
-    el.setAttribute("cx", x.toFixed(2));
-    el.setAttribute("cy", y.toFixed(2));
-  };
-
   const updateTargetsFromPointer = (event) => {
     const rect = hero.getBoundingClientRect();
     const nx = ((event.clientX - rect.left) / rect.width) * 2 - 1;
@@ -116,12 +88,10 @@
     state.targetNy = clampedY;
 
     state.targetAngle = -0.95 + clampedX * 0.82 + clampedY * 0.28;
-    state.targetSpread = 1.12 + (1 - distance) * 0.32;
+    state.targetSpread = getChordSpread(state.targetAngle, 1 - distance);
 
     state.targetShapeX = clampedX * 7;
     state.targetShapeY = clampedY * 5;
-    state.targetLayerX = clampedX * 12;
-    state.targetLayerY = clampedY * 9;
   };
 
   hero.addEventListener("pointerenter", (event) => {
@@ -145,11 +115,12 @@
       state.targetNx = Math.sin(t * 0.52) * 0.42;
       state.targetNy = Math.cos(t * 0.33) * 0.34;
       state.targetAngle = -0.98 + Math.sin(t * 0.62) * 0.58;
-      state.targetSpread = 1.2 + (Math.sin(t * 0.42) + 1) * 0.14;
+      state.targetSpread = getChordSpread(
+        state.targetAngle,
+        (Math.sin(t * 0.42) + 1) * 0.5
+      );
       state.targetShapeX = state.targetNx * 5.4;
       state.targetShapeY = state.targetNy * 4.2;
-      state.targetLayerX = state.targetNx * 9;
-      state.targetLayerY = state.targetNy * 7;
     }
 
     const easing = reduceMotion ? 0.2 : 0.06;
@@ -159,8 +130,6 @@
     state.spread = lerp(state.spread, state.targetSpread, easing);
     state.shapeX = lerp(state.shapeX, state.targetShapeX, easing);
     state.shapeY = lerp(state.shapeY, state.targetShapeY, easing);
-    state.layerX = lerp(state.layerX, state.targetLayerX, easing * 0.8);
-    state.layerY = lerp(state.layerY, state.targetLayerY, easing * 0.8);
 
     const pointA = polarToCartesian(center.x, center.y, radius, state.angle);
     const pointB = polarToCartesian(
@@ -177,7 +146,8 @@
       x: -Math.sin(state.angle),
       y: Math.cos(state.angle),
     };
-    const tangentLength = 210;
+    // As the moving radius approaches the x-axis, tighten the chord and extend the tangent.
+    const tangentLength = getTangentHalfLength(state.angle);
     setLine(
       refs.tangent,
       {
@@ -214,61 +184,7 @@
     refs.arc.style.strokeWidth = (3 + energy * 0.9).toFixed(2);
     refs.angle.style.opacity = (0.48 + energy * 0.42).toFixed(2);
 
-    const midRadius = {
-      x: (center.x + pointA.x) * 0.5,
-      y: (center.y + pointA.y) * 0.5,
-    };
-    const midChord = {
-      x: (pointA.x + pointB.x) * 0.5,
-      y: (pointA.y + pointB.y) * 0.5,
-    };
-    const arcMid = polarToCartesian(
-      center.x,
-      center.y,
-      radius + 34,
-      state.angle + state.spread * 0.5
-    );
-    const thetaMidAngle = axisStart + (state.angle - axisStart) * 0.5;
-    const thetaLabelPoint = polarToCartesian(center.x, center.y, 96, thetaMidAngle);
-    const radialDir = normalize({
-      x: pointA.x - center.x,
-      y: pointA.y - center.y,
-    });
-    const radialNormal = perpendicular(radialDir);
-    const chordDir = normalize({
-      x: pointB.x - pointA.x,
-      y: pointB.y - pointA.y,
-    });
-    const rawChordNormal = perpendicular(chordDir);
-    const toCenter = normalize({
-      x: center.x - midChord.x,
-      y: center.y - midChord.y,
-    });
-    const chordNormal =
-      dot(rawChordNormal, toCenter) < 0
-        ? { x: -rawChordNormal.x, y: -rawChordNormal.y }
-        : rawChordNormal;
-    const tangentLabelSide = tangentDir.x >= 0 ? 1 : -1;
     const subjectOffsetX = compactLayout.matches ? 0 : 214;
-    const subjectCenterX = center.x + subjectOffsetX;
-
-    setTextPos(
-      refs.radiusLabel,
-      midRadius.x + radialNormal.x * 18,
-      midRadius.y + radialNormal.y * 18
-    );
-    setTextPos(
-      refs.chordLabel,
-      midChord.x + chordNormal.x * 16 + chordDir.x * 0,
-      midChord.y + chordNormal.y * 16 + chordDir.y * 0
-    );
-    setTextPos(
-      refs.tangentLabel,
-      pointA.x + tangentDir.x * (74 * tangentLabelSide) + radialDir.x * 26,
-      pointA.y + tangentDir.y * (74 * tangentLabelSide) + radialDir.y * 26
-    );
-    setTextPos(refs.arcLabel, arcMid.x - 18, arcMid.y + 8);
-    setTextPos(refs.angleLabel, thetaLabelPoint.x - 7, thetaLabelPoint.y + 3);
 
     refs.group.setAttribute(
       "transform",
@@ -277,28 +193,14 @@
 
     refs.bgLayers.setAttribute(
       "transform",
-      `translate(${state.layerX.toFixed(2)} ${state.layerY.toFixed(2)}) rotate(${(state.nx * 3.6).toFixed(2)} 700 390)`
+      "translate(0 0)"
     );
 
+    // Keep the background construction anchored so only the focal diagram tracks the pointer.
     refs.construct.setAttribute(
       "transform",
-      `translate(${(subjectOffsetX + state.layerX * 0.62).toFixed(2)} ${(state.layerY * 0.62).toFixed(2)}) rotate(${(state.nx * -2.3).toFixed(2)} ${subjectCenterX.toFixed(2)} 390)`
+      `translate(${subjectOffsetX.toFixed(2)} 0)`
     );
-
-    const orbitBase = t * 0.44;
-    const orbit = [
-      { el: refs.orbit1, r: 240, a: orbitBase * 1.2 + 0.1 },
-      { el: refs.orbit2, r: 240, a: orbitBase * 1.2 + Math.PI / 2 },
-      { el: refs.orbit3, r: 240, a: orbitBase * 1.2 + Math.PI },
-      { el: refs.orbit4, r: 240, a: orbitBase * 1.2 + (Math.PI * 3) / 2 },
-      { el: refs.orbit5, r: 332, a: orbitBase * 0.86 + 0.7 },
-      { el: refs.orbit6, r: 332, a: orbitBase * 0.86 + 0.7 + Math.PI },
-    ];
-
-    orbit.forEach((item) => {
-      const p = polarToCartesian(center.x, center.y, item.r, item.a);
-      setCirclePos(item.el, p.x, p.y);
-    });
 
     requestAnimationFrame(render);
   };
@@ -512,4 +414,1025 @@
   if (lock) {
     lock.style.zIndex = "3";
   }
+})();
+
+(() => {
+  const picker = document.querySelector(".ai-chat-model-picker");
+  if (!picker) {
+    return;
+  }
+
+  const triggerValue = picker.querySelector(".ai-chat-model-picker-value");
+  const options = Array.from(
+    picker.querySelectorAll(".ai-chat-model-menu-item")
+  );
+
+  if (!triggerValue || !options.length) {
+    return;
+  }
+
+  let feedbackTimeout = 0;
+
+  const setSelectedModel = (label) => {
+    triggerValue.textContent = label;
+
+    options.forEach((option) => {
+      const optionLabel = option.textContent.trim();
+      const isSelected = optionLabel === label;
+
+      option.classList.toggle("is-selected", isSelected);
+      option.setAttribute("aria-selected", isSelected ? "true" : "false");
+    });
+
+    picker.classList.remove("is-updated");
+    window.clearTimeout(feedbackTimeout);
+
+    requestAnimationFrame(() => {
+      picker.classList.add("is-updated");
+      feedbackTimeout = window.setTimeout(() => {
+        picker.classList.remove("is-updated");
+      }, 720);
+    });
+  };
+
+  options.forEach((option) => {
+    option.addEventListener("click", () => {
+      setSelectedModel(option.textContent.trim());
+      picker.open = false;
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!picker.open || picker.contains(event.target)) {
+      return;
+    }
+
+    picker.open = false;
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      picker.open = false;
+    }
+  });
+})();
+
+(() => {
+  const chatShell = document.querySelector(".ai-chat-shell");
+  if (!chatShell) {
+    return;
+  }
+
+  const form = chatShell.querySelector(".ai-chat-composer");
+  const input = chatShell.querySelector(".ai-chat-draft");
+  const sendButton = chatShell.querySelector(".ai-chat-send");
+  const transcript = chatShell.querySelector(".ai-chat-transcript");
+  const messages = chatShell.querySelector("[data-ai-chat-messages]");
+  const modelValue = chatShell.querySelector(".ai-chat-model-picker-value");
+  const attachButton = chatShell.querySelector(".ai-chat-icon-btn");
+  const prefersReducedMotion = typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false };
+
+  if (
+    !form ||
+    !(form instanceof HTMLFormElement) ||
+    !input ||
+    !(input instanceof HTMLTextAreaElement) ||
+    !sendButton ||
+    !(sendButton instanceof HTMLButtonElement) ||
+    !transcript ||
+    !messages ||
+    !modelValue
+  ) {
+    return;
+  }
+
+  const maxComposerHeight = 172;
+
+  const autoResizeInput = () => {
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, maxComposerHeight)}px`;
+    input.style.overflowY = input.scrollHeight > maxComposerHeight ? "auto" : "hidden";
+  };
+
+  const syncSendState = () => {
+    sendButton.disabled = input.value.trim().length === 0;
+  };
+
+  const scrollTranscriptToBottom = (behavior = "smooth") => {
+    const nextTop = transcript.scrollHeight;
+
+    if (prefersReducedMotion.matches || typeof transcript.scrollTo !== "function") {
+      transcript.scrollTop = nextTop;
+      return;
+    }
+
+    transcript.scrollTo({
+      top: nextTop,
+      behavior,
+    });
+  };
+
+  const createMessage = (role, label, text) => {
+    const message = document.createElement("article");
+    message.className = `ai-chat-message is-${role}`;
+
+    const meta = document.createElement("p");
+    meta.className = "ai-chat-message-meta";
+    meta.textContent = label;
+
+    const bubble = document.createElement("p");
+    bubble.className = "ai-chat-message-bubble";
+    bubble.textContent = text;
+
+    message.append(meta, bubble);
+    return message;
+  };
+
+  const buildTutorReply = () =>
+    "Ask a question about circle geometry and I'll help you think it through.";
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const prompt = input.value.trim();
+    if (!prompt) {
+      syncSendState();
+      input.focus();
+      return;
+    }
+
+    messages.append(createMessage("user", "You", prompt));
+    messages.append(
+      createMessage(
+        "assistant",
+        `ArcMind - ${modelValue.textContent.trim()}`,
+        buildTutorReply()
+      )
+    );
+
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+    requestAnimationFrame(() => {
+      scrollTranscriptToBottom();
+    });
+    input.focus();
+  });
+
+  input.addEventListener("input", () => {
+    autoResizeInput();
+    syncSendState();
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.shiftKey || event.isComposing) {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (typeof form.requestSubmit === "function") {
+      form.requestSubmit();
+      return;
+    }
+
+    sendButton.click();
+  });
+
+  if (attachButton instanceof HTMLButtonElement) {
+    attachButton.addEventListener("click", () => {
+      input.focus();
+    });
+  }
+
+  autoResizeInput();
+  syncSendState();
+  scrollTranscriptToBottom("auto");
+})();
+
+(() => {
+  const header = document.querySelector(".site-header");
+  if (!(header instanceof HTMLElement)) {
+    return;
+  }
+
+  const measureScrollbarWidth = () => {
+    const scrollProbe = document.createElement("div");
+    scrollProbe.style.position = "absolute";
+    scrollProbe.style.top = "-9999px";
+    scrollProbe.style.width = "120px";
+    scrollProbe.style.height = "120px";
+    scrollProbe.style.overflow = "scroll";
+    scrollProbe.style.pointerEvents = "none";
+    document.body.append(scrollProbe);
+    const scrollbarWidth = scrollProbe.offsetWidth - scrollProbe.clientWidth;
+    scrollProbe.remove();
+    return Math.max(0, scrollbarWidth);
+  };
+
+  const syncViewportMetrics = () => {
+    const offset = Math.ceil(header.getBoundingClientRect().height + 12);
+    document.documentElement.style.setProperty("--auth-header-offset", `${offset}px`);
+    document.documentElement.style.setProperty(
+      "--scrollbar-compensation",
+      `${measureScrollbarWidth()}px`
+    );
+  };
+
+  const syncHeaderScrollState = () => {
+    document.body.classList.toggle("is-scrolled", window.scrollY > 8);
+  };
+
+  syncViewportMetrics();
+  syncHeaderScrollState();
+  window.addEventListener("load", syncViewportMetrics, { once: true });
+  window.addEventListener("resize", syncViewportMetrics);
+  window.addEventListener("scroll", syncHeaderScrollState, { passive: true });
+})();
+
+(() => {
+  const overlaySelector = "[data-signup-overlay], [data-login-overlay]";
+  const signupOverlay = document.querySelector("[data-signup-overlay]");
+  const loginOverlay = document.querySelector("[data-login-overlay]");
+
+  if (!signupOverlay && !loginOverlay) {
+    return;
+  }
+
+  const setHash = (hash) => {
+    if (window.location.hash === hash) {
+      return;
+    }
+
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}${hash}`
+    );
+  };
+
+  const clearHash = (hash) => {
+    if (window.location.hash !== hash) {
+      return;
+    }
+
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${window.location.search}`
+    );
+  };
+
+  const shouldRememberTrigger = (trigger) =>
+    trigger instanceof HTMLElement && !trigger.closest(overlaySelector);
+
+  const isAnyOverlayOpen = () =>
+    [signupOverlay, loginOverlay].some(
+      (overlay) => overlay instanceof HTMLElement && !overlay.hidden
+    );
+
+  const syncBodyState = () => {
+    document.body.classList.toggle("is-auth-open", isAnyOverlayOpen());
+  };
+
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const overlayCloseCleanupMap = new WeakMap();
+  const overlayOpenCleanupMap = new WeakMap();
+  const preferences = window.CircleLabPreferences || null;
+  const t = (key, fallback = "") =>
+    preferences?.t ? preferences.t(key, fallback) : fallback;
+
+  const getValidationMessage = (input, checkboxMessage) => {
+    if (input.validity.valueMissing) {
+      if (input.type === "checkbox") {
+        return checkboxMessage;
+      }
+
+      return input.validationMessage;
+    }
+
+    if (input.validity.typeMismatch || input.validity.tooShort) {
+      return input.validationMessage;
+    }
+
+    return (
+      input.validationMessage ||
+      t("feedback.generic", "Please check this field and try again.")
+    );
+  };
+
+  let lastTrigger = null;
+
+  const signupForm = signupOverlay
+    ? signupOverlay.querySelector("[data-signup-form]")
+    : null;
+  const signupEmailInput = signupOverlay
+    ? signupOverlay.querySelector("#signupEmail")
+    : null;
+  const signupPasswordInput = signupOverlay
+    ? signupOverlay.querySelector("#signupPassword")
+    : null;
+  const signupConsentInput = signupOverlay
+    ? signupOverlay.querySelector("#signupConsent")
+    : null;
+  const signupFeedback = signupOverlay
+    ? signupOverlay.querySelector("[data-signup-feedback]")
+    : null;
+  const signupOpenButtons = Array.from(document.querySelectorAll("[data-open-signup]"));
+  const signupCloseButtons = signupOverlay
+    ? Array.from(signupOverlay.querySelectorAll("[data-signup-close]"))
+    : [];
+  const signupFields =
+    signupEmailInput instanceof HTMLInputElement &&
+    signupPasswordInput instanceof HTMLInputElement &&
+    signupConsentInput instanceof HTMLInputElement
+      ? [signupEmailInput, signupPasswordInput, signupConsentInput]
+      : [];
+
+  let activeSignupValidationField = null;
+
+  const clearSignupFieldError = (input) => {
+    input.removeAttribute("aria-invalid");
+  };
+
+  const showSignupFeedback = (message, state) => {
+    if (!signupFeedback) {
+      return;
+    }
+
+    signupFeedback.hidden = false;
+    signupFeedback.textContent = message;
+    signupFeedback.classList.toggle("is-error", state === "error");
+    signupFeedback.classList.toggle("is-success", state === "success");
+  };
+
+  const clearSignupFeedback = () => {
+    if (!signupFeedback) {
+      return;
+    }
+
+    signupFeedback.hidden = true;
+    signupFeedback.textContent = "";
+    signupFeedback.classList.remove("is-error", "is-success");
+    activeSignupValidationField = null;
+  };
+
+  const validateSignupField = (input) => {
+    input.setCustomValidity("");
+
+    if (input.checkValidity()) {
+      clearSignupFieldError(input);
+      return "";
+    }
+
+    input.setAttribute("aria-invalid", "true");
+    return getValidationMessage(
+      input,
+      t(
+        "feedback.signup_consent",
+        "Please agree to the Terms and Conditions and Privacy Policy."
+      )
+    );
+  };
+
+  const validateSignupForm = () => {
+    for (const input of signupFields) {
+      const message = validateSignupField(input);
+      if (message) {
+        activeSignupValidationField = input;
+        return { input, message };
+      }
+    }
+
+    return null;
+  };
+
+  const resetSignupState = () => {
+    if (!(signupForm instanceof HTMLFormElement)) {
+      return;
+    }
+
+    signupForm.reset();
+    clearSignupFeedback();
+    signupFields.forEach(clearSignupFieldError);
+  };
+
+  const loginForm = loginOverlay
+    ? loginOverlay.querySelector("[data-login-form]")
+    : null;
+  const loginEmailInput = loginOverlay
+    ? loginOverlay.querySelector("#loginEmail")
+    : null;
+  const loginPasswordInput = loginOverlay
+    ? loginOverlay.querySelector("#loginPassword")
+    : null;
+  const loginFeedback = loginOverlay
+    ? loginOverlay.querySelector("[data-login-feedback]")
+    : null;
+  const loginHelpButton = loginOverlay
+    ? loginOverlay.querySelector("[data-login-help]")
+    : null;
+  const loginOpenButtons = Array.from(document.querySelectorAll("[data-open-login]"));
+  const loginCloseButtons = loginOverlay
+    ? Array.from(loginOverlay.querySelectorAll("[data-login-close]"))
+    : [];
+  const loginFields =
+    loginEmailInput instanceof HTMLInputElement &&
+    loginPasswordInput instanceof HTMLInputElement
+      ? [loginEmailInput, loginPasswordInput]
+      : [];
+
+  let activeLoginValidationField = null;
+
+  const clearLoginFieldError = (input) => {
+    input.removeAttribute("aria-invalid");
+  };
+
+  const showLoginFeedback = (message, state = "info") => {
+    if (!loginFeedback) {
+      return;
+    }
+
+    loginFeedback.hidden = false;
+    loginFeedback.textContent = message;
+    loginFeedback.classList.toggle("is-error", state === "error");
+    loginFeedback.classList.toggle("is-success", state === "success");
+  };
+
+  const clearLoginFeedback = () => {
+    if (!loginFeedback) {
+      return;
+    }
+
+    loginFeedback.hidden = true;
+    loginFeedback.textContent = "";
+    loginFeedback.classList.remove("is-error", "is-success");
+    activeLoginValidationField = null;
+  };
+
+  const validateLoginField = (input) => {
+    input.setCustomValidity("");
+
+    if (input.checkValidity()) {
+      clearLoginFieldError(input);
+      return "";
+    }
+
+    input.setAttribute("aria-invalid", "true");
+    return getValidationMessage(input, "");
+  };
+
+  const validateLoginForm = () => {
+    for (const input of loginFields) {
+      const message = validateLoginField(input);
+      if (message) {
+        activeLoginValidationField = input;
+        return { input, message };
+      }
+    }
+
+    return null;
+  };
+
+  const resetLoginState = () => {
+    if (!(loginForm instanceof HTMLFormElement)) {
+      return;
+    }
+
+    loginForm.reset();
+    clearLoginFeedback();
+    loginFields.forEach(clearLoginFieldError);
+  };
+
+  const cancelOverlayClose = (overlay) => {
+    if (!(overlay instanceof HTMLElement)) {
+      return;
+    }
+
+    const cleanup = overlayCloseCleanupMap.get(overlay);
+    if (cleanup) {
+      cleanup();
+      overlayCloseCleanupMap.delete(overlay);
+    }
+
+    overlay.classList.remove("is-closing");
+  };
+
+  const cancelOverlayOpen = (overlay) => {
+    if (!(overlay instanceof HTMLElement)) {
+      return;
+    }
+
+    const cleanup = overlayOpenCleanupMap.get(overlay);
+    if (cleanup) {
+      cleanup();
+      overlayOpenCleanupMap.delete(overlay);
+    }
+
+    overlay.classList.remove("is-opening");
+  };
+
+  const startOverlayOpen = (overlay) => {
+    if (!(overlay instanceof HTMLElement) || reduceMotion) {
+      return;
+    }
+
+    cancelOverlayOpen(overlay);
+    overlay.classList.add("is-opening");
+
+    const timeoutId = window.setTimeout(() => {
+      cancelOverlayOpen(overlay);
+    }, 360);
+
+    overlayOpenCleanupMap.set(overlay, () => {
+      window.clearTimeout(timeoutId);
+    });
+  };
+
+  const finalizeOverlayHide = (overlay, hash, resetState, clearUrl) => {
+    if (!(overlay instanceof HTMLElement)) {
+      return;
+    }
+
+    cancelOverlayOpen(overlay);
+    cancelOverlayClose(overlay);
+    overlay.hidden = true;
+    resetState();
+
+    if (clearUrl) {
+      clearHash(hash);
+    }
+
+    syncBodyState();
+  };
+
+  const hideOverlay = (
+    overlay,
+    hash,
+    resetState,
+    { clearUrl = true, immediate = false } = {}
+  ) => {
+    if (!(overlay instanceof HTMLElement) || overlay.hidden) {
+      return;
+    }
+
+    if (immediate || reduceMotion) {
+      finalizeOverlayHide(overlay, hash, resetState, clearUrl);
+      return;
+    }
+
+    cancelOverlayClose(overlay);
+    overlay.classList.add("is-closing");
+
+    const modal = overlay.querySelector(".signup-modal");
+    const animationTarget = modal instanceof HTMLElement ? modal : overlay;
+
+    const completeClose = () => {
+      finalizeOverlayHide(overlay, hash, resetState, clearUrl);
+    };
+
+    const handleAnimationEnd = (event) => {
+      if (event.target !== animationTarget) {
+        return;
+      }
+
+      completeClose();
+    };
+
+    const timeoutId = window.setTimeout(completeClose, 260);
+
+    animationTarget.addEventListener("animationend", handleAnimationEnd);
+
+    overlayCloseCleanupMap.set(overlay, () => {
+      window.clearTimeout(timeoutId);
+      animationTarget.removeEventListener("animationend", handleAnimationEnd);
+    });
+  };
+
+  const closeOverlay = (
+    overlay,
+    hash,
+    resetState,
+    { restoreFocus = true, clearUrl = true } = {}
+  ) => {
+    if (!(overlay instanceof HTMLElement) || overlay.hidden) {
+      return;
+    }
+
+    hideOverlay(overlay, hash, resetState, { clearUrl });
+
+    if (!isAnyOverlayOpen() && restoreFocus && lastTrigger instanceof HTMLElement) {
+      lastTrigger.focus();
+    }
+  };
+
+  const switchOverlay = ({
+    fromOverlay,
+    fromHash,
+    fromResetState,
+    toOverlay,
+    toHash,
+    toResetState,
+    focusInput,
+    direction,
+  }) => {
+    if (
+      !(fromOverlay instanceof HTMLElement) ||
+      !(toOverlay instanceof HTMLElement) ||
+      !(focusInput instanceof HTMLElement)
+    ) {
+      return false;
+    }
+
+    const fromModal = fromOverlay.querySelector(".signup-modal");
+    const toModal = toOverlay.querySelector(".signup-modal");
+
+    if (
+      reduceMotion ||
+      !(fromModal instanceof HTMLElement) ||
+      !(toModal instanceof HTMLElement) ||
+      typeof fromModal.animate !== "function" ||
+      typeof toModal.animate !== "function"
+    ) {
+      return false;
+    }
+
+    cancelOverlayClose(fromOverlay);
+    cancelOverlayClose(toOverlay);
+    cancelOverlayOpen(fromOverlay);
+    cancelOverlayOpen(toOverlay);
+    toResetState();
+    toOverlay.classList.add("is-switch-target");
+    toOverlay.hidden = false;
+    document.body.classList.add("is-auth-switching");
+    setHash(toHash);
+    syncBodyState();
+
+    const enterOffset = direction > 0 ? 34 : -34;
+    const exitOffset = direction > 0 ? -28 : 28;
+
+    const enterAnimation = toModal.animate(
+      [
+        {
+          opacity: 0,
+          transform: `translate3d(${enterOffset}px, 0, 0) scale(0.986)`,
+          filter: "blur(7px)",
+        },
+        {
+          opacity: 1,
+          transform: "translate3d(0, 0, 0) scale(1)",
+          filter: "blur(0px)",
+        },
+      ],
+      {
+        duration: 300,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "both",
+      }
+    );
+
+    const exitAnimation = fromModal.animate(
+      [
+        {
+          opacity: 1,
+          transform: "translate3d(0, 0, 0) scale(1)",
+          filter: "blur(0px)",
+        },
+        {
+          opacity: 0,
+          transform: `translate3d(${exitOffset}px, 0, 0) scale(0.986)`,
+          filter: "blur(7px)",
+        },
+      ],
+      {
+        duration: 220,
+        easing: "cubic-bezier(0.4, 0, 0.2, 1)",
+        fill: "both",
+      }
+    );
+
+    let isFinalized = false;
+    const finalizeSwitch = () => {
+      if (isFinalized) {
+        return;
+      }
+
+      isFinalized = true;
+      document.body.classList.remove("is-auth-switching");
+      toOverlay.classList.remove("is-switch-target");
+      enterAnimation.cancel();
+      exitAnimation.cancel();
+      hideOverlay(fromOverlay, fromHash, fromResetState, {
+        clearUrl: false,
+        immediate: true,
+      });
+
+      requestAnimationFrame(() => {
+        focusInput.focus();
+      });
+    };
+
+    Promise.allSettled([enterAnimation.finished, exitAnimation.finished]).then(
+      finalizeSwitch
+    );
+    window.setTimeout(finalizeSwitch, 340);
+
+    return true;
+  };
+
+  const openSignupOverlay = (trigger) => {
+    if (
+      !(signupOverlay instanceof HTMLElement) ||
+      !(signupForm instanceof HTMLFormElement) ||
+      !(signupEmailInput instanceof HTMLInputElement)
+    ) {
+      return;
+    }
+
+    if (shouldRememberTrigger(trigger)) {
+      lastTrigger = trigger;
+    }
+
+    if (
+      loginOverlay instanceof HTMLElement &&
+      !loginOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: loginOverlay,
+        fromHash: "#loginOverlay",
+        fromResetState: resetLoginState,
+        toOverlay: signupOverlay,
+        toHash: "#signupOverlay",
+        toResetState: resetSignupState,
+        focusInput: signupEmailInput,
+        direction: -1,
+      })
+    ) {
+      return;
+    }
+
+    hideOverlay(loginOverlay, "#loginOverlay", resetLoginState, {
+      clearUrl: false,
+      immediate: true,
+    });
+    cancelOverlayClose(signupOverlay);
+    cancelOverlayOpen(signupOverlay);
+    signupOverlay.hidden = false;
+    startOverlayOpen(signupOverlay);
+    setHash("#signupOverlay");
+    syncBodyState();
+    resetSignupState();
+
+    requestAnimationFrame(() => {
+      signupEmailInput.focus();
+    });
+  };
+
+  const closeSignupOverlay = (options) => {
+    closeOverlay(signupOverlay, "#signupOverlay", resetSignupState, options);
+  };
+
+  const openLoginOverlay = (trigger) => {
+    if (
+      !(loginOverlay instanceof HTMLElement) ||
+      !(loginForm instanceof HTMLFormElement) ||
+      !(loginEmailInput instanceof HTMLInputElement)
+    ) {
+      return;
+    }
+
+    if (shouldRememberTrigger(trigger)) {
+      lastTrigger = trigger;
+    }
+
+    if (
+      signupOverlay instanceof HTMLElement &&
+      !signupOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: signupOverlay,
+        fromHash: "#signupOverlay",
+        fromResetState: resetSignupState,
+        toOverlay: loginOverlay,
+        toHash: "#loginOverlay",
+        toResetState: resetLoginState,
+        focusInput: loginEmailInput,
+        direction: 1,
+      })
+    ) {
+      return;
+    }
+
+    hideOverlay(signupOverlay, "#signupOverlay", resetSignupState, {
+      clearUrl: false,
+      immediate: true,
+    });
+    cancelOverlayClose(loginOverlay);
+    cancelOverlayOpen(loginOverlay);
+    loginOverlay.hidden = false;
+    startOverlayOpen(loginOverlay);
+    setHash("#loginOverlay");
+    syncBodyState();
+    resetLoginState();
+
+    requestAnimationFrame(() => {
+      loginEmailInput.focus();
+    });
+  };
+
+  const closeLoginOverlay = (options) => {
+    closeOverlay(loginOverlay, "#loginOverlay", resetLoginState, options);
+  };
+
+  const setupFieldValidation = (
+    fields,
+    feedback,
+    validateField,
+    setActiveValidationField,
+    getActiveValidationField
+  ) => {
+    fields.forEach((input) => {
+      const updateValidation = () => {
+        if (feedback.classList.contains("is-success")) {
+          feedback.hidden = true;
+          feedback.textContent = "";
+          feedback.classList.remove("is-error", "is-success");
+        }
+
+        if (
+          getActiveValidationField() === input ||
+          input.getAttribute("aria-invalid") === "true"
+        ) {
+          const message = validateField(input);
+
+          if (message) {
+            setActiveValidationField(input);
+            feedback.hidden = false;
+            feedback.textContent = message;
+            feedback.classList.add("is-error");
+            feedback.classList.remove("is-success");
+            return;
+          }
+
+          feedback.hidden = true;
+          feedback.textContent = "";
+          feedback.classList.remove("is-error", "is-success");
+          setActiveValidationField(null);
+        }
+      };
+
+      input.addEventListener("input", updateValidation);
+
+      if (input.type === "checkbox") {
+        input.addEventListener("change", updateValidation);
+      }
+    });
+  };
+
+  signupOpenButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      openSignupOverlay(button);
+    });
+  });
+
+  signupCloseButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeSignupOverlay();
+    });
+  });
+
+  loginOpenButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      openLoginOverlay(button);
+    });
+  });
+
+  loginCloseButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeLoginOverlay();
+    });
+  });
+
+  if (signupOverlay instanceof HTMLElement) {
+    signupOverlay.addEventListener("click", (event) => {
+      if (event.target === signupOverlay) {
+        closeSignupOverlay();
+      }
+    });
+  }
+
+  if (loginOverlay instanceof HTMLElement) {
+    loginOverlay.addEventListener("click", (event) => {
+      if (event.target === loginOverlay) {
+        closeLoginOverlay();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") {
+      return;
+    }
+
+    if (loginOverlay instanceof HTMLElement && !loginOverlay.hidden) {
+      closeLoginOverlay();
+      return;
+    }
+
+    if (signupOverlay instanceof HTMLElement && !signupOverlay.hidden) {
+      closeSignupOverlay();
+    }
+  });
+
+  const applyHashState = () => {
+    if (window.location.hash === "#loginOverlay") {
+      openLoginOverlay(null);
+      return;
+    }
+
+    if (window.location.hash === "#signupOverlay") {
+      openSignupOverlay(null);
+      return;
+    }
+
+    closeLoginOverlay({ restoreFocus: false, clearUrl: false });
+    closeSignupOverlay({ restoreFocus: false, clearUrl: false });
+  };
+
+  window.addEventListener("hashchange", applyHashState);
+
+  if (
+    signupForm instanceof HTMLFormElement &&
+    signupFeedback &&
+    signupFields.length === 3
+  ) {
+    setupFieldValidation(
+      signupFields,
+      signupFeedback,
+      validateSignupField,
+      (input) => {
+        activeSignupValidationField = input;
+      },
+      () => activeSignupValidationField
+    );
+
+    signupForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const invalidField = validateSignupForm();
+      if (invalidField) {
+        showSignupFeedback(invalidField.message, "error");
+        invalidField.input.focus();
+        return;
+      }
+
+      closeSignupOverlay();
+    });
+  }
+
+  if (
+    loginForm instanceof HTMLFormElement &&
+    loginFeedback &&
+    loginFields.length === 2
+  ) {
+    setupFieldValidation(
+      loginFields,
+      loginFeedback,
+      validateLoginField,
+      (input) => {
+        activeLoginValidationField = input;
+      },
+      () => activeLoginValidationField
+    );
+
+    loginForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const invalidField = validateLoginForm();
+      if (invalidField) {
+        showLoginFeedback(invalidField.message, "error");
+        invalidField.input.focus();
+        return;
+      }
+
+      closeLoginOverlay();
+    });
+  }
+
+  if (loginHelpButton instanceof HTMLButtonElement) {
+    loginHelpButton.addEventListener("click", () => {
+      showLoginFeedback(
+        t(
+          "feedback.password_reset",
+          "Password recovery is not connected yet in this static build. Hook this button to your email reset flow when the auth service is ready."
+        )
+      );
+    });
+  }
+
+  applyHashState();
 })();

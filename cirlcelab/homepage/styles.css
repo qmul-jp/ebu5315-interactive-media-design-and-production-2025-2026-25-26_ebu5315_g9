@@ -11,7 +11,74 @@
   --cta-dark: oklch(0.88 0.1 170);
   --cta-dark-hover: oklch(0.8 0.11 170);
   --ink-dark: oklch(0.2 0.02 190);
+  --hero-panel-start: oklch(0.16 0.02 250);
+  --hero-panel-end: oklch(0.1 0.01 250);
+  --hero-focus-core: oklch(0.34 0.09 180 / 0.46);
+  --hero-focus-edge: oklch(0.34 0.1 180 / 0);
+  --hero-grid-stroke: color-mix(in oklch, var(--accent) 24%, black);
+  --hero-bg-ring: color-mix(in oklch, var(--accent) 60%, black);
+  --hero-construct-ring: color-mix(in oklch, var(--accent) 52%, black);
+  --hero-construct-line: color-mix(in oklch, var(--accent) 45%, black);
+  --hero-lattice-circle: color-mix(in oklch, var(--accent) 68%, white);
+  --hero-lattice-emphasis: color-mix(in oklch, var(--accent-alt) 62%, var(--accent));
+  --hero-lattice-fade-1: color-mix(in oklch, var(--accent) 58%, white);
+  --hero-lattice-fade-2: color-mix(in oklch, var(--accent) 46%, white);
+  --hero-main-circle: color-mix(in oklch, var(--accent) 74%, white);
+  --hero-diameter: color-mix(in oklch, var(--accent) 58%, white);
+  --hero-axis: color-mix(in oklch, var(--accent) 68%, white);
+  --hero-axis-stroke: color-mix(in oklch, black 76%, var(--panel));
+  --hero-radius: color-mix(in oklch, var(--accent) 86%, white);
+  --hero-chord: color-mix(in oklch, var(--accent-alt) 74%, var(--accent));
+  --hero-tangent: color-mix(in oklch, var(--accent) 58%, white);
+  --hero-arc: color-mix(in oklch, var(--accent) 72%, var(--accent-alt));
+  --hero-angle: color-mix(in oklch, var(--accent-alt) 58%, white);
+  --hero-point-center: color-mix(in oklch, var(--accent) 76%, white);
+  --hero-point: color-mix(in oklch, var(--accent) 90%, white);
+  --hero-point-muted: color-mix(in oklch, var(--accent-alt) 80%, white);
   --page-gutter: clamp(1.6rem, 5vw, 4rem);
+  --auth-header-offset: 6.1rem;
+  --scrollbar-compensation: 0px;
+  --header-layer: 200;
+  --overlay-layer: 160;
+}
+
+:root[data-theme="light"] {
+  --bg: oklch(0.975 0.008 250);
+  --panel: oklch(0.945 0.012 248);
+  --text: oklch(0.255 0.025 246);
+  --muted: oklch(0.54 0.025 244);
+  --chip: oklch(0.91 0.014 248);
+  --chip-hover: oklch(0.875 0.02 246);
+  --accent: oklch(0.6 0.13 182);
+  --accent-deep: oklch(0.5 0.11 186);
+  --accent-alt: oklch(0.72 0.11 92);
+  --cta-dark: oklch(0.31 0.04 210);
+  --cta-dark-hover: oklch(0.25 0.04 210);
+  --ink-dark: oklch(0.22 0.026 236);
+  --hero-panel-start: oklch(0.975 0.01 248);
+  --hero-panel-end: oklch(0.91 0.03 220);
+  --hero-focus-core: oklch(0.84 0.055 192 / 0.34);
+  --hero-focus-edge: oklch(0.9 0.03 194 / 0);
+  --hero-grid-stroke: color-mix(in oklch, var(--accent) 14%, white);
+  --hero-bg-ring: color-mix(in oklch, var(--accent-deep) 32%, var(--text));
+  --hero-construct-ring: color-mix(in oklch, var(--accent) 24%, var(--text));
+  --hero-construct-line: color-mix(in oklch, var(--accent-deep) 18%, var(--text));
+  --hero-lattice-circle: color-mix(in oklch, var(--accent) 30%, var(--text));
+  --hero-lattice-emphasis: color-mix(in oklch, var(--accent-alt) 46%, var(--accent-deep));
+  --hero-lattice-fade-1: color-mix(in oklch, var(--accent) 24%, var(--text));
+  --hero-lattice-fade-2: color-mix(in oklch, var(--accent) 18%, var(--text));
+  --hero-main-circle: color-mix(in oklch, var(--accent-deep) 56%, var(--text));
+  --hero-diameter: color-mix(in oklch, var(--accent) 44%, var(--text));
+  --hero-axis: color-mix(in oklch, var(--accent) 22%, var(--text));
+  --hero-axis-stroke: color-mix(in oklch, white 78%, var(--panel));
+  --hero-radius: color-mix(in oklch, var(--accent) 62%, var(--text));
+  --hero-chord: color-mix(in oklch, var(--accent-alt) 46%, var(--accent-deep));
+  --hero-tangent: color-mix(in oklch, var(--accent) 34%, var(--text));
+  --hero-arc: color-mix(in oklch, var(--accent) 54%, var(--accent-alt));
+  --hero-angle: color-mix(in oklch, var(--accent-alt) 42%, var(--text));
+  --hero-point-center: color-mix(in oklch, var(--accent-deep) 62%, white);
+  --hero-point: color-mix(in oklch, var(--accent) 76%, white);
+  --hero-point-muted: color-mix(in oklch, var(--accent-alt) 58%, white);
 }
 
 * {
@@ -30,15 +97,41 @@ body {
     var(--bg);
 }
 
+:root[data-theme="light"] body {
+  background:
+    radial-gradient(circle at 14% -14%, oklch(0.76 0.05 178 / 0.18), transparent 40%),
+    radial-gradient(circle at 88% -10%, oklch(0.84 0.05 92 / 0.18), transparent 34%),
+    linear-gradient(180deg, oklch(0.99 0.006 248) 0%, oklch(0.965 0.008 248) 100%),
+    var(--bg);
+}
+
 button {
   font: inherit;
 }
 
 .site-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--header-layer);
   width: 100%;
   margin: 0;
   padding: 0 var(--page-gutter);
   background: transparent;
+  transition:
+    background-color 220ms ease,
+    box-shadow 220ms ease,
+    backdrop-filter 220ms ease;
+}
+
+body.is-scrolled .site-header,
+body.is-auth-open .site-header {
+  background: color-mix(in oklch, var(--bg) 62%, transparent);
+  backdrop-filter: blur(16px) saturate(1.04);
+  box-shadow: 0 8px 20px color-mix(in oklch, black 14%, transparent);
+}
+
+body.is-auth-switching .auth-overlay {
+  pointer-events: none;
 }
 
 .nav-shell {
@@ -81,6 +174,10 @@ button {
   justify-self: end;
 }
 
+.settings-shell {
+  position: relative;
+}
+
 .nav-link {
   display: inline-flex;
   align-items: center;
@@ -118,11 +215,15 @@ button {
   background: transparent;
 }
 
-.account-nav .nav-link.login-btn {
+.account-nav .nav-link.login-btn,
+.account-nav .nav-link.signup-btn {
   min-height: 2.55rem;
   padding: 0.4rem 1rem;
-  background: color-mix(in oklch, var(--chip) 70%, transparent);
   border-radius: 10px;
+}
+
+.account-nav .nav-link.login-btn {
+  background: color-mix(in oklch, var(--chip) 70%, transparent);
 }
 
 .account-nav .nav-link.login-btn:hover,
@@ -131,22 +232,59 @@ button {
 }
 
 .account-nav .nav-link.signup-btn {
-  color: var(--ink-dark);
-  background: var(--cta-dark);
-  min-height: 2.55rem;
-  padding: 0.4rem 1rem;
-  border-radius: 10px;
+  min-width: 6.25rem;
+  color: color-mix(in oklch, var(--accent) 84%, white 16%);
+  background: transparent;
+  border: 1.5px solid var(--accent);
   font-weight: 700;
 }
 
 .account-nav .nav-link.signup-btn:hover,
 .account-nav .nav-link.signup-btn:focus-visible {
-  color: var(--ink-dark);
-  background: var(--cta-dark-hover);
+  color: color-mix(in oklch, var(--accent) 88%, white 12%);
+  background: color-mix(in oklch, var(--accent) 14%, transparent);
+  border-color: color-mix(in oklch, var(--accent) 88%, white 12%);
+}
+
+.account-nav .nav-link.setting-btn {
+  width: 2.55rem;
+  height: 2.55rem;
+  padding: 0;
+  border-radius: 10px;
+  color: var(--muted);
+  background: transparent;
+  box-shadow: none;
+  flex: 0 0 auto;
+  align-self: center;
+  cursor: pointer;
+}
+
+.account-nav .nav-link.setting-btn[aria-expanded="true"] {
+  color: var(--text);
+  background: transparent;
+  box-shadow: none;
+}
+
+.account-nav .nav-link.setting-btn svg {
+  width: 1.28rem;
+  height: 1.28rem;
+  display: block;
+  fill: none;
+  filter: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transform-origin: 50% 50%;
+  transition: transform 280ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.account-nav .nav-link.setting-btn[aria-expanded="true"] svg {
+  transform: rotate(90deg);
 }
 
 .hero-section {
-  padding: clamp(0.15rem, 0.6vw, 0.55rem) var(--page-gutter) clamp(2.5rem, 6vw, 5rem);
+  padding: 0 var(--page-gutter) clamp(2.5rem, 6vw, 5rem);
 }
 
 .hero-interactive {
@@ -154,10 +292,12 @@ button {
   display: grid;
   grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
   align-items: stretch;
-  min-height: clamp(620px, calc(100vh - 6.4rem), 1000px);
-  min-height: clamp(620px, calc(100svh - 6.4rem), 1000px);
+  margin-top: calc((var(--auth-header-offset) - 12px) * -1);
+  margin-inline: calc(var(--page-gutter) * -1);
+  min-height: max(620px, 100vh);
+  min-height: max(620px, 100svh);
   border: none;
-  border-radius: 26px;
+  border-radius: 0;
   overflow: hidden;
   isolation: isolate;
   background: color-mix(in oklch, var(--panel) 86%, black);
@@ -170,12 +310,12 @@ button {
   background-image:
     linear-gradient(
       to right,
-      color-mix(in oklch, var(--accent) 26%, black) 1px,
+      var(--hero-grid-stroke) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in oklch, var(--accent) 22%, black) 1px,
+      var(--hero-grid-stroke) 1px,
       transparent 1px
     );
   background-size: 54px 54px;
@@ -198,14 +338,28 @@ button {
   display: block;
 }
 
+.hero-panel-stop-start {
+  stop-color: var(--hero-panel-start);
+}
+
+.hero-panel-stop-end {
+  stop-color: var(--hero-panel-end);
+}
+
+.hero-focus-stop-start {
+  stop-color: var(--hero-focus-core);
+}
+
+.hero-focus-stop-end {
+  stop-color: var(--hero-focus-edge);
+}
+
 #geo-bg-layers {
   transform-origin: center;
-  will-change: transform;
 }
 
 #geo-construct {
   transform-origin: center;
-  will-change: transform;
 }
 
 #geo-parallax {
@@ -218,15 +372,18 @@ button {
   z-index: 2;
   width: min(640px, 94%);
   margin: 0;
+  margin-inline-start: clamp(1.9rem, 3.9vw, 3.7rem);
   align-self: center;
   justify-self: start;
-  padding: clamp(3.2rem, 8vw, 6rem) clamp(1.3rem, 3vw, 2.5rem);
+  padding-block: clamp(3.2rem, 8vw, 6rem);
+  padding-inline: clamp(1.3rem, 3vw, 2.5rem);
+  padding-inline-start: max(var(--page-gutter), clamp(1.3rem, 3vw, 2.5rem));
   text-align: left;
 }
 
 .hero-kicker {
   margin: 0;
-  color: color-mix(in oklch, var(--accent) 84%, white);
+  color: color-mix(in oklch, var(--accent-alt) 82%, white 18%);
   letter-spacing: 0.15em;
   font-size: 0.82rem;
   font-weight: 700;
@@ -238,7 +395,8 @@ button {
   line-height: 1.08;
   letter-spacing: -0.022em;
   color: color-mix(in oklch, white 89%, var(--accent) 11%);
-  text-wrap: balance;
+  white-space: pre-line;
+  text-wrap: pretty;
 }
 
 .scroll-title-reveal {
@@ -453,7 +611,6 @@ button {
 .core-feature-chat-btn:focus-visible {
   border-color: color-mix(in oklch, white 42%, transparent);
   background: color-mix(in oklch, var(--accent-alt) 34%, var(--panel));
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -562,7 +719,6 @@ button {
 .theorem-nav-btn:focus-visible {
   border-color: color-mix(in oklch, white 42%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 86%, var(--panel));
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -848,7 +1004,6 @@ button {
 .theorem-cta-btn:focus-visible {
   background: color-mix(in oklch, var(--accent) 48%, var(--panel));
   border-color: color-mix(in oklch, var(--accent) 44%, transparent);
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -884,6 +1039,692 @@ button {
 .theorem-cta-btn-alt:focus-visible {
   background: color-mix(in oklch, var(--accent) 36%, var(--chip-hover));
   border-color: color-mix(in oklch, var(--accent) 30%, transparent);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ai-study-section {
+  --ai-chat-surface: color-mix(
+    in oklch,
+    var(--panel) 66%,
+    oklch(0.235 0.024 212) 34%
+  );
+  --ai-chat-surface-raised: color-mix(
+    in oklch,
+    var(--chip) 48%,
+    oklch(0.278 0.028 202) 52%
+  );
+  --ai-chat-surface-deep: color-mix(
+    in oklch,
+    oklch(0.16 0.018 216) 56%,
+    var(--panel) 44%
+  );
+  --ai-chat-border: color-mix(in oklch, var(--accent) 20%, white 10%);
+  --ai-chat-border-strong: color-mix(in oklch, var(--accent) 30%, white 12%);
+  --ai-chat-text-strong: color-mix(in oklch, white 96%, var(--accent) 4%);
+  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 68%, white 32%);
+  --ai-chat-assistant-bubble: color-mix(
+    in oklch,
+    oklch(0.29 0.022 206) 90%,
+    white 12%
+  );
+  --ai-chat-user-bubble: color-mix(
+    in oklch,
+    var(--accent) 50%,
+    oklch(0.84 0.03 180) 50%
+  );
+  --ai-chat-user-text: color-mix(
+    in oklch,
+    var(--ink-dark) 94%,
+    oklch(0.3 0.02 190) 6%
+  );
+  --ai-chat-action: color-mix(in oklch, var(--accent) 62%, white 38%);
+  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 68%, white 32%);
+  --ai-chat-action-muted: color-mix(in oklch, var(--accent) 14%, transparent);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  gap: clamp(1.4rem, 3vw, 2.5rem);
+  margin-top: clamp(2.2rem, 5vw, 4.2rem);
+  padding: clamp(1.35rem, 3vw, 2rem);
+  border: 0;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+}
+
+.ai-study-section::before,
+.ai-study-section::after {
+  display: none;
+}
+
+.ai-study-copy,
+.ai-chat-demo {
+  position: relative;
+  z-index: 1;
+}
+
+.ai-study-copy {
+  display: grid;
+  align-content: center;
+  gap: clamp(1rem, 2vw, 1.4rem);
+  min-width: 0;
+}
+
+.ai-study-kicker {
+  margin: 0;
+  color: color-mix(in oklch, var(--accent-alt) 72%, white);
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+}
+
+#ai-study-title {
+  margin: 0;
+  max-width: 12ch;
+  font-size: clamp(2rem, 4.8vw, 4.1rem);
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  text-wrap: balance;
+}
+
+.ai-study-subtitle {
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(0.98rem, 1.18vw, 1.08rem);
+  line-height: 1.7;
+  color: color-mix(in oklch, var(--muted) 74%, white 26%);
+  text-wrap: balance;
+}
+
+.ai-chat-demo {
+  min-width: 0;
+  min-height: 0;
+  container-type: inline-size;
+}
+
+.ai-chat-stage {
+  position: relative;
+  display: grid;
+  align-items: center;
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+}
+
+.ai-chat-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(18px);
+  opacity: 0.22;
+  pointer-events: none;
+  animation: aiChatPulse 10s ease-in-out infinite;
+}
+
+.ai-chat-glow-a {
+  top: 10%;
+  right: 6%;
+  width: 7.5rem;
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--accent) 42%, transparent),
+    transparent 70%
+  );
+}
+
+.ai-chat-glow-b {
+  left: 3%;
+  bottom: 11%;
+  width: 9rem;
+  aspect-ratio: 1;
+  background: radial-gradient(
+    circle,
+    color-mix(in oklch, var(--accent-alt) 28%, transparent),
+    transparent 72%
+  );
+  animation-delay: -4.2s;
+}
+
+.ai-chat-shell {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.85rem, 1.45vw, 1rem);
+  min-width: 0;
+  min-height: 0;
+  height: clamp(33.8rem, 42vw, 39.8rem);
+  padding: clamp(1rem, 1.9vw, 1.3rem);
+  padding-bottom: clamp(0.44rem, 0.88vw, 0.68rem);
+  border-radius: 24px;
+  border: 1px solid var(--ai-chat-border);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--ai-chat-surface) 93%, white 7%),
+      var(--ai-chat-surface)
+    );
+  box-shadow:
+    0 12px 28px color-mix(in oklch, black 10%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 7%, transparent);
+  overflow: hidden;
+}
+
+.ai-chat-shell::before {
+  display: none;
+}
+
+.ai-chat-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
+.ai-chat-title,
+.ai-chat-subtitle {
+  margin: 0;
+}
+
+.ai-chat-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  font-size: 1.12rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--ai-chat-text-strong);
+}
+
+.ai-chat-title::before {
+  content: "";
+  width: 0.42rem;
+  height: 0.42rem;
+  flex: 0 0 0.42rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--accent) 80%, white 20%);
+  box-shadow: 0 0 0.55rem color-mix(in oklch, var(--accent) 30%, transparent);
+}
+
+.ai-chat-subtitle {
+  margin-top: 0.18rem;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--ai-chat-text-muted);
+}
+
+.ai-chat-transcript {
+  position: relative;
+  min-height: 0;
+  height: 100%;
+  margin-bottom: 0;
+  padding: 0.18rem;
+  border-radius: 18px;
+  border: 1px solid color-mix(in oklch, var(--ai-chat-border) 62%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--ai-chat-surface-deep) 92%, black 8%),
+      var(--ai-chat-surface-deep)
+    );
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklch, var(--accent) 22%, transparent) transparent;
+}
+
+.ai-chat-transcript::before,
+.ai-chat-transcript::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.ai-chat-transcript::before {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--accent) 6%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--accent-alt) 4%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 46px 46px;
+  opacity: 0.1;
+}
+
+.ai-chat-transcript::after {
+  display: none;
+}
+
+.ai-chat-messages {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  min-height: 100%;
+  padding: clamp(0.9rem, 1.55vw, 1.15rem);
+}
+
+.ai-chat-message {
+  display: grid;
+  gap: 0.34rem;
+  max-width: min(88%, 30rem);
+  min-width: 0;
+}
+
+.ai-chat-message.is-user {
+  align-self: flex-end;
+  justify-items: end;
+}
+
+.ai-chat-message-meta {
+  margin: 0;
+  color: var(--ai-chat-text-muted);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.ai-chat-message-bubble {
+  margin: 0;
+  padding: 0.85rem 0.96rem;
+  border-radius: 1.18rem;
+  border: 1px solid color-mix(in oklch, var(--ai-chat-border) 42%, transparent);
+  background: var(--ai-chat-assistant-bubble);
+  color: var(--ai-chat-text-strong);
+  font-size: 0.95rem;
+  line-height: 1.58;
+  overflow-wrap: anywhere;
+}
+
+.ai-chat-message.is-assistant .ai-chat-message-bubble {
+  border-top-left-radius: 0.45rem;
+}
+
+.ai-chat-message.is-user .ai-chat-message-bubble {
+  border-top-right-radius: 0.45rem;
+  border-color: var(--ai-chat-border-strong);
+  background: var(--ai-chat-user-bubble);
+  color: var(--ai-chat-user-text);
+}
+
+.ai-chat-composer {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  padding: 0.62rem 0.76rem;
+  border-radius: 20px;
+  border: 1px solid var(--ai-chat-border);
+  background: var(--ai-chat-surface-raised);
+  box-shadow: none;
+}
+
+.ai-chat-composer:focus-within {
+  border-color: var(--ai-chat-border-strong);
+}
+
+.ai-chat-composer::before {
+  display: none;
+}
+
+.ai-chat-draft {
+  display: block;
+  width: 100%;
+  min-height: 2.95rem;
+  margin-bottom: 0.42rem;
+  padding: 0.22rem 0 0 0.42rem;
+  border: 0;
+  background: transparent;
+  color: var(--ai-chat-text-strong);
+  font: inherit;
+  font-size: clamp(1rem, 1.35vw, 1.16rem);
+  line-height: 1.42;
+  letter-spacing: -0.015em;
+  resize: none;
+  overflow-y: hidden;
+  outline: none;
+}
+
+.ai-chat-draft::placeholder {
+  color: color-mix(in oklch, var(--ai-chat-text-muted) 96%, white 4%);
+}
+
+.ai-chat-draft:focus-visible {
+  outline: none;
+}
+
+.ai-chat-disclaimer {
+  width: 100%;
+  max-width: none;
+  margin: 0.08rem auto 0;
+  color: color-mix(in oklch, var(--ai-chat-text-muted) 92%, white 8%);
+  font-size: clamp(0.62rem, 1.25vw, 0.74rem);
+  line-height: 1.35;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.ai-chat-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 0.52rem;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.ai-chat-icon-btn,
+.ai-chat-send {
+  border: 0;
+  cursor: pointer;
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease;
+}
+
+.ai-chat-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  padding: 0.2rem 0.35rem 0.2rem 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--ai-chat-text-muted);
+}
+
+.ai-chat-icon-btn:hover,
+.ai-chat-icon-btn:focus-visible {
+  color: var(--ai-chat-text-strong);
+  outline: none;
+}
+
+.ai-chat-model-picker {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin-left: 0.38rem;
+  min-height: 2.2rem;
+  color: var(--ai-chat-text-muted);
+  min-width: 0;
+  transition: color 220ms ease;
+}
+
+.ai-chat-model-picker summary {
+  list-style: none;
+}
+
+.ai-chat-model-picker summary::-webkit-details-marker {
+  display: none;
+}
+
+.ai-chat-model-picker-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  min-height: 2.2rem;
+  padding: 0.4rem 0.08rem;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    color 220ms ease;
+}
+
+.ai-chat-model-picker-value {
+  display: inline-flex;
+  align-items: center;
+  transition: color 180ms ease;
+}
+
+.ai-chat-model-picker:hover,
+.ai-chat-model-picker:focus-within,
+.ai-chat-model-picker[open] {
+  color: var(--ai-chat-text-strong);
+}
+
+.ai-chat-model-picker.is-updated .ai-chat-model-picker-value {
+  color: var(--ai-chat-text-strong);
+}
+
+.ai-chat-model-picker-trigger:focus {
+  outline: none;
+}
+
+.ai-chat-model-picker-chevron {
+  width: 0.9rem;
+  height: 0.9rem;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 220ms ease;
+}
+
+.ai-chat-model-picker[open] .ai-chat-model-picker-chevron {
+  transform: rotate(180deg);
+}
+
+.ai-chat-model-menu {
+  position: absolute;
+  left: -0.26rem;
+  bottom: calc(100% + 0.28rem);
+  z-index: 20;
+  width: clamp(11.8rem, 17vw, 13.9rem);
+  padding: 0.5rem;
+  border-radius: 1.18rem;
+  border: 1px solid color-mix(in oklch, var(--ai-chat-border) 66%, transparent);
+  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, white 10%);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 14px 28px color-mix(in oklch, black 12%, transparent);
+}
+
+.ai-chat-model-menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, white 10%);
+  z-index: -1;
+}
+
+.ai-chat-model-menu-label {
+  margin: 0;
+  padding: 0.12rem 0.64rem 0.42rem;
+  color: var(--ai-chat-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  position: relative;
+  z-index: 1;
+}
+
+.ai-chat-model-menu-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.56rem;
+  width: 100%;
+  min-height: 2.38rem;
+  padding: 0.54rem 0.68rem;
+  border: 0;
+  border-radius: 0.82rem;
+  background: transparent;
+  color: var(--ai-chat-text-strong);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
+  position: relative;
+  z-index: 1;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.ai-chat-model-menu-item:hover,
+.ai-chat-model-menu-item:focus-visible {
+  background: color-mix(in oklch, white 6%, var(--accent) 8%);
+  color: var(--ai-chat-text-strong);
+  outline: none;
+}
+
+.ai-chat-model-menu-item.is-selected {
+  background: color-mix(in oklch, white 8%, var(--accent) 12%);
+  color: var(--ai-chat-text-strong);
+}
+
+.ai-chat-model-menu-item svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+  opacity: 0;
+  transform: scale(0.82);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.ai-chat-model-menu-item.is-selected svg {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.ai-chat-send {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in oklch, var(--accent) 24%, white 12%);
+  background: var(--ai-chat-action);
+  color: var(--ai-chat-user-text);
+  box-shadow: none;
+}
+
+.ai-chat-send:hover,
+.ai-chat-send:focus-visible {
+  background: var(--ai-chat-action-hover);
+  outline: none;
+}
+
+.ai-chat-send:disabled {
+  cursor: not-allowed;
+  background: var(--ai-chat-action-muted);
+  border-color: color-mix(in oklch, var(--ai-chat-border) 44%, transparent);
+  color: var(--ai-chat-text-muted);
+  transform: none;
+}
+
+.ai-chat-send:disabled:hover,
+.ai-chat-send:disabled:focus-visible {
+  background: var(--ai-chat-action-muted);
+  transform: none;
+}
+
+.ai-chat-icon-btn svg,
+.ai-chat-send svg {
+  width: 1.02rem;
+  height: 1.02rem;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+}
+
+.ai-chat-icon-btn svg,
+.ai-chat-send svg {
+  width: 1.46rem;
+  height: 1.46rem;
+}
+
+@keyframes aiChatPulse {
+  0%,
+  100% {
+    opacity: 0.26;
+    transform: scale(0.96);
+  }
+  50% {
+    opacity: 0.44;
+    transform: scale(1.06);
+  }
+}
+
+@container (max-width: 40rem) {
+  .ai-chat-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ai-chat-toolbar {
+    gap: 0.46rem;
+  }
+
+  .ai-chat-model-picker {
+    flex: 1 1 auto;
+  }
+
+  .ai-chat-model-picker-trigger {
+    width: 100%;
+  }
+
+  .ai-chat-model-menu {
+    left: 0;
+    width: min(13.9rem, calc(100vw - 3rem));
+  }
+
+  .ai-chat-send {
+    margin-left: 0;
+  }
 }
 
 .pricing-section {
@@ -930,7 +1771,7 @@ button {
   line-height: 1.06;
   letter-spacing: -0.024em;
   color: color-mix(in oklch, white 92%, var(--accent) 8%);
-  white-space: nowrap;
+  white-space: normal;
 }
 
 .pricing-intro {
@@ -1503,7 +2344,7 @@ button {
   display: grid;
   align-items: center;
   min-height: 100svh;
-  margin: clamp(3rem, 6vw, 5.8rem) calc(50% - 50vw) 0;
+  margin: clamp(3rem, 6vw, 5.8rem) calc(var(--page-gutter) * -1) 0;
   padding: clamp(3.8rem, 8vw, 6.8rem) clamp(1.2rem, 4vw, 2.8rem);
   border: none;
   border-radius: 0;
@@ -1616,20 +2457,21 @@ button {
 }
 
 .callout-btn-secondary {
-  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
-  border-color: color-mix(in oklch, white 14%, transparent);
-  background: color-mix(in oklch, var(--chip) 86%, transparent);
+  color: color-mix(in oklch, white 76%, var(--accent-alt) 24%);
+  border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
+  background: color-mix(in oklch, var(--accent-alt) 15%, var(--chip) 85%);
+  box-shadow: 0 14px 28px color-mix(in oklch, var(--accent-alt) 10%, transparent);
 }
 
 .callout-btn-secondary:hover,
 .callout-btn-secondary:focus-visible {
-  background: color-mix(in oklch, var(--chip-hover) 88%, transparent);
-  border-color: color-mix(in oklch, white 22%, transparent);
+  background: color-mix(in oklch, var(--accent-alt) 24%, var(--chip-hover) 76%);
+  border-color: color-mix(in oklch, var(--accent-alt) 48%, transparent);
 }
 
 .site-footer {
   position: relative;
-  margin: 0 calc(50% - 50vw);
+  margin: 0;
   padding: clamp(3.1rem, 6.3vw, 5rem) var(--page-gutter) clamp(1.5rem, 3vw, 2.2rem);
   background: linear-gradient(180deg, color-mix(in oklch, var(--bg) 96%, black 4%) 0%, color-mix(in oklch, var(--panel) 92%, black 8%) 100%);
   overflow: hidden;
@@ -1788,7 +2630,6 @@ button {
 .pricing-card-cta:focus-visible {
   border-color: color-mix(in oklch, white 28%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 88%, var(--panel));
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -1827,14 +2668,14 @@ button {
 }
 
 .geo-focus {
-  opacity: 0.92;
+  opacity: 0.8;
   filter: url(#softGlow);
   animation: pulseFocus 7.8s ease-in-out infinite;
 }
 
 .geo-bg-ring {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 60%, black);
+  stroke: var(--hero-bg-ring);
   stroke-width: 1.3;
   opacity: 0.32;
 }
@@ -1864,7 +2705,7 @@ button {
 
 .geo-construct-ring {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 52%, black);
+  stroke: var(--hero-construct-ring);
   stroke-width: 1.1;
   opacity: 0.22;
 }
@@ -1893,7 +2734,7 @@ button {
 }
 
 .geo-construct-line {
-  stroke: color-mix(in oklch, var(--accent) 45%, black);
+  stroke: var(--hero-construct-line);
   stroke-width: 1.05;
   opacity: 0.25;
 }
@@ -1902,16 +2743,9 @@ button {
   opacity: 0.14;
 }
 
-.geo-logo-mark {
-  opacity: 0.08;
-  filter: url(#softGlow);
-  transform-origin: 700px 390px;
-  animation: logoDrift 24s ease-in-out infinite;
-}
-
 .geo-lattice-circle {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 68%, white);
+  stroke: var(--hero-lattice-circle);
   stroke-width: 1.7;
   opacity: 0.22;
 }
@@ -1920,18 +2754,18 @@ button {
 .geo-lattice-circle.l5,
 .geo-lattice-circle.l8,
 .geo-lattice-circle.l9 {
-  stroke: color-mix(in oklch, var(--accent-alt) 62%, var(--accent));
+  stroke: var(--hero-lattice-emphasis);
   opacity: 0.28;
 }
 
 .geo-lattice-circle.fade-1 {
-  stroke: color-mix(in oklch, var(--accent) 58%, white);
+  stroke: var(--hero-lattice-fade-1);
   stroke-width: 1.5;
   opacity: 0.15;
 }
 
 .geo-lattice-circle.fade-2 {
-  stroke: color-mix(in oklch, var(--accent) 46%, white);
+  stroke: var(--hero-lattice-fade-2);
   stroke-width: 1.35;
   opacity: 0.1;
 }
@@ -1941,52 +2775,21 @@ button {
   animation: spinSlow 33s linear infinite;
 }
 
-.geo-orbit-node {
-  fill: color-mix(in oklch, var(--accent) 84%, white);
-  opacity: 0.78;
-  filter: url(#softGlow);
-}
-
-.geo-orbit-node.main {
-  fill: color-mix(in oklch, var(--accent-alt) 70%, white);
-}
-
-.geo-orbit-node.subtle {
-  opacity: 0.46;
-}
-
-.geo-formula {
-  fill: color-mix(in oklch, var(--muted) 72%, white);
-  font-size: 22px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  opacity: 0.32;
-  animation: formulaDrift 8s ease-in-out infinite;
-}
-
-.geo-formula:nth-of-type(2) {
-  animation-delay: -2.2s;
-}
-
-.geo-formula:nth-of-type(3) {
-  animation-delay: -4.6s;
-}
-
 .geo-circle {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 74%, white);
+  stroke: var(--hero-main-circle);
   stroke-width: 3.4;
 }
 
 .geo-diameter {
-  stroke: color-mix(in oklch, var(--accent) 58%, white);
+  stroke: var(--hero-diameter);
   stroke-width: 2.3;
   stroke-dasharray: none;
   opacity: 0.74;
 }
 
 .geo-axis {
-  stroke: color-mix(in oklch, var(--accent) 68%, white);
+  stroke: var(--hero-axis);
   stroke-width: 1.7;
   opacity: 0.22;
 }
@@ -2001,7 +2804,7 @@ button {
   font-weight: 700;
   letter-spacing: 0.01em;
   paint-order: stroke;
-  stroke: color-mix(in oklch, black 76%, var(--panel));
+  stroke: var(--hero-axis-stroke);
   stroke-width: 2px;
 }
 
@@ -2014,76 +2817,42 @@ button {
 }
 
 .geo-radius {
-  stroke: color-mix(in oklch, var(--accent) 86%, white);
+  stroke: var(--hero-radius);
   stroke-width: 3.2;
 }
 
 .geo-chord {
-  stroke: color-mix(in oklch, var(--accent-alt) 74%, var(--accent));
+  stroke: var(--hero-chord);
   stroke-width: 3;
 }
 
 .geo-tangent {
-  stroke: color-mix(in oklch, var(--accent) 58%, white);
+  stroke: var(--hero-tangent);
   stroke-width: 3;
 }
 
 .geo-arc {
-  stroke: color-mix(in oklch, var(--accent) 72%, var(--accent-alt));
+  stroke: var(--hero-arc);
   stroke-width: 3.4;
 }
 
 .geo-angle {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent-alt) 58%, white);
+  stroke: var(--hero-angle);
   stroke-width: 2.4;
   stroke-dasharray: 2 6;
 }
 
 .geo-point-center {
-  fill: color-mix(in oklch, var(--accent) 76%, white);
+  fill: var(--hero-point-center);
 }
 
 .geo-point {
-  fill: color-mix(in oklch, var(--accent) 90%, white);
+  fill: var(--hero-point);
 }
 
 .geo-point-muted {
-  fill: color-mix(in oklch, var(--accent-alt) 80%, white);
-}
-
-.geo-label {
-  fill: color-mix(in oklch, var(--text) 88%, var(--accent));
-  font-size: 19px;
-  font-weight: 700;
-  letter-spacing: 0.012em;
-  paint-order: stroke;
-  stroke: color-mix(in oklch, black 75%, var(--panel));
-  stroke-width: 2px;
-}
-
-@keyframes formulaDrift {
-  0%,
-  100% {
-    opacity: 0.25;
-    transform: translateY(0px);
-  }
-  50% {
-    opacity: 0.45;
-    transform: translateY(-5px);
-  }
-}
-
-@keyframes logoDrift {
-  0%,
-  100% {
-    opacity: 0.07;
-    transform: rotate(0deg) scale(1);
-  }
-  50% {
-    opacity: 0.13;
-    transform: rotate(7deg) scale(1.03);
-  }
+  fill: var(--hero-point-muted);
 }
 
 @keyframes spinSlow {
@@ -2107,11 +2876,11 @@ button {
 @keyframes pulseFocus {
   0%,
   100% {
-    opacity: 0.62;
+    opacity: 0.46;
     transform: scale(1);
   }
   50% {
-    opacity: 0.9;
+    opacity: 0.74;
     transform: scale(1.04);
   }
 }
@@ -2145,12 +2914,13 @@ button {
 
   .hero-interactive {
     grid-template-columns: 1fr;
-    min-height: clamp(540px, calc(100vh - 8.3rem), 900px);
-    min-height: clamp(540px, calc(100svh - 8.3rem), 900px);
+    min-height: max(540px, 100vh);
+    min-height: max(540px, 100svh);
   }
 
   .hero-content {
     width: min(92%, 760px);
+    margin-inline-start: 0;
     justify-self: center;
     text-align: center;
     padding: clamp(3.1rem, 8vw, 4.5rem) 0 1.4rem;
@@ -2189,6 +2959,23 @@ button {
 
   .theorems-carousel-head {
     margin-bottom: clamp(1.2rem, 2.2vw, 1.6rem);
+  }
+
+  .ai-study-section {
+    grid-template-columns: 1fr;
+  }
+
+  .ai-study-copy {
+    gap: 1rem;
+  }
+
+  #ai-study-title {
+    max-width: 14ch;
+  }
+
+  .ai-chat-demo {
+    width: min(100%, 820px);
+    justify-self: center;
   }
 
   .pricing-head {
@@ -2255,14 +3042,19 @@ button {
     flex-wrap: wrap;
   }
 
+  .settings-dropdown {
+    right: 0;
+    width: min(15.2rem, calc(100vw - 1rem));
+  }
+
   .hero-interactive {
-    border-radius: 18px;
-    min-height: clamp(500px, calc(100vh - 10.2rem), 860px);
-    min-height: clamp(500px, calc(100svh - 10.2rem), 860px);
+    min-height: max(500px, 100vh);
+    min-height: max(500px, 100svh);
   }
 
   .hero-content {
     width: min(92%, 560px);
+    margin-inline-start: 0;
     padding: 3.3rem 0 1rem;
   }
 
@@ -2273,10 +3065,6 @@ button {
   .hero-btn {
     min-height: 2.65rem;
     padding: 0.5rem 1rem;
-  }
-
-  .geo-label {
-    font-size: 15px;
   }
 
   .core-features {
@@ -2299,6 +3087,73 @@ button {
     --theorem-text-scale: 1.14;
     border-radius: 16px;
     padding: 1rem;
+  }
+
+  .ai-study-section {
+    padding: 1rem;
+  }
+
+  #ai-study-title {
+    max-width: 100%;
+    font-size: clamp(1.38rem, 6vw, 2.08rem);
+  }
+
+  .ai-study-subtitle {
+    max-width: 100%;
+    font-size: 0.94rem;
+    line-height: 1.62;
+  }
+
+  .ai-chat-shell {
+    border-radius: 18px;
+    gap: 0.82rem;
+    min-height: 0;
+    height: clamp(29.6rem, 98vw, 35.8rem);
+    padding: 0.85rem;
+    padding-bottom: 0.46rem;
+  }
+
+  .ai-chat-header {
+    margin-bottom: 0;
+  }
+
+  .ai-chat-title {
+    font-size: 1.04rem;
+  }
+
+  .ai-chat-subtitle {
+    font-size: 0.8rem;
+  }
+
+  .ai-chat-transcript {
+    min-height: 0;
+    border-radius: 15px;
+  }
+
+  .ai-chat-composer {
+    padding: 0.56rem 0.68rem;
+    border-radius: 16px;
+  }
+
+  .ai-chat-draft {
+    min-height: 2.6rem;
+    margin-bottom: 0.38rem;
+    font-size: 0.98rem;
+  }
+
+  .ai-chat-disclaimer {
+    margin-top: 0.06rem;
+    font-size: 0.64rem;
+  }
+
+  .ai-chat-model-picker-trigger,
+  .ai-chat-model-menu-item {
+    font-size: 0.78rem;
+  }
+
+  .ai-chat-send {
+    width: 2.8rem;
+    height: 2.8rem;
   }
 
   .pricing-section {
@@ -2457,6 +3312,1330 @@ button {
   }
 }
 
+body.is-signup-open,
+body.is-auth-open {
+  overflow: hidden;
+  padding-right: var(--scrollbar-compensation);
+}
+
+.auth-page {
+  display: flex;
+  flex-direction: column;
+}
+
+.auth-page-main {
+  flex: 1;
+  padding: clamp(0.2rem, 1vw, 0.8rem) var(--page-gutter) clamp(2rem, 5vw, 3.2rem);
+}
+
+.auth-stage {
+  min-height: calc(100vh - 5.4rem);
+  min-height: calc(100svh - 5.4rem);
+  display: grid;
+  align-items: center;
+}
+
+.auth-page .signup-modal {
+  width: min(1040px, 100%);
+  min-height: min(680px, calc(100vh - 8rem));
+  min-height: min(680px, calc(100svh - 8rem));
+  margin: 0 auto;
+}
+
+.auth-back-link {
+  text-decoration: none;
+}
+
+.auth-back-link svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.settings-dropdown[hidden] {
+  display: none;
+}
+
+.settings-dropdown {
+  position: absolute;
+  top: calc(100% + 0.7rem);
+  right: 0;
+  width: min(15.2rem, calc(100vw - (var(--page-gutter) * 2)));
+  padding: 0.8rem 0.82rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in oklch, var(--accent) 18%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--panel) 92%, black 8%) 0%,
+      color-mix(in oklch, var(--chip) 86%, var(--panel) 14%) 100%
+    );
+  box-shadow:
+    0 16px 34px color-mix(in oklch, black 26%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 6%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.settings-panel-title {
+  margin: 0 0 0.65rem;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.settings-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.settings-section + .settings-section {
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid color-mix(in oklch, var(--accent) 14%, transparent);
+}
+
+.settings-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.settings-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.36rem;
+  min-width: 8.6rem;
+  padding: 0;
+}
+
+.settings-option {
+  min-height: 2.06rem;
+  padding: 0.42rem 0.62rem;
+  border: 1px solid color-mix(in oklch, var(--accent) 16%, transparent);
+  border-radius: 11px;
+  background: color-mix(in oklch, var(--chip) 72%, transparent);
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 220ms ease,
+    color 220ms ease,
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.settings-option:hover,
+.settings-option:focus-visible {
+  color: var(--text);
+  background: var(--chip-hover);
+  border-color: color-mix(in oklch, var(--accent) 28%, transparent);
+  outline: none;
+}
+
+.settings-option.is-selected,
+.settings-option[aria-pressed="true"] {
+  color: var(--text);
+  background: color-mix(in oklch, var(--accent) 22%, var(--chip));
+  border-color: color-mix(in oklch, var(--accent) 42%, transparent);
+  box-shadow:
+    0 8px 18px color-mix(in oklch, var(--accent) 12%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 10%, transparent);
+}
+
+.login-form-meta {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+
+.login-remember {
+  margin-top: 0;
+  font-size: 0.83rem;
+}
+
+.login-forgot-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: color-mix(in oklch, var(--auth-accent, var(--accent)) 86%, white);
+  font: inherit;
+  font-size: 0.83rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.login-forgot-link:hover,
+.login-forgot-link:focus-visible {
+  color: var(--signup-text-strong);
+  outline: none;
+}
+
+.contact-modal .signup-modal-intro {
+  max-width: 40ch;
+  white-space: pre-line;
+}
+
+.contact-form {
+  margin-top: clamp(1.4rem, 3vw, 1.9rem);
+}
+
+.contact-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.95rem;
+}
+
+.contact-form-grid > .signup-field {
+  min-width: 0;
+}
+
+.contact-select-wrap {
+  position: relative;
+  display: block;
+}
+
+.contact-select-native {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.9rem;
+  cursor: pointer;
+}
+
+.contact-select-native::-ms-expand {
+  display: none;
+}
+
+.contact-select-icon {
+  position: absolute;
+  top: 50%;
+  right: 0.88rem;
+  width: 1.38rem;
+  height: 1.38rem;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 0.78;
+  transform: translateY(-50%);
+  transition: opacity 220ms ease;
+}
+
+.contact-select-icon svg {
+  width: 1.24rem;
+  height: 1.24rem;
+  display: block;
+  transform-origin: center;
+  transition: transform 220ms cubic-bezier(0.25, 1, 0.5, 1), opacity 220ms ease;
+}
+
+.contact-select-icon path {
+  fill: none;
+  stroke: color-mix(in oklch, var(--signup-text-muted) 84%, var(--auth-accent) 16%);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.contact-select-wrap:hover .contact-select-icon,
+.contact-select-wrap:focus-within .contact-select-icon {
+  opacity: 1;
+}
+
+.contact-select-wrap.is-turning .contact-select-icon svg {
+  transform: rotate(180deg);
+}
+
+.contact-textarea {
+  min-height: 8.6rem;
+  padding-block: 0.8rem;
+  resize: vertical;
+}
+
+:root[data-theme="light"] .contact-select-icon path {
+  stroke: color-mix(in oklch, var(--text) 72%, var(--auth-accent) 28%);
+}
+
+.auth-overlay[hidden] {
+  display: none;
+}
+
+.auth-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--overlay-layer);
+  display: grid;
+  place-items: center;
+  padding: clamp(1rem, 4vw, 2.6rem);
+  padding-top: max(var(--auth-header-offset), clamp(1rem, 4vw, 2.6rem));
+  background: color-mix(in oklch, var(--bg) 72%, black 28%);
+  backdrop-filter: blur(10px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.auth-overlay.login-overlay {
+  background: color-mix(in oklch, var(--bg) 74%, oklch(0.15 0.03 236) 26%);
+}
+
+.auth-overlay.is-opening {
+  animation: signupOverlayIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-overlay.is-closing {
+  animation: signupOverlayOut 180ms cubic-bezier(0.4, 0, 1, 1) both;
+}
+
+.auth-overlay.is-switch-target {
+  z-index: 161;
+  background: transparent;
+  backdrop-filter: none;
+  animation: none;
+}
+
+.signup-modal {
+  --auth-accent: var(--accent);
+  --auth-accent-deep: var(--accent-deep);
+  --auth-accent-alt: var(--accent-alt);
+  --signup-shell: color-mix(in oklch, var(--panel) 90%, black 10%);
+  --signup-panel: color-mix(in oklch, var(--chip) 72%, var(--panel) 28%);
+  --signup-showcase: color-mix(in oklch, var(--panel) 78%, black 22%);
+  --signup-input-bg: color-mix(in oklch, var(--chip) 84%, black 16%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+  --signup-text-strong: color-mix(in oklch, white 92%, var(--auth-accent) 8%);
+  --signup-text-muted: color-mix(in oklch, white 70%, var(--auth-accent) 10%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 52%, var(--signup-input-bg) 48%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 58%, var(--signup-input-bg) 42%);
+  position: relative;
+  width: min(1000px, 100%);
+  min-height: min(630px, calc(100vh - 2.8rem));
+  display: grid;
+  grid-template-columns: minmax(0, 0.94fr) minmax(0, 1.06fr);
+  border-radius: 24px;
+  overflow: hidden;
+  border: 1px solid var(--signup-border);
+  background: var(--signup-shell);
+  box-shadow:
+    0 28px 70px color-mix(in oklch, black 36%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 5%, transparent);
+}
+
+.login-modal {
+  --auth-accent: oklch(0.76 0.08 238);
+  --auth-accent-deep: oklch(0.57 0.065 232);
+  --auth-accent-alt: oklch(0.81 0.045 92);
+  --signup-shell: color-mix(in oklch, oklch(0.12 0.018 244) 86%, black 14%);
+  --signup-panel: color-mix(in oklch, oklch(0.19 0.024 238) 72%, var(--signup-shell) 28%);
+  --signup-showcase: color-mix(in oklch, oklch(0.17 0.038 236) 72%, black 28%);
+  --signup-input-bg: color-mix(in oklch, oklch(0.18 0.02 238) 82%, black 18%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 18%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 30%, transparent);
+  --signup-text-strong: color-mix(in oklch, white 93%, var(--auth-accent) 7%);
+  --signup-text-muted: color-mix(in oklch, white 72%, var(--auth-accent) 9%);
+}
+
+.auth-overlay.is-opening .signup-modal {
+  animation: signupModalIn 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.auth-overlay.is-closing .signup-modal {
+  animation: signupModalOut 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+.auth-overlay.is-switch-target .signup-modal {
+  animation: none;
+}
+
+.signup-modal-showcase,
+.signup-modal-panel {
+  position: relative;
+  min-width: 0;
+}
+
+.signup-modal-showcase {
+  display: grid;
+  place-items: center;
+  padding: clamp(1.15rem, 3vw, 1.8rem);
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--auth-accent) 18%, transparent), transparent 30%),
+    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--auth-accent-alt) 10%, transparent), transparent 26%),
+    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--auth-accent-deep) 14%, transparent), transparent 34%),
+    linear-gradient(
+      165deg,
+      color-mix(in oklch, var(--chip) 50%, black 50%) 0%,
+      color-mix(in oklch, var(--signup-showcase) 90%, var(--chip) 10%) 42%,
+      color-mix(in oklch, var(--signup-showcase) 78%, var(--auth-accent-deep) 10%) 74%,
+      color-mix(in oklch, var(--signup-showcase) 70%, var(--auth-accent) 12%) 100%
+    );
+  overflow: hidden;
+}
+
+.signup-modal-geometry {
+  position: relative;
+  z-index: 1;
+  width: min(144%, 41rem);
+  height: auto;
+  transform-origin: center;
+  transform: translate3d(-4.95rem, 0.6rem, 0) rotate(-45deg);
+  opacity: 0.92;
+  filter: drop-shadow(0 16px 28px color-mix(in oklch, black 20%, transparent));
+}
+
+.signup-modal-geometry-circles circle {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.signup-modal-geometry-circles circle {
+  stroke: color-mix(in oklch, white 82%, var(--auth-accent) 18%);
+  stroke-width: 1.18;
+  opacity: 0.68;
+}
+
+.signup-modal-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.15rem, 2.8vw, 2rem);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--signup-panel) 94%, black 6%) 0%,
+      color-mix(in oklch, var(--signup-shell) 84%, var(--chip) 16%) 100%
+    );
+  color: var(--signup-text-strong);
+}
+
+.signup-modal-close {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in oklch, white 6%, transparent);
+  color: var(--signup-text-muted);
+  cursor: pointer;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    transform 220ms ease;
+}
+
+.signup-modal-close:hover,
+.signup-modal-close:focus-visible {
+  background: color-mix(in oklch, white 10%, transparent);
+  color: var(--signup-text-strong);
+  outline: none;
+}
+
+.signup-modal-close svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.signup-modal-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: clamp(5.8rem, 14vw, 7rem);
+  transform: translateY(-0.32rem);
+  margin-bottom: 0.52rem;
+}
+
+.signup-modal-badge img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.signup-modal-title {
+  margin: 0.08rem 0 0;
+  font-size: clamp(1.85rem, 2.9vw, 2.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  color: var(--signup-text-strong);
+}
+
+.signup-modal-intro {
+  margin: 0.6rem 0 0;
+  max-width: 32ch;
+  font-size: clamp(0.9rem, 0.98vw, 0.96rem);
+  line-height: 1.56;
+  color: var(--signup-text-muted);
+}
+
+.signup-form {
+  display: grid;
+  gap: 1rem;
+  margin-top: clamp(1.7rem, 3.4vw, 2.2rem);
+}
+
+.signup-field {
+  display: grid;
+  gap: 0.42rem;
+}
+
+.signup-field span {
+  color: var(--signup-text-strong);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.signup-consent {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.72rem;
+  margin-top: 0.1rem;
+  min-width: 0;
+  color: var(--signup-text-muted);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.signup-consent-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-block;
+  width: 1.02rem;
+  height: 1.02rem;
+  margin: 0.18rem 0 0;
+  border-radius: 0.28rem;
+  border: 1px solid var(--signup-border);
+  background: color-mix(in oklch, var(--signup-input-bg) 86%, white 14%);
+  cursor: pointer;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 0.72rem 0.72rem;
+  transition:
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.signup-consent-checkbox:checked {
+  border-color: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+  background-color: color-mix(in oklch, var(--auth-accent) 56%, var(--signup-input-bg) 44%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.4 6.7 11.4 12.6 4.8' fill='none' stroke='%230b2320' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.login-modal .signup-consent-checkbox:checked {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.5 8.4 6.7 11.4 12.6 4.8' fill='none' stroke='%2311263d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+.signup-consent-checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--auth-accent) 16%, transparent);
+}
+
+.signup-consent-checkbox[aria-invalid="true"] {
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--auth-accent-alt) 12%, transparent);
+}
+
+.signup-consent-copy {
+  min-width: 0;
+}
+
+.signup-consent-copy a {
+  color: color-mix(in oklch, var(--auth-accent) 86%, white);
+  text-decoration: none;
+}
+
+.signup-consent-copy a:hover,
+.signup-consent-copy a:focus-visible {
+  color: var(--signup-text-strong);
+  outline: none;
+}
+
+.signup-input {
+  width: 100%;
+  min-height: 3.05rem;
+  padding: 0.7rem 0.92rem;
+  border-radius: 0.86rem;
+  border: 1px solid var(--signup-border);
+  background: color-mix(in oklch, var(--signup-input-bg) 86%, white 14%);
+  color: var(--signup-text-strong);
+  font: inherit;
+  font-size: 0.94rem;
+  line-height: 1.4;
+  transition:
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    background-color 220ms ease;
+}
+
+.signup-input::placeholder {
+  color: color-mix(in oklch, var(--muted) 88%, white 12%);
+}
+
+.signup-input:focus-visible {
+  border-color: var(--signup-border-strong);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--auth-accent) 18%, transparent);
+  outline: none;
+}
+
+.signup-input[aria-invalid="true"] {
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 30%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--auth-accent-alt) 12%, transparent);
+}
+
+.signup-input[aria-invalid="true"]:focus-visible {
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 36%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--auth-accent-alt) 14%, transparent);
+}
+
+.signup-submit {
+  min-height: 3.15rem;
+  margin-top: 0.64rem;
+  border: 1px solid color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  border-radius: 0.88rem;
+  background: var(--auth-submit-bg);
+  color: var(--signup-text-strong);
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  transition:
+    transform 220ms ease,
+    background-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.signup-submit:hover,
+.signup-submit:focus-visible {
+  background: var(--auth-submit-bg-hover);
+  box-shadow: 0 12px 24px color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  outline: none;
+}
+
+.signup-form-status {
+  margin: 0.28rem 0 0;
+  padding: 0.78rem 0.92rem;
+  border: 1px solid transparent;
+  border-radius: 0.82rem;
+  background: color-mix(in oklch, var(--chip) 84%, black 16%);
+  color: color-mix(in oklch, var(--auth-accent) 82%, white);
+  font-size: 0.84rem;
+  line-height: 1.55;
+}
+
+.signup-form-status.is-success {
+  border-color: color-mix(in oklch, var(--auth-accent) 22%, transparent);
+  background: color-mix(in oklch, var(--chip-hover) 74%, var(--auth-accent) 26%);
+  color: color-mix(in oklch, white 92%, var(--auth-accent) 8%);
+}
+
+.signup-form-status.is-error {
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 26%, transparent);
+  background: color-mix(in oklch, var(--chip-hover) 78%, var(--auth-accent-alt) 22%);
+  color: color-mix(in oklch, white 90%, var(--auth-accent-alt) 10%);
+}
+
+.signup-modal-helper {
+  margin: 0.82rem 0 0;
+  color: var(--signup-text-muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.signup-modal-helper a {
+  margin-left: 0.18rem;
+  color: color-mix(in oklch, var(--auth-accent) 86%, white);
+  font-weight: 800;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.16em;
+}
+
+.signup-modal-helper a:hover,
+.signup-modal-helper a:focus-visible {
+  color: var(--signup-text-strong);
+  outline: none;
+}
+
+:root[data-theme="light"] body.is-scrolled .site-header,
+:root[data-theme="light"] body.is-auth-open .site-header {
+  background: color-mix(in oklch, var(--bg) 68%, transparent);
+  box-shadow: 0 10px 24px color-mix(in oklch, var(--accent) 5%, transparent);
+}
+
+:root[data-theme="light"] .brand img,
+:root[data-theme="light"] .site-footer-logo,
+:root[data-theme="light"] .signup-modal-badge img {
+  filter: brightness(0) saturate(100%) opacity(0.94);
+}
+
+:root[data-theme="light"] .hero-interactive {
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in oklch, white 72%, var(--panel) 28%) 0%,
+      color-mix(in oklch, var(--panel) 78%, var(--accent) 22%) 100%
+    );
+  box-shadow: none;
+}
+
+:root[data-theme="light"] .hero-interactive::before {
+  opacity: 0.1;
+}
+
+:root[data-theme="light"] .geo-focus {
+  opacity: 0.64;
+}
+
+:root[data-theme="light"] .geo-bg-ring {
+  opacity: 0.2;
+}
+
+:root[data-theme="light"] .geo-construct-ring {
+  opacity: 0.14;
+}
+
+:root[data-theme="light"] .geo-construct-line {
+  opacity: 0.16;
+}
+
+:root[data-theme="light"] .geo-lattice-circle {
+  opacity: 0.18;
+}
+
+:root[data-theme="light"] .geo-lattice-circle.fade-1 {
+  opacity: 0.12;
+}
+
+:root[data-theme="light"] .geo-lattice-circle.fade-2 {
+  opacity: 0.08;
+}
+
+:root[data-theme="light"] .geo-axis {
+  opacity: 0.16;
+}
+
+:root[data-theme="light"] .hero-kicker,
+:root[data-theme="light"] .core-kicker,
+:root[data-theme="light"] .theorems-carousel-kicker,
+:root[data-theme="light"] .ai-study-kicker,
+:root[data-theme="light"] .pricing-kicker,
+:root[data-theme="light"] .pricing-switch-label {
+  color: color-mix(in oklch, var(--accent-deep) 76%, var(--text) 24%);
+}
+
+:root[data-theme="light"] #hero-title,
+:root[data-theme="light"] #core-features-title,
+:root[data-theme="light"] #theorems-carousel-title,
+:root[data-theme="light"] #ai-study-title,
+:root[data-theme="light"] #pricing-title,
+:root[data-theme="light"] .callout-title,
+:root[data-theme="light"] .pricing-card h3,
+:root[data-theme="light"] .theorem-frame h3,
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title,
+:root[data-theme="light"] .site-footer-tagline,
+:root[data-theme="light"] .site-footer-column h2 {
+  color: color-mix(in oklch, var(--text) 92%, var(--accent) 8%);
+}
+
+:root[data-theme="light"] .hero-intro,
+:root[data-theme="light"] .core-feature-card p,
+:root[data-theme="light"] .theorem-frame p,
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-copy,
+:root[data-theme="light"] .ai-study-subtitle,
+:root[data-theme="light"] .pricing-intro,
+:root[data-theme="light"] .pricing-switch-note,
+:root[data-theme="light"] .pricing-card-subtitle,
+:root[data-theme="light"] .pricing-card-billing,
+:root[data-theme="light"] .pricing-card-price-unit,
+:root[data-theme="light"] .pricing-card-price-note,
+:root[data-theme="light"] .pricing-card-fit,
+:root[data-theme="light"] .pricing-card-note,
+:root[data-theme="light"] .pricing-feature-list li,
+:root[data-theme="light"] .site-footer-column a,
+:root[data-theme="light"] .site-footer-copy,
+:root[data-theme="light"] .site-footer-legal a {
+  color: color-mix(in oklch, var(--muted) 88%, var(--text) 12%);
+}
+
+:root[data-theme="light"] .hero-btn.secondary {
+  color: var(--text);
+  background: color-mix(in oklch, white 44%, var(--chip) 56%);
+}
+
+:root[data-theme="light"] .hero-btn.secondary:hover,
+:root[data-theme="light"] .hero-btn.secondary:focus-visible {
+  color: var(--text);
+  background: color-mix(in oklch, white 28%, var(--chip-hover) 72%);
+}
+
+:root[data-theme="light"] .core-features,
+:root[data-theme="light"] .theorems-carousel,
+:root[data-theme="light"] .pricing-section {
+  box-shadow: 0 26px 52px color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .core-features {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 76%, var(--panel) 24%) 0%,
+      color-mix(in oklch, white 56%, var(--chip) 44%) 100%
+    );
+}
+
+:root[data-theme="light"] .core-features::before {
+  background: color-mix(in oklch, var(--accent) 34%, transparent);
+}
+
+:root[data-theme="light"] .core-feature-card {
+  border-color: color-mix(in oklch, var(--accent) 14%, oklch(0.78 0.018 248 / 0.8));
+  background: color-mix(in oklch, white 70%, var(--panel) 30%);
+}
+
+:root[data-theme="light"] .core-feature-card:hover,
+:root[data-theme="light"] .core-feature-card:focus-within {
+  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
+  background: color-mix(in oklch, white 54%, var(--panel) 46%);
+}
+
+:root[data-theme="light"] .core-feature-card h3,
+:root[data-theme="light"] .pricing-card-price,
+:root[data-theme="light"] .pricing-card-feature-lead {
+  color: color-mix(in oklch, var(--text) 90%, var(--accent) 10%);
+}
+
+:root[data-theme="light"] .core-feature-chat-btn,
+:root[data-theme="light"] .theorem-nav-btn,
+:root[data-theme="light"] .pricing-card-cta {
+  border-color: color-mix(in oklch, var(--accent) 16%, transparent);
+  background: color-mix(in oklch, white 58%, var(--chip) 42%);
+  color: color-mix(in oklch, var(--text) 86%, var(--accent) 14%);
+}
+
+:root[data-theme="light"] .callout-btn-secondary {
+  border-color: color-mix(in oklch, var(--accent-alt) 26%, transparent);
+  background: color-mix(in oklch, white 70%, var(--accent-alt) 30%);
+  color: color-mix(in oklch, var(--text) 88%, var(--accent-alt) 12%);
+  box-shadow: 0 16px 30px color-mix(in oklch, var(--accent-alt) 10%, transparent);
+}
+
+:root[data-theme="light"] .core-feature-chat-btn:hover,
+:root[data-theme="light"] .core-feature-chat-btn:focus-visible,
+:root[data-theme="light"] .theorem-nav-btn:hover,
+:root[data-theme="light"] .theorem-nav-btn:focus-visible,
+:root[data-theme="light"] .pricing-card-cta:hover,
+:root[data-theme="light"] .pricing-card-cta:focus-visible {
+  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
+  background: color-mix(in oklch, white 40%, var(--chip-hover) 60%);
+}
+
+:root[data-theme="light"] .callout-btn-secondary:hover,
+:root[data-theme="light"] .callout-btn-secondary:focus-visible {
+  border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
+  background: color-mix(in oklch, white 58%, var(--accent-alt) 42%);
+}
+
+:root[data-theme="light"] .theorems-carousel {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 76%, var(--panel) 24%) 0%,
+      color-mix(in oklch, white 56%, var(--chip) 44%) 100%
+    );
+}
+
+:root[data-theme="light"] .theorem-frame {
+  border-color: color-mix(in oklch, var(--accent) 12%, transparent);
+  background:
+    radial-gradient(circle at 84% 14%, color-mix(in oklch, var(--accent-alt) 10%, transparent), transparent 34%),
+    radial-gradient(circle at 12% 100%, color-mix(in oklch, var(--accent) 10%, transparent), transparent 42%),
+    linear-gradient(
+      162deg,
+      color-mix(in oklch, white 84%, var(--chip) 16%) 0%,
+      color-mix(in oklch, white 62%, var(--panel) 38%) 100%
+    );
+}
+
+:root[data-theme="light"] .theorem-frame-no,
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title span:last-child {
+  color: color-mix(in oklch, var(--accent-deep) 70%, var(--text) 30%);
+}
+
+:root[data-theme="light"] .theorem-frame-cta {
+  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 70%, transparent),
+    inset 0 -18px 26px color-mix(in oklch, var(--accent) 6%, transparent);
+  background:
+    radial-gradient(circle at 88% 16%, color-mix(in oklch, var(--accent-alt) 16%, transparent), transparent 30%),
+    radial-gradient(circle at 10% 100%, color-mix(in oklch, var(--accent) 18%, transparent), transparent 44%),
+    linear-gradient(
+      154deg,
+      color-mix(in oklch, var(--accent) 14%, white 86%) 0%,
+      color-mix(in oklch, white 66%, var(--chip) 34%) 52%,
+      color-mix(in oklch, white 54%, var(--panel) 46%) 100%
+    );
+}
+
+:root[data-theme="light"] .theorem-frame-cta::after {
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 56%,
+      color-mix(in oklch, var(--accent) 10%, transparent) 64%,
+      transparent 74%
+    );
+}
+
+:root[data-theme="light"] .theorem-cta-btn {
+  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--accent) 16%, white 84%),
+      color-mix(in oklch, white 60%, var(--panel) 40%)
+    );
+  color: color-mix(in oklch, var(--text) 88%, var(--accent) 12%);
+}
+
+:root[data-theme="light"] .theorem-cta-btn:hover,
+:root[data-theme="light"] .theorem-cta-btn:focus-visible {
+  background: color-mix(in oklch, var(--accent) 20%, white 80%);
+  border-color: color-mix(in oklch, var(--accent) 30%, transparent);
+}
+
+:root[data-theme="light"] .theorem-cta-btn-alt {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--accent-alt) 18%, white 82%),
+      color-mix(in oklch, white 64%, var(--chip) 36%)
+    );
+}
+
+:root[data-theme="light"] .ai-study-section {
+  --ai-chat-surface: color-mix(in oklch, white 70%, var(--panel) 30%);
+  --ai-chat-surface-raised: color-mix(in oklch, white 74%, var(--chip) 26%);
+  --ai-chat-surface-deep: color-mix(in oklch, white 58%, var(--panel) 42%);
+  --ai-chat-border: color-mix(in oklch, var(--accent) 18%, oklch(0.74 0.02 248 / 0.82));
+  --ai-chat-border-strong: color-mix(in oklch, var(--accent-deep) 26%, var(--text) 12%);
+  --ai-chat-text-strong: color-mix(in oklch, var(--text) 94%, var(--accent) 6%);
+  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 80%, var(--text) 20%);
+  --ai-chat-assistant-bubble: color-mix(in oklch, white 76%, var(--panel) 24%);
+  --ai-chat-user-bubble: color-mix(in oklch, var(--accent) 28%, white 72%);
+  --ai-chat-user-text: color-mix(in oklch, var(--ink-dark) 96%, var(--accent) 4%);
+  --ai-chat-action: color-mix(in oklch, var(--accent) 38%, white 62%);
+  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 44%, white 56%);
+  --ai-chat-action-muted: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+:root[data-theme="light"] .ai-chat-model-menu {
+  box-shadow: 0 18px 34px color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+:root[data-theme="light"] .pricing-section {
+  background:
+    radial-gradient(circle at 82% 8%, color-mix(in oklch, var(--accent) 12%, transparent), transparent 26%),
+    radial-gradient(circle at 12% 100%, color-mix(in oklch, var(--accent-alt) 12%, transparent), transparent 34%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 80%, var(--panel) 20%) 0%,
+      color-mix(in oklch, white 60%, var(--chip) 40%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-view-toggle {
+  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 72%, var(--chip) 28%) 0%,
+      color-mix(in oklch, white 54%, var(--panel) 46%) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 80%, transparent),
+    0 12px 24px color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .pricing-view-btn {
+  color: color-mix(in oklch, var(--muted) 82%, var(--text) 18%);
+}
+
+:root[data-theme="light"] .pricing-view-btn:hover,
+:root[data-theme="light"] .pricing-view-btn:focus-visible {
+  color: color-mix(in oklch, var(--text) 88%, var(--accent) 12%);
+  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card {
+  border-color: color-mix(in oklch, var(--accent) 10%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 86%, var(--panel) 14%) 0%,
+      color-mix(in oklch, white 66%, var(--chip) 34%) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 78%, transparent),
+    0 24px 42px color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card-starter {
+  background:
+    radial-gradient(circle at 84% 14%, color-mix(in oklch, var(--accent-alt) 14%, transparent), transparent 32%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 88%, var(--panel) 12%) 0%,
+      color-mix(in oklch, white 72%, var(--chip) 28%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-card-pro {
+  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
+  background:
+    radial-gradient(circle at 82% 14%, color-mix(in oklch, var(--accent) 18%, transparent), transparent 34%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 82%, oklch(0.9 0.03 230) 18%) 0%,
+      color-mix(in oklch, white 60%, oklch(0.86 0.04 236) 40%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-card-premium,
+:root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card {
+  background:
+    radial-gradient(circle at 86% 12%, color-mix(in oklch, var(--accent-alt) 16%, transparent), transparent 30%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 86%, var(--panel) 14%) 0%,
+      color-mix(in oklch, white 64%, var(--accent-alt) 36%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-card-badge {
+  border-color: color-mix(in oklch, var(--accent) 16%, transparent);
+  background: color-mix(in oklch, var(--accent) 10%, white 90%);
+  color: color-mix(in oklch, var(--text) 86%, var(--accent) 14%);
+}
+
+:root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card-badge {
+  border-color: color-mix(in oklch, var(--accent-alt) 18%, transparent);
+  background: color-mix(in oklch, var(--accent-alt) 14%, white 86%);
+  color: color-mix(in oklch, var(--text) 84%, var(--accent-alt) 16%);
+}
+
+:root[data-theme="light"] .pricing-card-label,
+:root[data-theme="light"] .pricing-card-billing,
+:root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card h3 {
+  color: color-mix(in oklch, var(--accent-deep) 72%, var(--text) 28%);
+}
+
+:root[data-theme="light"] .pricing-card-divider,
+:root[data-theme="light"] .site-footer::before,
+:root[data-theme="light"] .site-footer-bottom {
+  border-color: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card-divider {
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card.is-featured .pricing-card-cta,
+:root[data-theme="light"] .callout-btn-primary {
+  color: var(--ink-dark);
+}
+
+:root[data-theme="light"] .callout-section {
+  background:
+    radial-gradient(circle at 18% 22%, color-mix(in oklch, var(--accent-alt) 14%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 82% 76%, color-mix(in oklch, var(--accent) 16%, transparent) 0%, transparent 38%),
+    linear-gradient(
+      160deg,
+      color-mix(in oklch, white 78%, var(--panel) 22%) 0%,
+      color-mix(in oklch, white 58%, var(--chip) 42%) 100%
+    );
+}
+
+:root[data-theme="light"] .callout-section::before {
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--accent) 28%, transparent), transparent);
+  opacity: 0.28;
+}
+
+:root[data-theme="light"] .callout-line:nth-child(2),
+:root[data-theme="light"] .callout-line:nth-child(4) {
+  color: color-mix(in oklch, var(--accent-deep) 76%, var(--text) 24%);
+}
+
+:root[data-theme="light"] .site-footer {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 80%, var(--bg) 20%) 0%,
+      color-mix(in oklch, white 60%, var(--panel) 40%) 100%
+    );
+}
+
+:root[data-theme="light"] .site-footer-column a:hover,
+:root[data-theme="light"] .site-footer-column a:focus-visible,
+:root[data-theme="light"] .site-footer-legal a:hover,
+:root[data-theme="light"] .site-footer-legal a:focus-visible {
+  color: color-mix(in oklch, var(--text) 90%, var(--accent) 10%);
+}
+
+:root[data-theme="light"] .settings-dropdown {
+  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 84%, var(--panel) 16%) 0%,
+      color-mix(in oklch, white 62%, var(--chip) 38%) 100%
+    );
+  box-shadow:
+    0 18px 34px color-mix(in oklch, var(--accent) 10%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 78%, transparent);
+}
+
+:root[data-theme="light"] .auth-overlay {
+  background: color-mix(in oklch, var(--bg) 82%, white 18%);
+}
+
+:root[data-theme="light"] .auth-overlay.login-overlay {
+  background: color-mix(in oklch, var(--bg) 76%, oklch(0.86 0.024 232) 24%);
+}
+
+:root[data-theme="light"] .signup-modal {
+  --signup-shell: color-mix(in oklch, white 82%, var(--panel) 18%);
+  --signup-panel: color-mix(in oklch, white 92%, var(--panel) 8%);
+  --signup-showcase: color-mix(in oklch, white 64%, oklch(0.88 0.02 190) 36%);
+  --signup-input-bg: color-mix(in oklch, white 96%, var(--chip) 4%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 16%, oklch(0.76 0.018 248 / 0.7));
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 24%, transparent);
+  --signup-text-strong: color-mix(in oklch, var(--text) 92%, var(--auth-accent) 8%);
+  --signup-text-muted: color-mix(in oklch, var(--muted) 86%, var(--auth-accent) 14%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 18%, white 82%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 24%, white 76%);
+  box-shadow:
+    0 28px 64px color-mix(in oklch, var(--accent) 10%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 80%, transparent);
+}
+
+:root[data-theme="light"] .login-modal {
+  --auth-accent: oklch(0.56 0.09 232);
+  --auth-accent-deep: oklch(0.46 0.075 228);
+  --auth-accent-alt: oklch(0.72 0.085 88);
+  --signup-shell: color-mix(in oklch, white 84%, oklch(0.9 0.02 236) 16%);
+  --signup-panel: color-mix(in oklch, white 92%, oklch(0.9 0.02 236) 8%);
+  --signup-showcase: color-mix(in oklch, white 66%, oklch(0.86 0.028 232) 34%);
+  --signup-input-bg: color-mix(in oklch, white 96%, oklch(0.88 0.014 236) 4%);
+}
+
+:root[data-theme="light"] .signup-modal-showcase {
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--auth-accent) 10%, transparent), transparent 30%),
+    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--auth-accent-alt) 8%, transparent), transparent 26%),
+    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--auth-accent-deep) 10%, transparent), transparent 34%),
+    linear-gradient(
+      165deg,
+      color-mix(in oklch, white 54%, var(--chip) 46%) 0%,
+      color-mix(in oklch, white 66%, var(--signup-showcase) 34%) 42%,
+      color-mix(in oklch, var(--signup-showcase) 82%, var(--auth-accent-deep) 18%) 74%,
+      color-mix(in oklch, var(--signup-showcase) 78%, var(--auth-accent) 22%) 100%
+    );
+}
+
+:root[data-theme="light"] .signup-modal-geometry {
+  opacity: 0.84;
+  filter: drop-shadow(0 14px 22px color-mix(in oklch, var(--accent) 8%, transparent));
+}
+
+:root[data-theme="light"] .signup-modal-geometry-circles circle {
+  stroke: color-mix(in oklch, var(--text) 58%, var(--auth-accent-deep) 42%);
+  opacity: 0.36;
+}
+
+:root[data-theme="light"] .signup-modal-panel {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 94%, var(--signup-panel) 6%) 0%,
+      color-mix(in oklch, white 84%, var(--signup-shell) 16%) 100%
+    );
+}
+
+:root[data-theme="light"] .signup-modal-close {
+  background: color-mix(in oklch, white 44%, var(--chip) 56%);
+}
+
+:root[data-theme="light"] .signup-modal-close:hover,
+:root[data-theme="light"] .signup-modal-close:focus-visible {
+  background: color-mix(in oklch, white 28%, var(--chip-hover) 72%);
+}
+
+:root[data-theme="light"] .signup-form-status {
+  background: color-mix(in oklch, white 88%, var(--chip) 12%);
+  color: color-mix(in oklch, var(--text) 84%, var(--auth-accent) 16%);
+}
+
+:root[data-theme="light"] .signup-form-status.is-success {
+  color: color-mix(in oklch, var(--text) 82%, var(--auth-accent) 18%);
+}
+
+:root[data-theme="light"] .signup-form-status.is-error {
+  color: color-mix(in oklch, var(--text) 86%, var(--auth-accent-alt) 14%);
+}
+
+@keyframes signupOverlayIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes signupOverlayOut {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes signupModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes signupModalOut {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(18px) scale(0.99);
+  }
+}
+
+@media (max-width: 980px) {
+  .auth-page .signup-modal {
+    min-height: auto;
+  }
+
+  .signup-modal {
+    min-height: auto;
+    grid-template-columns: 1fr;
+  }
+
+  .signup-modal-showcase {
+    min-height: 16.5rem;
+  }
+
+  .signup-modal-geometry {
+    width: min(118%, 26rem);
+    transform: translate3d(-4.3rem, 0.14rem, 0) rotate(-45deg);
+  }
+
+  .contact-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .auth-page-main {
+    padding-bottom: 1rem;
+  }
+
+  .auth-stage {
+    min-height: auto;
+  }
+
+  .auth-overlay {
+    padding: 0.8rem;
+    padding-top: max(var(--auth-header-offset), 0.8rem);
+  }
+
+  .signup-modal {
+    border-radius: 20px;
+  }
+
+  .signup-modal-showcase,
+  .signup-modal-panel {
+    padding: 1rem;
+  }
+
+  .signup-modal-showcase {
+    min-height: 13.8rem;
+  }
+
+  .login-form-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .signup-modal-geometry {
+    width: min(116%, 19.6rem);
+    transform: translate3d(-4.02rem, 0.04rem, 0) rotate(-45deg);
+  }
+
+  .signup-modal-close {
+    top: 1rem;
+    right: 1rem;
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  .signup-input,
+  .signup-submit {
+    min-height: 2.95rem;
+  }
+
+  .contact-textarea {
+    min-height: 7.4rem;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .scroll-title-reveal {
     opacity: 1;
@@ -2475,7 +4654,27 @@ button {
   }
 
   .theorem-cta-btn,
-  .theorem-cta-btn-icon {
+  .theorem-cta-btn-icon,
+  .ai-chat-glow,
+  .ai-chat-model-picker,
+  .ai-chat-model-picker-chevron,
+  .ai-chat-model-menu-item,
+  .ai-chat-icon-btn,
+  .ai-chat-send,
+  .account-nav .nav-link.setting-btn svg,
+  .contact-select-icon,
+  .contact-select-icon svg,
+  .signup-modal-close,
+  .signup-submit {
+    transition: none;
+  }
+
+  .auth-overlay,
+  .signup-modal {
+    animation: none;
+  }
+
+  .login-forgot-link {
     transition: none;
   }
 }
