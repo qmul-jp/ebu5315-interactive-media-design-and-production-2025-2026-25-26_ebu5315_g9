@@ -641,9 +641,15 @@
     );
   };
 
+  const syncHeaderScrollState = () => {
+    document.body.classList.toggle("is-scrolled", window.scrollY > 8);
+  };
+
   syncViewportMetrics();
+  syncHeaderScrollState();
   window.addEventListener("load", syncViewportMetrics, { once: true });
   window.addEventListener("resize", syncViewportMetrics);
+  window.addEventListener("scroll", syncHeaderScrollState, { passive: true });
 })();
 
 (() => {
