@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>CircleLab</title>
+    <script>
+      (() => {
+        try {
+          const theme = window.localStorage.getItem("circlelab-theme");
+          const language = window.localStorage.getItem("circlelab-language");
+          if (theme === "light" || theme === "solar") {
+            document.documentElement.dataset.theme = "light";
+          }
+          document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
+        } catch (error) {
+          document.documentElement.lang = "en";
+        }
+      })();
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -12,7 +26,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body data-title-key="document.home">
     <header class="site-header">
       <div class="nav-shell">
         <a class="brand" href="#" aria-label="Circle Geometry home">
@@ -21,23 +35,57 @@
 
         <nav class="primary-nav" aria-label="Primary">
           <ul>
-            <li><a class="nav-link is-active" href="#">Home</a></li>
-            <li><a class="nav-link" href="#">Game</a></li>
-            <li><a class="nav-link" href="#">Quiz</a></li>
+            <li><a class="nav-link is-active" href="#" data-i18n="nav.home">Home</a></li>
+            <li><a class="nav-link" href="#" data-i18n="nav.game">Game</a></li>
+            <li><a class="nav-link" href="#" data-i18n="nav.quiz">Quiz</a></li>
           </ul>
         </nav>
 
         <nav class="account-nav" aria-label="Account">
           <ul>
-            <li><a class="nav-link login-btn" href="#loginOverlay" data-open-login aria-controls="loginOverlay">Log in</a></li>
-            <li><a class="nav-link signup-btn" href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Sign up</a></li>
-            <li>
-              <a class="nav-link setting-btn" href="#" aria-label="Settings">
+            <li><a class="nav-link login-btn" href="#loginOverlay" data-open-login aria-controls="loginOverlay" data-i18n="nav.login">Log in</a></li>
+            <li><a class="nav-link signup-btn" href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="nav.signup">Sign up</a></li>
+            <li class="settings-shell" data-settings>
+              <button
+                class="nav-link setting-btn settings-toggle"
+                type="button"
+                data-settings-toggle
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="settingsMenu"
+                data-i18n-aria-label="nav.settings"
+                aria-label="Settings"
+              >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/>
                   <circle cx="12" cy="12" r="3"/>
                 </svg>
-              </a>
+              </button>
+              <div class="settings-dropdown" id="settingsMenu" data-settings-menu hidden>
+                <p class="settings-panel-title" data-i18n="settings.title">Preferences</p>
+                <section class="settings-section" aria-label="Language settings">
+                  <p class="settings-label" data-i18n="settings.language">Language</p>
+                  <div class="settings-options" role="group" aria-label="Language">
+                    <button class="settings-option" type="button" data-language-option="en">
+                      <span data-i18n="settings.language_en">English</span>
+                    </button>
+                    <button class="settings-option" type="button" data-language-option="zh">
+                      <span data-i18n="settings.language_zh">简体中文</span>
+                    </button>
+                  </div>
+                </section>
+                <section class="settings-section" aria-label="Theme settings">
+                  <p class="settings-label" data-i18n="settings.theme">Theme</p>
+                  <div class="settings-options" role="group" aria-label="Theme">
+                    <button class="settings-option" type="button" data-theme-option="dark">
+                      <span data-i18n="settings.theme_dark">Dark</span>
+                    </button>
+                    <button class="settings-option" type="button" data-theme-option="light">
+                      <span data-i18n="settings.theme_light">Light</span>
+                    </button>
+                  </div>
+                </section>
+              </div>
             </li>
           </ul>
         </nav>
@@ -47,14 +95,14 @@
     <main class="hero-section">
       <section class="hero-interactive" id="heroInteractive" aria-labelledby="hero-title">
         <div class="hero-content">
-          <p class="hero-kicker">CIRCLE LAB</p>
-          <h1 id="hero-title">Master Circle Geometry with Ease</h1>
-          <p class="hero-intro">
+          <p class="hero-kicker" data-i18n="hero.kicker">CIRCLE LAB</p>
+          <h1 id="hero-title" data-i18n="hero.title">Master Circle Geometry with Ease</h1>
+          <p class="hero-intro" data-i18n="hero.intro">
             Learn the key rules of circle geometry through clear explanations, interactive visuals, and simple practice.
           </p>
           <div class="hero-actions">
-            <a class="hero-btn primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Start Learning</a>
-            <a class="hero-btn secondary" href="#">Watch Demo</a>
+            <a class="hero-btn primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="hero.start">Start Learning</a>
+            <a class="hero-btn secondary" href="#" data-i18n="hero.demo">Watch Demo</a>
           </div>
         </div>
 
@@ -62,12 +110,12 @@
           <svg id="geo-svg" viewBox="0 0 1400 760" preserveAspectRatio="xMidYMid slice">
             <defs>
               <linearGradient id="panelGradient" x1="0%" x2="100%" y1="0%" y2="100%">
-                <stop offset="0%" stop-color="oklch(0.16 0.02 250)" />
-                <stop offset="100%" stop-color="oklch(0.1 0.01 250)" />
+                <stop class="hero-panel-stop-start" offset="0%" />
+                <stop class="hero-panel-stop-end" offset="100%" />
               </linearGradient>
               <radialGradient id="focusGradient" cx="50%" cy="50%" r="52%">
-                <stop offset="0%" stop-color="oklch(0.34 0.1 180 / 0.56)" />
-                <stop offset="100%" stop-color="oklch(0.34 0.1 180 / 0)" />
+                <stop class="hero-focus-stop-start" offset="0%" />
+                <stop class="hero-focus-stop-end" offset="100%" />
               </radialGradient>
               <filter id="softGlow" x="-40%" y="-40%" width="180%" height="180%">
                 <feGaussianBlur stdDeviation="7.5" />
@@ -715,7 +763,7 @@
             <span class="callout-line">Quizzes that inspire. Play that enlightens.</span>
           </h2>
           <div class="callout-actions">
-            <a class="callout-btn callout-btn-primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Start Learning</a>
+            <a class="callout-btn callout-btn-primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="hero.start">Start Learning</a>
             <a class="callout-btn callout-btn-secondary" href="#">Contact Us</a>
           </div>
         </div>
@@ -812,12 +860,12 @@
             <img src="logowhite.png" alt="" />
           </div>
 
-          <h2 class="signup-modal-title" id="signupModalTitle">Create account</h2>
-          <p class="signup-modal-intro">Welcome to your CircleLab workspace.</p>
+          <h2 class="signup-modal-title" id="signupModalTitle" data-i18n="signup.title">Create account</h2>
+          <p class="signup-modal-intro" data-i18n="signup.intro">Welcome to your CircleLab workspace.</p>
 
           <form class="signup-form" data-signup-form novalidate>
             <label class="signup-field" for="signupEmail">
-              <span>Email address</span>
+              <span data-i18n="field.email">Email address</span>
               <input
                 class="signup-input"
                 id="signupEmail"
@@ -825,13 +873,14 @@
                 type="email"
                 autocomplete="email"
                 aria-describedby="signupFormFeedback"
+                data-i18n-placeholder="field.email_placeholder"
                 placeholder="you@circlelab.com"
                 required
               />
             </label>
 
             <label class="signup-field" for="signupPassword">
-              <span>Password</span>
+              <span data-i18n="field.password">Password</span>
               <input
                 class="signup-input"
                 id="signupPassword"
@@ -840,6 +889,7 @@
                 autocomplete="new-password"
                 aria-describedby="signupFormFeedback"
                 minlength="8"
+                data-i18n-placeholder="signup.password_placeholder"
                 placeholder="At least 8 characters"
                 required
               />
@@ -855,12 +905,12 @@
                 required
               />
               <span class="signup-consent-copy">
-                I agree to the <a href="#">Terms and Conditions</a> and
-                <a href="#">Privacy Policy</a>
+                <span data-i18n="signup.consent_prefix">I agree to the </span><a href="#" data-i18n="signup.terms">Terms and Conditions</a><span data-i18n="signup.consent_join"> and </span>
+                <a href="#" data-i18n="signup.privacy">Privacy Policy</a>
               </span>
             </label>
 
-            <button class="signup-submit" type="submit">Create free account</button>
+            <button class="signup-submit" type="submit" data-i18n="signup.submit">Create free account</button>
             <p
               class="signup-form-status"
               id="signupFormFeedback"
@@ -873,7 +923,7 @@
           </form>
 
           <p class="signup-modal-helper">
-            Already have an account? <a href="#loginOverlay" data-open-login aria-controls="loginOverlay">Log in</a>
+            <span data-i18n="signup.helper_prefix">Already have an account?</span> <a href="#loginOverlay" data-open-login aria-controls="loginOverlay" data-i18n="nav.login">Log in</a>
           </p>
         </section>
       </div>
@@ -917,14 +967,14 @@
             <img src="logowhite.png" alt="" />
           </div>
 
-          <h2 class="signup-modal-title" id="loginModalTitle">Welcome back</h2>
-          <p class="signup-modal-intro">
+          <h2 class="signup-modal-title" id="loginModalTitle" data-i18n="login.title">Welcome back</h2>
+          <p class="signup-modal-intro" data-i18n="login.intro">
             Log in to continue your geometry journey.
           </p>
 
           <form class="signup-form" data-login-form novalidate>
             <label class="signup-field" for="loginEmail">
-              <span>Email address</span>
+              <span data-i18n="field.email">Email address</span>
               <input
                 class="signup-input"
                 id="loginEmail"
@@ -932,13 +982,14 @@
                 type="email"
                 autocomplete="email"
                 aria-describedby="loginFormFeedback"
+                data-i18n-placeholder="field.email_placeholder"
                 placeholder="you@circlelab.com"
                 required
               />
             </label>
 
             <label class="signup-field" for="loginPassword">
-              <span>Password</span>
+              <span data-i18n="field.password">Password</span>
               <input
                 class="signup-input"
                 id="loginPassword"
@@ -947,6 +998,7 @@
                 autocomplete="current-password"
                 aria-describedby="loginFormFeedback"
                 minlength="8"
+                data-i18n-placeholder="login.password_placeholder"
                 placeholder="Enter your password"
                 required
               />
@@ -960,15 +1012,15 @@
                   name="remember"
                   type="checkbox"
                 />
-                <span class="signup-consent-copy">Remember this browser</span>
+                <span class="signup-consent-copy" data-i18n="login.remember">Remember this browser</span>
               </label>
 
-              <button class="login-forgot-link" type="button" data-login-help>
+              <button class="login-forgot-link" type="button" data-login-help data-i18n="login.forgot">
                 Forgot password?
               </button>
             </div>
 
-            <button class="signup-submit" type="submit">Log in</button>
+            <button class="signup-submit" type="submit" data-i18n="nav.login">Log in</button>
             <p
               class="signup-form-status"
               id="loginFormFeedback"
@@ -981,12 +1033,13 @@
           </form>
 
           <p class="signup-modal-helper">
-            Need an account? <a href="#signupOverlay" data-open-signup aria-controls="signupOverlay">Create one here</a>
+            <span data-i18n="login.helper_prefix">Need an account?</span> <a href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="login.helper_link">Create one here</a>
           </p>
         </section>
       </div>
     </div>
 
+    <script src="preferences.js"></script>
     <script src="script.js"></script>
   </body>
 </html>

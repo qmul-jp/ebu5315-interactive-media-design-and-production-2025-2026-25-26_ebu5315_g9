@@ -694,6 +694,9 @@
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   const overlayCloseCleanupMap = new WeakMap();
   const overlayOpenCleanupMap = new WeakMap();
+  const preferences = window.CircleLabPreferences || null;
+  const t = (key, fallback = "") =>
+    preferences?.t ? preferences.t(key, fallback) : fallback;
 
   const getValidationMessage = (input, checkboxMessage) => {
     if (input.validity.valueMissing) {
@@ -708,7 +711,10 @@
       return input.validationMessage;
     }
 
-    return input.validationMessage || "Please check this field and try again.";
+    return (
+      input.validationMessage ||
+      t("feedback.generic", "Please check this field and try again.")
+    );
   };
 
   let lastTrigger = null;
@@ -778,7 +784,10 @@
     input.setAttribute("aria-invalid", "true");
     return getValidationMessage(
       input,
-      "Please agree to the Terms and Conditions and Privacy Policy."
+      t(
+        "feedback.signup_consent",
+        "Please agree to the Terms and Conditions and Privacy Policy."
+      )
     );
   };
 
@@ -1411,7 +1420,10 @@
   if (loginHelpButton instanceof HTMLButtonElement) {
     loginHelpButton.addEventListener("click", () => {
       showLoginFeedback(
-        "Password recovery is not connected yet in this static build. Hook this button to your email reset flow when the auth service is ready."
+        t(
+          "feedback.password_reset",
+          "Password recovery is not connected yet in this static build. Hook this button to your email reset flow when the auth service is ready."
+        )
       );
     });
   }

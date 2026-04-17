@@ -11,11 +11,74 @@
   --cta-dark: oklch(0.88 0.1 170);
   --cta-dark-hover: oklch(0.8 0.11 170);
   --ink-dark: oklch(0.2 0.02 190);
+  --hero-panel-start: oklch(0.16 0.02 250);
+  --hero-panel-end: oklch(0.1 0.01 250);
+  --hero-focus-core: oklch(0.34 0.1 180 / 0.56);
+  --hero-focus-edge: oklch(0.34 0.1 180 / 0);
+  --hero-grid-stroke: color-mix(in oklch, var(--accent) 24%, black);
+  --hero-bg-ring: color-mix(in oklch, var(--accent) 60%, black);
+  --hero-construct-ring: color-mix(in oklch, var(--accent) 52%, black);
+  --hero-construct-line: color-mix(in oklch, var(--accent) 45%, black);
+  --hero-lattice-circle: color-mix(in oklch, var(--accent) 68%, white);
+  --hero-lattice-emphasis: color-mix(in oklch, var(--accent-alt) 62%, var(--accent));
+  --hero-lattice-fade-1: color-mix(in oklch, var(--accent) 58%, white);
+  --hero-lattice-fade-2: color-mix(in oklch, var(--accent) 46%, white);
+  --hero-main-circle: color-mix(in oklch, var(--accent) 74%, white);
+  --hero-diameter: color-mix(in oklch, var(--accent) 58%, white);
+  --hero-axis: color-mix(in oklch, var(--accent) 68%, white);
+  --hero-axis-stroke: color-mix(in oklch, black 76%, var(--panel));
+  --hero-radius: color-mix(in oklch, var(--accent) 86%, white);
+  --hero-chord: color-mix(in oklch, var(--accent-alt) 74%, var(--accent));
+  --hero-tangent: color-mix(in oklch, var(--accent) 58%, white);
+  --hero-arc: color-mix(in oklch, var(--accent) 72%, var(--accent-alt));
+  --hero-angle: color-mix(in oklch, var(--accent-alt) 58%, white);
+  --hero-point-center: color-mix(in oklch, var(--accent) 76%, white);
+  --hero-point: color-mix(in oklch, var(--accent) 90%, white);
+  --hero-point-muted: color-mix(in oklch, var(--accent-alt) 80%, white);
   --page-gutter: clamp(1.6rem, 5vw, 4rem);
   --auth-header-offset: 6.1rem;
   --scrollbar-compensation: 0px;
   --header-layer: 200;
   --overlay-layer: 160;
+}
+
+:root[data-theme="light"] {
+  --bg: oklch(0.975 0.008 250);
+  --panel: oklch(0.945 0.012 248);
+  --text: oklch(0.255 0.025 246);
+  --muted: oklch(0.54 0.025 244);
+  --chip: oklch(0.91 0.014 248);
+  --chip-hover: oklch(0.875 0.02 246);
+  --accent: oklch(0.6 0.13 182);
+  --accent-deep: oklch(0.5 0.11 186);
+  --accent-alt: oklch(0.72 0.11 92);
+  --cta-dark: oklch(0.31 0.04 210);
+  --cta-dark-hover: oklch(0.25 0.04 210);
+  --ink-dark: oklch(0.22 0.026 236);
+  --hero-panel-start: oklch(0.975 0.01 248);
+  --hero-panel-end: oklch(0.91 0.03 220);
+  --hero-focus-core: oklch(0.84 0.06 192 / 0.42);
+  --hero-focus-edge: oklch(0.9 0.03 194 / 0);
+  --hero-grid-stroke: color-mix(in oklch, var(--accent) 14%, white);
+  --hero-bg-ring: color-mix(in oklch, var(--accent-deep) 32%, var(--text));
+  --hero-construct-ring: color-mix(in oklch, var(--accent) 24%, var(--text));
+  --hero-construct-line: color-mix(in oklch, var(--accent-deep) 18%, var(--text));
+  --hero-lattice-circle: color-mix(in oklch, var(--accent) 30%, var(--text));
+  --hero-lattice-emphasis: color-mix(in oklch, var(--accent-alt) 46%, var(--accent-deep));
+  --hero-lattice-fade-1: color-mix(in oklch, var(--accent) 24%, var(--text));
+  --hero-lattice-fade-2: color-mix(in oklch, var(--accent) 18%, var(--text));
+  --hero-main-circle: color-mix(in oklch, var(--accent-deep) 56%, var(--text));
+  --hero-diameter: color-mix(in oklch, var(--accent) 44%, var(--text));
+  --hero-axis: color-mix(in oklch, var(--accent) 22%, var(--text));
+  --hero-axis-stroke: color-mix(in oklch, white 78%, var(--panel));
+  --hero-radius: color-mix(in oklch, var(--accent) 62%, var(--text));
+  --hero-chord: color-mix(in oklch, var(--accent-alt) 46%, var(--accent-deep));
+  --hero-tangent: color-mix(in oklch, var(--accent) 34%, var(--text));
+  --hero-arc: color-mix(in oklch, var(--accent) 54%, var(--accent-alt));
+  --hero-angle: color-mix(in oklch, var(--accent-alt) 42%, var(--text));
+  --hero-point-center: color-mix(in oklch, var(--accent-deep) 62%, white);
+  --hero-point: color-mix(in oklch, var(--accent) 76%, white);
+  --hero-point-muted: color-mix(in oklch, var(--accent-alt) 58%, white);
 }
 
 * {
@@ -31,6 +94,14 @@ body {
   background:
     radial-gradient(circle at 15% -15%, oklch(0.2 0.04 170 / 0.42), transparent 42%),
     radial-gradient(circle at 87% -8%, oklch(0.18 0.03 210 / 0.35), transparent 38%),
+    var(--bg);
+}
+
+:root[data-theme="light"] body {
+  background:
+    radial-gradient(circle at 14% -14%, oklch(0.76 0.05 178 / 0.18), transparent 40%),
+    radial-gradient(circle at 88% -10%, oklch(0.84 0.05 92 / 0.18), transparent 34%),
+    linear-gradient(180deg, oklch(0.99 0.006 248) 0%, oklch(0.965 0.008 248) 100%),
     var(--bg);
 }
 
@@ -95,6 +166,10 @@ body.is-auth-switching .auth-overlay {
 
 .account-nav {
   justify-self: end;
+}
+
+.settings-shell {
+  position: relative;
 }
 
 .nav-link {
@@ -172,8 +247,16 @@ body.is-auth-switching .auth-overlay {
   border-radius: 10px;
   color: var(--muted);
   background: transparent;
+  box-shadow: none;
   flex: 0 0 auto;
   align-self: center;
+  cursor: pointer;
+}
+
+.account-nav .nav-link.setting-btn[aria-expanded="true"] {
+  color: var(--text);
+  background: transparent;
+  box-shadow: none;
 }
 
 .account-nav .nav-link.setting-btn svg {
@@ -181,10 +264,17 @@ body.is-auth-switching .auth-overlay {
   height: 1.28rem;
   display: block;
   fill: none;
+  filter: none;
   stroke: currentColor;
   stroke-width: 1.75;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transform-origin: 50% 50%;
+  transition: transform 280ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.account-nav .nav-link.setting-btn[aria-expanded="true"] svg {
+  transform: rotate(90deg);
 }
 
 .hero-section {
@@ -212,12 +302,12 @@ body.is-auth-switching .auth-overlay {
   background-image:
     linear-gradient(
       to right,
-      color-mix(in oklch, var(--accent) 26%, black) 1px,
+      var(--hero-grid-stroke) 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in oklch, var(--accent) 22%, black) 1px,
+      var(--hero-grid-stroke) 1px,
       transparent 1px
     );
   background-size: 54px 54px;
@@ -238,6 +328,22 @@ body.is-auth-switching .auth-overlay {
   width: 100%;
   height: 100%;
   display: block;
+}
+
+.hero-panel-stop-start {
+  stop-color: var(--hero-panel-start);
+}
+
+.hero-panel-stop-end {
+  stop-color: var(--hero-panel-end);
+}
+
+.hero-focus-stop-start {
+  stop-color: var(--hero-focus-core);
+}
+
+.hero-focus-stop-end {
+  stop-color: var(--hero-focus-edge);
 }
 
 #geo-bg-layers {
@@ -493,7 +599,6 @@ body.is-auth-switching .auth-overlay {
 .core-feature-chat-btn:focus-visible {
   border-color: color-mix(in oklch, white 42%, transparent);
   background: color-mix(in oklch, var(--accent-alt) 34%, var(--panel));
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -602,7 +707,6 @@ body.is-auth-switching .auth-overlay {
 .theorem-nav-btn:focus-visible {
   border-color: color-mix(in oklch, white 42%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 86%, var(--panel));
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -888,7 +992,6 @@ body.is-auth-switching .auth-overlay {
 .theorem-cta-btn:focus-visible {
   background: color-mix(in oklch, var(--accent) 48%, var(--panel));
   border-color: color-mix(in oklch, var(--accent) 44%, transparent);
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -1338,7 +1441,6 @@ body.is-auth-switching .auth-overlay {
 .ai-chat-icon-btn:hover,
 .ai-chat-icon-btn:focus-visible {
   color: var(--ai-chat-text-strong);
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -1530,7 +1632,6 @@ body.is-auth-switching .auth-overlay {
 .ai-chat-send:hover,
 .ai-chat-send:focus-visible {
   background: var(--ai-chat-action-hover);
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -2509,7 +2610,6 @@ body.is-auth-switching .auth-overlay {
 .pricing-card-cta:focus-visible {
   border-color: color-mix(in oklch, white 28%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 88%, var(--panel));
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -2555,7 +2655,7 @@ body.is-auth-switching .auth-overlay {
 
 .geo-bg-ring {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 60%, black);
+  stroke: var(--hero-bg-ring);
   stroke-width: 1.3;
   opacity: 0.32;
 }
@@ -2585,7 +2685,7 @@ body.is-auth-switching .auth-overlay {
 
 .geo-construct-ring {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 52%, black);
+  stroke: var(--hero-construct-ring);
   stroke-width: 1.1;
   opacity: 0.22;
 }
@@ -2614,7 +2714,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .geo-construct-line {
-  stroke: color-mix(in oklch, var(--accent) 45%, black);
+  stroke: var(--hero-construct-line);
   stroke-width: 1.05;
   opacity: 0.25;
 }
@@ -2625,7 +2725,7 @@ body.is-auth-switching .auth-overlay {
 
 .geo-lattice-circle {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 68%, white);
+  stroke: var(--hero-lattice-circle);
   stroke-width: 1.7;
   opacity: 0.22;
 }
@@ -2634,18 +2734,18 @@ body.is-auth-switching .auth-overlay {
 .geo-lattice-circle.l5,
 .geo-lattice-circle.l8,
 .geo-lattice-circle.l9 {
-  stroke: color-mix(in oklch, var(--accent-alt) 62%, var(--accent));
+  stroke: var(--hero-lattice-emphasis);
   opacity: 0.28;
 }
 
 .geo-lattice-circle.fade-1 {
-  stroke: color-mix(in oklch, var(--accent) 58%, white);
+  stroke: var(--hero-lattice-fade-1);
   stroke-width: 1.5;
   opacity: 0.15;
 }
 
 .geo-lattice-circle.fade-2 {
-  stroke: color-mix(in oklch, var(--accent) 46%, white);
+  stroke: var(--hero-lattice-fade-2);
   stroke-width: 1.35;
   opacity: 0.1;
 }
@@ -2657,19 +2757,19 @@ body.is-auth-switching .auth-overlay {
 
 .geo-circle {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent) 74%, white);
+  stroke: var(--hero-main-circle);
   stroke-width: 3.4;
 }
 
 .geo-diameter {
-  stroke: color-mix(in oklch, var(--accent) 58%, white);
+  stroke: var(--hero-diameter);
   stroke-width: 2.3;
   stroke-dasharray: none;
   opacity: 0.74;
 }
 
 .geo-axis {
-  stroke: color-mix(in oklch, var(--accent) 68%, white);
+  stroke: var(--hero-axis);
   stroke-width: 1.7;
   opacity: 0.22;
 }
@@ -2684,7 +2784,7 @@ body.is-auth-switching .auth-overlay {
   font-weight: 700;
   letter-spacing: 0.01em;
   paint-order: stroke;
-  stroke: color-mix(in oklch, black 76%, var(--panel));
+  stroke: var(--hero-axis-stroke);
   stroke-width: 2px;
 }
 
@@ -2697,42 +2797,42 @@ body.is-auth-switching .auth-overlay {
 }
 
 .geo-radius {
-  stroke: color-mix(in oklch, var(--accent) 86%, white);
+  stroke: var(--hero-radius);
   stroke-width: 3.2;
 }
 
 .geo-chord {
-  stroke: color-mix(in oklch, var(--accent-alt) 74%, var(--accent));
+  stroke: var(--hero-chord);
   stroke-width: 3;
 }
 
 .geo-tangent {
-  stroke: color-mix(in oklch, var(--accent) 58%, white);
+  stroke: var(--hero-tangent);
   stroke-width: 3;
 }
 
 .geo-arc {
-  stroke: color-mix(in oklch, var(--accent) 72%, var(--accent-alt));
+  stroke: var(--hero-arc);
   stroke-width: 3.4;
 }
 
 .geo-angle {
   fill: none;
-  stroke: color-mix(in oklch, var(--accent-alt) 58%, white);
+  stroke: var(--hero-angle);
   stroke-width: 2.4;
   stroke-dasharray: 2 6;
 }
 
 .geo-point-center {
-  fill: color-mix(in oklch, var(--accent) 76%, white);
+  fill: var(--hero-point-center);
 }
 
 .geo-point {
-  fill: color-mix(in oklch, var(--accent) 90%, white);
+  fill: var(--hero-point);
 }
 
 .geo-point-muted {
-  fill: color-mix(in oklch, var(--accent-alt) 80%, white);
+  fill: var(--hero-point-muted);
 }
 
 @keyframes spinSlow {
@@ -2919,6 +3019,11 @@ body.is-auth-switching .auth-overlay {
   .primary-nav ul {
     gap: 0.3rem;
     flex-wrap: wrap;
+  }
+
+  .settings-dropdown {
+    right: 0;
+    width: min(15.2rem, calc(100vw - 1rem));
   }
 
   .hero-interactive {
@@ -3230,6 +3335,106 @@ body.is-auth-open {
   stroke-linejoin: round;
 }
 
+.settings-dropdown[hidden] {
+  display: none;
+}
+
+.settings-dropdown {
+  position: absolute;
+  top: calc(100% + 0.7rem);
+  right: 0;
+  width: min(15.2rem, calc(100vw - (var(--page-gutter) * 2)));
+  padding: 0.8rem 0.82rem;
+  border-radius: 16px;
+  border: 1px solid color-mix(in oklch, var(--accent) 18%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--panel) 92%, black 8%) 0%,
+      color-mix(in oklch, var(--chip) 86%, var(--panel) 14%) 100%
+    );
+  box-shadow:
+    0 16px 34px color-mix(in oklch, black 26%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 6%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.settings-panel-title {
+  margin: 0 0 0.65rem;
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.settings-section {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.settings-section + .settings-section {
+  margin-top: 0.7rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid color-mix(in oklch, var(--accent) 14%, transparent);
+}
+
+.settings-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.73rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.settings-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.36rem;
+  min-width: 8.6rem;
+  padding: 0;
+}
+
+.settings-option {
+  min-height: 2.06rem;
+  padding: 0.42rem 0.62rem;
+  border: 1px solid color-mix(in oklch, var(--accent) 16%, transparent);
+  border-radius: 11px;
+  background: color-mix(in oklch, var(--chip) 72%, transparent);
+  color: var(--muted);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 220ms ease,
+    color 220ms ease,
+    background-color 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+.settings-option:hover,
+.settings-option:focus-visible {
+  color: var(--text);
+  background: var(--chip-hover);
+  border-color: color-mix(in oklch, var(--accent) 28%, transparent);
+  outline: none;
+}
+
+.settings-option.is-selected,
+.settings-option[aria-pressed="true"] {
+  color: var(--text);
+  background: color-mix(in oklch, var(--accent) 22%, var(--chip));
+  border-color: color-mix(in oklch, var(--accent) 42%, transparent);
+  box-shadow:
+    0 8px 18px color-mix(in oklch, var(--accent) 12%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 10%, transparent);
+}
+
 .login-form-meta {
   display: flex;
   align-items: flex-start;
@@ -3260,7 +3465,6 @@ body.is-auth-open {
 .login-forgot-link:hover,
 .login-forgot-link:focus-visible {
   color: var(--signup-text-strong);
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -3442,7 +3646,6 @@ body.is-auth-open {
 .signup-modal-close:focus-visible {
   background: color-mix(in oklch, white 10%, transparent);
   color: var(--signup-text-strong);
-  transform: translateY(-1px);
   outline: none;
 }
 
@@ -3628,7 +3831,6 @@ body.is-auth-open {
 .signup-submit:hover,
 .signup-submit:focus-visible {
   background: var(--auth-submit-bg-hover);
-  transform: translateY(-1px);
   box-shadow: 0 12px 24px color-mix(in oklch, var(--auth-accent) 16%, transparent);
   outline: none;
 }
@@ -3676,6 +3878,522 @@ body.is-auth-open {
 .signup-modal-helper a:focus-visible {
   color: var(--signup-text-strong);
   outline: none;
+}
+
+:root[data-theme="light"] body.is-auth-open .site-header {
+  background: color-mix(in oklch, var(--bg) 90%, white 10%);
+}
+
+:root[data-theme="light"] .brand img,
+:root[data-theme="light"] .site-footer-logo,
+:root[data-theme="light"] .signup-modal-badge img {
+  filter: brightness(0) saturate(100%) opacity(0.94);
+}
+
+:root[data-theme="light"] .hero-interactive {
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in oklch, white 72%, var(--panel) 28%) 0%,
+      color-mix(in oklch, var(--panel) 78%, var(--accent) 22%) 100%
+    );
+  box-shadow: 0 24px 48px color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .hero-interactive::before {
+  opacity: 0.1;
+}
+
+:root[data-theme="light"] .geo-focus {
+  opacity: 0.72;
+}
+
+:root[data-theme="light"] .geo-bg-ring {
+  opacity: 0.2;
+}
+
+:root[data-theme="light"] .geo-construct-ring {
+  opacity: 0.14;
+}
+
+:root[data-theme="light"] .geo-construct-line {
+  opacity: 0.16;
+}
+
+:root[data-theme="light"] .geo-lattice-circle {
+  opacity: 0.18;
+}
+
+:root[data-theme="light"] .geo-lattice-circle.fade-1 {
+  opacity: 0.12;
+}
+
+:root[data-theme="light"] .geo-lattice-circle.fade-2 {
+  opacity: 0.08;
+}
+
+:root[data-theme="light"] .geo-axis {
+  opacity: 0.16;
+}
+
+:root[data-theme="light"] .hero-kicker,
+:root[data-theme="light"] .core-kicker,
+:root[data-theme="light"] .theorems-carousel-kicker,
+:root[data-theme="light"] .ai-study-kicker,
+:root[data-theme="light"] .pricing-kicker,
+:root[data-theme="light"] .pricing-switch-label {
+  color: color-mix(in oklch, var(--accent-deep) 76%, var(--text) 24%);
+}
+
+:root[data-theme="light"] #hero-title,
+:root[data-theme="light"] #core-features-title,
+:root[data-theme="light"] #theorems-carousel-title,
+:root[data-theme="light"] #ai-study-title,
+:root[data-theme="light"] #pricing-title,
+:root[data-theme="light"] .callout-title,
+:root[data-theme="light"] .pricing-card h3,
+:root[data-theme="light"] .theorem-frame h3,
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title,
+:root[data-theme="light"] .site-footer-tagline,
+:root[data-theme="light"] .site-footer-column h2 {
+  color: color-mix(in oklch, var(--text) 92%, var(--accent) 8%);
+}
+
+:root[data-theme="light"] .hero-intro,
+:root[data-theme="light"] .core-feature-card p,
+:root[data-theme="light"] .theorem-frame p,
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-copy,
+:root[data-theme="light"] .ai-study-subtitle,
+:root[data-theme="light"] .pricing-intro,
+:root[data-theme="light"] .pricing-switch-note,
+:root[data-theme="light"] .pricing-card-subtitle,
+:root[data-theme="light"] .pricing-card-billing,
+:root[data-theme="light"] .pricing-card-price-unit,
+:root[data-theme="light"] .pricing-card-price-note,
+:root[data-theme="light"] .pricing-card-fit,
+:root[data-theme="light"] .pricing-card-note,
+:root[data-theme="light"] .pricing-feature-list li,
+:root[data-theme="light"] .site-footer-column a,
+:root[data-theme="light"] .site-footer-copy,
+:root[data-theme="light"] .site-footer-legal a {
+  color: color-mix(in oklch, var(--muted) 88%, var(--text) 12%);
+}
+
+:root[data-theme="light"] .hero-btn.secondary {
+  color: var(--text);
+  background: color-mix(in oklch, white 44%, var(--chip) 56%);
+}
+
+:root[data-theme="light"] .hero-btn.secondary:hover,
+:root[data-theme="light"] .hero-btn.secondary:focus-visible {
+  color: var(--text);
+  background: color-mix(in oklch, white 28%, var(--chip-hover) 72%);
+}
+
+:root[data-theme="light"] .core-features,
+:root[data-theme="light"] .theorems-carousel,
+:root[data-theme="light"] .pricing-section {
+  box-shadow: 0 26px 52px color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .core-features {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 76%, var(--panel) 24%) 0%,
+      color-mix(in oklch, white 56%, var(--chip) 44%) 100%
+    );
+}
+
+:root[data-theme="light"] .core-features::before {
+  background: color-mix(in oklch, var(--accent) 34%, transparent);
+}
+
+:root[data-theme="light"] .core-feature-card {
+  border-color: color-mix(in oklch, var(--accent) 14%, oklch(0.78 0.018 248 / 0.8));
+  background: color-mix(in oklch, white 70%, var(--panel) 30%);
+}
+
+:root[data-theme="light"] .core-feature-card:hover,
+:root[data-theme="light"] .core-feature-card:focus-within {
+  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
+  background: color-mix(in oklch, white 54%, var(--panel) 46%);
+}
+
+:root[data-theme="light"] .core-feature-card h3,
+:root[data-theme="light"] .pricing-card-price,
+:root[data-theme="light"] .pricing-card-feature-lead {
+  color: color-mix(in oklch, var(--text) 90%, var(--accent) 10%);
+}
+
+:root[data-theme="light"] .core-feature-chat-btn,
+:root[data-theme="light"] .theorem-nav-btn,
+:root[data-theme="light"] .pricing-card-cta,
+:root[data-theme="light"] .callout-btn-secondary {
+  border-color: color-mix(in oklch, var(--accent) 16%, transparent);
+  background: color-mix(in oklch, white 58%, var(--chip) 42%);
+  color: color-mix(in oklch, var(--text) 86%, var(--accent) 14%);
+}
+
+:root[data-theme="light"] .core-feature-chat-btn:hover,
+:root[data-theme="light"] .core-feature-chat-btn:focus-visible,
+:root[data-theme="light"] .theorem-nav-btn:hover,
+:root[data-theme="light"] .theorem-nav-btn:focus-visible,
+:root[data-theme="light"] .pricing-card-cta:hover,
+:root[data-theme="light"] .pricing-card-cta:focus-visible,
+:root[data-theme="light"] .callout-btn-secondary:hover,
+:root[data-theme="light"] .callout-btn-secondary:focus-visible {
+  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
+  background: color-mix(in oklch, white 40%, var(--chip-hover) 60%);
+}
+
+:root[data-theme="light"] .theorems-carousel {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 76%, var(--panel) 24%) 0%,
+      color-mix(in oklch, white 56%, var(--chip) 44%) 100%
+    );
+}
+
+:root[data-theme="light"] .theorem-frame {
+  border-color: color-mix(in oklch, var(--accent) 12%, transparent);
+  background:
+    radial-gradient(circle at 84% 14%, color-mix(in oklch, var(--accent-alt) 10%, transparent), transparent 34%),
+    radial-gradient(circle at 12% 100%, color-mix(in oklch, var(--accent) 10%, transparent), transparent 42%),
+    linear-gradient(
+      162deg,
+      color-mix(in oklch, white 84%, var(--chip) 16%) 0%,
+      color-mix(in oklch, white 62%, var(--panel) 38%) 100%
+    );
+}
+
+:root[data-theme="light"] .theorem-frame-no,
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title span:last-child {
+  color: color-mix(in oklch, var(--accent-deep) 70%, var(--text) 30%);
+}
+
+:root[data-theme="light"] .theorem-frame-cta {
+  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 70%, transparent),
+    inset 0 -18px 26px color-mix(in oklch, var(--accent) 6%, transparent);
+  background:
+    radial-gradient(circle at 88% 16%, color-mix(in oklch, var(--accent-alt) 16%, transparent), transparent 30%),
+    radial-gradient(circle at 10% 100%, color-mix(in oklch, var(--accent) 18%, transparent), transparent 44%),
+    linear-gradient(
+      154deg,
+      color-mix(in oklch, var(--accent) 14%, white 86%) 0%,
+      color-mix(in oklch, white 66%, var(--chip) 34%) 52%,
+      color-mix(in oklch, white 54%, var(--panel) 46%) 100%
+    );
+}
+
+:root[data-theme="light"] .theorem-frame-cta::after {
+  background:
+    linear-gradient(
+      135deg,
+      transparent 0 56%,
+      color-mix(in oklch, var(--accent) 10%, transparent) 64%,
+      transparent 74%
+    );
+}
+
+:root[data-theme="light"] .theorem-cta-btn {
+  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--accent) 16%, white 84%),
+      color-mix(in oklch, white 60%, var(--panel) 40%)
+    );
+  color: color-mix(in oklch, var(--text) 88%, var(--accent) 12%);
+}
+
+:root[data-theme="light"] .theorem-cta-btn:hover,
+:root[data-theme="light"] .theorem-cta-btn:focus-visible {
+  background: color-mix(in oklch, var(--accent) 20%, white 80%);
+  border-color: color-mix(in oklch, var(--accent) 30%, transparent);
+}
+
+:root[data-theme="light"] .theorem-cta-btn-alt {
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--accent-alt) 18%, white 82%),
+      color-mix(in oklch, white 64%, var(--chip) 36%)
+    );
+}
+
+:root[data-theme="light"] .ai-study-section {
+  --ai-chat-surface: color-mix(in oklch, white 74%, var(--panel) 26%);
+  --ai-chat-surface-raised: color-mix(in oklch, white 72%, var(--chip) 28%);
+  --ai-chat-surface-deep: color-mix(in oklch, white 62%, var(--panel) 38%);
+  --ai-chat-border: color-mix(in oklch, var(--accent) 14%, oklch(0.78 0.018 248 / 0.7));
+  --ai-chat-border-strong: color-mix(in oklch, var(--accent) 22%, transparent);
+  --ai-chat-text-strong: color-mix(in oklch, var(--text) 92%, var(--accent) 8%);
+  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 86%, var(--text) 14%);
+  --ai-chat-assistant-bubble: color-mix(in oklch, white 70%, var(--panel) 30%);
+  --ai-chat-user-bubble: color-mix(in oklch, var(--accent) 22%, white 78%);
+  --ai-chat-user-text: color-mix(in oklch, var(--ink-dark) 92%, var(--accent) 8%);
+  --ai-chat-action: color-mix(in oklch, var(--accent) 18%, white 82%);
+  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 24%, white 76%);
+  --ai-chat-action-muted: color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .ai-chat-model-menu {
+  box-shadow: 0 18px 34px color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+:root[data-theme="light"] .pricing-section {
+  background:
+    radial-gradient(circle at 82% 8%, color-mix(in oklch, var(--accent) 12%, transparent), transparent 26%),
+    radial-gradient(circle at 12% 100%, color-mix(in oklch, var(--accent-alt) 12%, transparent), transparent 34%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 80%, var(--panel) 20%) 0%,
+      color-mix(in oklch, white 60%, var(--chip) 40%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-view-toggle {
+  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 72%, var(--chip) 28%) 0%,
+      color-mix(in oklch, white 54%, var(--panel) 46%) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 80%, transparent),
+    0 12px 24px color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .pricing-view-btn {
+  color: color-mix(in oklch, var(--muted) 82%, var(--text) 18%);
+}
+
+:root[data-theme="light"] .pricing-view-btn:hover,
+:root[data-theme="light"] .pricing-view-btn:focus-visible {
+  color: color-mix(in oklch, var(--text) 88%, var(--accent) 12%);
+  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card {
+  border-color: color-mix(in oklch, var(--accent) 10%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 86%, var(--panel) 14%) 0%,
+      color-mix(in oklch, white 66%, var(--chip) 34%) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, white 78%, transparent),
+    0 24px 42px color-mix(in oklch, var(--accent) 8%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card-starter {
+  background:
+    radial-gradient(circle at 84% 14%, color-mix(in oklch, var(--accent-alt) 14%, transparent), transparent 32%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 88%, var(--panel) 12%) 0%,
+      color-mix(in oklch, white 72%, var(--chip) 28%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-card-pro {
+  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
+  background:
+    radial-gradient(circle at 82% 14%, color-mix(in oklch, var(--accent) 18%, transparent), transparent 34%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 82%, oklch(0.9 0.03 230) 18%) 0%,
+      color-mix(in oklch, white 60%, oklch(0.86 0.04 236) 40%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-card-premium,
+:root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card {
+  background:
+    radial-gradient(circle at 86% 12%, color-mix(in oklch, var(--accent-alt) 16%, transparent), transparent 30%),
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 86%, var(--panel) 14%) 0%,
+      color-mix(in oklch, white 64%, var(--accent-alt) 36%) 100%
+    );
+}
+
+:root[data-theme="light"] .pricing-card-badge {
+  border-color: color-mix(in oklch, var(--accent) 16%, transparent);
+  background: color-mix(in oklch, var(--accent) 10%, white 90%);
+  color: color-mix(in oklch, var(--text) 86%, var(--accent) 14%);
+}
+
+:root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card-badge {
+  border-color: color-mix(in oklch, var(--accent-alt) 18%, transparent);
+  background: color-mix(in oklch, var(--accent-alt) 14%, white 86%);
+  color: color-mix(in oklch, var(--text) 84%, var(--accent-alt) 16%);
+}
+
+:root[data-theme="light"] .pricing-card-label,
+:root[data-theme="light"] .pricing-card-billing,
+:root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card h3 {
+  color: color-mix(in oklch, var(--accent-deep) 72%, var(--text) 28%);
+}
+
+:root[data-theme="light"] .pricing-card-divider,
+:root[data-theme="light"] .site-footer::before,
+:root[data-theme="light"] .site-footer-bottom {
+  border-color: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card-divider {
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
+}
+
+:root[data-theme="light"] .pricing-card.is-featured .pricing-card-cta,
+:root[data-theme="light"] .callout-btn-primary {
+  color: var(--ink-dark);
+}
+
+:root[data-theme="light"] .callout-section {
+  background:
+    radial-gradient(circle at 18% 22%, color-mix(in oklch, var(--accent-alt) 14%, transparent) 0%, transparent 34%),
+    radial-gradient(circle at 82% 76%, color-mix(in oklch, var(--accent) 16%, transparent) 0%, transparent 38%),
+    linear-gradient(
+      160deg,
+      color-mix(in oklch, white 78%, var(--panel) 22%) 0%,
+      color-mix(in oklch, white 58%, var(--chip) 42%) 100%
+    );
+}
+
+:root[data-theme="light"] .callout-section::before {
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--accent) 28%, transparent), transparent);
+  opacity: 0.28;
+}
+
+:root[data-theme="light"] .callout-line:nth-child(2),
+:root[data-theme="light"] .callout-line:nth-child(4) {
+  color: color-mix(in oklch, var(--accent-deep) 76%, var(--text) 24%);
+}
+
+:root[data-theme="light"] .site-footer {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 80%, var(--bg) 20%) 0%,
+      color-mix(in oklch, white 60%, var(--panel) 40%) 100%
+    );
+}
+
+:root[data-theme="light"] .site-footer-column a:hover,
+:root[data-theme="light"] .site-footer-column a:focus-visible,
+:root[data-theme="light"] .site-footer-legal a:hover,
+:root[data-theme="light"] .site-footer-legal a:focus-visible {
+  color: color-mix(in oklch, var(--text) 90%, var(--accent) 10%);
+}
+
+:root[data-theme="light"] .settings-dropdown {
+  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 84%, var(--panel) 16%) 0%,
+      color-mix(in oklch, white 62%, var(--chip) 38%) 100%
+    );
+  box-shadow:
+    0 18px 34px color-mix(in oklch, var(--accent) 10%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 78%, transparent);
+}
+
+:root[data-theme="light"] .auth-overlay {
+  background: color-mix(in oklch, var(--bg) 82%, white 18%);
+}
+
+:root[data-theme="light"] .auth-overlay.login-overlay {
+  background: color-mix(in oklch, var(--bg) 76%, oklch(0.86 0.024 232) 24%);
+}
+
+:root[data-theme="light"] .signup-modal {
+  --signup-shell: color-mix(in oklch, white 82%, var(--panel) 18%);
+  --signup-panel: color-mix(in oklch, white 92%, var(--panel) 8%);
+  --signup-showcase: color-mix(in oklch, white 64%, oklch(0.88 0.02 190) 36%);
+  --signup-input-bg: color-mix(in oklch, white 96%, var(--chip) 4%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 16%, oklch(0.76 0.018 248 / 0.7));
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 24%, transparent);
+  --signup-text-strong: color-mix(in oklch, var(--text) 92%, var(--auth-accent) 8%);
+  --signup-text-muted: color-mix(in oklch, var(--muted) 86%, var(--auth-accent) 14%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 18%, white 82%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 24%, white 76%);
+  box-shadow:
+    0 28px 64px color-mix(in oklch, var(--accent) 10%, transparent),
+    inset 0 1px 0 color-mix(in oklch, white 80%, transparent);
+}
+
+:root[data-theme="light"] .login-modal {
+  --auth-accent: oklch(0.56 0.09 232);
+  --auth-accent-deep: oklch(0.46 0.075 228);
+  --auth-accent-alt: oklch(0.72 0.085 88);
+  --signup-shell: color-mix(in oklch, white 84%, oklch(0.9 0.02 236) 16%);
+  --signup-panel: color-mix(in oklch, white 92%, oklch(0.9 0.02 236) 8%);
+  --signup-showcase: color-mix(in oklch, white 66%, oklch(0.86 0.028 232) 34%);
+  --signup-input-bg: color-mix(in oklch, white 96%, oklch(0.88 0.014 236) 4%);
+}
+
+:root[data-theme="light"] .signup-modal-showcase {
+  background:
+    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--auth-accent) 10%, transparent), transparent 30%),
+    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--auth-accent-alt) 8%, transparent), transparent 26%),
+    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--auth-accent-deep) 10%, transparent), transparent 34%),
+    linear-gradient(
+      165deg,
+      color-mix(in oklch, white 54%, var(--chip) 46%) 0%,
+      color-mix(in oklch, white 66%, var(--signup-showcase) 34%) 42%,
+      color-mix(in oklch, var(--signup-showcase) 82%, var(--auth-accent-deep) 18%) 74%,
+      color-mix(in oklch, var(--signup-showcase) 78%, var(--auth-accent) 22%) 100%
+    );
+}
+
+:root[data-theme="light"] .signup-modal-geometry {
+  opacity: 0.84;
+  filter: drop-shadow(0 14px 22px color-mix(in oklch, var(--accent) 8%, transparent));
+}
+
+:root[data-theme="light"] .signup-modal-geometry-circles circle {
+  stroke: color-mix(in oklch, var(--text) 58%, var(--auth-accent-deep) 42%);
+  opacity: 0.36;
+}
+
+:root[data-theme="light"] .signup-modal-panel {
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, white 94%, var(--signup-panel) 6%) 0%,
+      color-mix(in oklch, white 84%, var(--signup-shell) 16%) 100%
+    );
+}
+
+:root[data-theme="light"] .signup-modal-close {
+  background: color-mix(in oklch, white 44%, var(--chip) 56%);
+}
+
+:root[data-theme="light"] .signup-modal-close:hover,
+:root[data-theme="light"] .signup-modal-close:focus-visible {
+  background: color-mix(in oklch, white 28%, var(--chip-hover) 72%);
+}
+
+:root[data-theme="light"] .signup-form-status {
+  background: color-mix(in oklch, white 88%, var(--chip) 12%);
+  color: color-mix(in oklch, var(--text) 84%, var(--auth-accent) 16%);
+}
+
+:root[data-theme="light"] .signup-form-status.is-success {
+  color: color-mix(in oklch, var(--text) 82%, var(--auth-accent) 18%);
+}
+
+:root[data-theme="light"] .signup-form-status.is-error {
+  color: color-mix(in oklch, var(--text) 86%, var(--auth-accent-alt) 14%);
 }
 
 @keyframes signupOverlayIn {
@@ -3818,6 +4536,7 @@ body.is-auth-open {
   .ai-chat-model-menu-item,
   .ai-chat-icon-btn,
   .ai-chat-send,
+  .account-nav .nav-link.setting-btn svg,
   .signup-modal-close,
   .signup-submit {
     transition: none;

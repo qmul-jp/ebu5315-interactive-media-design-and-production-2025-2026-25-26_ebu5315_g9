@@ -1,4 +1,7 @@
 (() => {
+  const preferences = window.CircleLabPreferences || null;
+  const t = (key, fallback = "") =>
+    preferences?.t ? preferences.t(key, fallback) : fallback;
   const form = document.querySelector("[data-login-form]");
   if (!(form instanceof HTMLFormElement)) {
     return;
@@ -45,7 +48,10 @@
     }
 
     input.setAttribute("aria-invalid", "true");
-    return input.validationMessage || "Please check this field and try again.";
+    return (
+      input.validationMessage ||
+      t("feedback.generic", "Please check this field and try again.")
+    );
   };
 
   form.addEventListener("submit", (event) => {
@@ -62,7 +68,10 @@
     }
 
     showFeedback(
-      "Login demo complete. This static page validates in the browser and is ready to connect to a real auth service.",
+      t(
+        "feedback.login_success",
+        "Login demo complete. This static page validates in the browser and is ready to connect to a real auth service."
+      ),
       "success"
     );
   });
@@ -79,7 +88,10 @@
   if (helpButton instanceof HTMLButtonElement) {
     helpButton.addEventListener("click", () => {
       showFeedback(
-        "Password recovery is not connected yet in this static build. Hook this button to your email reset flow when the auth service is ready."
+        t(
+          "feedback.password_reset",
+          "Password recovery is not connected yet in this static build. Hook this button to your email reset flow when the auth service is ready."
+        )
       );
     });
   }
