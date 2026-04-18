@@ -765,7 +765,7 @@ with Ease</h1>
           </h2>
           <div class="callout-actions">
             <a class="callout-btn callout-btn-primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="hero.start">Start Learning</a>
-            <a class="callout-btn callout-btn-secondary" href="contact.html">Get in Touch</a>
+            <a class="callout-btn callout-btn-secondary" href="#contactOverlay" data-open-contact aria-controls="contactOverlay">Get in Touch</a>
           </div>
         </div>
       </section>
@@ -796,7 +796,7 @@ with Ease</h1>
             <div class="site-footer-column">
               <h2>Support</h2>
               <ul>
-                <li><a href="contact.html">Contact Us</a></li>
+                <li><a href="#contactOverlay" data-open-contact aria-controls="contactOverlay">Contact Us</a></li>
                 <li><a href="#">FAQs</a></li>
                 <li><a href="#">Feedback</a></li>
               </ul>
@@ -1035,6 +1035,142 @@ with Ease</h1>
 
           <p class="signup-modal-helper">
             <span data-i18n="login.helper_prefix">Need an account?</span> <a href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="login.helper_link">Create one here</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+    <div class="signup-overlay auth-overlay login-overlay contact-overlay" id="contactOverlay" data-contact-overlay hidden>
+      <div class="signup-modal login-modal contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+        <div class="signup-modal-showcase" aria-hidden="true">
+          <svg class="signup-modal-geometry" viewBox="146 108 540 540" role="presentation" focusable="false">
+            <g class="signup-modal-geometry-circles">
+              <circle cx="366" cy="432" r="16" />
+              <circle cx="371" cy="440" r="18" />
+              <circle cx="373" cy="451" r="21" />
+              <circle cx="371" cy="463" r="24" />
+              <circle cx="364" cy="475" r="28" />
+              <circle cx="351" cy="483" r="32" />
+              <circle cx="335" cy="488" r="37" />
+              <circle cx="315" cy="486" r="43" />
+              <circle cx="296" cy="476" r="50" />
+              <circle cx="281" cy="457" r="57" />
+              <circle cx="272" cy="431" r="66" />
+              <circle cx="274" cy="401" r="76" />
+              <circle cx="289" cy="369" r="87" />
+              <circle cx="318" cy="341" r="101" />
+              <circle cx="361" cy="325" r="116" />
+              <circle cx="412" cy="325" r="134" />
+              <circle cx="467" cy="348" r="154" />
+            </g>
+          </svg>
+        </div>
+
+        <section class="signup-modal-panel">
+          <button class="signup-modal-close" type="button" data-contact-close aria-label="Close contact form">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6 18 18" />
+              <path d="M18 6 6 18" />
+            </svg>
+          </button>
+
+          <div class="signup-modal-badge" aria-hidden="true">
+            <img src="logowhite.png" alt="" />
+          </div>
+
+          <h2 class="signup-modal-title" id="contactModalTitle" data-i18n="contact.title">Get in touch</h2>
+          <p class="signup-modal-intro" data-i18n="contact.intro">
+            We'd love to hear from you.
+Share your questions, ideas, or feedback anytime.
+          </p>
+
+          <form class="signup-form contact-form" data-contact-form novalidate>
+            <div class="contact-form-grid">
+              <label class="signup-field" for="contactName">
+                <span data-i18n="contact.name">Your name</span>
+                <input
+                  class="signup-input"
+                  id="contactName"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  aria-describedby="contactFormFeedback"
+                  data-i18n-placeholder="contact.name_placeholder"
+                  placeholder="What should we call you?"
+                  required
+                />
+              </label>
+
+              <label class="signup-field" for="contactEmail">
+                <span data-i18n="field.email">Email address</span>
+                <input
+                  class="signup-input"
+                  id="contactEmail"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  aria-describedby="contactFormFeedback"
+                  data-i18n-placeholder="field.email_placeholder"
+                  placeholder="you@circlelab.com"
+                  required
+                />
+              </label>
+            </div>
+
+            <label class="signup-field" for="contactTopic">
+              <span data-i18n="contact.topic">Topic</span>
+              <span class="contact-select-wrap">
+                <select
+                  class="signup-input contact-select-native"
+                  id="contactTopic"
+                  name="topic"
+                  aria-describedby="contactFormFeedback"
+                  required
+                >
+                  <option value="" selected disabled data-i18n="contact.topic_placeholder">Choose a topic</option>
+                  <option value="learning" data-i18n="contact.topic_learning">Learning support</option>
+                  <option value="feedback" data-i18n="contact.topic_feedback">Product feedback</option>
+                  <option value="bug" data-i18n="contact.topic_bug">Bug report</option>
+                  <option value="school" data-i18n="contact.topic_school">School or partnership</option>
+                </select>
+                <span class="contact-select-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" focusable="false">
+                    <path d="M7 10.5 12 15.5l5-5" />
+                  </svg>
+                </span>
+              </span>
+            </label>
+
+            <label class="signup-field" for="contactMessage">
+              <span data-i18n="contact.message">Message</span>
+              <textarea
+                class="signup-input contact-textarea"
+                id="contactMessage"
+                name="message"
+                aria-describedby="contactFormFeedback"
+                data-i18n-placeholder="contact.message_placeholder"
+                placeholder="Let us know how we can help."
+                rows="6"
+                minlength="24"
+                required
+              ></textarea>
+            </label>
+
+            <button class="signup-submit" type="submit" data-i18n="contact.submit">Send message</button>
+            <p
+              class="signup-form-status"
+              id="contactFormFeedback"
+              data-contact-feedback
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              hidden
+            ></p>
+          </form>
+
+          <p class="signup-modal-helper">
+            <span data-i18n="contact.helper_prefix">Need quick help instead?</span>
+            <a href="#ai-study-title" data-i18n="contact.helper_link">Try the ArcMind</a>
           </p>
         </section>
       </div>

@@ -2,238 +2,29 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="refresh" content="0; url=homepage.html#contactOverlay" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CircleLab | Get in Touch</title>
-    <script>
-      (() => {
-        try {
-          const theme = window.localStorage.getItem("circlelab-theme");
-          const language = window.localStorage.getItem("circlelab-language");
-          if (theme === "light" || theme === "solar") {
-            document.documentElement.dataset.theme = "light";
-          }
-          document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
-        } catch (error) {
-          document.documentElement.lang = "en";
-        }
-      })();
-    </script>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
-      rel="stylesheet"
-    />
+    <title>CircleLab | Redirecting</title>
     <link rel="stylesheet" href="styles.css" />
+    <script>
+      window.location.replace("homepage.html#contactOverlay");
+    </script>
   </head>
-  <body class="auth-page" data-title-key="document.contact">
-    <header class="site-header">
-      <div class="nav-shell">
-        <a class="brand" href="homepage.html" aria-label="Circle Geometry home">
-          <img src="logowhite.png" alt="Circle Geometry logo" />
-        </a>
-
-        <nav class="primary-nav" aria-label="Primary">
-          <ul>
-            <li><a class="nav-link" href="homepage.html" data-i18n="nav.home">Home</a></li>
-            <li><a class="nav-link" href="homepage.html" data-i18n="nav.game">Game</a></li>
-            <li><a class="nav-link" href="homepage.html" data-i18n="nav.quiz">Quiz</a></li>
-          </ul>
-        </nav>
-
-        <nav class="account-nav" aria-label="Account">
-          <ul>
-            <li>
-              <a class="nav-link login-btn" href="login.html" data-i18n="nav.login">Log in</a>
-            </li>
-            <li>
-              <a class="nav-link signup-btn" href="homepage.html#signupOverlay" data-i18n="nav.signup">Sign up</a>
-            </li>
-            <li class="settings-shell" data-settings>
-              <button
-                class="nav-link setting-btn settings-toggle"
-                type="button"
-                data-settings-toggle
-                aria-haspopup="true"
-                aria-expanded="false"
-                aria-controls="settingsMenu"
-                data-i18n-aria-label="nav.settings"
-                aria-label="Settings"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M9.671 4.136a2.34 2.34 0 0 1 4.659 0 2.34 2.34 0 0 0 3.319 1.915 2.34 2.34 0 0 1 2.33 4.033 2.34 2.34 0 0 0 0 3.831 2.34 2.34 0 0 1-2.33 4.033 2.34 2.34 0 0 0-3.319 1.915 2.34 2.34 0 0 1-4.659 0 2.34 2.34 0 0 0-3.32-1.915 2.34 2.34 0 0 1-2.33-4.033 2.34 2.34 0 0 0 0-3.831A2.34 2.34 0 0 1 6.35 6.051a2.34 2.34 0 0 0 3.319-1.915"/>
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-              </button>
-              <div class="settings-dropdown" id="settingsMenu" data-settings-menu hidden>
-                <p class="settings-panel-title" data-i18n="settings.title">Preferences</p>
-                <section class="settings-section" aria-label="Language settings">
-                  <p class="settings-label" data-i18n="settings.language">Language</p>
-                  <div class="settings-options" role="group" aria-label="Language">
-                    <button class="settings-option" type="button" data-language-option="en">
-                      <span data-i18n="settings.language_en">English</span>
-                    </button>
-                    <button class="settings-option" type="button" data-language-option="zh">
-                      <span data-i18n="settings.language_zh">简体中文</span>
-                    </button>
-                  </div>
-                </section>
-                <section class="settings-section" aria-label="Theme settings">
-                  <p class="settings-label" data-i18n="settings.theme">Theme</p>
-                  <div class="settings-options" role="group" aria-label="Theme">
-                    <button class="settings-option" type="button" data-theme-option="dark">
-                      <span data-i18n="settings.theme_dark">Dark</span>
-                    </button>
-                    <button class="settings-option" type="button" data-theme-option="light">
-                      <span data-i18n="settings.theme_light">Light</span>
-                    </button>
-                  </div>
-                </section>
-              </div>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
+  <body class="auth-page">
     <main class="auth-page-main">
-      <section class="auth-stage" aria-labelledby="contactTitle">
-        <div class="signup-modal login-modal contact-modal">
-          <div class="signup-modal-showcase" aria-hidden="true">
-            <svg class="signup-modal-geometry" viewBox="146 108 540 540" role="presentation" focusable="false">
-              <g class="signup-modal-geometry-circles">
-                <circle cx="366" cy="432" r="16" />
-                <circle cx="371" cy="440" r="18" />
-                <circle cx="373" cy="451" r="21" />
-                <circle cx="371" cy="463" r="24" />
-                <circle cx="364" cy="475" r="28" />
-                <circle cx="351" cy="483" r="32" />
-                <circle cx="335" cy="488" r="37" />
-                <circle cx="315" cy="486" r="43" />
-                <circle cx="296" cy="476" r="50" />
-                <circle cx="281" cy="457" r="57" />
-                <circle cx="272" cy="431" r="66" />
-                <circle cx="274" cy="401" r="76" />
-                <circle cx="289" cy="369" r="87" />
-                <circle cx="318" cy="341" r="101" />
-                <circle cx="361" cy="325" r="116" />
-                <circle cx="412" cy="325" r="134" />
-                <circle cx="467" cy="348" r="154" />
-              </g>
-            </svg>
-          </div>
-
+      <section class="auth-stage" aria-labelledby="redirectTitle">
+        <div class="signup-modal login-modal">
           <section class="signup-modal-panel">
-            <a class="signup-modal-close auth-back-link" href="homepage.html" aria-label="Back to home">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M15 6 9 12l6 6" />
-              </svg>
-            </a>
-
-            <div class="signup-modal-badge" aria-hidden="true">
-              <img src="logowhite.png" alt="" />
-            </div>
-
-            <h1 class="signup-modal-title" id="contactTitle" data-i18n="contact.title">Get in touch</h1>
-            <p class="signup-modal-intro" data-i18n="contact.intro">
-              We'd love to hear from you.
-Share your questions, ideas, or feedback anytime.
+            <h1 class="signup-modal-title" id="redirectTitle">Opening contact form</h1>
+            <p class="signup-modal-intro">
+              Redirecting to the homepage contact overlay.
             </p>
-
-            <form class="signup-form contact-form" data-contact-form novalidate>
-              <div class="contact-form-grid">
-                <label class="signup-field" for="contactName">
-                  <span data-i18n="contact.name">Your name</span>
-                  <input
-                    class="signup-input"
-                    id="contactName"
-                    name="name"
-                    type="text"
-                    autocomplete="name"
-                    aria-describedby="contactFormFeedback"
-                    data-i18n-placeholder="contact.name_placeholder"
-                    placeholder="What should we call you?"
-                    required
-                  />
-                </label>
-
-                <label class="signup-field" for="contactEmail">
-                  <span data-i18n="field.email">Email address</span>
-                  <input
-                    class="signup-input"
-                    id="contactEmail"
-                    name="email"
-                    type="email"
-                    autocomplete="email"
-                    aria-describedby="contactFormFeedback"
-                    data-i18n-placeholder="field.email_placeholder"
-                    placeholder="you@circlelab.com"
-                    required
-                  />
-                </label>
-              </div>
-
-              <label class="signup-field" for="contactTopic">
-                <span data-i18n="contact.topic">Topic</span>
-                <span class="contact-select-wrap">
-                  <select
-                    class="signup-input contact-select-native"
-                    id="contactTopic"
-                    name="topic"
-                    aria-describedby="contactFormFeedback"
-                    required
-                  >
-                    <option value="" selected disabled data-i18n="contact.topic_placeholder">Choose a topic</option>
-                    <option value="learning" data-i18n="contact.topic_learning">Learning support</option>
-                    <option value="feedback" data-i18n="contact.topic_feedback">Product feedback</option>
-                    <option value="bug" data-i18n="contact.topic_bug">Bug report</option>
-                    <option value="school" data-i18n="contact.topic_school">School or partnership</option>
-                  </select>
-                  <span class="contact-select-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" focusable="false">
-                      <path d="M7 10.5 12 15.5l5-5" />
-                    </svg>
-                  </span>
-                </span>
-              </label>
-
-              <label class="signup-field" for="contactMessage">
-                <span data-i18n="contact.message">Message</span>
-                <textarea
-                  class="signup-input contact-textarea"
-                  id="contactMessage"
-                  name="message"
-                  aria-describedby="contactFormFeedback"
-                  data-i18n-placeholder="contact.message_placeholder"
-                  placeholder="Let us know how we can help."
-                  rows="6"
-                  minlength="24"
-                  required
-                ></textarea>
-              </label>
-
-              <button class="signup-submit" type="submit" data-i18n="contact.submit">Send message</button>
-              <p
-                class="signup-form-status"
-                id="contactFormFeedback"
-                data-contact-feedback
-                role="status"
-                aria-live="polite"
-                aria-atomic="true"
-                hidden
-              ></p>
-            </form>
-
             <p class="signup-modal-helper">
-              <span data-i18n="contact.helper_prefix">Need quick help instead?</span>
-              <a href="homepage.html#ai-study-title" data-i18n="contact.helper_link">Try the ArcMind</a>
+              <a href="homepage.html#contactOverlay">Continue if the page does not change.</a>
             </p>
           </section>
         </div>
       </section>
     </main>
-
-    <script src="preferences.js"></script>
-    <script src="contact.js"></script>
   </body>
 </html>

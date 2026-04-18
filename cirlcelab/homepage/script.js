@@ -653,11 +653,13 @@
 })();
 
 (() => {
-  const overlaySelector = "[data-signup-overlay], [data-login-overlay]";
+  const overlaySelector =
+    "[data-signup-overlay], [data-login-overlay], [data-contact-overlay]";
   const signupOverlay = document.querySelector("[data-signup-overlay]");
   const loginOverlay = document.querySelector("[data-login-overlay]");
+  const contactOverlay = document.querySelector("[data-contact-overlay]");
 
-  if (!signupOverlay && !loginOverlay) {
+  if (!signupOverlay && !loginOverlay && !contactOverlay) {
     return;
   }
 
@@ -689,7 +691,7 @@
     trigger instanceof HTMLElement && !trigger.closest(overlaySelector);
 
   const isAnyOverlayOpen = () =>
-    [signupOverlay, loginOverlay].some(
+    [signupOverlay, loginOverlay, contactOverlay].some(
       (overlay) => overlay instanceof HTMLElement && !overlay.hidden
     );
 
@@ -904,6 +906,196 @@
     loginForm.reset();
     clearLoginFeedback();
     loginFields.forEach(clearLoginFieldError);
+  };
+
+  const contactForm = contactOverlay
+    ? contactOverlay.querySelector("[data-contact-form]")
+    : null;
+  const contactNameInput = contactOverlay
+    ? contactOverlay.querySelector("#contactName")
+    : null;
+  const contactEmailInput = contactOverlay
+    ? contactOverlay.querySelector("#contactEmail")
+    : null;
+  const contactTopicInput = contactOverlay
+    ? contactOverlay.querySelector("#contactTopic")
+    : null;
+  const contactMessageInput = contactOverlay
+    ? contactOverlay.querySelector("#contactMessage")
+    : null;
+  const contactFeedback = contactOverlay
+    ? contactOverlay.querySelector("[data-contact-feedback]")
+    : null;
+  const contactTopicWrap = contactOverlay
+    ? contactOverlay.querySelector(".contact-select-wrap")
+    : null;
+  const contactOpenButtons = Array.from(
+    document.querySelectorAll("[data-open-contact]")
+  );
+  const contactCloseButtons = contactOverlay
+    ? Array.from(contactOverlay.querySelectorAll("[data-contact-close]"))
+    : [];
+  const contactFields =
+    contactNameInput instanceof HTMLInputElement &&
+    contactEmailInput instanceof HTMLInputElement &&
+    contactTopicInput instanceof HTMLSelectElement &&
+    contactMessageInput instanceof HTMLTextAreaElement
+      ? [
+          contactNameInput,
+          contactEmailInput,
+          contactTopicInput,
+          contactMessageInput,
+        ]
+      : [];
+
+  let activeContactValidationField = null;
+
+  const clearContactFieldError = (input) => {
+    input.removeAttribute("aria-invalid");
+  };
+
+  const showContactFeedback = (message, state = "info") => {
+    if (!contactFeedback) {
+      return;
+    }
+
+    contactFeedback.hidden = false;
+    contactFeedback.textContent = message;
+    contactFeedback.classList.toggle("is-error", state === "error");
+    contactFeedback.classList.toggle("is-success", state === "success");
+  };
+
+  const clearContactFeedback = () => {
+    if (!contactFeedback) {
+      return;
+    }
+
+    contactFeedback.hidden = true;
+    contactFeedback.textContent = "";
+    contactFeedback.classList.remove("is-error", "is-success");
+    activeContactValidationField = null;
+  };
+
+  const syncContactCustomValidity = (input) => {
+    input.setCustomValidity("");
+
+    if (input === contactMessageInput) {
+      const length = input.value.trim().length;
+      if (length > 0 && length < 24) {
+        input.setCustomValidity(
+          t(
+            "feedback.contact_length",
+            "Please add a little more detail so we know how to help."
+          )
+        );
+      }
+    }
+  };
+
+  const validateContactField = (input) => {
+    syncContactCustomValidity(input);
+
+    if (input.checkValidity()) {
+      clearContactFieldError(input);
+      return "";
+    }
+
+    input.setAttribute("aria-invalid", "true");
+    return getValidationMessage(input, "");
+  };
+
+  const validateContactForm = () => {
+    for (const input of contactFields) {
+      const message = validateContactField(input);
+      if (message) {
+        activeContactValidationField = input;
+        return { input, message };
+      }
+    }
+
+    return null;
+  };
+
+  const resetContactState = () => {
+    if (!(contactForm instanceof HTMLFormElement)) {
+      return;
+    }
+
+    contactForm.reset();
+    clearContactFeedback();
+    contactFields.forEach(clearContactFieldError);
+
+    if (contactTopicWrap instanceof HTMLElement) {
+      contactTopicWrap.classList.remove("is-turning");
+    }
+  };
+
+  const initTopicDropdown = (selectInput, selectWrap) => {
+    if (
+      !(selectInput instanceof HTMLSelectElement) ||
+      !(selectWrap instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    const OPEN_KEYS = new Set([" ", "Spacebar", "Enter", "ArrowDown", "ArrowUp"]);
+    const CLOSE_KEYS = new Set(["Escape", "Tab"]);
+    let closeTimerId = 0;
+
+    const clearCloseTimer = () => {
+      if (!closeTimerId) {
+        return;
+      }
+
+      window.clearTimeout(closeTimerId);
+      closeTimerId = 0;
+    };
+
+    const setOpenState = (isOpen) => {
+      selectWrap.classList.toggle("is-turning", isOpen);
+    };
+
+    const openDropdown = () => {
+      clearCloseTimer();
+      setOpenState(true);
+    };
+
+    const closeDropdown = (delay = 0) => {
+      clearCloseTimer();
+
+      if (delay <= 0) {
+        setOpenState(false);
+        return;
+      }
+
+      closeTimerId = window.setTimeout(() => {
+        closeTimerId = 0;
+        setOpenState(false);
+      }, delay);
+    };
+
+    selectInput.addEventListener("pointerdown", openDropdown);
+    selectInput.addEventListener("focus", openDropdown);
+    selectInput.addEventListener("keydown", (event) => {
+      if (OPEN_KEYS.has(event.key)) {
+        openDropdown();
+      }
+
+      if (CLOSE_KEYS.has(event.key)) {
+        closeDropdown();
+      }
+    });
+    selectInput.addEventListener("keyup", (event) => {
+      if (event.key === "Enter" || event.key === "Escape") {
+        closeDropdown();
+      }
+    });
+    selectInput.addEventListener("change", () => {
+      closeDropdown(90);
+    });
+    selectInput.addEventListener("blur", () => {
+      closeDropdown();
+    });
   };
 
   const cancelOverlayClose = (overlay) => {
@@ -1156,6 +1348,23 @@
     }
 
     if (
+      contactOverlay instanceof HTMLElement &&
+      !contactOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: contactOverlay,
+        fromHash: "#contactOverlay",
+        fromResetState: resetContactState,
+        toOverlay: signupOverlay,
+        toHash: "#signupOverlay",
+        toResetState: resetSignupState,
+        focusInput: signupEmailInput,
+        direction: -1,
+      })
+    ) {
+      return;
+    }
+
+    if (
       loginOverlay instanceof HTMLElement &&
       !loginOverlay.hidden &&
       switchOverlay({
@@ -1172,6 +1381,10 @@
       return;
     }
 
+    hideOverlay(contactOverlay, "#contactOverlay", resetContactState, {
+      clearUrl: false,
+      immediate: true,
+    });
     hideOverlay(loginOverlay, "#loginOverlay", resetLoginState, {
       clearUrl: false,
       immediate: true,
@@ -1207,6 +1420,23 @@
     }
 
     if (
+      contactOverlay instanceof HTMLElement &&
+      !contactOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: contactOverlay,
+        fromHash: "#contactOverlay",
+        fromResetState: resetContactState,
+        toOverlay: loginOverlay,
+        toHash: "#loginOverlay",
+        toResetState: resetLoginState,
+        focusInput: loginEmailInput,
+        direction: -1,
+      })
+    ) {
+      return;
+    }
+
+    if (
       signupOverlay instanceof HTMLElement &&
       !signupOverlay.hidden &&
       switchOverlay({
@@ -1223,6 +1453,10 @@
       return;
     }
 
+    hideOverlay(contactOverlay, "#contactOverlay", resetContactState, {
+      clearUrl: false,
+      immediate: true,
+    });
     hideOverlay(signupOverlay, "#signupOverlay", resetSignupState, {
       clearUrl: false,
       immediate: true,
@@ -1242,6 +1476,78 @@
 
   const closeLoginOverlay = (options) => {
     closeOverlay(loginOverlay, "#loginOverlay", resetLoginState, options);
+  };
+
+  const openContactOverlay = (trigger) => {
+    if (
+      !(contactOverlay instanceof HTMLElement) ||
+      !(contactForm instanceof HTMLFormElement) ||
+      !(contactNameInput instanceof HTMLInputElement)
+    ) {
+      return;
+    }
+
+    if (shouldRememberTrigger(trigger)) {
+      lastTrigger = trigger;
+    }
+
+    if (
+      loginOverlay instanceof HTMLElement &&
+      !loginOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: loginOverlay,
+        fromHash: "#loginOverlay",
+        fromResetState: resetLoginState,
+        toOverlay: contactOverlay,
+        toHash: "#contactOverlay",
+        toResetState: resetContactState,
+        focusInput: contactNameInput,
+        direction: 1,
+      })
+    ) {
+      return;
+    }
+
+    if (
+      signupOverlay instanceof HTMLElement &&
+      !signupOverlay.hidden &&
+      switchOverlay({
+        fromOverlay: signupOverlay,
+        fromHash: "#signupOverlay",
+        fromResetState: resetSignupState,
+        toOverlay: contactOverlay,
+        toHash: "#contactOverlay",
+        toResetState: resetContactState,
+        focusInput: contactNameInput,
+        direction: 1,
+      })
+    ) {
+      return;
+    }
+
+    hideOverlay(loginOverlay, "#loginOverlay", resetLoginState, {
+      clearUrl: false,
+      immediate: true,
+    });
+    hideOverlay(signupOverlay, "#signupOverlay", resetSignupState, {
+      clearUrl: false,
+      immediate: true,
+    });
+    cancelOverlayClose(contactOverlay);
+    cancelOverlayOpen(contactOverlay);
+    contactOverlay.hidden = false;
+    startOverlayOpen(contactOverlay);
+    setHash("#contactOverlay");
+    syncBodyState();
+    resetContactState();
+
+    requestAnimationFrame(() => {
+      contactNameInput.focus();
+    });
+  };
+
+  const closeContactOverlay = (options) => {
+    closeOverlay(contactOverlay, "#contactOverlay", resetContactState, options);
   };
 
   const setupFieldValidation = (
@@ -1281,11 +1587,12 @@
         }
       };
 
-      input.addEventListener("input", updateValidation);
+      const eventName =
+        input instanceof HTMLSelectElement || input.type === "checkbox"
+          ? "change"
+          : "input";
 
-      if (input.type === "checkbox") {
-        input.addEventListener("change", updateValidation);
-      }
+      input.addEventListener(eventName, updateValidation);
     });
   };
 
@@ -1317,6 +1624,20 @@
     });
   });
 
+  contactOpenButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      openContactOverlay(button);
+    });
+  });
+
+  contactCloseButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      closeContactOverlay();
+    });
+  });
+
   if (signupOverlay instanceof HTMLElement) {
     signupOverlay.addEventListener("click", (event) => {
       if (event.target === signupOverlay) {
@@ -1333,8 +1654,21 @@
     });
   }
 
+  if (contactOverlay instanceof HTMLElement) {
+    contactOverlay.addEventListener("click", (event) => {
+      if (event.target === contactOverlay) {
+        closeContactOverlay();
+      }
+    });
+  }
+
   document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
+      return;
+    }
+
+    if (contactOverlay instanceof HTMLElement && !contactOverlay.hidden) {
+      closeContactOverlay();
       return;
     }
 
@@ -1349,6 +1683,11 @@
   });
 
   const applyHashState = () => {
+    if (window.location.hash === "#contactOverlay") {
+      openContactOverlay(null);
+      return;
+    }
+
     if (window.location.hash === "#loginOverlay") {
       openLoginOverlay(null);
       return;
@@ -1359,6 +1698,7 @@
       return;
     }
 
+    closeContactOverlay({ restoreFocus: false, clearUrl: false });
     closeLoginOverlay({ restoreFocus: false, clearUrl: false });
     closeSignupOverlay({ restoreFocus: false, clearUrl: false });
   };
@@ -1422,6 +1762,51 @@
       closeLoginOverlay();
     });
   }
+
+  if (
+    contactForm instanceof HTMLFormElement &&
+    contactFeedback &&
+    contactFields.length === 4
+  ) {
+    setupFieldValidation(
+      contactFields,
+      contactFeedback,
+      validateContactField,
+      (input) => {
+        activeContactValidationField = input;
+      },
+      () => activeContactValidationField
+    );
+
+    contactForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const invalidField = validateContactForm();
+      if (invalidField) {
+        showContactFeedback(invalidField.message, "error");
+        invalidField.input.focus();
+        return;
+      }
+
+      contactForm.reset();
+      contactFields.forEach(clearContactFieldError);
+      activeContactValidationField = null;
+
+      if (contactTopicWrap instanceof HTMLElement) {
+        contactTopicWrap.classList.remove("is-turning");
+      }
+
+      showContactFeedback(
+        t(
+          "feedback.contact_success",
+          "Thanks for reaching out. This static page validated your message in the browser. Connect this form to email or your preferred form service when you're ready."
+        ),
+        "success"
+      );
+    });
+  }
+
+  initTopicDropdown(contactTopicInput, contactTopicWrap);
 
   if (loginHelpButton instanceof HTMLButtonElement) {
     loginHelpButton.addEventListener("click", () => {

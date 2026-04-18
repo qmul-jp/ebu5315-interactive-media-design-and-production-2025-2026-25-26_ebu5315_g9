@@ -43,23 +43,28 @@
 }
 
 :root[data-theme="light"] {
-  --bg: oklch(0.975 0.008 250);
-  --panel: oklch(0.945 0.012 248);
-  --text: oklch(0.255 0.025 246);
-  --muted: oklch(0.54 0.025 244);
-  --chip: oklch(0.91 0.014 248);
-  --chip-hover: oklch(0.875 0.02 246);
-  --accent: oklch(0.6 0.13 182);
-  --accent-deep: oklch(0.5 0.11 186);
-  --accent-alt: oklch(0.72 0.11 92);
-  --cta-dark: oklch(0.31 0.04 210);
-  --cta-dark-hover: oklch(0.25 0.04 210);
-  --ink-dark: oklch(0.22 0.026 236);
-  --hero-panel-start: oklch(0.975 0.01 248);
-  --hero-panel-end: oklch(0.91 0.03 220);
-  --hero-focus-core: oklch(0.84 0.055 192 / 0.34);
-  --hero-focus-edge: oklch(0.9 0.03 194 / 0);
-  --hero-grid-stroke: color-mix(in oklch, var(--accent) 14%, white);
+  --bg: #faf9f5;
+  --panel: #e8e6dc;
+  --text: #141413;
+  --muted: #b0aea5;
+  --chip: #e8e6dc;
+  --chip-hover: #cec6ba;
+  --accent: #6a9bcc;
+  --accent-deep: #1F1E1D;
+  --accent-alt: #bacfc8;
+  --accent-warm: #d97757;
+  --accent-olive: #788c5d;
+  --accent-rose: #C36585;
+  --accent-soft: #e9cccc;
+  --accent-lavender: #CAC9DA;
+  --cta-dark: #1F1E1D;
+  --cta-dark-hover: #141413;
+  --ink-dark: #1F1E1D;
+  --hero-panel-start: #faf9f5;
+  --hero-panel-end: #e8e6dc;
+  --hero-focus-core: color-mix(in oklch, #6a9bcc 24%, transparent);
+  --hero-focus-edge: transparent;
+  --hero-grid-stroke: color-mix(in oklch, var(--accent) 14%, #faf9f5);
   --hero-bg-ring: color-mix(in oklch, var(--accent-deep) 32%, var(--text));
   --hero-construct-ring: color-mix(in oklch, var(--accent) 24%, var(--text));
   --hero-construct-line: color-mix(in oklch, var(--accent-deep) 18%, var(--text));
@@ -70,15 +75,15 @@
   --hero-main-circle: color-mix(in oklch, var(--accent-deep) 56%, var(--text));
   --hero-diameter: color-mix(in oklch, var(--accent) 44%, var(--text));
   --hero-axis: color-mix(in oklch, var(--accent) 22%, var(--text));
-  --hero-axis-stroke: color-mix(in oklch, white 78%, var(--panel));
+  --hero-axis-stroke: color-mix(in oklch, #faf9f5 78%, var(--panel));
   --hero-radius: color-mix(in oklch, var(--accent) 62%, var(--text));
   --hero-chord: color-mix(in oklch, var(--accent-alt) 46%, var(--accent-deep));
   --hero-tangent: color-mix(in oklch, var(--accent) 34%, var(--text));
   --hero-arc: color-mix(in oklch, var(--accent) 54%, var(--accent-alt));
   --hero-angle: color-mix(in oklch, var(--accent-alt) 42%, var(--text));
-  --hero-point-center: color-mix(in oklch, var(--accent-deep) 62%, white);
-  --hero-point: color-mix(in oklch, var(--accent) 76%, white);
-  --hero-point-muted: color-mix(in oklch, var(--accent-alt) 58%, white);
+  --hero-point-center: color-mix(in oklch, var(--accent-deep) 62%, #faf9f5);
+  --hero-point: color-mix(in oklch, var(--accent) 76%, #faf9f5);
+  --hero-point-muted: color-mix(in oklch, var(--accent-alt) 58%, #faf9f5);
 }
 
 * {
@@ -98,11 +103,7 @@ body {
 }
 
 :root[data-theme="light"] body {
-  background:
-    radial-gradient(circle at 14% -14%, oklch(0.76 0.05 178 / 0.18), transparent 40%),
-    radial-gradient(circle at 88% -10%, oklch(0.84 0.05 92 / 0.18), transparent 34%),
-    linear-gradient(180deg, oklch(0.99 0.006 248) 0%, oklch(0.965 0.008 248) 100%),
-    var(--bg);
+  background: var(--bg);
 }
 
 button {
@@ -233,7 +234,7 @@ body.is-auth-switching .auth-overlay {
 
 .account-nav .nav-link.signup-btn {
   min-width: 6.25rem;
-  color: color-mix(in oklch, var(--accent) 84%, white 16%);
+  color: color-mix(in oklch, var(--accent) 84%, #faf9f5 16%);
   background: transparent;
   border: 1.5px solid var(--accent);
   font-weight: 700;
@@ -241,9 +242,9 @@ body.is-auth-switching .auth-overlay {
 
 .account-nav .nav-link.signup-btn:hover,
 .account-nav .nav-link.signup-btn:focus-visible {
-  color: color-mix(in oklch, var(--accent) 88%, white 12%);
+  color: color-mix(in oklch, var(--accent) 88%, #faf9f5 12%);
   background: color-mix(in oklch, var(--accent) 14%, transparent);
-  border-color: color-mix(in oklch, var(--accent) 88%, white 12%);
+  border-color: color-mix(in oklch, var(--accent) 88%, #faf9f5 12%);
 }
 
 .account-nav .nav-link.setting-btn {
@@ -383,7 +384,7 @@ body.is-auth-switching .auth-overlay {
 
 .hero-kicker {
   margin: 0;
-  color: color-mix(in oklch, var(--accent-alt) 82%, white 18%);
+  color: color-mix(in oklch, var(--accent-alt) 82%, #faf9f5 18%);
   letter-spacing: 0.15em;
   font-size: 0.82rem;
   font-weight: 700;
@@ -394,7 +395,7 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(2.2rem, 5.5vw, 4.5rem);
   line-height: 1.08;
   letter-spacing: -0.022em;
-  color: color-mix(in oklch, white 89%, var(--accent) 11%);
+  color: color-mix(in oklch, #faf9f5 89%, var(--accent) 11%);
   white-space: pre-line;
   text-wrap: pretty;
 }
@@ -422,7 +423,7 @@ body.is-auth-switching .auth-overlay {
   max-width: 64ch;
   font-size: clamp(1rem, 1.55vw, 1.18rem);
   line-height: 1.76;
-  color: color-mix(in oklch, var(--muted) 85%, white);
+  color: color-mix(in oklch, var(--muted) 85%, #faf9f5);
   text-wrap: pretty;
 }
 
@@ -457,7 +458,7 @@ body.is-auth-switching .auth-overlay {
 .hero-btn.primary:hover,
 .hero-btn.primary:focus-visible {
   color: var(--ink-dark);
-  background: color-mix(in oklch, var(--accent) 82%, white);
+  background: color-mix(in oklch, var(--accent) 82%, #faf9f5);
 }
 
 .hero-btn.secondary {
@@ -467,7 +468,7 @@ body.is-auth-switching .auth-overlay {
 
 .hero-btn.secondary:hover,
 .hero-btn.secondary:focus-visible {
-  color: white;
+  color: #faf9f5;
   background: var(--chip-hover);
 }
 
@@ -494,7 +495,7 @@ body.is-auth-switching .auth-overlay {
   height: 1px;
   pointer-events: none;
   opacity: 0.72;
-  background: color-mix(in oklch, var(--accent) 62%, white);
+  background: color-mix(in oklch, var(--accent) 62%, #faf9f5);
 }
 
 .core-features-head {
@@ -506,7 +507,7 @@ body.is-auth-switching .auth-overlay {
 
 .core-kicker {
   margin: 0;
-  color: color-mix(in oklch, var(--accent) 82%, white);
+  color: color-mix(in oklch, var(--accent) 82%, #faf9f5);
   font-size: 0.76rem;
   letter-spacing: 0.14em;
   font-weight: 700;
@@ -518,7 +519,7 @@ body.is-auth-switching .auth-overlay {
   line-height: 1.08;
   letter-spacing: -0.022em;
   word-spacing: 0.04em;
-  color: color-mix(in oklch, white 90%, var(--accent) 10%);
+  color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
   text-wrap: normal;
 }
 
@@ -542,7 +543,7 @@ body.is-auth-switching .auth-overlay {
   min-height: 210px;
   padding: clamp(1rem, 2vw, 1.35rem);
   border-radius: 12px;
-  border: 1px solid color-mix(in oklch, white 20%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 20%, transparent);
   background: color-mix(in oklch, var(--panel) 44%, transparent);
   transition:
     border-color 220ms ease,
@@ -551,7 +552,7 @@ body.is-auth-switching .auth-overlay {
 
 .core-feature-card:hover,
 .core-feature-card:focus-within {
-  border-color: color-mix(in oklch, white 42%, transparent);
+  border-color: color-mix(in oklch, #faf9f5 42%, transparent);
   background: color-mix(in oklch, var(--panel) 56%, transparent);
 }
 
@@ -560,7 +561,7 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(1.14rem, 1.7vw, 1.34rem);
   line-height: 1.24;
   letter-spacing: 0.01em;
-  color: color-mix(in oklch, white 88%, var(--accent) 12%);
+  color: color-mix(in oklch, #faf9f5 88%, var(--accent) 12%);
 }
 
 .core-feature-icon {
@@ -581,7 +582,7 @@ body.is-auth-switching .auth-overlay {
 
 .core-feature-card p {
   margin: 0;
-  color: color-mix(in oklch, var(--muted) 87%, white);
+  color: color-mix(in oklch, var(--muted) 87%, #faf9f5);
   font-size: clamp(0.98rem, 1.14vw, 1.08rem);
   line-height: 1.62;
 }
@@ -595,9 +596,9 @@ body.is-auth-switching .auth-overlay {
   min-height: 1.9rem;
   padding: 0.28rem 0.78rem;
   border-radius: 9px;
-  border: 1px solid color-mix(in oklch, white 24%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 24%, transparent);
   background: color-mix(in oklch, var(--accent) 28%, var(--panel));
-  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
@@ -609,7 +610,7 @@ body.is-auth-switching .auth-overlay {
 
 .core-feature-chat-btn:hover,
 .core-feature-chat-btn:focus-visible {
-  border-color: color-mix(in oklch, white 42%, transparent);
+  border-color: color-mix(in oklch, #faf9f5 42%, transparent);
   background: color-mix(in oklch, var(--accent-alt) 34%, var(--panel));
   outline: none;
 }
@@ -665,7 +666,7 @@ body.is-auth-switching .auth-overlay {
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.14em;
-  color: color-mix(in oklch, var(--accent-alt) 68%, white);
+  color: color-mix(in oklch, var(--accent-alt) 68%, #faf9f5);
 }
 
 #theorems-carousel-title {
@@ -673,7 +674,7 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(1.95rem, 4.9vw, 3.9rem);
   line-height: 1.15;
   letter-spacing: -0.012em;
-  color: color-mix(in oklch, white 90%, var(--accent) 10%);
+  color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
 }
 
 .theorems-carousel-controls {
@@ -691,9 +692,9 @@ body.is-auth-switching .auth-overlay {
   padding: 0;
   line-height: 1;
   border-radius: 10px;
-  border: 1px solid color-mix(in oklch, white 24%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 24%, transparent);
   background: color-mix(in oklch, var(--chip) 72%, var(--panel));
-  color: color-mix(in oklch, white 90%, var(--accent) 10%);
+  color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
   font-size: calc(1rem * var(--theorem-text-scale));
   font-weight: 700;
   cursor: pointer;
@@ -717,7 +718,7 @@ body.is-auth-switching .auth-overlay {
 
 .theorem-nav-btn:hover,
 .theorem-nav-btn:focus-visible {
-  border-color: color-mix(in oklch, white 42%, transparent);
+  border-color: color-mix(in oklch, #faf9f5 42%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 86%, var(--panel));
   outline: none;
 }
@@ -748,7 +749,7 @@ body.is-auth-switching .auth-overlay {
   min-height: 230px;
   padding: clamp(1.1rem, 2vw, 1.4rem);
   border-radius: 12px;
-  border: 1px solid color-mix(in oklch, white 18%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 18%, transparent);
   background:
     radial-gradient(circle at 84% 14%, oklch(0.84 0.11 85 / 0.04), transparent 34%),
     radial-gradient(circle at 12% 100%, oklch(0.72 0.12 170 / 0.035), transparent 44%),
@@ -772,7 +773,7 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(1.52rem, 2.38vw, 2.04rem);
   font-weight: 700;
   letter-spacing: 0.04em;
-  color: color-mix(in oklch, white 76%, var(--accent-alt) 24%);
+  color: color-mix(in oklch, #faf9f5 76%, var(--accent-alt) 24%);
   background: transparent;
 }
 
@@ -780,14 +781,14 @@ body.is-auth-switching .auth-overlay {
   margin: 0.95rem 0 2rem;
   font-size: calc(clamp(1.14rem, 1.5vw, 1.32rem) * var(--theorem-text-scale));
   line-height: 1.3;
-  color: color-mix(in oklch, white 90%, var(--accent) 10%);
+  color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
 }
 
 .theorem-frame p {
   margin: 0 0 0.72rem;
   font-size: calc(0.94rem * var(--theorem-text-scale));
   line-height: 1.56;
-  color: color-mix(in oklch, white 82%, var(--muted) 18%);
+  color: color-mix(in oklch, #faf9f5 82%, var(--muted) 18%);
 }
 
 .theorem-embed {
@@ -796,7 +797,7 @@ body.is-auth-switching .auth-overlay {
   place-items: center;
   margin-top: 1.1rem;
   border-radius: 10px;
-  border: 1px solid color-mix(in oklch, white 18%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 18%, transparent);
   overflow: hidden;
   background: #ffffff;
   aspect-ratio: 1 / 1;
@@ -875,7 +876,7 @@ body.is-auth-switching .auth-overlay {
   text-align: left;
   border-color: color-mix(in oklch, var(--accent) 42%, transparent);
   box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 18%, transparent),
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 18%, transparent),
     inset 0 -22px 36px color-mix(in oklch, black 20%, transparent);
   overflow: hidden;
   background:
@@ -913,7 +914,7 @@ body.is-auth-switching .auth-overlay {
     linear-gradient(
       135deg,
       transparent 0 56%,
-      color-mix(in oklch, white 8%, transparent) 64%,
+      color-mix(in oklch, #faf9f5 8%, transparent) 64%,
       transparent 74%
     );
   opacity: 0.55;
@@ -932,7 +933,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .theorem-frame-cta .theorem-cta-title span:last-child {
-  color: color-mix(in oklch, white 74%, var(--accent-alt) 26%);
+  color: color-mix(in oklch, #faf9f5 74%, var(--accent-alt) 26%);
 }
 
 .theorem-frame-cta .theorem-cta-copy {
@@ -942,7 +943,7 @@ body.is-auth-switching .auth-overlay {
   max-width: 29ch;
   font-size: calc(0.96rem * var(--theorem-text-scale));
   line-height: 1.7;
-  color: color-mix(in oklch, white 82%, var(--muted) 18%);
+  color: color-mix(in oklch, #faf9f5 82%, var(--muted) 18%);
 }
 
 .theorem-cta-actions {
@@ -972,7 +973,7 @@ body.is-auth-switching .auth-overlay {
       color-mix(in oklch, var(--accent) 52%, transparent),
       color-mix(in oklch, var(--accent) 35%, var(--panel))
     );
-  color: color-mix(in oklch, white 84%, var(--muted) 16%);
+  color: color-mix(in oklch, #faf9f5 84%, var(--muted) 16%);
   font-size: 0.97rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -1031,7 +1032,7 @@ body.is-auth-switching .auth-overlay {
       color-mix(in oklch, var(--accent-alt) 20%, transparent),
       color-mix(in oklch, var(--accent) 24%, var(--chip))
     );
-  color: color-mix(in oklch, white 78%, var(--muted) 22%);
+  color: color-mix(in oklch, #faf9f5 78%, var(--muted) 22%);
   border-color: color-mix(in oklch, var(--accent) 22%, transparent);
 }
 
@@ -1069,14 +1070,14 @@ body.is-auth-switching .auth-overlay {
     oklch(0.16 0.018 216) 56%,
     var(--panel) 44%
   );
-  --ai-chat-border: color-mix(in oklch, var(--accent) 20%, white 10%);
-  --ai-chat-border-strong: color-mix(in oklch, var(--accent) 30%, white 12%);
-  --ai-chat-text-strong: color-mix(in oklch, white 96%, var(--accent) 4%);
-  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 68%, white 32%);
+  --ai-chat-border: color-mix(in oklch, var(--accent) 20%, #faf9f5 10%);
+  --ai-chat-border-strong: color-mix(in oklch, var(--accent) 30%, #faf9f5 12%);
+  --ai-chat-text-strong: color-mix(in oklch, #faf9f5 96%, var(--accent) 4%);
+  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 68%, #faf9f5 32%);
   --ai-chat-assistant-bubble: color-mix(
     in oklch,
     oklch(0.29 0.022 206) 90%,
-    white 12%
+    #faf9f5 12%
   );
   --ai-chat-user-bubble: color-mix(
     in oklch,
@@ -1088,8 +1089,8 @@ body.is-auth-switching .auth-overlay {
     var(--ink-dark) 94%,
     oklch(0.3 0.02 190) 6%
   );
-  --ai-chat-action: color-mix(in oklch, var(--accent) 62%, white 38%);
-  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 68%, white 32%);
+  --ai-chat-action: color-mix(in oklch, var(--accent) 62%, #faf9f5 38%);
+  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 68%, #faf9f5 32%);
   --ai-chat-action-muted: color-mix(in oklch, var(--accent) 14%, transparent);
   position: relative;
   isolation: isolate;
@@ -1124,7 +1125,7 @@ body.is-auth-switching .auth-overlay {
 
 .ai-study-kicker {
   margin: 0;
-  color: color-mix(in oklch, var(--accent-alt) 72%, white);
+  color: color-mix(in oklch, var(--accent-alt) 72%, #faf9f5);
   font-size: 0.8rem;
   font-weight: 800;
   letter-spacing: 0.16em;
@@ -1136,7 +1137,7 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(2rem, 4.8vw, 4.1rem);
   line-height: 1.05;
   letter-spacing: -0.03em;
-  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   text-wrap: balance;
 }
 
@@ -1145,7 +1146,7 @@ body.is-auth-switching .auth-overlay {
   max-width: 34ch;
   font-size: clamp(0.98rem, 1.18vw, 1.08rem);
   line-height: 1.7;
-  color: color-mix(in oklch, var(--muted) 74%, white 26%);
+  color: color-mix(in oklch, var(--muted) 74%, #faf9f5 26%);
   text-wrap: balance;
 }
 
@@ -1213,12 +1214,12 @@ body.is-auth-switching .auth-overlay {
   background:
     linear-gradient(
       180deg,
-      color-mix(in oklch, var(--ai-chat-surface) 93%, white 7%),
+      color-mix(in oklch, var(--ai-chat-surface) 93%, #faf9f5 7%),
       var(--ai-chat-surface)
     );
   box-shadow:
     0 12px 28px color-mix(in oklch, black 10%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 7%, transparent);
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 7%, transparent);
   overflow: hidden;
 }
 
@@ -1255,7 +1256,7 @@ body.is-auth-switching .auth-overlay {
   height: 0.42rem;
   flex: 0 0 0.42rem;
   border-radius: 999px;
-  background: color-mix(in oklch, var(--accent) 80%, white 20%);
+  background: color-mix(in oklch, var(--accent) 80%, #faf9f5 20%);
   box-shadow: 0 0 0.55rem color-mix(in oklch, var(--accent) 30%, transparent);
 }
 
@@ -1408,7 +1409,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .ai-chat-draft::placeholder {
-  color: color-mix(in oklch, var(--ai-chat-text-muted) 96%, white 4%);
+  color: color-mix(in oklch, var(--ai-chat-text-muted) 96%, #faf9f5 4%);
 }
 
 .ai-chat-draft:focus-visible {
@@ -1419,7 +1420,7 @@ body.is-auth-switching .auth-overlay {
   width: 100%;
   max-width: none;
   margin: 0.08rem auto 0;
-  color: color-mix(in oklch, var(--ai-chat-text-muted) 92%, white 8%);
+  color: color-mix(in oklch, var(--ai-chat-text-muted) 92%, #faf9f5 8%);
   font-size: clamp(0.62rem, 1.25vw, 0.74rem);
   line-height: 1.35;
   text-align: center;
@@ -1549,7 +1550,7 @@ body.is-auth-switching .auth-overlay {
   padding: 0.5rem;
   border-radius: 1.18rem;
   border: 1px solid color-mix(in oklch, var(--ai-chat-border) 66%, transparent);
-  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, white 10%);
+  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, #faf9f5 10%);
   overflow: hidden;
   isolation: isolate;
   box-shadow: 0 14px 28px color-mix(in oklch, black 12%, transparent);
@@ -1559,7 +1560,7 @@ body.is-auth-switching .auth-overlay {
   content: "";
   position: absolute;
   inset: 0;
-  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, white 10%);
+  background: color-mix(in oklch, var(--ai-chat-surface-deep) 90%, #faf9f5 10%);
   z-index: -1;
 }
 
@@ -1602,13 +1603,13 @@ body.is-auth-switching .auth-overlay {
 
 .ai-chat-model-menu-item:hover,
 .ai-chat-model-menu-item:focus-visible {
-  background: color-mix(in oklch, white 6%, var(--accent) 8%);
+  background: color-mix(in oklch, #faf9f5 6%, var(--accent) 8%);
   color: var(--ai-chat-text-strong);
   outline: none;
 }
 
 .ai-chat-model-menu-item.is-selected {
-  background: color-mix(in oklch, white 8%, var(--accent) 12%);
+  background: color-mix(in oklch, #faf9f5 8%, var(--accent) 12%);
   color: var(--ai-chat-text-strong);
 }
 
@@ -1642,7 +1643,7 @@ body.is-auth-switching .auth-overlay {
   height: 3rem;
   padding: 0;
   border-radius: 999px;
-  border: 1px solid color-mix(in oklch, var(--accent) 24%, white 12%);
+  border: 1px solid color-mix(in oklch, var(--accent) 24%, #faf9f5 12%);
   background: var(--ai-chat-action);
   color: var(--ai-chat-user-text);
   box-shadow: none;
@@ -1757,7 +1758,7 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-kicker {
   margin: 0;
-  color: color-mix(in oklch, var(--accent-alt) 74%, white);
+  color: color-mix(in oklch, var(--accent-alt) 74%, #faf9f5);
   font-size: 0.8rem;
   font-weight: 700;
   letter-spacing: 0.16em;
@@ -1770,7 +1771,7 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(1.95rem, 4.9vw, 3.9rem);
   line-height: 1.06;
   letter-spacing: -0.024em;
-  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   white-space: normal;
 }
 
@@ -1779,7 +1780,7 @@ body.is-auth-switching .auth-overlay {
   max-width: 60ch;
   font-size: clamp(0.99rem, 1.2vw, 1.08rem);
   line-height: 1.72;
-  color: color-mix(in oklch, var(--muted) 82%, white);
+  color: color-mix(in oklch, var(--muted) 82%, #faf9f5);
 }
 
 .pricing-switch-wrap {
@@ -1799,14 +1800,14 @@ body.is-auth-switching .auth-overlay {
 }
 
 .pricing-switch-label {
-  color: color-mix(in oklch, var(--accent-alt) 68%, white);
+  color: color-mix(in oklch, var(--accent-alt) 68%, #faf9f5);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
 .pricing-switch-note {
-  color: color-mix(in oklch, var(--muted) 78%, white);
+  color: color-mix(in oklch, var(--muted) 78%, #faf9f5);
 }
 
 .pricing-view-toggle {
@@ -1815,7 +1816,7 @@ body.is-auth-switching .auth-overlay {
   gap: 0.28rem;
   padding: 0.28rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in oklch, white 14%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 14%, transparent);
   background:
     linear-gradient(
       180deg,
@@ -1823,7 +1824,7 @@ body.is-auth-switching .auth-overlay {
       color-mix(in oklch, var(--panel) 92%, black) 100%
     );
   box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 8%, transparent),
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 8%, transparent),
     0 10px 18px color-mix(in oklch, black 24%, transparent);
 }
 
@@ -1834,7 +1835,7 @@ body.is-auth-switching .auth-overlay {
   border: 1px solid transparent;
   border-radius: 999px;
   background: transparent;
-  color: color-mix(in oklch, var(--muted) 84%, white);
+  color: color-mix(in oklch, var(--muted) 84%, #faf9f5);
   font-size: 0.94rem;
   font-weight: 700;
   cursor: pointer;
@@ -1848,13 +1849,13 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-view-btn:hover,
 .pricing-view-btn:focus-visible {
-  color: color-mix(in oklch, white 84%, var(--accent) 16%);
-  border-color: color-mix(in oklch, white 14%, transparent);
+  color: color-mix(in oklch, #faf9f5 84%, var(--accent) 16%);
+  border-color: color-mix(in oklch, #faf9f5 14%, transparent);
   outline: none;
 }
 
 .pricing-view-btn.is-active {
-  color: color-mix(in oklch, var(--ink-dark) 72%, white 28%);
+  color: color-mix(in oklch, var(--ink-dark) 72%, #faf9f5 28%);
 }
 
 .pricing-view-btn[data-pricing-view-target="personal"]:hover,
@@ -1868,17 +1869,17 @@ body.is-auth-switching .auth-overlay {
 }
 
 .pricing-view-btn[data-pricing-view-target="personal"].is-active {
-  background: color-mix(in oklch, var(--accent) 68%, white);
+  background: color-mix(in oklch, var(--accent) 68%, #faf9f5);
   box-shadow:
     0 8px 18px color-mix(in oklch, var(--accent) 18%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 22%, transparent);
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 22%, transparent);
 }
 
 .pricing-view-btn[data-pricing-view-target="schools"].is-active {
-  background: color-mix(in oklch, var(--accent-alt) 66%, white);
+  background: color-mix(in oklch, var(--accent-alt) 66%, #faf9f5);
   box-shadow:
     0 8px 18px color-mix(in oklch, var(--accent-alt) 20%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 20%, transparent);
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 20%, transparent);
 }
 
 .pricing-view-btn:active {
@@ -1923,7 +1924,7 @@ body.is-auth-switching .auth-overlay {
   min-height: clamp(36rem, 45vw, 41rem);
   padding: clamp(1.2rem, 2.2vw, 1.7rem);
   border-radius: 22px;
-  border: 1px solid color-mix(in oklch, white 14%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 14%, transparent);
   background:
     linear-gradient(
       180deg,
@@ -1931,7 +1932,7 @@ body.is-auth-switching .auth-overlay {
       color-mix(in oklch, var(--chip) 90%, var(--panel)) 100%
     );
   box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 8%, transparent),
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 8%, transparent),
     0 24px 40px color-mix(in oklch, black 36%, transparent);
   overflow: hidden;
 }
@@ -1943,7 +1944,7 @@ body.is-auth-switching .auth-overlay {
   width: 10rem;
   aspect-ratio: 1;
   border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in oklch, white 18%, transparent), transparent 62%);
+  background: radial-gradient(circle, color-mix(in oklch, #faf9f5 18%, transparent), transparent 62%);
   opacity: 0.28;
   pointer-events: none;
 }
@@ -2028,9 +2029,9 @@ body.is-auth-switching .auth-overlay {
   margin-bottom: 0.9rem;
   padding: 0.32rem 0.72rem;
   border-radius: 999px;
-  border: 1px solid color-mix(in oklch, white 18%, transparent);
-  background: color-mix(in oklch, white 8%, transparent);
-  color: color-mix(in oklch, white 90%, var(--accent) 10%);
+  border: 1px solid color-mix(in oklch, #faf9f5 18%, transparent);
+  background: color-mix(in oklch, #faf9f5 8%, transparent);
+  color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -2040,7 +2041,7 @@ body.is-auth-switching .auth-overlay {
 .pricing-panel[data-pricing-panel="schools"] .pricing-card-badge {
   border-color: color-mix(in oklch, var(--accent-alt) 38%, transparent);
   background: color-mix(in oklch, var(--accent-alt) 16%, transparent);
-  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
+  color: color-mix(in oklch, #faf9f5 90%, var(--accent-alt) 10%);
 }
 
 .pricing-card-top {
@@ -2057,7 +2058,7 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-card-label {
   margin: 0 0 0.42rem;
-  color: color-mix(in oklch, var(--accent-alt) 68%, white);
+  color: color-mix(in oklch, var(--accent-alt) 68%, #faf9f5);
   font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -2069,11 +2070,11 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(2rem, 2.8vw, 2.6rem);
   line-height: 1.02;
   letter-spacing: -0.03em;
-  color: color-mix(in oklch, white 94%, var(--accent) 6%);
+  color: color-mix(in oklch, #faf9f5 94%, var(--accent) 6%);
 }
 
 .pricing-panel[data-pricing-panel="schools"] .pricing-card h3 {
-  color: color-mix(in oklch, white 90%, var(--accent-alt) 10%);
+  color: color-mix(in oklch, #faf9f5 90%, var(--accent-alt) 10%);
 }
 
 .pricing-card-title-row {
@@ -2094,7 +2095,7 @@ body.is-auth-switching .auth-overlay {
 .pricing-card-subtitle {
   margin: 0.72rem 0 0;
   max-width: 26ch;
-  color: color-mix(in oklch, var(--muted) 82%, white);
+  color: color-mix(in oklch, var(--muted) 82%, #faf9f5);
   font-size: 1.02rem;
   line-height: 1.56;
 }
@@ -2112,7 +2113,7 @@ body.is-auth-switching .auth-overlay {
 .pricing-card-billing {
   flex: 0 0 auto;
   padding-top: 0.3rem;
-  color: color-mix(in oklch, white 74%, var(--accent-alt) 26%);
+  color: color-mix(in oklch, #faf9f5 74%, var(--accent-alt) 26%);
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -2123,7 +2124,7 @@ body.is-auth-switching .auth-overlay {
   width: 100%;
   height: 1px;
   margin: 1.35rem 0;
-  background: color-mix(in oklch, white 12%, transparent);
+  background: color-mix(in oklch, #faf9f5 12%, transparent);
 }
 
 .pricing-card-top + .pricing-card-divider {
@@ -2139,7 +2140,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .pricing-card-price {
-  color: color-mix(in oklch, white 96%, var(--accent) 4%);
+  color: color-mix(in oklch, #faf9f5 96%, var(--accent) 4%);
   font-size: clamp(2rem, 4vw, 2.95rem);
   font-weight: 800;
   line-height: 1;
@@ -2148,21 +2149,21 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-card-price-unit {
   padding-bottom: 0.28rem;
-  color: color-mix(in oklch, var(--muted) 74%, white);
+  color: color-mix(in oklch, var(--muted) 74%, #faf9f5);
   font-size: 1.02rem;
   line-height: 1.3;
 }
 
 .pricing-card-price-note {
   margin: 0.78rem 0 0;
-  color: color-mix(in oklch, var(--muted) 74%, white);
+  color: color-mix(in oklch, var(--muted) 74%, #faf9f5);
   font-size: 0.9rem;
   line-height: 1.45;
 }
 
 .pricing-card-feature-lead {
   margin: 0;
-  color: color-mix(in oklch, white 88%, var(--accent) 12%);
+  color: color-mix(in oklch, #faf9f5 88%, var(--accent) 12%);
   font-size: 1rem;
   font-weight: 700;
 }
@@ -2178,7 +2179,7 @@ body.is-auth-switching .auth-overlay {
 .pricing-feature-list li {
   position: relative;
   padding-left: 1.35rem;
-  color: color-mix(in oklch, white 82%, var(--muted) 18%);
+  color: color-mix(in oklch, #faf9f5 82%, var(--muted) 18%);
   font-size: 1.04rem;
   line-height: 1.5;
 }
@@ -2191,7 +2192,7 @@ body.is-auth-switching .auth-overlay {
   width: 0.42rem;
   height: 0.42rem;
   border-radius: 50%;
-  background: color-mix(in oklch, var(--accent) 74%, white);
+  background: color-mix(in oklch, var(--accent) 74%, #faf9f5);
   box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--accent) 18%, transparent);
 }
 
@@ -2299,13 +2300,13 @@ body.is-auth-switching .auth-overlay {
   width: 0.42rem;
   height: 0.42rem;
   border-radius: 50%;
-  background: color-mix(in oklch, var(--accent-alt) 72%, white);
+  background: color-mix(in oklch, var(--accent-alt) 72%, #faf9f5);
   box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--accent-alt) 22%, transparent);
 }
 
 .pricing-card-fit,
 .pricing-card-note {
-  color: color-mix(in oklch, var(--muted) 76%, white);
+  color: color-mix(in oklch, var(--muted) 76%, #faf9f5);
   line-height: 1.55;
 }
 
@@ -2363,7 +2364,7 @@ body.is-auth-switching .auth-overlay {
   width: min(78%, 820px);
   height: 1px;
   transform: translateX(-50%);
-  background: linear-gradient(90deg, transparent, color-mix(in oklch, white 22%, var(--accent) 78%), transparent);
+  background: linear-gradient(90deg, transparent, color-mix(in oklch, #faf9f5 22%, var(--accent) 78%), transparent);
   opacity: 0.14;
 }
 
@@ -2400,7 +2401,7 @@ body.is-auth-switching .auth-overlay {
   line-height: 1.08;
   letter-spacing: -0.034em;
   font-weight: 700;
-  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   text-wrap: balance;
 }
 
@@ -2409,11 +2410,11 @@ body.is-auth-switching .auth-overlay {
 }
 
 .callout-line:nth-child(2) {
-  color: color-mix(in oklch, white 88%, var(--accent-alt) 12%);
+  color: color-mix(in oklch, #faf9f5 88%, var(--accent-alt) 12%);
 }
 
 .callout-line:nth-child(4) {
-  color: color-mix(in oklch, white 86%, var(--accent) 14%);
+  color: color-mix(in oklch, #faf9f5 86%, var(--accent) 14%);
 }
 
 .callout-actions {
@@ -2447,17 +2448,17 @@ body.is-auth-switching .auth-overlay {
 .callout-btn-primary {
   color: var(--ink-dark);
   border-color: color-mix(in oklch, var(--accent) 26%, transparent);
-  background: color-mix(in oklch, var(--accent) 78%, white);
+  background: color-mix(in oklch, var(--accent) 78%, #faf9f5);
   box-shadow: 0 18px 36px color-mix(in oklch, var(--accent) 24%, transparent);
 }
 
 .callout-btn-primary:hover,
 .callout-btn-primary:focus-visible {
-  background: color-mix(in oklch, var(--accent) 70%, white);
+  background: color-mix(in oklch, var(--accent) 70%, #faf9f5);
 }
 
 .callout-btn-secondary {
-  color: color-mix(in oklch, white 76%, var(--accent-alt) 24%);
+  color: color-mix(in oklch, #faf9f5 76%, var(--accent-alt) 24%);
   border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
   background: color-mix(in oklch, var(--accent-alt) 15%, var(--chip) 85%);
   box-shadow: 0 14px 28px color-mix(in oklch, var(--accent-alt) 10%, transparent);
@@ -2482,7 +2483,7 @@ body.is-auth-switching .auth-overlay {
   position: absolute;
   inset: 0 0 auto;
   height: 1px;
-  background: color-mix(in oklch, white 7%, transparent);
+  background: color-mix(in oklch, #faf9f5 7%, transparent);
 }
 
 .site-footer-shell {
@@ -2522,7 +2523,7 @@ body.is-auth-switching .auth-overlay {
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.03em;
-  color: color-mix(in oklch, white 94%, var(--accent) 6%);
+  color: color-mix(in oklch, #faf9f5 94%, var(--accent) 6%);
   white-space: nowrap;
 }
 
@@ -2537,7 +2538,7 @@ body.is-auth-switching .auth-overlay {
   font-size: clamp(1.02rem, 1.22vw, 1.24rem);
   font-weight: 800;
   letter-spacing: -0.03em;
-  color: color-mix(in oklch, white 95%, var(--accent-alt) 5%);
+  color: color-mix(in oklch, #faf9f5 95%, var(--accent-alt) 5%);
 }
 
 .site-footer-column ul {
@@ -2549,7 +2550,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .site-footer-column a {
-  color: color-mix(in oklch, var(--muted) 84%, white);
+  color: color-mix(in oklch, var(--muted) 84%, #faf9f5);
   text-decoration: none;
   font-size: clamp(0.92rem, 1.02vw, 1rem);
   line-height: 1.4;
@@ -2572,12 +2573,12 @@ body.is-auth-switching .auth-overlay {
   gap: 1.2rem;
   margin-top: clamp(2.5rem, 5vw, 4rem);
   padding-top: 1.2rem;
-  border-top: 1px solid color-mix(in oklch, white 7%, transparent);
+  border-top: 1px solid color-mix(in oklch, #faf9f5 7%, transparent);
 }
 
 .site-footer-copy {
   margin: 0;
-  color: color-mix(in oklch, var(--muted) 86%, white);
+  color: color-mix(in oklch, var(--muted) 86%, #faf9f5);
   font-size: clamp(0.84rem, 0.9vw, 0.92rem);
   line-height: 1.5;
 }
@@ -2591,7 +2592,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .site-footer-legal a {
-  color: color-mix(in oklch, var(--muted) 82%, white);
+  color: color-mix(in oklch, var(--muted) 82%, #faf9f5);
   font-size: clamp(0.84rem, 0.9vw, 0.92rem);
   text-decoration: none;
   transition:
@@ -2612,10 +2613,10 @@ body.is-auth-switching .auth-overlay {
   min-height: 3.3rem;
   width: 100%;
   padding: 0.7rem 1.1rem;
-  border: 1px solid color-mix(in oklch, white 14%, transparent);
+  border: 1px solid color-mix(in oklch, #faf9f5 14%, transparent);
   border-radius: 999px;
   background: color-mix(in oklch, var(--chip) 86%, var(--panel));
-  color: color-mix(in oklch, white 92%, var(--accent) 8%);
+  color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   font-size: 1rem;
   font-weight: 800;
   letter-spacing: 0.01em;
@@ -2628,7 +2629,7 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-card-cta:hover,
 .pricing-card-cta:focus-visible {
-  border-color: color-mix(in oklch, white 28%, transparent);
+  border-color: color-mix(in oklch, #faf9f5 28%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 88%, var(--panel));
   outline: none;
 }
@@ -2636,7 +2637,7 @@ body.is-auth-switching .auth-overlay {
 .pricing-panel[data-pricing-panel="schools"] .pricing-card-cta {
   border-color: color-mix(in oklch, var(--accent-alt) 28%, transparent);
   background: color-mix(in oklch, var(--chip) 78%, var(--accent-alt) 22%);
-  color: color-mix(in oklch, white 92%, var(--accent-alt) 8%);
+  color: color-mix(in oklch, #faf9f5 92%, var(--accent-alt) 8%);
 }
 
 .pricing-panel[data-pricing-panel="schools"] .pricing-card-cta:hover,
@@ -2647,24 +2648,24 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-card.is-featured .pricing-card-cta {
   color: var(--ink-dark);
-  background: color-mix(in oklch, var(--accent) 72%, white);
+  background: color-mix(in oklch, var(--accent) 72%, #faf9f5);
   border-color: color-mix(in oklch, var(--accent) 26%, transparent);
 }
 
 .pricing-card.is-featured .pricing-card-cta:hover,
 .pricing-card.is-featured .pricing-card-cta:focus-visible {
-  background: color-mix(in oklch, var(--accent) 82%, white);
+  background: color-mix(in oklch, var(--accent) 82%, #faf9f5);
 }
 
 .pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta {
-  background: color-mix(in oklch, var(--accent-alt) 72%, white);
+  background: color-mix(in oklch, var(--accent-alt) 72%, #faf9f5);
   border-color: color-mix(in oklch, var(--accent-alt) 32%, transparent);
   color: color-mix(in oklch, var(--ink-dark) 86%, oklch(0.34 0.03 85));
 }
 
 .pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta:hover,
 .pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta:focus-visible {
-  background: color-mix(in oklch, var(--accent-alt) 82%, white);
+  background: color-mix(in oklch, var(--accent-alt) 82%, #faf9f5);
 }
 
 .geo-focus {
@@ -3376,7 +3377,7 @@ body.is-auth-open {
     );
   box-shadow:
     0 16px 34px color-mix(in oklch, black 26%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 6%, transparent);
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 6%, transparent);
   backdrop-filter: blur(16px);
 }
 
@@ -3453,7 +3454,7 @@ body.is-auth-open {
   border-color: color-mix(in oklch, var(--accent) 42%, transparent);
   box-shadow:
     0 8px 18px color-mix(in oklch, var(--accent) 12%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 10%, transparent);
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 10%, transparent);
 }
 
 .login-form-meta {
@@ -3473,7 +3474,7 @@ body.is-auth-open {
   padding: 0;
   border: 0;
   background: transparent;
-  color: color-mix(in oklch, var(--auth-accent, var(--accent)) 86%, white);
+  color: color-mix(in oklch, var(--auth-accent, var(--accent)) 86%, #faf9f5);
   font: inherit;
   font-size: 0.83rem;
   font-weight: 800;
@@ -3492,6 +3493,7 @@ body.is-auth-open {
 .contact-modal .signup-modal-intro {
   max-width: 40ch;
   white-space: pre-line;
+  color: color-mix(in oklch, var(--signup-text-muted) 92%, #faf9f5 8%);
 }
 
 .contact-form {
@@ -3554,6 +3556,10 @@ body.is-auth-open {
   stroke-linejoin: round;
 }
 
+.contact-modal .contact-select-icon path {
+  stroke: color-mix(in oklch, #faf9f5 76%, var(--auth-accent) 24%);
+}
+
 .contact-select-wrap:hover .contact-select-icon,
 .contact-select-wrap:focus-within .contact-select-icon {
   opacity: 1;
@@ -3567,6 +3573,14 @@ body.is-auth-open {
   min-height: 8.6rem;
   padding-block: 0.8rem;
   resize: vertical;
+}
+
+.contact-modal .signup-input::placeholder {
+  color: color-mix(in oklch, var(--muted) 88%, #faf9f5 12%);
+}
+
+.contact-modal .signup-modal-helper {
+  color: color-mix(in oklch, #faf9f5 80%, var(--auth-accent) 20%);
 }
 
 :root[data-theme="light"] .contact-select-icon path {
@@ -3595,6 +3609,10 @@ body.is-auth-open {
   background: color-mix(in oklch, var(--bg) 74%, oklch(0.15 0.03 236) 26%);
 }
 
+.auth-overlay.contact-overlay {
+  background: color-mix(in oklch, var(--bg) 70%, oklch(0.05 0.014 224) 30%);
+}
+
 .auth-overlay.is-opening {
   animation: signupOverlayIn 220ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -3614,16 +3632,22 @@ body.is-auth-open {
   --auth-accent: var(--accent);
   --auth-accent-deep: var(--accent-deep);
   --auth-accent-alt: var(--accent-alt);
+  --signup-showcase-glow-main: var(--auth-accent);
+  --signup-showcase-glow-alt: var(--auth-accent-alt);
+  --signup-showcase-glow-deep: var(--auth-accent-deep);
   --signup-shell: color-mix(in oklch, var(--panel) 90%, black 10%);
   --signup-panel: color-mix(in oklch, var(--chip) 72%, var(--panel) 28%);
   --signup-showcase: color-mix(in oklch, var(--panel) 78%, black 22%);
   --signup-input-bg: color-mix(in oklch, var(--chip) 84%, black 16%);
   --signup-border: color-mix(in oklch, var(--auth-accent) 16%, transparent);
   --signup-border-strong: color-mix(in oklch, var(--auth-accent) 28%, transparent);
-  --signup-text-strong: color-mix(in oklch, white 92%, var(--auth-accent) 8%);
-  --signup-text-muted: color-mix(in oklch, white 70%, var(--auth-accent) 10%);
+  --signup-text-strong: color-mix(in oklch, #faf9f5 92%, var(--auth-accent) 8%);
+  --signup-text-muted: color-mix(in oklch, #faf9f5 70%, var(--auth-accent) 10%);
   --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 52%, var(--signup-input-bg) 48%);
   --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 58%, var(--signup-input-bg) 42%);
+  --auth-submit-text: var(--signup-text-strong);
+  --auth-submit-border-color: color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 16%, transparent);
   position: relative;
   width: min(1000px, 100%);
   min-height: min(630px, calc(100vh - 2.8rem));
@@ -3635,21 +3659,51 @@ body.is-auth-open {
   background: var(--signup-shell);
   box-shadow:
     0 28px 70px color-mix(in oklch, black 36%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 5%, transparent);
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 5%, transparent);
 }
 
 .login-modal {
-  --auth-accent: oklch(0.76 0.08 238);
-  --auth-accent-deep: oklch(0.57 0.065 232);
-  --auth-accent-alt: oklch(0.81 0.045 92);
-  --signup-shell: color-mix(in oklch, oklch(0.12 0.018 244) 86%, black 14%);
-  --signup-panel: color-mix(in oklch, oklch(0.19 0.024 238) 72%, var(--signup-shell) 28%);
-  --signup-showcase: color-mix(in oklch, oklch(0.17 0.038 236) 72%, black 28%);
-  --signup-input-bg: color-mix(in oklch, oklch(0.18 0.02 238) 82%, black 18%);
+  --auth-accent: oklch(0.79 0.095 232);
+  --auth-accent-deep: oklch(0.61 0.084 224);
+  --auth-accent-alt: oklch(0.84 0.062 86);
+  --signup-showcase-glow-main: color-mix(in oklch, var(--auth-accent) 62%, var(--signup-showcase) 38%);
+  --signup-showcase-glow-alt: color-mix(in oklch, var(--auth-accent-alt) 54%, var(--signup-showcase) 46%);
+  --signup-showcase-glow-deep: color-mix(in oklch, var(--auth-accent-deep) 58%, var(--signup-showcase) 42%);
+  --signup-shell: color-mix(in oklch, oklch(0.125 0.022 242) 84%, black 16%);
+  --signup-panel: color-mix(in oklch, oklch(0.205 0.03 236) 74%, var(--signup-shell) 26%);
+  --signup-showcase: color-mix(in oklch, oklch(0.2 0.048 226) 72%, black 28%);
+  --signup-input-bg: color-mix(in oklch, oklch(0.19 0.026 232) 82%, black 18%);
   --signup-border: color-mix(in oklch, var(--auth-accent) 18%, transparent);
   --signup-border-strong: color-mix(in oklch, var(--auth-accent) 30%, transparent);
-  --signup-text-strong: color-mix(in oklch, white 93%, var(--auth-accent) 7%);
-  --signup-text-muted: color-mix(in oklch, white 72%, var(--auth-accent) 9%);
+  --signup-text-strong: color-mix(in oklch, #faf9f5 93%, var(--auth-accent) 7%);
+  --signup-text-muted: color-mix(in oklch, #faf9f5 72%, var(--auth-accent) 9%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 78%, oklch(0.22 0.028 228) 22%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 86%, #faf9f5 14%);
+  --auth-submit-text: color-mix(in oklch, black 76%, var(--auth-accent) 24%);
+  --auth-submit-border-color: color-mix(in oklch, #faf9f5 18%, var(--auth-accent) 52%);
+  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+}
+
+.contact-modal {
+  --auth-accent: oklch(0.75 0.1 228);
+  --auth-accent-deep: oklch(0.56 0.084 174);
+  --auth-accent-alt: oklch(0.78 0.096 156);
+  --signup-showcase-glow-main: color-mix(in oklch, var(--auth-accent) 66%, var(--signup-showcase) 34%);
+  --signup-showcase-glow-alt: color-mix(in oklch, var(--auth-accent-alt) 52%, var(--signup-showcase) 48%);
+  --signup-showcase-glow-deep: color-mix(in oklch, var(--auth-accent-deep) 56%, var(--signup-showcase) 44%);
+  --signup-shell: color-mix(in oklch, oklch(0.056 0.008 226) 86%, black 14%);
+  --signup-panel: color-mix(in oklch, oklch(0.102 0.014 220) 74%, var(--signup-shell) 26%);
+  --signup-showcase: color-mix(in oklch, oklch(0.134 0.03 214) 72%, black 28%);
+  --signup-input-bg: color-mix(in oklch, oklch(0.092 0.012 216) 88%, black 12%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 24%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 38%, transparent);
+  --signup-text-strong: color-mix(in oklch, #faf9f5 97%, var(--auth-accent) 3%);
+  --signup-text-muted: color-mix(in oklch, #faf9f5 84%, var(--auth-accent) 16%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 62%, var(--auth-accent-alt) 38%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 68%, var(--auth-accent-alt) 32%);
+  --auth-submit-text: color-mix(in oklch, black 78%, var(--auth-accent-deep) 22%);
+  --auth-submit-border-color: color-mix(in oklch, #faf9f5 14%, var(--auth-accent) 48%);
+  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 22%, var(--auth-accent-alt) 12%);
 }
 
 .auth-overlay.is-opening .signup-modal {
@@ -3675,15 +3729,15 @@ body.is-auth-open {
   place-items: center;
   padding: clamp(1.15rem, 3vw, 1.8rem);
   background:
-    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--auth-accent) 18%, transparent), transparent 30%),
-    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--auth-accent-alt) 10%, transparent), transparent 26%),
-    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--auth-accent-deep) 14%, transparent), transparent 34%),
+    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--signup-showcase-glow-main) 18%, transparent), transparent 30%),
+    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--signup-showcase-glow-alt) 10%, transparent), transparent 26%),
+    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--signup-showcase-glow-deep) 8%, transparent), transparent 32%),
     linear-gradient(
       165deg,
       color-mix(in oklch, var(--chip) 50%, black 50%) 0%,
       color-mix(in oklch, var(--signup-showcase) 90%, var(--chip) 10%) 42%,
-      color-mix(in oklch, var(--signup-showcase) 78%, var(--auth-accent-deep) 10%) 74%,
-      color-mix(in oklch, var(--signup-showcase) 70%, var(--auth-accent) 12%) 100%
+      color-mix(in oklch, var(--signup-showcase) 82%, var(--signup-showcase-glow-deep) 6%) 74%,
+      color-mix(in oklch, var(--signup-showcase) 76%, var(--signup-showcase-glow-main) 8%) 100%
     );
   overflow: hidden;
 }
@@ -3694,9 +3748,9 @@ body.is-auth-open {
   width: min(144%, 41rem);
   height: auto;
   transform-origin: center;
-  transform: translate3d(-4.95rem, 0.6rem, 0) rotate(-45deg);
-  opacity: 0.92;
-  filter: drop-shadow(0 16px 28px color-mix(in oklch, black 20%, transparent));
+  transform: translate3d(0.15rem, -0.4rem, 0) rotate(-45deg);
+  opacity: 0.89;
+  filter: drop-shadow(0 10px 18px color-mix(in oklch, black 14%, transparent));
 }
 
 .signup-modal-geometry-circles circle {
@@ -3707,7 +3761,7 @@ body.is-auth-open {
 }
 
 .signup-modal-geometry-circles circle {
-  stroke: color-mix(in oklch, white 82%, var(--auth-accent) 18%);
+  stroke: color-mix(in oklch, #faf9f5 82%, var(--auth-accent) 18%);
   stroke-width: 1.18;
   opacity: 0.68;
 }
@@ -3738,7 +3792,7 @@ body.is-auth-open {
   padding: 0;
   border: 0;
   border-radius: 999px;
-  background: color-mix(in oklch, white 6%, transparent);
+  background: color-mix(in oklch, #faf9f5 6%, transparent);
   color: var(--signup-text-muted);
   cursor: pointer;
   transition:
@@ -3749,7 +3803,7 @@ body.is-auth-open {
 
 .signup-modal-close:hover,
 .signup-modal-close:focus-visible {
-  background: color-mix(in oklch, white 10%, transparent);
+  background: color-mix(in oklch, #faf9f5 10%, transparent);
   color: var(--signup-text-strong);
   outline: none;
 }
@@ -3834,7 +3888,7 @@ body.is-auth-open {
   margin: 0.18rem 0 0;
   border-radius: 0.28rem;
   border: 1px solid var(--signup-border);
-  background: color-mix(in oklch, var(--signup-input-bg) 86%, white 14%);
+  background: color-mix(in oklch, var(--signup-input-bg) 86%, #faf9f5 14%);
   cursor: pointer;
   background-repeat: no-repeat;
   background-position: center;
@@ -3869,7 +3923,7 @@ body.is-auth-open {
 }
 
 .signup-consent-copy a {
-  color: color-mix(in oklch, var(--auth-accent) 86%, white);
+  color: color-mix(in oklch, var(--auth-accent) 86%, #faf9f5);
   text-decoration: none;
 }
 
@@ -3885,7 +3939,7 @@ body.is-auth-open {
   padding: 0.7rem 0.92rem;
   border-radius: 0.86rem;
   border: 1px solid var(--signup-border);
-  background: color-mix(in oklch, var(--signup-input-bg) 86%, white 14%);
+  background: color-mix(in oklch, var(--signup-input-bg) 86%, #faf9f5 14%);
   color: var(--signup-text-strong);
   font: inherit;
   font-size: 0.94rem;
@@ -3897,7 +3951,7 @@ body.is-auth-open {
 }
 
 .signup-input::placeholder {
-  color: color-mix(in oklch, var(--muted) 88%, white 12%);
+  color: color-mix(in oklch, var(--muted) 88%, #faf9f5 12%);
 }
 
 .signup-input:focus-visible {
@@ -3919,24 +3973,31 @@ body.is-auth-open {
 .signup-submit {
   min-height: 3.15rem;
   margin-top: 0.64rem;
-  border: 1px solid color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  border: 1px solid var(--auth-submit-border-color);
   border-radius: 0.88rem;
   background: var(--auth-submit-bg);
-  color: var(--signup-text-strong);
+  color: var(--auth-submit-text);
   font-size: 0.95rem;
   font-weight: 800;
   letter-spacing: -0.02em;
   cursor: pointer;
+  box-shadow:
+    0 1px 0 color-mix(in oklch, #faf9f5 10%, transparent) inset,
+    0 10px 22px var(--auth-submit-shadow);
   transition:
     transform 220ms ease,
     background-color 220ms ease,
-    box-shadow 220ms ease;
+    box-shadow 220ms ease,
+    border-color 220ms ease;
 }
 
 .signup-submit:hover,
 .signup-submit:focus-visible {
   background: var(--auth-submit-bg-hover);
-  box-shadow: 0 12px 24px color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  border-color: color-mix(in oklch, var(--auth-submit-border-color) 72%, #faf9f5 28%);
+  box-shadow:
+    0 1px 0 color-mix(in oklch, #faf9f5 16%, transparent) inset,
+    0 14px 28px color-mix(in oklch, var(--auth-submit-shadow) 76%, transparent);
   outline: none;
 }
 
@@ -3946,7 +4007,7 @@ body.is-auth-open {
   border: 1px solid transparent;
   border-radius: 0.82rem;
   background: color-mix(in oklch, var(--chip) 84%, black 16%);
-  color: color-mix(in oklch, var(--auth-accent) 82%, white);
+  color: color-mix(in oklch, var(--auth-accent) 82%, #faf9f5);
   font-size: 0.84rem;
   line-height: 1.55;
 }
@@ -3954,13 +4015,13 @@ body.is-auth-open {
 .signup-form-status.is-success {
   border-color: color-mix(in oklch, var(--auth-accent) 22%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 74%, var(--auth-accent) 26%);
-  color: color-mix(in oklch, white 92%, var(--auth-accent) 8%);
+  color: color-mix(in oklch, #faf9f5 92%, var(--auth-accent) 8%);
 }
 
 .signup-form-status.is-error {
   border-color: color-mix(in oklch, var(--auth-accent-alt) 26%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 78%, var(--auth-accent-alt) 22%);
-  color: color-mix(in oklch, white 90%, var(--auth-accent-alt) 10%);
+  color: color-mix(in oklch, #faf9f5 90%, var(--auth-accent-alt) 10%);
 }
 
 .signup-modal-helper {
@@ -3973,7 +4034,7 @@ body.is-auth-open {
 
 .signup-modal-helper a {
   margin-left: 0.18rem;
-  color: color-mix(in oklch, var(--auth-accent) 86%, white);
+  color: color-mix(in oklch, var(--auth-accent) 86%, #faf9f5);
   font-weight: 800;
   text-decoration-thickness: 0.08em;
   text-underline-offset: 0.16em;
@@ -3998,12 +4059,7 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .hero-interactive {
-  background:
-    linear-gradient(
-      145deg,
-      color-mix(in oklch, white 72%, var(--panel) 28%) 0%,
-      color-mix(in oklch, var(--panel) 78%, var(--accent) 22%) 100%
-    );
+  background: #CAC9DA;
   box-shadow: none;
 }
 
@@ -4043,13 +4099,25 @@ body.is-auth-open {
   opacity: 0.16;
 }
 
-:root[data-theme="light"] .hero-kicker,
-:root[data-theme="light"] .core-kicker,
-:root[data-theme="light"] .theorems-carousel-kicker,
-:root[data-theme="light"] .ai-study-kicker,
+:root[data-theme="light"] .hero-kicker {
+  color: color-mix(in oklch, var(--accent-deep) 76%, var(--text) 24%);
+}
+
+:root[data-theme="light"] .core-kicker {
+  color: color-mix(in oklch, var(--accent-warm) 68%, var(--text) 32%);
+}
+
+:root[data-theme="light"] .theorems-carousel-kicker {
+  color: color-mix(in oklch, var(--accent-rose) 66%, var(--text) 34%);
+}
+
+:root[data-theme="light"] .ai-study-kicker {
+  color: color-mix(in oklch, var(--accent-olive) 70%, var(--text) 30%);
+}
+
 :root[data-theme="light"] .pricing-kicker,
 :root[data-theme="light"] .pricing-switch-label {
-  color: color-mix(in oklch, var(--accent-deep) 76%, var(--text) 24%);
+  color: color-mix(in oklch, var(--accent-warm) 62%, var(--text) 38%);
 }
 
 :root[data-theme="light"] #hero-title,
@@ -4088,43 +4156,39 @@ body.is-auth-open {
 
 :root[data-theme="light"] .hero-btn.secondary {
   color: var(--text);
-  background: color-mix(in oklch, white 44%, var(--chip) 56%);
+  background: #e8e6dc;
 }
 
 :root[data-theme="light"] .hero-btn.secondary:hover,
 :root[data-theme="light"] .hero-btn.secondary:focus-visible {
   color: var(--text);
-  background: color-mix(in oklch, white 28%, var(--chip-hover) 72%);
+  background: #cec6ba;
 }
 
 :root[data-theme="light"] .core-features,
 :root[data-theme="light"] .theorems-carousel,
 :root[data-theme="light"] .pricing-section {
-  box-shadow: 0 26px 52px color-mix(in oklch, var(--accent) 8%, transparent);
+  border-radius: 0;
+  box-shadow: none;
 }
 
 :root[data-theme="light"] .core-features {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 76%, var(--panel) 24%) 0%,
-      color-mix(in oklch, white 56%, var(--chip) 44%) 100%
-    );
+  background: transparent;
 }
 
 :root[data-theme="light"] .core-features::before {
-  background: color-mix(in oklch, var(--accent) 34%, transparent);
+  content: none;
 }
 
 :root[data-theme="light"] .core-feature-card {
-  border-color: color-mix(in oklch, var(--accent) 14%, oklch(0.78 0.018 248 / 0.8));
-  background: color-mix(in oklch, white 70%, var(--panel) 30%);
+  border-color: #cec6ba;
+  background: #faf9f5;
 }
 
 :root[data-theme="light"] .core-feature-card:hover,
 :root[data-theme="light"] .core-feature-card:focus-within {
-  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
-  background: color-mix(in oklch, white 54%, var(--panel) 46%);
+  border-color: #CAC9DA;
+  background: #e9cccc;
 }
 
 :root[data-theme="light"] .core-feature-card h3,
@@ -4136,16 +4200,16 @@ body.is-auth-open {
 :root[data-theme="light"] .core-feature-chat-btn,
 :root[data-theme="light"] .theorem-nav-btn,
 :root[data-theme="light"] .pricing-card-cta {
-  border-color: color-mix(in oklch, var(--accent) 16%, transparent);
-  background: color-mix(in oklch, white 58%, var(--chip) 42%);
-  color: color-mix(in oklch, var(--text) 86%, var(--accent) 14%);
+  border-color: #cec6ba;
+  background: #cec6ba;
+  color: var(--ink-dark);
 }
 
 :root[data-theme="light"] .callout-btn-secondary {
-  border-color: color-mix(in oklch, var(--accent-alt) 26%, transparent);
-  background: color-mix(in oklch, white 70%, var(--accent-alt) 30%);
-  color: color-mix(in oklch, var(--text) 88%, var(--accent-alt) 12%);
-  box-shadow: 0 16px 30px color-mix(in oklch, var(--accent-alt) 10%, transparent);
+  border-color: #788c5d;
+  background: #bacfc8;
+  color: var(--ink-dark);
+  box-shadow: none;
 }
 
 :root[data-theme="light"] .core-feature-chat-btn:hover,
@@ -4154,136 +4218,86 @@ body.is-auth-open {
 :root[data-theme="light"] .theorem-nav-btn:focus-visible,
 :root[data-theme="light"] .pricing-card-cta:hover,
 :root[data-theme="light"] .pricing-card-cta:focus-visible {
-  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
-  background: color-mix(in oklch, white 40%, var(--chip-hover) 60%);
+  border-color: #6a9bcc;
+  background: #6a9bcc;
 }
 
 :root[data-theme="light"] .callout-btn-secondary:hover,
 :root[data-theme="light"] .callout-btn-secondary:focus-visible {
-  border-color: color-mix(in oklch, var(--accent-alt) 36%, transparent);
-  background: color-mix(in oklch, white 58%, var(--accent-alt) 42%);
+  border-color: #788c5d;
+  background: #788c5d;
+  color: #faf9f5;
 }
 
 :root[data-theme="light"] .theorems-carousel {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 76%, var(--panel) 24%) 0%,
-      color-mix(in oklch, white 56%, var(--chip) 44%) 100%
-    );
+  background: transparent;
 }
 
 :root[data-theme="light"] .theorem-frame {
-  border-color: color-mix(in oklch, var(--accent) 12%, transparent);
-  background:
-    radial-gradient(circle at 84% 14%, color-mix(in oklch, var(--accent-alt) 10%, transparent), transparent 34%),
-    radial-gradient(circle at 12% 100%, color-mix(in oklch, var(--accent) 10%, transparent), transparent 42%),
-    linear-gradient(
-      162deg,
-      color-mix(in oklch, white 84%, var(--chip) 16%) 0%,
-      color-mix(in oklch, white 62%, var(--panel) 38%) 100%
-    );
+  border-color: #cec6ba;
+  background: #faf9f5;
 }
 
 :root[data-theme="light"] .theorem-frame-no,
 :root[data-theme="light"] .theorem-frame-cta .theorem-cta-title span:last-child {
-  color: color-mix(in oklch, var(--accent-deep) 70%, var(--text) 30%);
+  color: #1F1E1D;
 }
 
 :root[data-theme="light"] .theorem-frame-cta {
-  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 70%, transparent),
-    inset 0 -18px 26px color-mix(in oklch, var(--accent) 6%, transparent);
-  background:
-    radial-gradient(circle at 88% 16%, color-mix(in oklch, var(--accent-alt) 16%, transparent), transparent 30%),
-    radial-gradient(circle at 10% 100%, color-mix(in oklch, var(--accent) 18%, transparent), transparent 44%),
-    linear-gradient(
-      154deg,
-      color-mix(in oklch, var(--accent) 14%, white 86%) 0%,
-      color-mix(in oklch, white 66%, var(--chip) 34%) 52%,
-      color-mix(in oklch, white 54%, var(--panel) 46%) 100%
-    );
+  border-color: #cec6ba;
+  box-shadow: none;
+  background: #bacfc8;
 }
 
 :root[data-theme="light"] .theorem-frame-cta::after {
-  background:
-    linear-gradient(
-      135deg,
-      transparent 0 56%,
-      color-mix(in oklch, var(--accent) 10%, transparent) 64%,
-      transparent 74%
-    );
+  background: #6a9bcc;
+  opacity: 0.08;
 }
 
 :root[data-theme="light"] .theorem-cta-btn {
-  border-color: color-mix(in oklch, var(--accent) 22%, transparent);
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in oklch, var(--accent) 16%, white 84%),
-      color-mix(in oklch, white 60%, var(--panel) 40%)
-    );
-  color: color-mix(in oklch, var(--text) 88%, var(--accent) 12%);
+  border-color: #6a9bcc;
+  background: #6a9bcc;
+  color: var(--ink-dark);
 }
 
 :root[data-theme="light"] .theorem-cta-btn:hover,
 :root[data-theme="light"] .theorem-cta-btn:focus-visible {
-  background: color-mix(in oklch, var(--accent) 20%, white 80%);
-  border-color: color-mix(in oklch, var(--accent) 30%, transparent);
+  background: #bacfc8;
+  border-color: #bacfc8;
 }
 
 :root[data-theme="light"] .theorem-cta-btn-alt {
-  background:
-    linear-gradient(
-      135deg,
-      color-mix(in oklch, var(--accent-alt) 18%, white 82%),
-      color-mix(in oklch, white 64%, var(--chip) 36%)
-    );
+  background: #cec6ba;
 }
 
 :root[data-theme="light"] .ai-study-section {
-  --ai-chat-surface: color-mix(in oklch, white 70%, var(--panel) 30%);
-  --ai-chat-surface-raised: color-mix(in oklch, white 74%, var(--chip) 26%);
-  --ai-chat-surface-deep: color-mix(in oklch, white 58%, var(--panel) 42%);
-  --ai-chat-border: color-mix(in oklch, var(--accent) 18%, oklch(0.74 0.02 248 / 0.82));
-  --ai-chat-border-strong: color-mix(in oklch, var(--accent-deep) 26%, var(--text) 12%);
-  --ai-chat-text-strong: color-mix(in oklch, var(--text) 94%, var(--accent) 6%);
-  --ai-chat-text-muted: color-mix(in oklch, var(--muted) 80%, var(--text) 20%);
-  --ai-chat-assistant-bubble: color-mix(in oklch, white 76%, var(--panel) 24%);
-  --ai-chat-user-bubble: color-mix(in oklch, var(--accent) 28%, white 72%);
-  --ai-chat-user-text: color-mix(in oklch, var(--ink-dark) 96%, var(--accent) 4%);
-  --ai-chat-action: color-mix(in oklch, var(--accent) 38%, white 62%);
-  --ai-chat-action-hover: color-mix(in oklch, var(--accent) 44%, white 56%);
-  --ai-chat-action-muted: color-mix(in oklch, var(--accent) 10%, transparent);
+  --ai-chat-surface: #e8e6dc;
+  --ai-chat-surface-raised: #faf9f5;
+  --ai-chat-surface-deep: #cec6ba;
+  --ai-chat-border: #CAC9DA;
+  --ai-chat-border-strong: #b0aea5;
+  --ai-chat-text-strong: #141413;
+  --ai-chat-text-muted: #1F1E1D;
+  --ai-chat-assistant-bubble: #e9cccc;
+  --ai-chat-user-bubble: #6a9bcc;
+  --ai-chat-user-text: #141413;
+  --ai-chat-action: #CAC9DA;
+  --ai-chat-action-hover: #6a9bcc;
+  --ai-chat-action-muted: #cec6ba;
 }
 
 :root[data-theme="light"] .ai-chat-model-menu {
-  box-shadow: 0 18px 34px color-mix(in oklch, var(--accent) 10%, transparent);
+  box-shadow: 0 12px 24px color-mix(in oklch, var(--accent) 6%, transparent);
 }
 
 :root[data-theme="light"] .pricing-section {
-  background:
-    radial-gradient(circle at 82% 8%, color-mix(in oklch, var(--accent) 12%, transparent), transparent 26%),
-    radial-gradient(circle at 12% 100%, color-mix(in oklch, var(--accent-alt) 12%, transparent), transparent 34%),
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 80%, var(--panel) 20%) 0%,
-      color-mix(in oklch, white 60%, var(--chip) 40%) 100%
-    );
+  background: transparent;
 }
 
 :root[data-theme="light"] .pricing-view-toggle {
-  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 72%, var(--chip) 28%) 0%,
-      color-mix(in oklch, white 54%, var(--panel) 46%) 100%
-    );
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 80%, transparent),
-    0 12px 24px color-mix(in oklch, var(--accent) 8%, transparent);
+  border-color: #cec6ba;
+  background: #e8e6dc;
+  box-shadow: none;
 }
 
 :root[data-theme="light"] .pricing-view-btn {
@@ -4297,76 +4311,51 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .pricing-card {
-  border-color: color-mix(in oklch, var(--accent) 10%, transparent);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 86%, var(--panel) 14%) 0%,
-      color-mix(in oklch, white 66%, var(--chip) 34%) 100%
-    );
-  box-shadow:
-    inset 0 1px 0 color-mix(in oklch, white 78%, transparent),
-    0 24px 42px color-mix(in oklch, var(--accent) 8%, transparent);
+  border-color: #cec6ba;
+  background: #faf9f5;
+  box-shadow: none;
 }
 
 :root[data-theme="light"] .pricing-card-starter {
-  background:
-    radial-gradient(circle at 84% 14%, color-mix(in oklch, var(--accent-alt) 14%, transparent), transparent 32%),
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 88%, var(--panel) 12%) 0%,
-      color-mix(in oklch, white 72%, var(--chip) 28%) 100%
-    );
+  background: #e9cccc;
 }
 
 :root[data-theme="light"] .pricing-card-pro {
-  border-color: color-mix(in oklch, var(--accent) 24%, transparent);
-  background:
-    radial-gradient(circle at 82% 14%, color-mix(in oklch, var(--accent) 18%, transparent), transparent 34%),
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 82%, oklch(0.9 0.03 230) 18%) 0%,
-      color-mix(in oklch, white 60%, oklch(0.86 0.04 236) 40%) 100%
-    );
+  border-color: #6a9bcc;
+  background: #CAC9DA;
 }
 
 :root[data-theme="light"] .pricing-card-premium,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card {
-  background:
-    radial-gradient(circle at 86% 12%, color-mix(in oklch, var(--accent-alt) 16%, transparent), transparent 30%),
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 86%, var(--panel) 14%) 0%,
-      color-mix(in oklch, white 64%, var(--accent-alt) 36%) 100%
-    );
+  background: #bacfc8;
 }
 
 :root[data-theme="light"] .pricing-card-badge {
-  border-color: color-mix(in oklch, var(--accent) 16%, transparent);
-  background: color-mix(in oklch, var(--accent) 10%, white 90%);
-  color: color-mix(in oklch, var(--text) 86%, var(--accent) 14%);
+  border-color: #d97757;
+  background: #e8e6dc;
+  color: #1F1E1D;
 }
 
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card-badge {
-  border-color: color-mix(in oklch, var(--accent-alt) 18%, transparent);
-  background: color-mix(in oklch, var(--accent-alt) 14%, white 86%);
-  color: color-mix(in oklch, var(--text) 84%, var(--accent-alt) 16%);
+  border-color: #788c5d;
+  background: #e8e6dc;
+  color: #1F1E1D;
 }
 
 :root[data-theme="light"] .pricing-card-label,
 :root[data-theme="light"] .pricing-card-billing,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card h3 {
-  color: color-mix(in oklch, var(--accent-deep) 72%, var(--text) 28%);
+  color: #1F1E1D;
 }
 
 :root[data-theme="light"] .pricing-card-divider,
 :root[data-theme="light"] .site-footer::before,
 :root[data-theme="light"] .site-footer-bottom {
-  border-color: color-mix(in oklch, var(--accent) 10%, transparent);
+  border-color: #b0aea5;
 }
 
 :root[data-theme="light"] .pricing-card-divider {
-  background: color-mix(in oklch, var(--accent) 10%, transparent);
+  background: #b0aea5;
 }
 
 :root[data-theme="light"] .pricing-card.is-featured .pricing-card-cta,
@@ -4375,19 +4364,12 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .callout-section {
-  background:
-    radial-gradient(circle at 18% 22%, color-mix(in oklch, var(--accent-alt) 14%, transparent) 0%, transparent 34%),
-    radial-gradient(circle at 82% 76%, color-mix(in oklch, var(--accent) 16%, transparent) 0%, transparent 38%),
-    linear-gradient(
-      160deg,
-      color-mix(in oklch, white 78%, var(--panel) 22%) 0%,
-      color-mix(in oklch, white 58%, var(--chip) 42%) 100%
-    );
+  background: #e8e6dc;
 }
 
 :root[data-theme="light"] .callout-section::before {
-  background: linear-gradient(90deg, transparent, color-mix(in oklch, var(--accent) 28%, transparent), transparent);
-  opacity: 0.28;
+  background: #CAC9DA;
+  opacity: 0.12;
 }
 
 :root[data-theme="light"] .callout-line:nth-child(2),
@@ -4396,12 +4378,7 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .site-footer {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 80%, var(--bg) 20%) 0%,
-      color-mix(in oklch, white 60%, var(--panel) 40%) 100%
-    );
+  background: #cec6ba;
 }
 
 :root[data-theme="light"] .site-footer-column a:hover,
@@ -4412,69 +4389,69 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .settings-dropdown {
-  border-color: color-mix(in oklch, var(--accent) 14%, transparent);
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 84%, var(--panel) 16%) 0%,
-      color-mix(in oklch, white 62%, var(--chip) 38%) 100%
-    );
-  box-shadow:
-    0 18px 34px color-mix(in oklch, var(--accent) 10%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 78%, transparent);
+  border-color: #cec6ba;
+  background: #e8e6dc;
+  box-shadow: 0 12px 22px color-mix(in oklch, var(--accent) 5%, transparent);
 }
 
 :root[data-theme="light"] .auth-overlay {
-  background: color-mix(in oklch, var(--bg) 82%, white 18%);
+  background: #e8e6dc;
 }
 
 :root[data-theme="light"] .auth-overlay.login-overlay {
-  background: color-mix(in oklch, var(--bg) 76%, oklch(0.86 0.024 232) 24%);
+  background: #CAC9DA;
+}
+
+:root[data-theme="light"] .auth-overlay.contact-overlay {
+  background: #bacfc8;
 }
 
 :root[data-theme="light"] .signup-modal {
-  --signup-shell: color-mix(in oklch, white 82%, var(--panel) 18%);
-  --signup-panel: color-mix(in oklch, white 92%, var(--panel) 8%);
-  --signup-showcase: color-mix(in oklch, white 64%, oklch(0.88 0.02 190) 36%);
-  --signup-input-bg: color-mix(in oklch, white 96%, var(--chip) 4%);
-  --signup-border: color-mix(in oklch, var(--auth-accent) 16%, oklch(0.76 0.018 248 / 0.7));
-  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 24%, transparent);
-  --signup-text-strong: color-mix(in oklch, var(--text) 92%, var(--auth-accent) 8%);
-  --signup-text-muted: color-mix(in oklch, var(--muted) 86%, var(--auth-accent) 14%);
-  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 18%, white 82%);
-  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 24%, white 76%);
+  --signup-shell: #e8e6dc;
+  --signup-panel: #faf9f5;
+  --signup-showcase: #CAC9DA;
+  --signup-input-bg: #faf9f5;
+  --signup-border: #cec6ba;
+  --signup-border-strong: #b0aea5;
+  --signup-text-strong: #141413;
+  --signup-text-muted: #b0aea5;
+  --auth-submit-bg: #cec6ba;
+  --auth-submit-bg-hover: #6a9bcc;
   box-shadow:
-    0 28px 64px color-mix(in oklch, var(--accent) 10%, transparent),
-    inset 0 1px 0 color-mix(in oklch, white 80%, transparent);
+    0 20px 40px color-mix(in oklch, #CAC9DA 10%, transparent);
 }
 
 :root[data-theme="light"] .login-modal {
-  --auth-accent: oklch(0.56 0.09 232);
-  --auth-accent-deep: oklch(0.46 0.075 228);
-  --auth-accent-alt: oklch(0.72 0.085 88);
-  --signup-shell: color-mix(in oklch, white 84%, oklch(0.9 0.02 236) 16%);
-  --signup-panel: color-mix(in oklch, white 92%, oklch(0.9 0.02 236) 8%);
-  --signup-showcase: color-mix(in oklch, white 66%, oklch(0.86 0.028 232) 34%);
-  --signup-input-bg: color-mix(in oklch, white 96%, oklch(0.88 0.014 236) 4%);
+  --auth-accent: #6a9bcc;
+  --auth-accent-deep: #1F1E1D;
+  --auth-accent-alt: #CAC9DA;
+  --signup-shell: #e8e6dc;
+  --signup-panel: #faf9f5;
+  --signup-showcase: #CAC9DA;
+  --signup-input-bg: #faf9f5;
+}
+
+:root[data-theme="light"] .contact-modal {
+  --auth-accent: #6a9bcc;
+  --auth-accent-deep: #1F1E1D;
+  --auth-accent-alt: #bacfc8;
+  --signup-shell: #e8e6dc;
+  --signup-panel: #faf9f5;
+  --signup-showcase: #bacfc8;
+  --signup-input-bg: #faf9f5;
+  --signup-border: #cec6ba;
+  --signup-border-strong: #b0aea5;
+  --signup-text-strong: #141413;
+  --signup-text-muted: #1F1E1D;
 }
 
 :root[data-theme="light"] .signup-modal-showcase {
-  background:
-    radial-gradient(circle at 18% 18%, color-mix(in oklch, var(--auth-accent) 10%, transparent), transparent 30%),
-    radial-gradient(circle at 78% 12%, color-mix(in oklch, var(--auth-accent-alt) 8%, transparent), transparent 26%),
-    radial-gradient(circle at 30% 92%, color-mix(in oklch, var(--auth-accent-deep) 10%, transparent), transparent 34%),
-    linear-gradient(
-      165deg,
-      color-mix(in oklch, white 54%, var(--chip) 46%) 0%,
-      color-mix(in oklch, white 66%, var(--signup-showcase) 34%) 42%,
-      color-mix(in oklch, var(--signup-showcase) 82%, var(--auth-accent-deep) 18%) 74%,
-      color-mix(in oklch, var(--signup-showcase) 78%, var(--auth-accent) 22%) 100%
-    );
+  background: var(--signup-showcase);
 }
 
 :root[data-theme="light"] .signup-modal-geometry {
-  opacity: 0.84;
-  filter: drop-shadow(0 14px 22px color-mix(in oklch, var(--accent) 8%, transparent));
+  opacity: 0.8;
+  filter: drop-shadow(0 10px 16px color-mix(in oklch, var(--accent) 5%, transparent));
 }
 
 :root[data-theme="light"] .signup-modal-geometry-circles circle {
@@ -4483,26 +4460,21 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .signup-modal-panel {
-  background:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, white 94%, var(--signup-panel) 6%) 0%,
-      color-mix(in oklch, white 84%, var(--signup-shell) 16%) 100%
-    );
+  background: var(--signup-panel);
 }
 
 :root[data-theme="light"] .signup-modal-close {
-  background: color-mix(in oklch, white 44%, var(--chip) 56%);
+  background: #e8e6dc;
 }
 
 :root[data-theme="light"] .signup-modal-close:hover,
 :root[data-theme="light"] .signup-modal-close:focus-visible {
-  background: color-mix(in oklch, white 28%, var(--chip-hover) 72%);
+  background: #cec6ba;
 }
 
 :root[data-theme="light"] .signup-form-status {
-  background: color-mix(in oklch, white 88%, var(--chip) 12%);
-  color: color-mix(in oklch, var(--text) 84%, var(--auth-accent) 16%);
+  background: #e8e6dc;
+  color: #1F1E1D;
 }
 
 :root[data-theme="light"] .signup-form-status.is-success {
@@ -4573,7 +4545,7 @@ body.is-auth-open {
 
   .signup-modal-geometry {
     width: min(118%, 26rem);
-    transform: translate3d(-4.3rem, 0.14rem, 0) rotate(-45deg);
+    transform: translate3d(0.75rem, -0.86rem, 0) rotate(-45deg);
   }
 
   .contact-form-grid {
@@ -4616,7 +4588,7 @@ body.is-auth-open {
 
   .signup-modal-geometry {
     width: min(116%, 19.6rem);
-    transform: translate3d(-4.02rem, 0.04rem, 0) rotate(-45deg);
+    transform: translate3d(0.95rem, -0.96rem, 0) rotate(-45deg);
   }
 
   .signup-modal-close {
@@ -4678,3 +4650,6 @@ body.is-auth-open {
     transition: none;
   }
 }
+
+
+
