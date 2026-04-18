@@ -30,6 +30,7 @@ This document combines the light theme palette from `COLORS.md` with the design 
 - Warm Gray: `#b0aea5`
 - Sand: `#e8e6dc`
 - Clay: `#d97757`
+- Clay Hover: `#C96442`
 - Dusty Blue: `#6a9bcc`
 - Olive: `#788c5d`
 - Deep Ink: `#1F1E1D`
@@ -94,6 +95,7 @@ This document combines the light theme palette from `COLORS.md` with the design 
   - Fill: `#141413`
   - Text: `#ffffff` or `#faf9f5`
   - Border: none or visually invisible
+  - Clay hover option: `#C96442`
   - Role: the strongest anchor on the page
 - Secondary button details:
   - Fill: `#e8e6dc` or `#faf9f5`

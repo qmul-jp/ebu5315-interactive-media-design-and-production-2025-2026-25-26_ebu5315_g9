@@ -209,8 +209,14 @@
 })();
 
 (() => {
-  const titles = Array.from(document.querySelectorAll(".scroll-title-reveal"));
-  if (!titles.length) {
+  const revealTargets = Array.from(
+    document.querySelectorAll(".scroll-title-reveal, .scroll-title-cascade")
+  );
+  const cascadeTitles = Array.from(
+    document.querySelectorAll(".scroll-title-cascade")
+  );
+
+  if (!revealTargets.length) {
     return;
   }
 
@@ -218,22 +224,98 @@
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
+  const lineSelectors = ["title-line", "callout-line", "title-cascade-line"];
+
+  const collectRawLines = (title) => {
+    const explicitLines = Array.from(title.children).filter((child) =>
+      lineSelectors.some((className) => child.classList.contains(className))
+    );
+
+    if (explicitLines.length) {
+      return explicitLines.map((line) => ({
+        text: (line.dataset.cascadeSource || line.textContent || "")
+          .replace(/\s+/g, " ")
+          .trim(),
+        className: line.className,
+      }));
+    }
+
+    const segments = [];
+    let buffer = "";
+
+    Array.from(title.childNodes).forEach((node) => {
+      if (node.nodeType === Node.ELEMENT_NODE && node.nodeName === "BR") {
+        segments.push(buffer);
+        buffer = "";
+        return;
+      }
+
+      buffer += node.textContent || "";
+    });
+
+    segments.push(buffer);
+
+    return segments
+      .flatMap((segment) => segment.split(/\n+/))
+      .map((segment) => segment.replace(/\s+/g, " ").trim())
+      .filter(Boolean)
+      .map((text) => ({
+        text,
+        className: "title-cascade-line",
+      }));
+  };
+
+  const prepareCascadeTitle = (title) => {
+    const lines = collectRawLines(title);
+    if (!lines.length) {
+      title.classList.remove("title-cascade-ready");
+      return;
+    }
+
+    title.replaceChildren();
+
+    lines.forEach((line, index) => {
+      const lineEl = document.createElement("span");
+      lineEl.className = line.className;
+      lineEl.dataset.cascadeSource = line.text;
+      lineEl.style.setProperty(
+        "--line-delay",
+        `${index * 120}ms`
+      );
+
+      const inner = document.createElement("span");
+      inner.className = "title-cascade-line-inner";
+      inner.textContent = line.text;
+
+      lineEl.append(inner);
+      title.append(lineEl);
+    });
+
+    title.classList.add("title-cascade-ready");
+  };
+
+  const prepareCascadeTitles = () => {
+    cascadeTitles.forEach(prepareCascadeTitle);
+  };
+
   const reveal = (el) => {
     el.classList.add("is-visible");
   };
 
+  prepareCascadeTitles();
+
   if (reduceMotion || !("IntersectionObserver" in window)) {
-    titles.forEach(reveal);
+    revealTargets.forEach(reveal);
     return;
   }
 
-  titles.forEach((title, index) => {
+  revealTargets.forEach((target, index) => {
     const customDelay = Number.parseInt(
-      title.getAttribute("data-reveal-delay") || "",
+      target.getAttribute("data-reveal-delay") || "",
       10
     );
     const delay = Number.isFinite(customDelay) ? customDelay : index * 45;
-    title.style.setProperty("--reveal-delay", `${delay}ms`);
+    target.style.setProperty("--reveal-delay", `${delay}ms`);
   });
 
   const observer = new IntersectionObserver(
@@ -254,8 +336,12 @@
 
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
-      titles.forEach((title) => observer.observe(title));
+      revealTargets.forEach((target) => observer.observe(target));
     });
+  });
+
+  window.addEventListener("circlelab:languagechange", () => {
+    prepareCascadeTitles();
   });
 })();
 

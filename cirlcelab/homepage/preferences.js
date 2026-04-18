@@ -297,6 +297,7 @@
       return;
     }
 
+    delete menu.dataset.previewTheme;
     menu.hidden = true;
     toggle.setAttribute("aria-expanded", "false");
   };
@@ -314,6 +315,15 @@
     if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) {
       return;
     }
+
+    const setPreviewTheme = (theme) => {
+      if (theme === "dark" || theme === "light") {
+        menu.dataset.previewTheme = theme;
+        return;
+      }
+
+      delete menu.dataset.previewTheme;
+    };
 
     toggle.addEventListener("click", () => {
       const willOpen = menu.hidden;
@@ -341,7 +351,26 @@
         return;
       }
 
+      const previewTheme = button.dataset.themeOption;
+
+      button.addEventListener("mouseenter", () => {
+        setPreviewTheme(previewTheme);
+      });
+
+      button.addEventListener("mouseleave", () => {
+        setPreviewTheme(null);
+      });
+
+      button.addEventListener("focus", () => {
+        setPreviewTheme(previewTheme);
+      });
+
+      button.addEventListener("blur", () => {
+        setPreviewTheme(null);
+      });
+
       button.addEventListener("click", () => {
+        setPreviewTheme(null);
         applyTheme(button.dataset.themeOption);
       });
     });

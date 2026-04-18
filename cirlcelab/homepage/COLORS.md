@@ -8,6 +8,7 @@
 #b0aea5
 #e8e6dc
 #d97757
+#C96442
 #6a9bcc
 #788c5d
 #1F1E1D
