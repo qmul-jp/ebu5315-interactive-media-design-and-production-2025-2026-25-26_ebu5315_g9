@@ -4,6 +4,7 @@
 
 #141413
 #faf9f5
+#ffffff
 #b0aea5
 #e8e6dc
 #d97757

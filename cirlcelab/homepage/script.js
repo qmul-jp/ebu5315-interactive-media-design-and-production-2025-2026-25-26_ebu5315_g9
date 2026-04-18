@@ -642,7 +642,7 @@
   };
 
   const syncHeaderScrollState = () => {
-    document.body.classList.toggle("is-scrolled", window.scrollY > 8);
+    document.body.classList.toggle("is-scrolled", window.scrollY > 0);
   };
 
   syncViewportMetrics();
