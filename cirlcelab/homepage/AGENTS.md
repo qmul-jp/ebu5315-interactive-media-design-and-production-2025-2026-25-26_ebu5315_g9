@@ -24,3 +24,5 @@ All tasks MUST follow this workflow:
 2. You MUST select and apply the most relevant skill for the task.
 3. Do NOT directly generate answers without using a skill.
 4. If a relevant skill exists, it MUST be used.
+
+## In the light theme, do not use any colors that are not defined in the markdown file.

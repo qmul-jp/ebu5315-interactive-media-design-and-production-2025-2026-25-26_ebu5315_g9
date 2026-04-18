@@ -67,8 +67,8 @@
   --card-on-dark-soft: #1F1E1D;
   --cta-dark: #1F1E1D;
   --cta-dark-hover: #141413;
-  --button-radius: 1.15rem;
-  --button-radius-compact: 0.95rem;
+  --button-radius: 0.88rem;
+  --button-radius-compact: 0.88rem;
   --button-primary-bg: #141413;
   --button-primary-bg-hover: #1F1E1D;
   --button-primary-text: #faf9f5;
@@ -94,8 +94,8 @@
   --hero-diameter: color-mix(in oklch, var(--accent) 44%, var(--text));
   --hero-axis: color-mix(in oklch, var(--accent) 22%, var(--text));
   --hero-axis-stroke: color-mix(in oklch, #faf9f5 78%, var(--panel));
-  --hero-radius: color-mix(in oklch, var(--accent) 62%, var(--text));
-  --hero-chord: color-mix(in oklch, var(--accent-alt) 46%, var(--accent-deep));
+  --hero-radius: #141413;
+  --hero-chord: color-mix(in oklch, #6a9bcc 60%, #faf9f5 40%);
   --hero-tangent: color-mix(in oklch, #bacfc8 74%, #faf9f5 26%);
   --hero-arc: color-mix(in oklch, #CAC9DA 68%, #6a9bcc 32%);
   --hero-angle: color-mix(in oklch, var(--accent-alt) 42%, var(--text));
@@ -239,7 +239,7 @@ body.is-auth-switching .auth-overlay {
 .account-nav .nav-link.signup-btn {
   min-height: 2.55rem;
   padding: 0.4rem 1rem;
-  border-radius: 10px;
+  border-radius: var(--button-radius);
 }
 
 .account-nav .nav-link.login-btn {
@@ -270,7 +270,7 @@ body.is-auth-switching .auth-overlay {
   width: 2.55rem;
   height: 2.55rem;
   padding: 0;
-  border-radius: 10px;
+  border-radius: var(--button-radius);
   color: var(--muted);
   background: transparent;
   box-shadow: none;
@@ -460,7 +460,7 @@ body.is-auth-switching .auth-overlay {
   justify-content: center;
   min-height: 2.88rem;
   padding: 0.55rem 1.3rem;
-  border-radius: 10px;
+  border-radius: var(--button-radius);
   border: none;
   text-decoration: none;
   font-weight: 700;
@@ -614,7 +614,7 @@ body.is-auth-switching .auth-overlay {
   gap: 0.38rem;
   min-height: 1.9rem;
   padding: 0.28rem 0.78rem;
-  border-radius: 9px;
+  border-radius: var(--button-radius);
   border: 1px solid color-mix(in oklch, #faf9f5 24%, transparent);
   background: color-mix(in oklch, var(--accent) 28%, var(--panel));
   color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
@@ -710,7 +710,7 @@ body.is-auth-switching .auth-overlay {
   height: 2.2rem;
   padding: 0;
   line-height: 1;
-  border-radius: 10px;
+  border-radius: var(--button-radius);
   border: 1px solid color-mix(in oklch, #faf9f5 24%, transparent);
   background: color-mix(in oklch, var(--chip) 72%, var(--panel));
   color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
@@ -984,7 +984,7 @@ body.is-auth-switching .auth-overlay {
   min-height: 2.88rem;
   width: 100%;
   padding: 0.62rem 0.9rem;
-  border-radius: 12px;
+  border-radius: var(--button-radius);
   border: 1px solid color-mix(in oklch, var(--accent) 34%, transparent);
   background:
     linear-gradient(
@@ -1509,7 +1509,7 @@ body.is-auth-switching .auth-overlay {
   min-height: 2.2rem;
   padding: 0.4rem 0.08rem;
   border: 0;
-  border-radius: 0;
+  border-radius: var(--button-radius);
   background: transparent;
   color: inherit;
   font: inherit;
@@ -1603,7 +1603,7 @@ body.is-auth-switching .auth-overlay {
   min-height: 2.38rem;
   padding: 0.54rem 0.68rem;
   border: 0;
-  border-radius: 0.82rem;
+  border-radius: var(--button-radius);
   background: transparent;
   color: var(--ai-chat-text-strong);
   font: inherit;
@@ -1661,7 +1661,7 @@ body.is-auth-switching .auth-overlay {
   width: 3rem;
   height: 3rem;
   padding: 0;
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   border: 1px solid color-mix(in oklch, var(--accent) 24%, #faf9f5 12%);
   background: var(--ai-chat-action);
   color: var(--ai-chat-user-text);
@@ -1852,7 +1852,7 @@ body.is-auth-switching .auth-overlay {
   min-width: 7.15rem;
   padding: 0.48rem 1rem;
   border: 1px solid transparent;
-  border-radius: 0.92rem;
+  border-radius: var(--button-radius);
   background: transparent;
   color: color-mix(in oklch, var(--muted) 84%, #faf9f5);
   font-size: 0.94rem;
@@ -2451,7 +2451,7 @@ body.is-auth-switching .auth-overlay {
   min-width: 11.5rem;
   min-height: 3.15rem;
   padding: 0.78rem 1.55rem;
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   border: 1px solid transparent;
   text-decoration: none;
   font-size: 0.98rem;
@@ -2633,7 +2633,7 @@ body.is-auth-switching .auth-overlay {
   width: 100%;
   padding: 0.7rem 1.1rem;
   border: 1px solid color-mix(in oklch, #faf9f5 14%, transparent);
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   background: color-mix(in oklch, var(--chip) 86%, var(--panel));
   color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   font-size: 1rem;
@@ -2751,16 +2751,6 @@ body.is-auth-switching .auth-overlay {
   stroke-dasharray: 1 13;
   opacity: 0.11;
   animation: spinReverse 60s linear infinite;
-}
-
-.geo-construct-line {
-  stroke: var(--hero-construct-line);
-  stroke-width: 1.05;
-  opacity: 0.25;
-}
-
-.geo-construct-line.soft {
-  opacity: 0.14;
 }
 
 .geo-lattice-circle {
@@ -3442,7 +3432,7 @@ body.is-auth-open {
   min-height: 2.06rem;
   padding: 0.42rem 0.62rem;
   border: 1px solid color-mix(in oklch, var(--accent) 16%, transparent);
-  border-radius: 11px;
+  border-radius: var(--button-radius);
   background: color-mix(in oklch, var(--chip) 72%, transparent);
   color: var(--muted);
   font-size: 0.74rem;
@@ -3648,25 +3638,25 @@ body.is-auth-open {
 }
 
 .signup-modal {
-  --auth-accent: var(--accent);
-  --auth-accent-deep: var(--accent-deep);
-  --auth-accent-alt: var(--accent-alt);
-  --signup-showcase-glow-main: var(--auth-accent);
-  --signup-showcase-glow-alt: var(--auth-accent-alt);
-  --signup-showcase-glow-deep: var(--auth-accent-deep);
-  --signup-shell: color-mix(in oklch, var(--panel) 90%, black 10%);
-  --signup-panel: color-mix(in oklch, var(--chip) 72%, var(--panel) 28%);
-  --signup-showcase: color-mix(in oklch, var(--panel) 78%, black 22%);
-  --signup-input-bg: color-mix(in oklch, var(--chip) 84%, black 16%);
-  --signup-border: color-mix(in oklch, var(--auth-accent) 16%, transparent);
-  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 28%, transparent);
-  --signup-text-strong: color-mix(in oklch, #faf9f5 92%, var(--auth-accent) 8%);
-  --signup-text-muted: color-mix(in oklch, #faf9f5 70%, var(--auth-accent) 10%);
-  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 52%, var(--signup-input-bg) 48%);
-  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 58%, var(--signup-input-bg) 42%);
-  --auth-submit-text: var(--signup-text-strong);
-  --auth-submit-border-color: color-mix(in oklch, var(--auth-accent) 16%, transparent);
-  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  --auth-accent: #d97757;
+  --auth-accent-deep: #141413;
+  --auth-accent-alt: #cec6ba;
+  --signup-showcase-glow-main: #d97757;
+  --signup-showcase-glow-alt: #cec6ba;
+  --signup-showcase-glow-deep: #141413;
+  --signup-shell: #141413;
+  --signup-panel: #1F1E1D;
+  --signup-showcase: #d97757;
+  --signup-input-bg: #1F1E1D;
+  --signup-border: #d97757;
+  --signup-border-strong: #cec6ba;
+  --signup-text-strong: #faf9f5;
+  --signup-text-muted: #b0aea5;
+  --auth-submit-bg: #d97757;
+  --auth-submit-bg-hover: #d97757;
+  --auth-submit-text: #141413;
+  --auth-submit-border-color: transparent;
+  --auth-submit-shadow: transparent;
   position: relative;
   width: min(1000px, 100%);
   min-height: min(630px, calc(100vh - 2.8rem));
@@ -3682,47 +3672,47 @@ body.is-auth-open {
 }
 
 .login-modal {
-  --auth-accent: oklch(0.79 0.095 232);
-  --auth-accent-deep: oklch(0.61 0.084 224);
-  --auth-accent-alt: oklch(0.84 0.062 86);
-  --signup-showcase-glow-main: color-mix(in oklch, var(--auth-accent) 62%, var(--signup-showcase) 38%);
-  --signup-showcase-glow-alt: color-mix(in oklch, var(--auth-accent-alt) 54%, var(--signup-showcase) 46%);
-  --signup-showcase-glow-deep: color-mix(in oklch, var(--auth-accent-deep) 58%, var(--signup-showcase) 42%);
-  --signup-shell: color-mix(in oklch, oklch(0.125 0.022 242) 84%, black 16%);
-  --signup-panel: color-mix(in oklch, oklch(0.205 0.03 236) 74%, var(--signup-shell) 26%);
-  --signup-showcase: color-mix(in oklch, oklch(0.2 0.048 226) 72%, black 28%);
-  --signup-input-bg: color-mix(in oklch, oklch(0.19 0.026 232) 82%, black 18%);
-  --signup-border: color-mix(in oklch, var(--auth-accent) 18%, transparent);
-  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 30%, transparent);
-  --signup-text-strong: color-mix(in oklch, #faf9f5 93%, var(--auth-accent) 7%);
-  --signup-text-muted: color-mix(in oklch, #faf9f5 72%, var(--auth-accent) 9%);
-  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 78%, oklch(0.22 0.028 228) 22%);
-  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 86%, #faf9f5 14%);
-  --auth-submit-text: color-mix(in oklch, black 76%, var(--auth-accent) 24%);
-  --auth-submit-border-color: color-mix(in oklch, #faf9f5 18%, var(--auth-accent) 52%);
-  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+  --auth-accent: #6a9bcc;
+  --auth-accent-deep: #1F1E1D;
+  --auth-accent-alt: #CAC9DA;
+  --signup-showcase-glow-main: #6a9bcc;
+  --signup-showcase-glow-alt: #CAC9DA;
+  --signup-showcase-glow-deep: #6a9bcc;
+  --signup-shell: #141413;
+  --signup-panel: #1F1E1D;
+  --signup-showcase: #6a9bcc;
+  --signup-input-bg: #1F1E1D;
+  --signup-border: #6a9bcc;
+  --signup-border-strong: #CAC9DA;
+  --signup-text-strong: #faf9f5;
+  --signup-text-muted: #b0aea5;
+  --auth-submit-bg: #6a9bcc;
+  --auth-submit-bg-hover: #CAC9DA;
+  --auth-submit-text: #141413;
+  --auth-submit-border-color: transparent;
+  --auth-submit-shadow: transparent;
 }
 
 .contact-modal {
-  --auth-accent: oklch(0.75 0.1 228);
-  --auth-accent-deep: oklch(0.56 0.084 174);
-  --auth-accent-alt: oklch(0.78 0.096 156);
-  --signup-showcase-glow-main: color-mix(in oklch, var(--auth-accent) 66%, var(--signup-showcase) 34%);
-  --signup-showcase-glow-alt: color-mix(in oklch, var(--auth-accent-alt) 52%, var(--signup-showcase) 48%);
-  --signup-showcase-glow-deep: color-mix(in oklch, var(--auth-accent-deep) 56%, var(--signup-showcase) 44%);
-  --signup-shell: color-mix(in oklch, oklch(0.056 0.008 226) 86%, black 14%);
-  --signup-panel: color-mix(in oklch, oklch(0.102 0.014 220) 74%, var(--signup-shell) 26%);
-  --signup-showcase: color-mix(in oklch, oklch(0.134 0.03 214) 72%, black 28%);
-  --signup-input-bg: color-mix(in oklch, oklch(0.092 0.012 216) 88%, black 12%);
-  --signup-border: color-mix(in oklch, var(--auth-accent) 24%, transparent);
-  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 38%, transparent);
-  --signup-text-strong: color-mix(in oklch, #faf9f5 97%, var(--auth-accent) 3%);
-  --signup-text-muted: color-mix(in oklch, #faf9f5 84%, var(--auth-accent) 16%);
-  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 62%, var(--auth-accent-alt) 38%);
-  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 68%, var(--auth-accent-alt) 32%);
-  --auth-submit-text: color-mix(in oklch, black 78%, var(--auth-accent-deep) 22%);
-  --auth-submit-border-color: color-mix(in oklch, #faf9f5 14%, var(--auth-accent) 48%);
-  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 22%, var(--auth-accent-alt) 12%);
+  --auth-accent: #788c5d;
+  --auth-accent-deep: #1F1E1D;
+  --auth-accent-alt: #cec6ba;
+  --signup-showcase-glow-main: #788c5d;
+  --signup-showcase-glow-alt: #cec6ba;
+  --signup-showcase-glow-deep: #788c5d;
+  --signup-shell: #141413;
+  --signup-panel: #1F1E1D;
+  --signup-showcase: #788c5d;
+  --signup-input-bg: #1F1E1D;
+  --signup-border: #788c5d;
+  --signup-border-strong: #cec6ba;
+  --signup-text-strong: #faf9f5;
+  --signup-text-muted: #b0aea5;
+  --auth-submit-bg: #788c5d;
+  --auth-submit-bg-hover: #788c5d;
+  --auth-submit-text: #141413;
+  --auth-submit-border-color: transparent;
+  --auth-submit-shadow: transparent;
 }
 
 .auth-overlay.is-opening .signup-modal {
@@ -3780,7 +3770,7 @@ body.is-auth-open {
 }
 
 .signup-modal-geometry-circles circle {
-  stroke: color-mix(in oklch, #faf9f5 82%, var(--auth-accent) 18%);
+  stroke: #ffffff;
   stroke-width: 1.18;
   opacity: 0.68;
 }
@@ -3810,7 +3800,7 @@ body.is-auth-open {
   height: 2.35rem;
   padding: 0;
   border: 0;
-  border-radius: 999px;
+  border-radius: var(--button-radius);
   background: color-mix(in oklch, #faf9f5 6%, transparent);
   color: var(--signup-text-muted);
   cursor: pointer;
@@ -3993,7 +3983,7 @@ body.is-auth-open {
   min-height: 3.15rem;
   margin-top: 0.64rem;
   border: 1px solid var(--auth-submit-border-color);
-  border-radius: 0.88rem;
+  border-radius: var(--button-radius);
   background: var(--auth-submit-bg);
   color: var(--auth-submit-text);
   font-size: 0.95rem;
@@ -4135,10 +4125,6 @@ body.is-auth-open {
 
 :root[data-theme="light"] .geo-construct-ring {
   opacity: 0.14;
-}
-
-:root[data-theme="light"] .geo-construct-line {
-  opacity: 0.16;
 }
 
 :root[data-theme="light"] .geo-lattice-circle {
@@ -4452,17 +4438,91 @@ body.is-auth-open {
   --ai-chat-border-strong: #b0aea5;
   --ai-chat-text-strong: #141413;
   --ai-chat-text-muted: #1F1E1D;
-  --ai-chat-assistant-bubble: #faf9f5;
-  --ai-chat-user-bubble: #141413;
+  --ai-chat-assistant-bubble: #cec6ba;
+  --ai-chat-user-bubble: #d97757;
   --ai-chat-user-text: #faf9f5;
-  --ai-chat-action: #141413;
-  --ai-chat-action-hover: #1F1E1D;
-  --ai-chat-action-muted: #cec6ba;
+  --ai-chat-action: #d97757;
+  --ai-chat-action-hover: #d97757;
+  --ai-chat-action-muted: #d97757;
   background: transparent;
 }
 
+:root[data-theme="light"] .ai-chat-glow {
+  display: none;
+}
+
+:root[data-theme="light"] .ai-chat-shell {
+  background: var(--ai-chat-surface);
+}
+
+:root[data-theme="light"] .ai-chat-transcript {
+  background: var(--ai-chat-surface-deep);
+}
+
+:root[data-theme="light"] .ai-chat-transcript::before {
+  display: none;
+}
+
+:root[data-theme="light"] .ai-chat-send,
+:root[data-theme="light"] .ai-chat-send:disabled {
+  color: #faf9f5;
+}
+
 :root[data-theme="light"] .ai-chat-model-menu {
-  box-shadow: 0 12px 24px color-mix(in oklch, var(--accent) 6%, transparent);
+  border-color: #cec6ba;
+  background: #faf9f5;
+  box-shadow: 0 12px 24px color-mix(in oklch, #cec6ba 22%, transparent);
+}
+
+:root[data-theme="light"] .ai-chat-model-picker {
+  color: #1F1E1D;
+}
+
+:root[data-theme="light"] .ai-chat-model-picker:hover,
+:root[data-theme="light"] .ai-chat-model-picker:focus-within,
+:root[data-theme="light"] .ai-chat-model-picker[open] {
+  color: #141413;
+}
+
+:root[data-theme="light"] .ai-chat-model-picker-trigger {
+  padding: 0.42rem 0.68rem;
+  border: 1px solid #cec6ba;
+  border-radius: var(--button-radius);
+  background: #e8e6dc;
+}
+
+:root[data-theme="light"] .ai-chat-model-picker:hover .ai-chat-model-picker-trigger,
+:root[data-theme="light"] .ai-chat-model-picker:focus-within .ai-chat-model-picker-trigger,
+:root[data-theme="light"] .ai-chat-model-picker[open] .ai-chat-model-picker-trigger {
+  border-color: #b0aea5;
+  background: #faf9f5;
+}
+
+:root[data-theme="light"] .ai-chat-model-picker-chevron {
+  stroke: #d97757;
+}
+
+:root[data-theme="light"] .ai-chat-model-menu::before {
+  background: #faf9f5;
+}
+
+:root[data-theme="light"] .ai-chat-model-menu-label {
+  color: #b0aea5;
+}
+
+:root[data-theme="light"] .ai-chat-model-menu-item {
+  color: #141413;
+}
+
+:root[data-theme="light"] .ai-chat-model-menu-item:hover,
+:root[data-theme="light"] .ai-chat-model-menu-item:focus-visible {
+  background: #e8e6dc;
+  color: #141413;
+}
+
+:root[data-theme="light"] .ai-chat-model-menu-item.is-selected {
+  background: #d97757;
+  color: #faf9f5;
 }
 
 :root[data-theme="light"] .pricing-section {
@@ -4604,7 +4664,7 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .core-feature-chat-btn {
-  border-radius: var(--button-radius-compact);
+  border-radius: var(--button-radius);
   font-weight: 800;
   letter-spacing: -0.02em;
   box-shadow: none;
@@ -4714,7 +4774,40 @@ body.is-auth-open {
 :root[data-theme="light"] .settings-dropdown {
   border-color: #cec6ba;
   background: #faf9f5;
-  box-shadow: 0 10px 18px color-mix(in oklch, black 8%, transparent);
+  box-shadow: 0 10px 18px color-mix(in oklch, #cec6ba 22%, transparent);
+}
+
+:root[data-theme="light"] .settings-panel-title {
+  color: #141413;
+}
+
+:root[data-theme="light"] .settings-label {
+  color: #b0aea5;
+}
+
+:root[data-theme="light"] .settings-section + .settings-section {
+  border-top-color: #cec6ba;
+}
+
+:root[data-theme="light"] .settings-option {
+  border-color: #cec6ba;
+  background: #e8e6dc;
+  color: #1F1E1D;
+}
+
+:root[data-theme="light"] .settings-option:hover,
+:root[data-theme="light"] .settings-option:focus-visible {
+  color: #141413;
+  background: #faf9f5;
+  border-color: #b0aea5;
+}
+
+:root[data-theme="light"] .settings-option.is-selected,
+:root[data-theme="light"] .settings-option[aria-pressed="true"] {
+  color: #faf9f5;
+  background: #d97757;
+  border-color: #d97757;
+  box-shadow: none;
 }
 
 :root[data-theme="light"] .auth-overlay {
@@ -4730,21 +4823,24 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .signup-modal {
+  --auth-accent: #d97757;
+  --auth-accent-deep: #141413;
+  --auth-accent-alt: #cec6ba;
   --signup-shell: #e8e6dc;
   --signup-panel: #faf9f5;
-  --signup-showcase: #CAC9DA;
-  --signup-input-bg: #faf9f5;
+  --signup-showcase: #d97757;
+  --signup-input-bg: #ffffff;
   --signup-border: #cec6ba;
   --signup-border-strong: #b0aea5;
   --signup-text-strong: #141413;
   --signup-text-muted: #b0aea5;
-  --auth-submit-bg: #141413;
-  --auth-submit-bg-hover: #1F1E1D;
-  --auth-submit-text: #faf9f5;
+  --auth-submit-bg: #d97757;
+  --auth-submit-bg-hover: #d97757;
+  --auth-submit-text: #141413;
   --auth-submit-border-color: transparent;
   --auth-submit-shadow: transparent;
   box-shadow:
-    0 20px 40px color-mix(in oklch, #CAC9DA 10%, transparent);
+    0 20px 40px color-mix(in oklch, #d97757 16%, transparent);
 }
 
 :root[data-theme="light"] .login-modal {
@@ -4753,22 +4849,93 @@ body.is-auth-open {
   --auth-accent-alt: #CAC9DA;
   --signup-shell: #e8e6dc;
   --signup-panel: #faf9f5;
-  --signup-showcase: #CAC9DA;
-  --signup-input-bg: #faf9f5;
-}
-
-:root[data-theme="light"] .contact-modal {
-  --auth-accent: #6a9bcc;
-  --auth-accent-deep: #1F1E1D;
-  --auth-accent-alt: #bacfc8;
-  --signup-shell: #e8e6dc;
-  --signup-panel: #faf9f5;
-  --signup-showcase: #bacfc8;
-  --signup-input-bg: #faf9f5;
+  --signup-showcase: #6a9bcc;
+  --signup-input-bg: #ffffff;
   --signup-border: #cec6ba;
   --signup-border-strong: #b0aea5;
   --signup-text-strong: #141413;
   --signup-text-muted: #1F1E1D;
+  --auth-submit-bg: #6a9bcc;
+  --auth-submit-bg-hover: #CAC9DA;
+  --auth-submit-text: #141413;
+  --auth-submit-border-color: transparent;
+  --auth-submit-shadow: transparent;
+}
+
+:root[data-theme="light"] .contact-modal {
+  --auth-accent: #788c5d;
+  --auth-accent-deep: #1F1E1D;
+  --auth-accent-alt: #cec6ba;
+  --signup-shell: #e8e6dc;
+  --signup-panel: #faf9f5;
+  --signup-showcase: #788c5d;
+  --signup-input-bg: #ffffff;
+  --signup-border: #cec6ba;
+  --signup-border-strong: #b0aea5;
+  --signup-text-strong: #141413;
+  --signup-text-muted: #1F1E1D;
+  --auth-submit-bg: #788c5d;
+  --auth-submit-bg-hover: #788c5d;
+  --auth-submit-text: #141413;
+  --auth-submit-border-color: transparent;
+  --auth-submit-shadow: transparent;
+}
+
+:root[data-theme="light"] .signup-input {
+  min-height: 3.05rem;
+  padding: 0.7rem 0.92rem;
+  border-radius: 0.86rem;
+  border-color: #cec6ba;
+  background: #ffffff;
+  color: #141413;
+  font-size: 0.94rem;
+  line-height: 1.4;
+  box-shadow: none;
+}
+
+:root[data-theme="light"] .signup-input:hover {
+  border-color: #b0aea5;
+  background: #ffffff;
+}
+
+:root[data-theme="light"] .signup-input::placeholder,
+:root[data-theme="light"] .contact-modal .signup-input::placeholder {
+  color: #b0aea5;
+}
+
+:root[data-theme="light"] .signup-input:focus-visible {
+  border-color: #d97757;
+  background: #ffffff;
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, #d97757 16%, transparent);
+}
+
+:root[data-theme="light"] .contact-select-native {
+  background: #ffffff;
+  color: #141413;
+}
+
+:root[data-theme="light"] .contact-select-native:hover,
+:root[data-theme="light"] .contact-select-native:focus-visible {
+  border-color: #b0aea5;
+  background: #ffffff;
+}
+
+:root[data-theme="light"] .contact-select-native:invalid {
+  color: #b0aea5;
+}
+
+:root[data-theme="light"] .contact-select-native option {
+  background: #ffffff;
+  color: #141413;
+}
+
+:root[data-theme="light"] .contact-select-icon path {
+  stroke: #d97757;
+}
+
+:root[data-theme="light"] .contact-select-wrap:hover .contact-select-icon path,
+:root[data-theme="light"] .contact-select-wrap:focus-within .contact-select-icon path {
+  stroke: #141413;
 }
 
 :root[data-theme="light"] .signup-modal-showcase {
@@ -4781,7 +4948,7 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .signup-modal-geometry-circles circle {
-  stroke: color-mix(in oklch, var(--text) 58%, var(--auth-accent-deep) 42%);
+  stroke: #ffffff;
   opacity: 0.36;
 }
 
