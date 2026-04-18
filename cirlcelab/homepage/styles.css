@@ -35,6 +35,8 @@
   --hero-point-center: color-mix(in oklch, var(--accent) 76%, white);
   --hero-point: color-mix(in oklch, var(--accent) 90%, white);
   --hero-point-muted: color-mix(in oklch, var(--accent-alt) 80%, white);
+  --button-radius: 0.88rem;
+  --button-radius-compact: 0.88rem;
   --page-gutter: clamp(1.6rem, 5vw, 4rem);
   --auth-header-offset: 6.1rem;
   --scrollbar-compensation: 0px;
@@ -3374,9 +3376,9 @@ body.is-auth-open {
   position: absolute;
   top: calc(100% + 0.7rem);
   right: 0;
-  width: min(15.2rem, calc(100vw - (var(--page-gutter) * 2)));
-  padding: 0.8rem 0.82rem;
-  border-radius: 16px;
+  width: min(16.2rem, calc(100vw - (var(--page-gutter) * 2)));
+  padding: 0.68rem 0.72rem;
+  border-radius: 14px;
   border: 1px solid color-mix(in oklch, var(--accent) 18%, transparent);
   background:
     linear-gradient(
@@ -3391,79 +3393,93 @@ body.is-auth-open {
 }
 
 .settings-panel-title {
-  margin: 0 0 0.65rem;
+  margin: 0 0 0.56rem;
   color: var(--text);
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   font-weight: 800;
   letter-spacing: -0.02em;
 }
 
 .settings-section {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
-  gap: 0.8rem;
+  gap: 0.68rem;
 }
 
 .settings-section + .settings-section {
-  margin-top: 0.7rem;
-  padding-top: 0.7rem;
+  margin-top: 0.58rem;
+  padding-top: 0.58rem;
   border-top: 1px solid color-mix(in oklch, var(--accent) 14%, transparent);
 }
 
 .settings-label {
   margin: 0;
   color: var(--muted);
-  font-size: 0.73rem;
+  font-size: 0.69rem;
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .settings-options {
-  display: grid;
+  display: inline-grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.36rem;
-  min-width: 8.6rem;
-  padding: 0;
+  gap: 0.22rem;
+  min-width: 7.95rem;
+  padding: 0.22rem;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in oklch, #faf9f5 14%, transparent);
+  background:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--chip) 88%, var(--panel)) 0%,
+      color-mix(in oklch, var(--panel) 92%, black) 100%
+    );
+  box-shadow:
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 8%, transparent),
+    0 10px 18px color-mix(in oklch, black 24%, transparent);
+  justify-self: end;
 }
 
 .settings-option {
-  min-height: 2.06rem;
-  padding: 0.42rem 0.62rem;
-  border: 1px solid color-mix(in oklch, var(--accent) 16%, transparent);
+  min-height: 2.16rem;
+  padding: 0.4rem 0.68rem;
+  border: 1px solid transparent;
   border-radius: var(--button-radius);
-  background: color-mix(in oklch, var(--chip) 72%, transparent);
-  color: var(--muted);
-  font-size: 0.74rem;
+  background: transparent;
+  color: color-mix(in oklch, var(--muted) 84%, #faf9f5);
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 0.01em;
+  letter-spacing: -0.02em;
   white-space: nowrap;
   cursor: pointer;
+  box-shadow: none;
   transition:
-    transform 220ms ease,
-    color 220ms ease,
-    background-color 220ms ease,
-    border-color 220ms ease,
-    box-shadow 220ms ease;
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease,
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 200ms ease;
 }
 
 .settings-option:hover,
 .settings-option:focus-visible {
-  color: var(--text);
-  background: var(--chip-hover);
-  border-color: color-mix(in oklch, var(--accent) 28%, transparent);
+  color: color-mix(in oklch, #faf9f5 84%, var(--accent) 16%);
+  border-color: color-mix(in oklch, #faf9f5 14%, transparent);
+  background: color-mix(in oklch, var(--accent) 10%, transparent);
   outline: none;
 }
 
 .settings-option.is-selected,
 .settings-option[aria-pressed="true"] {
-  color: var(--text);
-  background: color-mix(in oklch, var(--accent) 22%, var(--chip));
-  border-color: color-mix(in oklch, var(--accent) 42%, transparent);
+  color: color-mix(in oklch, var(--ink-dark) 72%, #faf9f5 28%);
+  background: color-mix(in oklch, var(--accent) 68%, #faf9f5);
+  border-color: transparent;
   box-shadow:
-    0 8px 18px color-mix(in oklch, var(--accent) 12%, transparent),
-    inset 0 1px 0 color-mix(in oklch, #faf9f5 10%, transparent);
+    0 8px 18px color-mix(in oklch, var(--accent) 18%, transparent),
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 22%, transparent);
 }
 
 .login-form-meta {
@@ -3524,58 +3540,172 @@ body.is-auth-open {
   display: block;
 }
 
-.contact-select-native {
-  appearance: none;
-  -webkit-appearance: none;
-  padding-right: 2.9rem;
-  cursor: pointer;
+.contact-topic-picker {
+  position: relative;
+  display: block;
+  color: var(--signup-text-muted);
+  transition: color 220ms ease;
 }
 
-.contact-select-native::-ms-expand {
+.contact-topic-picker summary {
+  list-style: none;
+}
+
+.contact-topic-picker summary::-webkit-details-marker {
   display: none;
 }
 
-.contact-select-icon {
-  position: absolute;
-  top: 50%;
-  right: 0.88rem;
-  width: 1.38rem;
-  height: 1.38rem;
-  display: grid;
-  place-items: center;
-  pointer-events: none;
-  opacity: 0.78;
-  transform: translateY(-50%);
-  transition: opacity 220ms ease;
+.contact-topic-picker-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.56rem;
+  cursor: pointer;
+  user-select: none;
 }
 
-.contact-select-icon svg {
-  width: 1.24rem;
-  height: 1.24rem;
-  display: block;
-  transform-origin: center;
-  transition: transform 220ms cubic-bezier(0.25, 1, 0.5, 1), opacity 220ms ease;
+.contact-topic-picker-trigger:focus {
+  outline: none;
 }
 
-.contact-select-icon path {
+.contact-topic-picker-value {
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  transition: color 180ms ease;
+}
+
+.contact-topic-picker:hover,
+.contact-topic-picker:focus-within,
+.contact-topic-picker[open] {
+  color: var(--signup-text-strong);
+}
+
+.contact-topic-picker.is-updated .contact-topic-picker-value {
+  color: var(--signup-text-strong);
+}
+
+.contact-topic-picker-chevron {
+  width: 0.96rem;
+  height: 0.96rem;
+  flex: 0 0 auto;
   fill: none;
-  stroke: color-mix(in oklch, var(--signup-text-muted) 84%, var(--auth-accent) 16%);
-  stroke-width: 1.9;
+  stroke: currentColor;
+  stroke-width: 2.1;
   stroke-linecap: round;
   stroke-linejoin: round;
+  transition: transform 220ms ease;
 }
 
-.contact-modal .contact-select-icon path {
-  stroke: color-mix(in oklch, #faf9f5 76%, var(--auth-accent) 24%);
-}
-
-.contact-select-wrap:hover .contact-select-icon,
-.contact-select-wrap:focus-within .contact-select-icon {
-  opacity: 1;
-}
-
-.contact-select-wrap.is-turning .contact-select-icon svg {
+.contact-topic-picker[open] .contact-topic-picker-chevron {
   transform: rotate(180deg);
+}
+
+.contact-topic-picker[open] .contact-topic-picker-trigger {
+  border-color: var(--signup-border-strong);
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, var(--auth-accent) 12%, transparent);
+}
+
+.contact-topic-picker[data-invalid="true"] .contact-topic-picker-trigger {
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 30%, transparent);
+  box-shadow: 0 0 0 0.18rem color-mix(in oklch, var(--auth-accent-alt) 12%, transparent);
+}
+
+.contact-topic-picker-trigger[aria-invalid="true"] {
+  border-color: color-mix(in oklch, var(--auth-accent-alt) 30%, transparent);
+}
+
+.contact-topic-menu {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.42rem);
+  z-index: 24;
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 1.18rem;
+  border: 1px solid color-mix(in oklch, var(--signup-border) 70%, transparent);
+  background: color-mix(in oklch, var(--signup-panel) 92%, #faf9f5 8%);
+  overflow: hidden;
+  isolation: isolate;
+  box-shadow: 0 14px 28px color-mix(in oklch, black 12%, transparent);
+}
+
+.contact-topic-menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: color-mix(in oklch, var(--signup-panel) 92%, #faf9f5 8%);
+  z-index: -1;
+}
+
+.contact-topic-menu-label {
+  margin: 0;
+  padding: 0.12rem 0.64rem 0.42rem;
+  color: var(--signup-text-muted);
+  font-size: 0.72rem;
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  position: relative;
+  z-index: 1;
+}
+
+.contact-topic-menu-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.56rem;
+  width: 100%;
+  min-height: 2.38rem;
+  padding: 0.54rem 0.68rem;
+  border: 0;
+  border-radius: var(--button-radius);
+  background: transparent;
+  color: var(--signup-text-strong);
+  font: inherit;
+  font-size: 0.84rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: none;
+  position: relative;
+  z-index: 1;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.contact-topic-menu-item:hover,
+.contact-topic-menu-item:focus-visible {
+  background: color-mix(in oklch, #faf9f5 6%, var(--auth-accent) 8%);
+  color: var(--signup-text-strong);
+  outline: none;
+}
+
+.contact-topic-menu-item.is-selected {
+  background: color-mix(in oklch, #faf9f5 8%, var(--auth-accent) 14%);
+  color: #faf9f5;
+}
+
+.contact-topic-menu-item svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  flex: 0 0 auto;
+  opacity: 0;
+  transform: scale(0.82);
+  transition:
+    opacity 180ms ease,
+    transform 220ms ease;
+}
+
+.contact-topic-menu-item.is-selected svg {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .contact-textarea {
@@ -3592,10 +3722,6 @@ body.is-auth-open {
   color: color-mix(in oklch, #faf9f5 80%, var(--auth-accent) 20%);
 }
 
-:root[data-theme="light"] .contact-select-icon path {
-  stroke: color-mix(in oklch, var(--text) 72%, var(--auth-accent) 28%);
-}
-
 .auth-overlay[hidden] {
   display: none;
 }
@@ -3608,18 +3734,9 @@ body.is-auth-open {
   place-items: center;
   padding: clamp(1rem, 4vw, 2.6rem);
   padding-top: max(var(--auth-header-offset), clamp(1rem, 4vw, 2.6rem));
-  background: color-mix(in oklch, var(--bg) 72%, black 28%);
   backdrop-filter: blur(10px);
   overflow-y: auto;
   overscroll-behavior: contain;
-}
-
-.auth-overlay.login-overlay {
-  background: color-mix(in oklch, var(--bg) 74%, oklch(0.15 0.03 236) 26%);
-}
-
-.auth-overlay.contact-overlay {
-  background: color-mix(in oklch, var(--bg) 70%, oklch(0.05 0.014 224) 30%);
 }
 
 .auth-overlay.is-opening {
@@ -3638,25 +3755,6 @@ body.is-auth-open {
 }
 
 .signup-modal {
-  --auth-accent: #d97757;
-  --auth-accent-deep: #141413;
-  --auth-accent-alt: #cec6ba;
-  --signup-showcase-glow-main: #d97757;
-  --signup-showcase-glow-alt: #cec6ba;
-  --signup-showcase-glow-deep: #141413;
-  --signup-shell: #141413;
-  --signup-panel: #1F1E1D;
-  --signup-showcase: #d97757;
-  --signup-input-bg: #1F1E1D;
-  --signup-border: #d97757;
-  --signup-border-strong: #cec6ba;
-  --signup-text-strong: #faf9f5;
-  --signup-text-muted: #b0aea5;
-  --auth-submit-bg: #d97757;
-  --auth-submit-bg-hover: #d97757;
-  --auth-submit-text: #141413;
-  --auth-submit-border-color: transparent;
-  --auth-submit-shadow: transparent;
   position: relative;
   width: min(1000px, 100%);
   min-height: min(630px, calc(100vh - 2.8rem));
@@ -3666,53 +3764,6 @@ body.is-auth-open {
   overflow: hidden;
   border: 1px solid var(--signup-border);
   background: var(--signup-shell);
-  box-shadow:
-    0 28px 70px color-mix(in oklch, black 36%, transparent),
-    inset 0 1px 0 color-mix(in oklch, #faf9f5 5%, transparent);
-}
-
-.login-modal {
-  --auth-accent: #6a9bcc;
-  --auth-accent-deep: #1F1E1D;
-  --auth-accent-alt: #CAC9DA;
-  --signup-showcase-glow-main: #6a9bcc;
-  --signup-showcase-glow-alt: #CAC9DA;
-  --signup-showcase-glow-deep: #6a9bcc;
-  --signup-shell: #141413;
-  --signup-panel: #1F1E1D;
-  --signup-showcase: #6a9bcc;
-  --signup-input-bg: #1F1E1D;
-  --signup-border: #6a9bcc;
-  --signup-border-strong: #CAC9DA;
-  --signup-text-strong: #faf9f5;
-  --signup-text-muted: #b0aea5;
-  --auth-submit-bg: #6a9bcc;
-  --auth-submit-bg-hover: #CAC9DA;
-  --auth-submit-text: #141413;
-  --auth-submit-border-color: transparent;
-  --auth-submit-shadow: transparent;
-}
-
-.contact-modal {
-  --auth-accent: #788c5d;
-  --auth-accent-deep: #1F1E1D;
-  --auth-accent-alt: #cec6ba;
-  --signup-showcase-glow-main: #788c5d;
-  --signup-showcase-glow-alt: #cec6ba;
-  --signup-showcase-glow-deep: #788c5d;
-  --signup-shell: #141413;
-  --signup-panel: #1F1E1D;
-  --signup-showcase: #788c5d;
-  --signup-input-bg: #1F1E1D;
-  --signup-border: #788c5d;
-  --signup-border-strong: #cec6ba;
-  --signup-text-strong: #faf9f5;
-  --signup-text-muted: #b0aea5;
-  --auth-submit-bg: #788c5d;
-  --auth-submit-bg-hover: #788c5d;
-  --auth-submit-text: #141413;
-  --auth-submit-border-color: transparent;
-  --auth-submit-shadow: transparent;
 }
 
 .auth-overlay.is-opening .signup-modal {
@@ -3770,7 +3821,7 @@ body.is-auth-open {
 }
 
 .signup-modal-geometry-circles circle {
-  stroke: #ffffff;
+  stroke: var(--auth-geometry-stroke, color-mix(in oklch, #faf9f5 82%, var(--auth-accent) 18%));
   stroke-width: 1.18;
   opacity: 0.68;
 }
@@ -3869,7 +3920,7 @@ body.is-auth-open {
   gap: 0.42rem;
 }
 
-.signup-field span {
+.signup-field > span {
   color: var(--signup-text-strong);
   font-size: 0.88rem;
   font-weight: 700;
@@ -4790,23 +4841,29 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .settings-option {
-  border-color: #cec6ba;
-  background: #e8e6dc;
+  border-color: transparent;
+  background: transparent;
   color: #1F1E1D;
+}
+
+:root[data-theme="light"] .settings-options {
+  border-color: transparent;
+  background: #e8e6dc;
+  box-shadow: none;
 }
 
 :root[data-theme="light"] .settings-option:hover,
 :root[data-theme="light"] .settings-option:focus-visible {
   color: #141413;
   background: #faf9f5;
-  border-color: #b0aea5;
+  border-color: #cec6ba;
 }
 
 :root[data-theme="light"] .settings-option.is-selected,
 :root[data-theme="light"] .settings-option[aria-pressed="true"] {
-  color: #faf9f5;
-  background: #d97757;
-  border-color: #d97757;
+  color: #141413;
+  background: #faf9f5;
+  border-color: #cec6ba;
   box-shadow: none;
 }
 
@@ -4826,6 +4883,7 @@ body.is-auth-open {
   --auth-accent: #d97757;
   --auth-accent-deep: #141413;
   --auth-accent-alt: #cec6ba;
+  --auth-geometry-stroke: #ffffff;
   --signup-shell: #e8e6dc;
   --signup-panel: #faf9f5;
   --signup-showcase: #d97757;
@@ -4847,6 +4905,7 @@ body.is-auth-open {
   --auth-accent: #6a9bcc;
   --auth-accent-deep: #1F1E1D;
   --auth-accent-alt: #CAC9DA;
+  --auth-geometry-stroke: #ffffff;
   --signup-shell: #e8e6dc;
   --signup-panel: #faf9f5;
   --signup-showcase: #6a9bcc;
@@ -4866,6 +4925,7 @@ body.is-auth-open {
   --auth-accent: #788c5d;
   --auth-accent-deep: #1F1E1D;
   --auth-accent-alt: #cec6ba;
+  --auth-geometry-stroke: #ffffff;
   --signup-shell: #e8e6dc;
   --signup-panel: #faf9f5;
   --signup-showcase: #788c5d;
@@ -4879,6 +4939,98 @@ body.is-auth-open {
   --auth-submit-text: #141413;
   --auth-submit-border-color: transparent;
   --auth-submit-shadow: transparent;
+  box-shadow:
+    0 20px 40px color-mix(in oklch, #788c5d 16%, transparent);
+}
+
+:root:not([data-theme="light"]) .auth-overlay {
+  background: color-mix(in oklch, var(--bg) 72%, black 28%);
+}
+
+:root:not([data-theme="light"]) .auth-overlay.login-overlay {
+  background: color-mix(in oklch, var(--bg) 74%, oklch(0.15 0.03 236) 26%);
+}
+
+:root:not([data-theme="light"]) .auth-overlay.contact-overlay {
+  background: color-mix(in oklch, var(--bg) 70%, oklch(0.05 0.014 224) 30%);
+}
+
+:root:not([data-theme="light"]) .signup-modal {
+  --auth-accent: oklch(0.74 0.14 170);
+  --auth-accent-deep: oklch(0.58 0.1 170);
+  --auth-accent-alt: oklch(0.84 0.11 85);
+  --signup-showcase-glow-main: var(--auth-accent);
+  --signup-showcase-glow-alt: var(--auth-accent-alt);
+  --signup-showcase-glow-deep: var(--auth-accent-deep);
+  --auth-geometry-stroke: color-mix(in oklch, #faf9f5 82%, var(--auth-accent) 18%);
+  --signup-shell: color-mix(in oklch, oklch(0.13 0.012 252) 90%, black 10%);
+  --signup-panel: color-mix(in oklch, oklch(0.2 0.01 250) 72%, oklch(0.13 0.012 252) 28%);
+  --signup-showcase: color-mix(in oklch, oklch(0.13 0.012 252) 78%, black 22%);
+  --signup-input-bg: color-mix(in oklch, oklch(0.2 0.01 250) 84%, black 16%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+  --signup-text-strong: color-mix(in oklch, #faf9f5 92%, var(--auth-accent) 8%);
+  --signup-text-muted: color-mix(in oklch, #faf9f5 70%, var(--auth-accent) 10%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 52%, var(--signup-input-bg) 48%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 58%, var(--signup-input-bg) 42%);
+  --auth-submit-text: var(--signup-text-strong);
+  --auth-submit-border-color: color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 16%, transparent);
+  box-shadow:
+    0 28px 70px color-mix(in oklch, black 36%, transparent),
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 5%, transparent);
+}
+
+:root:not([data-theme="light"]) .login-modal {
+  --auth-accent: oklch(0.79 0.095 232);
+  --auth-accent-deep: oklch(0.61 0.084 224);
+  --auth-accent-alt: oklch(0.84 0.062 86);
+  --signup-showcase-glow-main: color-mix(in oklch, var(--auth-accent) 62%, var(--signup-showcase) 38%);
+  --signup-showcase-glow-alt: color-mix(in oklch, var(--auth-accent-alt) 54%, var(--signup-showcase) 46%);
+  --signup-showcase-glow-deep: color-mix(in oklch, var(--auth-accent-deep) 58%, var(--signup-showcase) 42%);
+  --auth-geometry-stroke: color-mix(in oklch, #faf9f5 82%, var(--auth-accent) 18%);
+  --signup-shell: color-mix(in oklch, oklch(0.125 0.022 242) 84%, black 16%);
+  --signup-panel: color-mix(in oklch, oklch(0.205 0.03 236) 74%, var(--signup-shell) 26%);
+  --signup-showcase: color-mix(in oklch, oklch(0.2 0.048 226) 72%, black 28%);
+  --signup-input-bg: color-mix(in oklch, oklch(0.19 0.026 232) 82%, black 18%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 18%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 30%, transparent);
+  --signup-text-strong: color-mix(in oklch, #faf9f5 93%, var(--auth-accent) 7%);
+  --signup-text-muted: color-mix(in oklch, #faf9f5 72%, var(--auth-accent) 9%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 78%, oklch(0.22 0.028 228) 22%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 86%, #faf9f5 14%);
+  --auth-submit-text: color-mix(in oklch, black 76%, var(--auth-accent) 24%);
+  --auth-submit-border-color: color-mix(in oklch, #faf9f5 18%, var(--auth-accent) 52%);
+  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 28%, transparent);
+  box-shadow:
+    0 28px 70px color-mix(in oklch, black 36%, transparent),
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 5%, transparent);
+}
+
+:root:not([data-theme="light"]) .contact-modal {
+  --auth-accent: oklch(0.75 0.1 228);
+  --auth-accent-deep: oklch(0.56 0.084 174);
+  --auth-accent-alt: oklch(0.78 0.096 156);
+  --signup-showcase-glow-main: color-mix(in oklch, var(--auth-accent) 66%, var(--signup-showcase) 34%);
+  --signup-showcase-glow-alt: color-mix(in oklch, var(--auth-accent-alt) 52%, var(--signup-showcase) 48%);
+  --signup-showcase-glow-deep: color-mix(in oklch, var(--auth-accent-deep) 56%, var(--signup-showcase) 44%);
+  --auth-geometry-stroke: color-mix(in oklch, #faf9f5 82%, var(--auth-accent) 18%);
+  --signup-shell: color-mix(in oklch, oklch(0.056 0.008 226) 86%, black 14%);
+  --signup-panel: color-mix(in oklch, oklch(0.102 0.014 220) 74%, var(--signup-shell) 26%);
+  --signup-showcase: color-mix(in oklch, oklch(0.134 0.03 214) 72%, black 28%);
+  --signup-input-bg: color-mix(in oklch, oklch(0.092 0.012 216) 88%, black 12%);
+  --signup-border: color-mix(in oklch, var(--auth-accent) 24%, transparent);
+  --signup-border-strong: color-mix(in oklch, var(--auth-accent) 38%, transparent);
+  --signup-text-strong: color-mix(in oklch, #faf9f5 97%, var(--auth-accent) 3%);
+  --signup-text-muted: color-mix(in oklch, #faf9f5 84%, var(--auth-accent) 16%);
+  --auth-submit-bg: color-mix(in oklch, var(--auth-accent) 62%, var(--auth-accent-alt) 38%);
+  --auth-submit-bg-hover: color-mix(in oklch, var(--auth-accent) 68%, var(--auth-accent-alt) 32%);
+  --auth-submit-text: color-mix(in oklch, black 78%, var(--auth-accent-deep) 22%);
+  --auth-submit-border-color: color-mix(in oklch, #faf9f5 14%, var(--auth-accent) 48%);
+  --auth-submit-shadow: color-mix(in oklch, var(--auth-accent) 22%, var(--auth-accent-alt) 12%);
+  box-shadow:
+    0 28px 70px color-mix(in oklch, black 36%, transparent),
+    inset 0 1px 0 color-mix(in oklch, #faf9f5 5%, transparent);
 }
 
 :root[data-theme="light"] .signup-input {
@@ -4909,33 +5061,70 @@ body.is-auth-open {
   box-shadow: 0 0 0 0.16rem color-mix(in oklch, #d97757 16%, transparent);
 }
 
-:root[data-theme="light"] .contact-select-native {
-  background: #ffffff;
+:root[data-theme="light"] .contact-topic-picker {
+  color: #1F1E1D;
+}
+
+:root[data-theme="light"] .contact-topic-picker:hover,
+:root[data-theme="light"] .contact-topic-picker:focus-within,
+:root[data-theme="light"] .contact-topic-picker[open] {
   color: #141413;
 }
 
-:root[data-theme="light"] .contact-select-native:hover,
-:root[data-theme="light"] .contact-select-native:focus-visible {
-  border-color: #b0aea5;
+:root[data-theme="light"] .contact-topic-picker-trigger {
   background: #ffffff;
+  border-color: #cec6ba;
+  color: #141413;
 }
 
-:root[data-theme="light"] .contact-select-native:invalid {
+:root[data-theme="light"] .contact-topic-picker:hover .contact-topic-picker-trigger,
+:root[data-theme="light"] .contact-topic-picker:focus-within .contact-topic-picker-trigger,
+:root[data-theme="light"] .contact-topic-picker[open] .contact-topic-picker-trigger {
+  border-color: #b0aea5;
+  background: #faf9f5;
+}
+
+:root[data-theme="light"] .contact-topic-picker[open] .contact-topic-picker-trigger {
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, #788c5d 14%, transparent);
+}
+
+:root[data-theme="light"] .contact-topic-picker[data-invalid="true"] .contact-topic-picker-trigger,
+:root[data-theme="light"] .contact-topic-picker-trigger[aria-invalid="true"] {
+  border-color: #d97757;
+  box-shadow: 0 0 0 0.16rem color-mix(in oklch, #d97757 16%, transparent);
+}
+
+:root[data-theme="light"] .contact-topic-picker-chevron {
+  stroke: #788c5d;
+}
+
+:root[data-theme="light"] .contact-topic-menu {
+  border-color: #cec6ba;
+  background: #faf9f5;
+  box-shadow: 0 12px 24px color-mix(in oklch, #cec6ba 22%, transparent);
+}
+
+:root[data-theme="light"] .contact-topic-menu::before {
+  background: #faf9f5;
+}
+
+:root[data-theme="light"] .contact-topic-menu-label {
   color: #b0aea5;
 }
 
-:root[data-theme="light"] .contact-select-native option {
-  background: #ffffff;
+:root[data-theme="light"] .contact-topic-menu-item {
   color: #141413;
 }
 
-:root[data-theme="light"] .contact-select-icon path {
-  stroke: #d97757;
+:root[data-theme="light"] .contact-topic-menu-item:hover,
+:root[data-theme="light"] .contact-topic-menu-item:focus-visible {
+  background: #e8e6dc;
+  color: #141413;
 }
 
-:root[data-theme="light"] .contact-select-wrap:hover .contact-select-icon path,
-:root[data-theme="light"] .contact-select-wrap:focus-within .contact-select-icon path {
-  stroke: #141413;
+:root[data-theme="light"] .contact-topic-menu-item.is-selected {
+  background: #788c5d;
+  color: #ffffff;
 }
 
 :root[data-theme="light"] .signup-modal-showcase {
@@ -5047,6 +5236,21 @@ body.is-auth-open {
 }
 
 @media (max-width: 620px) {
+  .settings-dropdown {
+    width: min(16.8rem, calc(100vw - (var(--page-gutter) * 2)));
+  }
+
+  .settings-section {
+    grid-template-columns: 1fr;
+    gap: 0.58rem;
+  }
+
+  .settings-options {
+    min-width: 0;
+    width: 100%;
+    justify-self: stretch;
+  }
+
   .auth-page-main {
     padding-bottom: 1rem;
   }
@@ -5127,8 +5331,9 @@ body.is-auth-open {
   .ai-chat-icon-btn,
   .ai-chat-send,
   .account-nav .nav-link.setting-btn svg,
-  .contact-select-icon,
-  .contact-select-icon svg,
+  .contact-topic-picker,
+  .contact-topic-picker-chevron,
+  .contact-topic-menu-item,
   .signup-modal-close,
   .signup-submit {
     transition: none;

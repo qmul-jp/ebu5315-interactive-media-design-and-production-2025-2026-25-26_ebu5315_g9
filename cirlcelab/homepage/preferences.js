@@ -30,6 +30,8 @@
       "contact.submit": "Send message",
       "contact.helper_prefix": "Need quick help instead?",
       "contact.helper_link": "Try the ArcMind",
+      "feedback.contact_topic":
+        "Please choose a topic so we can route your message.",
       "feedback.contact_length":
         "Please add a little more detail so we know how to help.",
       "feedback.contact_success":
@@ -101,6 +103,8 @@
       "contact.submit": "\u53d1\u9001\u6d88\u606f",
       "contact.helper_prefix": "\u60f3\u5feb\u901f\u5f97\u5230\u5e2e\u52a9\uff1f",
       "contact.helper_link": "\u8bd5\u8bd5 ArcMind",
+      "feedback.contact_topic":
+        "\u8bf7\u5148\u9009\u62e9\u4e00\u4e2a\u4e3b\u9898\uff0c\u65b9\u4fbf\u6211\u4eec\u66f4\u597d\u5904\u7406\u4f60\u7684\u6d88\u606f\u3002",
       "feedback.contact_length":
         "\u8bf7\u518d\u8865\u5145\u4e00\u70b9\u7ec6\u8282\uff0c\u8fd9\u6837\u6211\u4eec\u66f4\u597d\u5e2e\u5230\u4f60\u3002",
       "feedback.contact_success":

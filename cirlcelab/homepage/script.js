@@ -920,15 +920,24 @@
   const contactTopicInput = contactOverlay
     ? contactOverlay.querySelector("#contactTopic")
     : null;
+  const contactTopicPicker = contactOverlay
+    ? contactOverlay.querySelector("[data-contact-topic-picker]")
+    : null;
+  const contactTopicTrigger = contactOverlay
+    ? contactOverlay.querySelector(".contact-topic-picker-trigger")
+    : null;
+  const contactTopicValue = contactOverlay
+    ? contactOverlay.querySelector("[data-contact-topic-value]")
+    : null;
   const contactMessageInput = contactOverlay
     ? contactOverlay.querySelector("#contactMessage")
     : null;
   const contactFeedback = contactOverlay
     ? contactOverlay.querySelector("[data-contact-feedback]")
     : null;
-  const contactTopicWrap = contactOverlay
-    ? contactOverlay.querySelector(".contact-select-wrap")
-    : null;
+  const contactTopicOptions = contactOverlay
+    ? Array.from(contactOverlay.querySelectorAll("[data-contact-topic-option]"))
+    : [];
   const contactOpenButtons = Array.from(
     document.querySelectorAll("[data-open-contact]")
   );
@@ -938,7 +947,7 @@
   const contactFields =
     contactNameInput instanceof HTMLInputElement &&
     contactEmailInput instanceof HTMLInputElement &&
-    contactTopicInput instanceof HTMLSelectElement &&
+    contactTopicInput instanceof HTMLInputElement &&
     contactMessageInput instanceof HTMLTextAreaElement
       ? [
           contactNameInput,
@@ -949,9 +958,20 @@
       : [];
 
   let activeContactValidationField = null;
+  let contactTopicFeedbackTimeout = 0;
 
   const clearContactFieldError = (input) => {
     input.removeAttribute("aria-invalid");
+
+    if (input === contactTopicInput) {
+      if (contactTopicTrigger instanceof HTMLElement) {
+        contactTopicTrigger.removeAttribute("aria-invalid");
+      }
+
+      if (contactTopicPicker instanceof HTMLElement) {
+        contactTopicPicker.removeAttribute("data-invalid");
+      }
+    }
   };
 
   const showContactFeedback = (message, state = "info") => {
@@ -976,8 +996,92 @@
     activeContactValidationField = null;
   };
 
+  const syncContactTopicSelection = (
+    value,
+    { emit = true, close = false, restoreFocus = false, pulse = true } = {}
+  ) => {
+    if (
+      !(contactTopicInput instanceof HTMLInputElement) ||
+      !(contactTopicPicker instanceof HTMLDetailsElement) ||
+      !(contactTopicValue instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    const nextValue = typeof value === "string" ? value : "";
+    const selectedOption = contactTopicOptions.find((option) => {
+      return option instanceof HTMLButtonElement && option.dataset.value === nextValue;
+    });
+
+    contactTopicInput.value = selectedOption ? nextValue : "";
+
+    contactTopicOptions.forEach((option) => {
+      if (!(option instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      const isSelected = option === selectedOption;
+      option.classList.toggle("is-selected", isSelected);
+      option.setAttribute("aria-selected", isSelected ? "true" : "false");
+    });
+
+    if (selectedOption instanceof HTMLButtonElement) {
+      const label = selectedOption.textContent?.trim() || "";
+      const translationKey = selectedOption.dataset.i18nKey || "";
+
+      contactTopicValue.textContent = label;
+
+      if (translationKey) {
+        contactTopicValue.dataset.i18n = translationKey;
+      } else {
+        delete contactTopicValue.dataset.i18n;
+      }
+    } else {
+      contactTopicValue.textContent = t(
+        "contact.topic_placeholder",
+        "Choose a topic"
+      );
+      contactTopicValue.dataset.i18n = "contact.topic_placeholder";
+    }
+
+    clearContactFieldError(contactTopicInput);
+
+    window.clearTimeout(contactTopicFeedbackTimeout);
+    contactTopicPicker.classList.remove("is-updated");
+
+    if (pulse && selectedOption) {
+      requestAnimationFrame(() => {
+        contactTopicPicker.classList.add("is-updated");
+        contactTopicFeedbackTimeout = window.setTimeout(() => {
+          contactTopicPicker.classList.remove("is-updated");
+          contactTopicFeedbackTimeout = 0;
+        }, 720);
+      });
+    }
+
+    if (close) {
+      contactTopicPicker.open = false;
+    }
+
+    if (restoreFocus && contactTopicTrigger instanceof HTMLElement) {
+      contactTopicTrigger.focus();
+    }
+
+    if (emit) {
+      contactTopicInput.dispatchEvent(
+        new Event("input", {
+          bubbles: true,
+        })
+      );
+    }
+  };
+
   const syncContactCustomValidity = (input) => {
     input.setCustomValidity("");
+
+    if (input === contactTopicInput) {
+      return;
+    }
 
     if (input === contactMessageInput) {
       const length = input.value.trim().length;
@@ -993,6 +1097,32 @@
   };
 
   const validateContactField = (input) => {
+    if (input === contactTopicInput) {
+      const hasSelection =
+        contactTopicInput instanceof HTMLInputElement &&
+        contactTopicInput.value.trim().length > 0;
+
+      if (hasSelection) {
+        clearContactFieldError(input);
+        return "";
+      }
+
+      input.setAttribute("aria-invalid", "true");
+
+      if (contactTopicTrigger instanceof HTMLElement) {
+        contactTopicTrigger.setAttribute("aria-invalid", "true");
+      }
+
+      if (contactTopicPicker instanceof HTMLElement) {
+        contactTopicPicker.setAttribute("data-invalid", "true");
+      }
+
+      return t(
+        "feedback.contact_topic",
+        "Please choose a topic so we can route your message."
+      );
+    }
+
     syncContactCustomValidity(input);
 
     if (input.checkValidity()) {
@@ -1025,76 +1155,64 @@
     clearContactFeedback();
     contactFields.forEach(clearContactFieldError);
 
-    if (contactTopicWrap instanceof HTMLElement) {
-      contactTopicWrap.classList.remove("is-turning");
+    if (contactTopicPicker instanceof HTMLDetailsElement) {
+      contactTopicPicker.open = false;
     }
+
+    syncContactTopicSelection("", { emit: false, pulse: false });
   };
 
-  const initTopicDropdown = (selectInput, selectWrap) => {
+  const initTopicDropdown = () => {
     if (
-      !(selectInput instanceof HTMLSelectElement) ||
-      !(selectWrap instanceof HTMLElement)
+      !(contactTopicInput instanceof HTMLInputElement) ||
+      !(contactTopicPicker instanceof HTMLDetailsElement) ||
+      !(contactTopicTrigger instanceof HTMLElement) ||
+      !(contactTopicValue instanceof HTMLElement) ||
+      !contactTopicOptions.length
     ) {
       return;
     }
 
-    const OPEN_KEYS = new Set([" ", "Spacebar", "Enter", "ArrowDown", "ArrowUp"]);
-    const CLOSE_KEYS = new Set(["Escape", "Tab"]);
-    let closeTimerId = 0;
+    syncContactTopicSelection(contactTopicInput.value, {
+      emit: false,
+      pulse: false,
+    });
 
-    const clearCloseTimer = () => {
-      if (!closeTimerId) {
+    contactTopicOptions.forEach((option) => {
+      if (!(option instanceof HTMLButtonElement)) {
         return;
       }
 
-      window.clearTimeout(closeTimerId);
-      closeTimerId = 0;
-    };
+      option.addEventListener("click", () => {
+        syncContactTopicSelection(option.dataset.value || "", {
+          close: true,
+          restoreFocus: true,
+        });
+      });
+    });
 
-    const setOpenState = (isOpen) => {
-      selectWrap.classList.toggle("is-turning", isOpen);
-    };
-
-    const openDropdown = () => {
-      clearCloseTimer();
-      setOpenState(true);
-    };
-
-    const closeDropdown = (delay = 0) => {
-      clearCloseTimer();
-
-      if (delay <= 0) {
-        setOpenState(false);
+    document.addEventListener("click", (event) => {
+      if (!contactTopicPicker.open || contactTopicPicker.contains(event.target)) {
         return;
       }
 
-      closeTimerId = window.setTimeout(() => {
-        closeTimerId = 0;
-        setOpenState(false);
-      }, delay);
-    };
+      contactTopicPicker.open = false;
+    });
 
-    selectInput.addEventListener("pointerdown", openDropdown);
-    selectInput.addEventListener("focus", openDropdown);
-    selectInput.addEventListener("keydown", (event) => {
-      if (OPEN_KEYS.has(event.key)) {
-        openDropdown();
+    document.addEventListener("keydown", (event) => {
+      if (event.key !== "Escape" || !contactTopicPicker.open) {
+        return;
       }
 
-      if (CLOSE_KEYS.has(event.key)) {
-        closeDropdown();
-      }
+      contactTopicPicker.open = false;
+      contactTopicTrigger.focus();
     });
-    selectInput.addEventListener("keyup", (event) => {
-      if (event.key === "Enter" || event.key === "Escape") {
-        closeDropdown();
-      }
-    });
-    selectInput.addEventListener("change", () => {
-      closeDropdown(90);
-    });
-    selectInput.addEventListener("blur", () => {
-      closeDropdown();
+
+    window.addEventListener("circlelab:languagechange", () => {
+      syncContactTopicSelection(contactTopicInput.value, {
+        emit: false,
+        pulse: false,
+      });
     });
   };
 
@@ -1784,7 +1902,11 @@
       const invalidField = validateContactForm();
       if (invalidField) {
         showContactFeedback(invalidField.message, "error");
-        invalidField.input.focus();
+        if (invalidField.input === contactTopicInput) {
+          contactTopicTrigger?.focus();
+        } else {
+          invalidField.input.focus();
+        }
         return;
       }
 
@@ -1792,9 +1914,11 @@
       contactFields.forEach(clearContactFieldError);
       activeContactValidationField = null;
 
-      if (contactTopicWrap instanceof HTMLElement) {
-        contactTopicWrap.classList.remove("is-turning");
+      if (contactTopicPicker instanceof HTMLDetailsElement) {
+        contactTopicPicker.open = false;
       }
+
+      syncContactTopicSelection("", { emit: false, pulse: false });
 
       showContactFeedback(
         t(
@@ -1806,7 +1930,7 @@
     });
   }
 
-  initTopicDropdown(contactTopicInput, contactTopicWrap);
+  initTopicDropdown();
 
   if (loginHelpButton instanceof HTMLButtonElement) {
     loginHelpButton.addEventListener("click", () => {

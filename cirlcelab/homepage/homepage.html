@@ -1112,29 +1112,100 @@ Share your questions, ideas, or feedback anytime.
               </label>
             </div>
 
-            <label class="signup-field" for="contactTopic">
-              <span data-i18n="contact.topic">Topic</span>
+            <div class="signup-field contact-topic-field">
+              <span class="contact-topic-label" id="contactTopicLabel" data-i18n="contact.topic">Topic</span>
               <span class="contact-select-wrap">
-                <select
-                  class="signup-input contact-select-native"
+                <input
+                  class="contact-topic-input"
                   id="contactTopic"
                   name="topic"
-                  aria-describedby="contactFormFeedback"
-                  required
-                >
-                  <option value="" selected disabled data-i18n="contact.topic_placeholder">Choose a topic</option>
-                  <option value="learning" data-i18n="contact.topic_learning">Learning support</option>
-                  <option value="feedback" data-i18n="contact.topic_feedback">Product feedback</option>
-                  <option value="bug" data-i18n="contact.topic_bug">Bug report</option>
-                  <option value="school" data-i18n="contact.topic_school">School or partnership</option>
-                </select>
-                <span class="contact-select-icon" aria-hidden="true">
-                  <svg viewBox="0 0 24 24" focusable="false">
-                    <path d="M7 10.5 12 15.5l5-5" />
-                  </svg>
-                </span>
+                  type="hidden"
+                  value=""
+                />
+
+                <details class="contact-topic-picker" data-contact-topic-picker>
+                  <summary
+                    class="signup-input contact-topic-picker-trigger"
+                    aria-describedby="contactFormFeedback"
+                    aria-labelledby="contactTopicLabel contactTopicValue"
+                  >
+                    <span
+                      class="contact-topic-picker-value"
+                      id="contactTopicValue"
+                      data-contact-topic-value
+                      data-i18n="contact.topic_placeholder"
+                    >Choose a topic</span>
+                    <svg class="contact-topic-picker-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m7 10 5 5 5-5" />
+                    </svg>
+                  </summary>
+
+                  <div class="contact-topic-menu" role="listbox" aria-labelledby="contactTopicLabel">
+                    <p class="contact-topic-menu-label" data-i18n="contact.topic">Topic</p>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="learning"
+                      data-i18n-key="contact.topic_learning"
+                    >
+                      <span data-i18n="contact.topic_learning">Learning support</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="feedback"
+                      data-i18n-key="contact.topic_feedback"
+                    >
+                      <span data-i18n="contact.topic_feedback">Product feedback</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="bug"
+                      data-i18n-key="contact.topic_bug"
+                    >
+                      <span data-i18n="contact.topic_bug">Bug report</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="school"
+                      data-i18n-key="contact.topic_school"
+                    >
+                      <span data-i18n="contact.topic_school">School or partnership</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+                  </div>
+                </details>
               </span>
-            </label>
+            </div>
 
             <label class="signup-field" for="contactMessage">
               <span data-i18n="contact.message">Message</span>
