@@ -1264,6 +1264,35 @@ Share your questions, ideas, or feedback anytime.
       </div>
     </div>
 
+
+    <div class="ai-float-shell" data-ai-float-shell aria-label="ArcMind quick access">
+      <div class="ai-float-glow ai-float-glow-a" aria-hidden="true"></div>
+      <div class="ai-float-glow ai-float-glow-b" aria-hidden="true"></div>
+      <form class="ai-float-bar" data-ai-float-form aria-label="Ask ArcMind quickly">
+        <button class="ai-float-plus" type="button" data-ai-float-focus aria-label="Focus ArcMind">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14" />
+            <path d="M5 12h14" />
+          </svg>
+        </button>
+        <label class="sr-only" for="aiFloatInput">Ask ArcMind</label>
+        <input
+          class="ai-float-input"
+          id="aiFloatInput"
+          name="prompt"
+          type="text"
+          maxlength="180"
+          placeholder="Ask ArcMind"
+          autocomplete="off"
+        />
+        <button class="ai-float-send" type="submit" aria-label="Send to ArcMind" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 18V6" />
+            <path d="m7 11 5-5 5 5" />
+          </svg>
+        </button>
+      </form>
+    </div>
     <script src="preferences.js"></script>
     <script src="script.js"></script>
   </body>

@@ -576,8 +576,18 @@
   const messages = chatShell.querySelector("[data-ai-chat-messages]");
   const modelValue = chatShell.querySelector(".ai-chat-model-picker-value");
   const attachButton = chatShell.querySelector(".ai-chat-icon-btn");
+  const heroSection = document.getElementById("heroInteractive");
+  const aiStudySection = document.querySelector(".ai-study-section");
+  const floatShell = document.querySelector("[data-ai-float-shell]");
+  const floatForm = floatShell?.querySelector("[data-ai-float-form]");
+  const floatInput = floatShell?.querySelector(".ai-float-input");
+  const floatSend = floatShell?.querySelector(".ai-float-send");
+  const floatFocusButton = floatShell?.querySelector("[data-ai-float-focus]");
   const prefersReducedMotion = typeof window.matchMedia === "function"
     ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false };
+  const compactViewport = typeof window.matchMedia === "function"
+    ? window.matchMedia("(max-width: 620px)")
     : { matches: false };
 
   if (
@@ -596,6 +606,37 @@
 
   const maxComposerHeight = 172;
 
+  if (floatShell instanceof HTMLElement) {
+    let floatEntranceTimer = 0;
+
+    const revealFloatShell = () => {
+      floatShell.classList.add("is-ready");
+
+      if (prefersReducedMotion.matches) {
+        return;
+      }
+
+      floatShell.classList.remove("is-entering");
+      void floatShell.offsetWidth;
+      floatShell.classList.add("is-entering");
+
+      window.clearTimeout(floatEntranceTimer);
+      floatEntranceTimer = window.setTimeout(() => {
+        floatShell.classList.remove("is-entering");
+      }, 760);
+    };
+
+    if (prefersReducedMotion.matches) {
+      revealFloatShell();
+    } else if (document.readyState === "complete") {
+      window.setTimeout(revealFloatShell, 90);
+    } else {
+      window.addEventListener("load", () => {
+        window.setTimeout(revealFloatShell, 90);
+      }, { once: true });
+    }
+  }
+
   const autoResizeInput = () => {
     input.style.height = "auto";
     input.style.height = `${Math.min(input.scrollHeight, maxComposerHeight)}px`;
@@ -604,6 +645,31 @@
 
   const syncSendState = () => {
     sendButton.disabled = input.value.trim().length === 0;
+  };
+
+  const syncFloatState = () => {
+    if (
+      !(floatShell instanceof HTMLElement) ||
+      !(floatInput instanceof HTMLInputElement) ||
+      !(floatSend instanceof HTMLButtonElement)
+    ) {
+      return;
+    }
+
+    const hasPrompt = floatInput.value.trim().length > 0;
+    floatShell.classList.toggle("has-value", hasPrompt);
+    floatSend.disabled = !hasPrompt;
+  };
+
+  const focusComposer = (preventScroll = false) => {
+    try {
+      input.focus(preventScroll ? { preventScroll: true } : undefined);
+    } catch (error) {
+      input.focus();
+    }
+
+    const caret = input.value.length;
+    input.setSelectionRange(caret, caret);
   };
 
   const scrollTranscriptToBottom = (behavior = "smooth") => {
@@ -639,16 +705,7 @@
   const buildTutorReply = () =>
     "Ask a question about circle geometry and I'll help you think it through.";
 
-  form.addEventListener("submit", (event) => {
-    event.preventDefault();
-
-    const prompt = input.value.trim();
-    if (!prompt) {
-      syncSendState();
-      input.focus();
-      return;
-    }
-
+  const appendTutorExchange = (prompt) => {
     messages.append(createMessage("user", "You", prompt));
     messages.append(
       createMessage(
@@ -658,13 +715,46 @@
       )
     );
 
-    input.value = "";
-    autoResizeInput();
-    syncSendState();
     requestAnimationFrame(() => {
       scrollTranscriptToBottom();
     });
-    input.focus();
+  };
+
+  const revealArcMind = () => {
+    if (aiStudySection instanceof HTMLElement) {
+      aiStudySection.scrollIntoView({
+        behavior: prefersReducedMotion.matches ? "auto" : "smooth",
+        block: compactViewport.matches ? "start" : "center",
+      });
+    }
+
+    if (prefersReducedMotion.matches) {
+      requestAnimationFrame(() => {
+        focusComposer(true);
+      });
+      return;
+    }
+
+    window.setTimeout(() => {
+      focusComposer(true);
+    }, compactViewport.matches ? 320 : 240);
+  };
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const prompt = input.value.trim();
+    if (!prompt) {
+      syncSendState();
+      focusComposer();
+      return;
+    }
+
+    appendTutorExchange(prompt);
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+    focusComposer();
   });
 
   input.addEventListener("input", () => {
@@ -689,12 +779,109 @@
 
   if (attachButton instanceof HTMLButtonElement) {
     attachButton.addEventListener("click", () => {
-      input.focus();
+      focusComposer();
     });
+  }
+
+  if (
+    floatForm instanceof HTMLFormElement &&
+    floatInput instanceof HTMLInputElement &&
+    floatSend instanceof HTMLButtonElement
+  ) {
+    floatForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const prompt = floatInput.value.trim();
+      if (!prompt) {
+        revealArcMind();
+        syncFloatState();
+        return;
+      }
+
+      appendTutorExchange(prompt);
+      floatInput.value = "";
+      syncFloatState();
+      revealArcMind();
+    });
+
+    floatInput.addEventListener("input", () => {
+      syncFloatState();
+    });
+
+    floatInput.addEventListener("keydown", (event) => {
+      if (event.key !== "Enter" || event.shiftKey || event.isComposing) {
+        return;
+      }
+
+      event.preventDefault();
+
+      if (typeof floatForm.requestSubmit === "function") {
+        floatForm.requestSubmit();
+        return;
+      }
+
+      floatSend.click();
+    });
+  }
+
+  if (
+    floatFocusButton instanceof HTMLButtonElement &&
+    floatInput instanceof HTMLInputElement
+  ) {
+    floatFocusButton.addEventListener("click", () => {
+      if (floatInput.value.trim()) {
+        input.value = floatInput.value.trim();
+        autoResizeInput();
+        syncSendState();
+        floatInput.value = "";
+        syncFloatState();
+      }
+
+      revealArcMind();
+    });
+  }
+
+  if (floatShell instanceof HTMLElement && "IntersectionObserver" in window) {
+    const dockTargets = [heroSection, aiStudySection].filter(
+      (section) => section instanceof HTMLElement
+    );
+
+    if (dockTargets.length) {
+      const activeDockTargets = new Set();
+      const syncDockedState = () => {
+        floatShell.classList.toggle("is-docked-away", activeDockTargets.size > 0);
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const shouldDock =
+              entry.isIntersecting && entry.intersectionRatio > 0.12;
+
+            if (shouldDock) {
+              activeDockTargets.add(entry.target);
+            } else {
+              activeDockTargets.delete(entry.target);
+            }
+          });
+
+          syncDockedState();
+        },
+        {
+          threshold: [0, 0.12, 0.26, 0.48],
+          rootMargin: "-8% 0px 16% 0px",
+        }
+      );
+
+      dockTargets.forEach((section) => {
+        observer.observe(section);
+      });
+    }
   }
 
   autoResizeInput();
   syncSendState();
+  syncFloatState();
   scrollTranscriptToBottom("auto");
 })();
 
