@@ -1,4 +1,16 @@
+@font-face {
+  font-family: "Anthropic Serif";
+  src: url("./fonts/6997199fab1923a705f0042d_AnthropicSerif-Roman-Web.woff2")
+    format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 :root {
+  --font-display: "Anthropic Serif", "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  --section-title-line-height: 1.18;
+  --section-title-letter-spacing: -0.008em;
+  --section-title-line-gap: 0.24em;
   --bg: oklch(0.11 0.01 252);
   --panel: oklch(0.13 0.012 252);
   --text: oklch(0.93 0.01 250);
@@ -132,6 +144,23 @@ body {
     radial-gradient(circle at 15% -15%, oklch(0.2 0.04 170 / 0.42), transparent 42%),
     radial-gradient(circle at 87% -8%, oklch(0.18 0.03 210 / 0.35), transparent 38%),
     var(--bg);
+}
+
+#hero-title,
+#core-features-title,
+#theorems-carousel-title,
+#ai-study-title,
+#pricing-title,
+.callout-title,
+.theorem-frame-cta .theorem-cta-title,
+.core-feature-card h3,
+.pricing-card-price,
+.site-footer-column h2,
+.signup-modal-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-kerning: normal;
+  text-rendering: optimizeLegibility;
 }
 
 :root[data-theme="light"] body {
@@ -457,9 +486,9 @@ body.is-auth-switching .auth-overlay {
 
 #hero-title {
   margin: 1.02rem 0 1.16rem;
-  font-size: clamp(2.2rem, 5.5vw, 4.5rem);
-  line-height: 1.08;
-  letter-spacing: -0.022em;
+  font-size: clamp(2.05rem, 5.15vw, 4.2rem);
+  line-height: var(--section-title-line-height);
+  letter-spacing: var(--section-title-letter-spacing);
   color: color-mix(in oklch, #faf9f5 89%, var(--accent) 11%);
   white-space: pre-line;
   text-wrap: pretty;
@@ -602,6 +631,8 @@ body.is-auth-switching .auth-overlay {
   z-index: 1;
   margin-bottom: clamp(1.2rem, 2.6vw, 2rem);
   max-width: none;
+  display: grid;
+  justify-items: center;
 }
 
 .core-kicker {
@@ -614,12 +645,13 @@ body.is-auth-switching .auth-overlay {
 
 #core-features-title {
   margin: 0;
-  font-size: clamp(1.95rem, 4.9vw, 3.9rem);
-  line-height: 1.08;
-  letter-spacing: -0.022em;
-  word-spacing: 0.04em;
+  font-size: clamp(1.82rem, 4.45vw, 3.55rem);
+  line-height: var(--section-title-line-height);
+  letter-spacing: var(--section-title-letter-spacing);
+  word-spacing: 0.02em;
   color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
   text-wrap: normal;
+  text-align: center;
 }
 
 #core-features-title .title-line {
@@ -630,7 +662,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 #core-features-title .title-line + .title-line {
-  margin-top: 0.18em;
+  margin-top: var(--section-title-line-gap);
 }
 
 #core-features-title .title-line-nowrap {
@@ -678,10 +710,10 @@ body.is-auth-switching .auth-overlay {
 }
 
 .core-feature-card h3 {
-  margin: 0 0 1.4rem;
-  font-size: clamp(1.14rem, 1.7vw, 1.34rem);
-  line-height: 1.24;
-  letter-spacing: 0.01em;
+  margin: 0 0 1rem;
+  font-size: clamp(1.08rem, 1.56vw, 1.24rem);
+  line-height: 1.28;
+  letter-spacing: 0.004em;
   color: color-mix(in oklch, #faf9f5 88%, var(--accent) 12%);
 }
 
@@ -736,11 +768,17 @@ body.is-auth-switching .auth-overlay {
 }
 
 .theorems-carousel-head {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: end;
-  justify-content: space-between;
   gap: 1rem;
   margin-bottom: clamp(1.4rem, 2.4vw, 2.05rem);
+}
+
+.theorems-carousel-title-wrap {
+  grid-column: 2;
+  display: grid;
+  justify-items: center;
 }
 
 .theorems-carousel-kicker {
@@ -753,13 +791,16 @@ body.is-auth-switching .auth-overlay {
 
 #theorems-carousel-title {
   margin: 0.55rem 0 0;
-  font-size: clamp(1.95rem, 4.9vw, 3.9rem);
-  line-height: 1.15;
-  letter-spacing: -0.012em;
+  font-size: clamp(1.82rem, 4.45vw, 3.55rem);
+  line-height: var(--section-title-line-height);
+  letter-spacing: var(--section-title-letter-spacing);
   color: color-mix(in oklch, #faf9f5 90%, var(--accent) 10%);
+  text-align: center;
 }
 
 .theorems-carousel-controls {
+  grid-column: 3;
+  justify-self: end;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
@@ -1007,11 +1048,11 @@ body.is-auth-switching .auth-overlay {
   z-index: 1;
   margin: 0;
   display: grid;
-  gap: 0.28rem;
+  gap: 0.22rem;
   max-width: 11.2ch;
-  font-size: calc(clamp(1.54rem, 2.28vw, 2.08rem) * var(--theorem-text-scale));
-  line-height: 1.06;
-  letter-spacing: -0.02em;
+  font-size: calc(clamp(1.42rem, 2.08vw, 1.94rem) * var(--theorem-text-scale));
+  line-height: 1.1;
+  letter-spacing: -0.012em;
 }
 
 .theorem-frame-cta .theorem-cta-title span:last-child {
@@ -1216,9 +1257,9 @@ body.is-auth-switching .auth-overlay {
 #ai-study-title {
   margin: 0;
   max-width: 12ch;
-  font-size: clamp(2rem, 4.8vw, 4.1rem);
-  line-height: 1.05;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.88rem, 4.45vw, 3.8rem);
+  line-height: var(--section-title-line-height);
+  letter-spacing: var(--section-title-letter-spacing);
   color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   text-wrap: balance;
 }
@@ -1850,9 +1891,9 @@ body.is-auth-switching .auth-overlay {
 #pricing-title {
   margin: 0;
   max-width: none;
-  font-size: clamp(1.95rem, 4.9vw, 3.9rem);
-  line-height: 1.06;
-  letter-spacing: -0.024em;
+  font-size: clamp(1.82rem, 4.45vw, 3.55rem);
+  line-height: var(--section-title-line-height);
+  letter-spacing: var(--section-title-letter-spacing);
   color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   white-space: normal;
 }
@@ -2224,10 +2265,10 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-card-price {
   color: color-mix(in oklch, #faf9f5 96%, var(--accent) 4%);
-  font-size: clamp(1.82rem, 3.55vw, 2.62rem);
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: -0.03em;
+  font-size: clamp(1.68rem, 3.2vw, 2.38rem);
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.016em;
 }
 
 .pricing-card-price-unit {
@@ -2479,11 +2520,11 @@ body.is-auth-switching .auth-overlay {
 .callout-title {
   margin: 0;
   display: grid;
-  gap: 0.26em;
-  font-size: clamp(1.9rem, 5.1vw, 3.85rem);
-  line-height: 1.1;
-  letter-spacing: -0.034em;
-  font-weight: 700;
+  gap: var(--section-title-line-gap);
+  font-size: clamp(1.76rem, 4.7vw, 3.45rem);
+  line-height: var(--section-title-line-height);
+  letter-spacing: var(--section-title-letter-spacing);
+  font-weight: 400;
   color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
   text-wrap: balance;
 }
@@ -2615,9 +2656,10 @@ body.is-auth-switching .auth-overlay {
 
 .site-footer-column h2 {
   margin: 0 0 1rem;
-  font-size: clamp(1.02rem, 1.22vw, 1.24rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
+  font-size: clamp(0.98rem, 1.12vw, 1.12rem);
+  font-weight: 600;
+  line-height: 1.12;
+  letter-spacing: -0.012em;
   color: color-mix(in oklch, #faf9f5 95%, var(--accent-alt) 5%);
 }
 
@@ -3316,7 +3358,7 @@ body.is-auth-switching .auth-overlay {
 
   .callout-title {
     font-size: clamp(1.55rem, 6.9vw, 2.3rem);
-    line-height: 1.1;
+    line-height: var(--section-title-line-height);
   }
 
   .callout-actions {
@@ -4006,9 +4048,9 @@ body.is-auth-open {
 
 .signup-modal-title {
   margin: 0.08rem 0 0;
-  font-size: clamp(1.85rem, 2.9vw, 2.8rem);
-  line-height: 1.02;
-  letter-spacing: -0.045em;
+  font-size: clamp(1.72rem, 2.55vw, 2.45rem);
+  line-height: 1.08;
+  letter-spacing: -0.022em;
   color: var(--signup-text-strong);
 }
 
@@ -5503,6 +5545,7 @@ body.is-auth-open {
     transition: none;
   }
 }
+
 
 
 
