@@ -74,6 +74,7 @@
   --accent-soft: #e9cccc;
   --accent-lavender: #CAC9DA;
   --card-deep-green: #bacfc8;
+  --card-deep-olive: #788c5d;
   --card-deep-blue: #6a9bcc;
   --card-deep-plum: #CAC9DA;
   --card-deep-berry: #d97757;
@@ -730,7 +731,7 @@ body.is-auth-switching .auth-overlay {
   width: 100%;
   height: 100%;
   display: block;
-  filter: none;
+  filter: brightness(0) saturate(100%) invert(1) opacity(0.98);
 }
 
 .core-feature-card p {
@@ -893,9 +894,11 @@ body.is-auth-switching .auth-overlay {
   margin-bottom: 0.45rem;
   border-radius: 999px;
   border: none;
+  font-family: "Manrope", "Noto Sans SC", "PingFang SC", "Microsoft YaHei",
+    sans-serif;
   font-size: clamp(1.52rem, 2.38vw, 2.04rem);
   font-weight: 700;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: color-mix(in oklch, #faf9f5 76%, var(--accent-alt) 24%);
   background: transparent;
 }
@@ -1264,6 +1267,10 @@ body.is-auth-switching .auth-overlay {
   text-wrap: balance;
 }
 
+#ai-study-title .ai-study-title-line {
+  display: block;
+}
+
 .ai-study-subtitle {
   margin: 0;
   max-width: 34ch;
@@ -1498,11 +1505,13 @@ body.is-auth-switching .auth-overlay {
   position: relative;
   min-width: 0;
   min-height: 0;
+  margin-top: 0;
   padding: 0.62rem 0.76rem;
   border-radius: 20px;
   border: 1px solid var(--ai-chat-border);
   background: var(--ai-chat-surface-raised);
   box-shadow: none;
+  transform: translateY(0.35rem);
 }
 
 .ai-chat-composer:focus-within {
@@ -1869,14 +1878,16 @@ body.is-auth-switching .auth-overlay {
   z-index: 1;
   display: flex;
   flex-direction: column;
-  align-items: start;
+  align-items: center;
   justify-content: flex-start;
   gap: clamp(2.7rem, 4.6vw, 3.8rem);
   margin-bottom: clamp(1.45rem, 2.8vw, 2.25rem);
 }
 
 .pricing-copy {
+  width: 100%;
   max-width: min(64ch, 100%);
+  text-align: center;
 }
 
 .pricing-kicker {
@@ -1891,11 +1902,14 @@ body.is-auth-switching .auth-overlay {
 #pricing-title {
   margin: 0;
   max-width: none;
-  font-size: clamp(1.82rem, 4.45vw, 3.55rem);
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+  font-size: clamp(1.72rem, 4.05vw, 3.15rem);
   line-height: var(--section-title-line-height);
   letter-spacing: var(--section-title-letter-spacing);
   color: color-mix(in oklch, #faf9f5 92%, var(--accent) 8%);
-  white-space: normal;
+  white-space: nowrap;
 }
 
 .pricing-intro {
@@ -2190,9 +2204,11 @@ body.is-auth-switching .auth-overlay {
 
 .pricing-card h3 {
   margin: 0;
+  font-family: var(--font-display);
   font-size: clamp(2rem, 2.8vw, 2.6rem);
   line-height: 1.02;
-  letter-spacing: -0.03em;
+  font-weight: 400;
+  letter-spacing: -0.02em;
   color: color-mix(in oklch, #faf9f5 94%, var(--accent) 6%);
 }
 
@@ -2266,7 +2282,7 @@ body.is-auth-switching .auth-overlay {
 .pricing-card-price {
   color: color-mix(in oklch, #faf9f5 96%, var(--accent) 4%);
   font-size: clamp(1.68rem, 3.2vw, 2.38rem);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.04;
   letter-spacing: -0.016em;
 }
@@ -3106,7 +3122,7 @@ body.is-auth-switching .auth-overlay {
 
   .pricing-head {
     flex-direction: column;
-    align-items: start;
+    align-items: center;
   }
 
   .pricing-switch-wrap {
@@ -3300,6 +3316,7 @@ body.is-auth-switching .auth-overlay {
   #pricing-title {
     max-width: 100%;
     font-size: clamp(1.22rem, 6vw, 1.92rem);
+    white-space: normal;
   }
 
   .pricing-view-toggle {
@@ -4302,7 +4319,6 @@ body.is-auth-open {
   filter: brightness(0) saturate(100%) opacity(0.94);
 }
 
-:root[data-theme="light"] .core-feature-icon img,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="personal"] .pricing-card-starter .pricing-feature-list li::before,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="personal"] .pricing-card-pro .pricing-feature-list li::before,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="personal"] .pricing-card-premium .pricing-feature-list li::before {
@@ -4541,9 +4557,12 @@ body.is-auth-open {
 :root[data-theme="light"] .pricing-card-note,
 :root[data-theme="light"] .pricing-feature-list li,
 :root[data-theme="light"] .pricing-card-label,
-:root[data-theme="light"] .theorem-frame-no,
-:root[data-theme="light"] .theorem-frame-cta .theorem-cta-copy {
+:root[data-theme="light"] .theorem-frame-no {
   color: var(--card-on-dark-muted);
+}
+
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-copy {
+  color: #f0f0eb;
 }
 
 :root[data-theme="light"] .pricing-card-cta {
@@ -4617,20 +4636,26 @@ body.is-auth-open {
   background: var(--card-deep-berry);
 }
 
-:root[data-theme="light"] .theorem-frame-no,
-:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title span:last-child {
+:root[data-theme="light"] .theorem-frame-no {
   color: var(--card-on-dark-soft);
 }
 
-:root[data-theme="light"] .theorem-frame h3,
-:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title {
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title span:last-child {
+  color: #f0f0eb;
+}
+
+:root[data-theme="light"] .theorem-frame h3 {
   color: var(--card-on-dark);
+}
+
+:root[data-theme="light"] .theorem-frame-cta .theorem-cta-title {
+  color: #faf9f5;
 }
 
 :root[data-theme="light"] .theorem-frame-cta {
   border-color: transparent;
   box-shadow: none;
-  background: var(--card-deep-rose);
+  background: var(--card-deep-olive);
 }
 
 :root[data-theme="light"] .theorem-frame-cta::after {
@@ -4639,35 +4664,35 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .theorem-cta-btn {
-  border-color: transparent;
-  background: #141413;
-  color: #faf9f5;
+  background: color-mix(in oklch, #faf9f5 78%, var(--card-deep-olive) 22%);
+  border-color: color-mix(in oklch, var(--card-deep-olive) 42%, #cec6ba 58%);
+  color: #141413;
 }
 
 :root[data-theme="light"] .theorem-cta-btn:hover,
 :root[data-theme="light"] .theorem-cta-btn:focus-visible {
-  background: #1F1E1D;
-  border-color: transparent;
-  color: #faf9f5;
+  background: color-mix(in oklch, #e8e6dc 72%, var(--card-deep-olive) 28%);
+  border-color: color-mix(in oklch, var(--card-deep-olive) 50%, #cec6ba 50%);
+  color: #141413;
 }
 
 :root[data-theme="light"] .theorem-cta-btn-alt {
-  background: #faf9f5;
-  border-color: #cec6ba;
+  background: color-mix(in oklch, #faf9f5 84%, var(--card-deep-olive) 16%);
+  border-color: color-mix(in oklch, var(--card-deep-olive) 34%, #cec6ba 66%);
   color: #141413;
 }
 
 :root[data-theme="light"] .ai-study-section {
   --ai-chat-surface: #e8e6dc;
-  --ai-chat-surface-raised: #faf9f5;
-  --ai-chat-surface-deep: #faf9f5;
+  --ai-chat-surface-raised: #ffffff;
+  --ai-chat-surface-deep: #ffffff;
   --ai-chat-border: #cec6ba;
   --ai-chat-border-strong: #b0aea5;
   --ai-chat-text-strong: #141413;
   --ai-chat-text-muted: #1F1E1D;
-  --ai-chat-assistant-bubble: #cec6ba;
-  --ai-chat-user-bubble: #d97757;
-  --ai-chat-user-text: #faf9f5;
+  --ai-chat-assistant-bubble: #e8e6dc;
+  --ai-chat-user-bubble: #e8e6dc;
+  --ai-chat-user-text: #141413;
   --ai-chat-action: #d97757;
   --ai-chat-action-hover: #C96442;
   --ai-chat-action-muted: #d97757;
@@ -4684,6 +4709,11 @@ body.is-auth-open {
 
 :root[data-theme="light"] .ai-chat-transcript {
   background: var(--ai-chat-surface-deep);
+}
+
+:root[data-theme="light"] .ai-chat-composer,
+:root[data-theme="light"] .ai-chat-draft {
+  background: #ffffff;
 }
 
 :root[data-theme="light"] .ai-chat-transcript::before {
@@ -4891,7 +4921,6 @@ body.is-auth-open {
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card-cta,
 :root[data-theme="light"] .pricing-card.is-featured .pricing-card-cta,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta,
-:root[data-theme="light"] .theorem-cta-btn,
 :root[data-theme="light"] .signup-submit {
   color: var(--button-primary-text);
   border-color: transparent;
@@ -4911,8 +4940,6 @@ body.is-auth-open {
 :root[data-theme="light"] .pricing-card.is-featured .pricing-card-cta:focus-visible,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta:hover,
 :root[data-theme="light"] .pricing-panel[data-pricing-panel="schools"] .pricing-card.is-featured .pricing-card-cta:focus-visible,
-:root[data-theme="light"] .theorem-cta-btn:hover,
-:root[data-theme="light"] .theorem-cta-btn:focus-visible,
 :root[data-theme="light"] .signup-submit:hover,
 :root[data-theme="light"] .signup-submit:focus-visible {
   color: var(--button-primary-text);
@@ -4922,8 +4949,7 @@ body.is-auth-open {
 }
 
 :root[data-theme="light"] .hero-btn.secondary,
-:root[data-theme="light"] .callout-btn-secondary,
-:root[data-theme="light"] .theorem-cta-btn-alt {
+:root[data-theme="light"] .callout-btn-secondary {
   color: var(--button-secondary-text);
   border-color: var(--button-secondary-border);
   background: var(--button-secondary-bg);
@@ -4937,8 +4963,8 @@ body.is-auth-open {
 :root[data-theme="light"] .theorem-cta-btn-alt:hover,
 :root[data-theme="light"] .theorem-cta-btn-alt:focus-visible {
   color: var(--button-secondary-text);
-  border-color: var(--button-secondary-border-hover);
-  background: var(--button-secondary-bg-hover);
+  border-color: color-mix(in oklch, var(--card-deep-olive) 44%, #cec6ba 56%);
+  background: color-mix(in oklch, #e8e6dc 76%, var(--card-deep-olive) 24%);
   box-shadow: none;
 }
 

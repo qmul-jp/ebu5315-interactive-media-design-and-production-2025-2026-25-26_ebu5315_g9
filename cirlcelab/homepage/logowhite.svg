@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" role="img" aria-labelledby="title desc">
+  <title id="title">CircleLab logo</title>
+  <desc id="desc">A circle-based mark made from overlapping perfect circles beside the word CircleLab.</desc>
+  <defs>
+    <style>
+      @font-face {
+        font-family: "Anthropic Serif";
+        src: url("./fonts/6997199fab1923a705f0042d_AnthropicSerif-Roman-Web.woff2") format("woff2");
+        font-style: normal;
+        font-weight: 400;
+      }
+
+      .mark {
+        fill: none;
+        stroke: #ffffff;
+        stroke-width: 4;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .wordmark {
+        fill: #ffffff;
+        font-family: "Anthropic Serif", "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+        font-size: 102px;
+        font-weight: 400;
+        letter-spacing: -0.035em;
+      }
+    </style>
+  </defs>
+
+  <g transform="translate(26 20)">
+    <g transform="translate(86 90)">
+      <circle class="mark" cx="0" cy="-34" r="62" />
+      <circle class="mark" cx="24" cy="-24" r="62" />
+      <circle class="mark" cx="34" cy="0" r="62" />
+      <circle class="mark" cx="24" cy="24" r="62" />
+      <circle class="mark" cx="0" cy="34" r="62" />
+      <circle class="mark" cx="-24" cy="24" r="62" />
+      <circle class="mark" cx="-34" cy="0" r="62" />
+      <circle class="mark" cx="-24" cy="-24" r="62" />
+      <circle class="mark" cx="0" cy="0" r="62" />
+    </g>
+
+    <text class="wordmark" x="202" y="124">CircleLab</text>
+  </g>
+</svg>
