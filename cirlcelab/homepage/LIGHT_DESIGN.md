@@ -39,6 +39,8 @@ This document combines the light theme palette from `COLORS.md` with the design 
 - Sage: `#bacfc8`
 - Soft Pink: `#e9cccc`
 - Stone: `#cec6ba`
+- Muted Gray: `#878785`
+- Graphite Gray: `#6A6B6A`
 
 ## Visual Direction
 
@@ -69,6 +71,7 @@ This document combines the light theme palette from `COLORS.md` with the design 
 - Prefer low-saturation solid fills
 - White may be used in small amounts to sharpen contrast and create breathing room
 - Let neutrals dominate while muted colors group and emphasize content
+- Use `#878785` and `#6A6B6A` as supporting neutrals for muted text, dividers, and quiet UI structure
 - Good section or card colors:
   - `#bacfc8`
   - `#CAC9DA`

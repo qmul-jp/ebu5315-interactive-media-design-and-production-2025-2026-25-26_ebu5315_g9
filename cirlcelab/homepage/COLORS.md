@@ -17,6 +17,8 @@
 #bacfc8
 #e9cccc
 #cec6ba
+#878785
+#6A6B6A
 
 ## Dark Theme Core
 

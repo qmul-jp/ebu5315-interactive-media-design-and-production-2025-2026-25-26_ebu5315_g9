@@ -605,6 +605,491 @@
   }
 
   const maxComposerHeight = 172;
+  const floatPromptCopy = {
+    en: {
+      label: "Suggested circle questions",
+      placeholder: "Ask ArcMind",
+      prompts: [
+        "How do I prove the angle in a semicircle is 90 degrees?",
+        "What is the difference between a chord and a tangent?",
+        "Why are angles in the same segment equal?",
+      ],
+    },
+    zh: {
+      label: "\u63a8\u8350\u7684\u5706\u51e0\u4f55\u95ee\u9898",
+      placeholder: "\u968f\u4fbf\u95ee\u4e00\u4e2a\u5706\u51e0\u4f55\u95ee\u9898",
+      prompts: [
+        "\u5982\u4f55\u8bc1\u660e\u534a\u5706\u6240\u5bf9\u7684\u89d2\u662f 90 \u5ea6\uff1f",
+        "\u5f26\u548c\u5207\u7ebf\u6709\u4ec0\u4e48\u533a\u522b\uff1f",
+        "\u4e3a\u4ec0\u4e48\u540c\u5f27\u6240\u5bf9\u7684\u89d2\u76f8\u7b49\uff1f",
+      ],
+    },
+  };
+  const floatResponseUiCopy = {
+    en: {
+      brand: "ArcMind",
+      panelLabel: "ArcMind answer panel",
+      loadingTitle: "Working through the circle theorem",
+      loadingBody: "Building a clear circle-geometry explanation...",
+      closeLabel: "Hide answer panel",
+      collapseLabel: "Collapse answer",
+      followUp:
+        "Ask a follow-up below if you want the proof rewritten with diagram letters.",
+    },
+    zh: {
+      brand: "ArcMind",
+      panelLabel: "ArcMind \u56de\u7b54\u9762\u677f",
+      loadingTitle: "\u6b63\u5728\u6574\u7406\u5706\u51e0\u4f55\u601d\u8def",
+      loadingBody: "\u6b63\u5728\u751f\u6210\u66f4\u6e05\u695a\u7684\u5706\u51e0\u4f55\u8bb2\u89e3\u2026\u2026",
+      closeLabel: "\u6536\u8d77\u56de\u7b54\u9762\u677f",
+      collapseLabel: "\u6536\u8d77\u56de\u7b54",
+      followUp:
+        "\u5982\u679c\u4f60\u613f\u610f\uff0c\u53ef\u4ee5\u7ee7\u7eed\u8ffd\u95ee\uff0c\u6211\u4e5f\u53ef\u4ee5\u6309\u56fe\u4e2d\u5b57\u6bcd\u5199\u6210\u8bc1\u660e\u8fc7\u7a0b\u3002",
+    },
+  };
+  const floatAnswerLibrary = [
+    {
+      patterns: [
+        "semicircle",
+        "diameter",
+        "half circle",
+        "\u534a\u5706",
+        "\u76f4\u5f84",
+        "\u534a\u5706\u6240\u5bf9\u89d2",
+      ],
+      title: {
+        en: "Angle in a semicircle",
+        zh: "\u534a\u5706\u6240\u5bf9\u89d2",
+      },
+      paragraphs: {
+        en: [
+          "If the angle stands on a diameter, the intercepted arc is 180 degrees. An angle at the circumference is half the angle at the centre on the same arc, so the angle must be 90 degrees.",
+          "A clean proof route is to mark the centre, join the centre to the endpoints of the diameter and to the point on the circle, then use equal radii and angle sums to justify the right angle.",
+          "In exam-style proofs, name the diameter first, then state the theorem before writing the final angle value.",
+        ],
+        zh: [
+          "\u5982\u679c\u8fd9\u4e2a\u89d2\u6240\u5bf9\u7684\u662f\u76f4\u5f84\uff0c\u90a3\u4e48\u5b83\u5bf9\u5e94\u7684\u5706\u5fc3\u89d2\u5c31\u662f 180 \u5ea6\u3002\u540c\u5f27\u6240\u5bf9\u7684\u5706\u5468\u89d2\u7b49\u4e8e\u5706\u5fc3\u89d2\u7684\u4e00\u534a\uff0c\u6240\u4ee5\u8fd9\u4e2a\u89d2\u4e00\u5b9a\u662f 90 \u5ea6\u3002",
+          "\u66f4\u7a33\u7684\u8bc1\u660e\u8def\u7ebf\u662f\uff1a\u5148\u6807\u51fa\u5706\u5fc3\uff0c\u8fde\u63a5\u5706\u5fc3\u5230\u76f4\u5f84\u4e24\u7aef\u548c\u5706\u4e0a\u90a3\u4e2a\u70b9\uff0c\u518d\u5229\u7528\u534a\u5f84\u76f8\u7b49\u548c\u89d2\u5ea6\u5173\u7cfb\u63a8\u51fa\u76f4\u89d2\u3002",
+          "\u5199\u9898\u65f6\u53ef\u4ee5\u5148\u660e\u786e\u6307\u51fa\u54ea\u6761\u7ebf\u662f\u76f4\u5f84\uff0c\u518d\u5199\u51fa\u5b9a\u7406\uff0c\u7ed3\u8bba\u4f1a\u66f4\u6e05\u6670\u3002",
+        ],
+      },
+    },
+    {
+      patterns: [
+        "same segment",
+        "same arc",
+        "same chord",
+        "\u540c\u5f27",
+        "\u540c\u4e00\u5f27",
+        "\u540c\u5f26",
+        "\u540c\u4e00\u6bb5",
+      ],
+      title: {
+        en: "Angles in the same segment",
+        zh: "\u540c\u5f27\u6240\u5bf9\u89d2",
+      },
+      paragraphs: {
+        en: [
+          "If two angles stand on the same chord and lie in the same segment of the circle, those angles are equal.",
+          "The fastest route is to identify the common chord first, then name each angle as standing on that chord before applying the theorem.",
+          "Check that both points are on the same side of the chord. If one point lies in the opposite segment, the theorem does not apply directly.",
+        ],
+        zh: [
+          "\u5982\u679c\u4e24\u4e2a\u89d2\u540c\u65f6\u622a\u540c\u4e00\u6761\u5f26\uff0c\u800c\u4e14\u5b83\u4eec\u5728\u540c\u4e00\u6bb5\u5f27\u4e0a\uff0c\u90a3\u4e48\u8fd9\u4e24\u4e2a\u89d2\u76f8\u7b49\u3002",
+          "\u6700\u5feb\u7684\u89e3\u9898\u65b9\u5f0f\u662f\u5148\u627e\u51fa\u516c\u5171\u7684\u5f26\uff0c\u518d\u5206\u522b\u6307\u51fa\u4e24\u4e2a\u89d2\u90fd\u662f\u7531\u8fd9\u6761\u5f26\u6240\u5bf9\uff0c\u6700\u540e\u518d\u5957\u7528\u5b9a\u7406\u3002",
+          "\u8981\u6ce8\u610f\u4e24\u4e2a\u70b9\u5fc5\u987b\u843d\u5728\u5f26\u7684\u540c\u4e00\u4fa7\uff1b\u5982\u679c\u4e0d\u5728\u540c\u4e00\u6bb5\uff0c\u5c31\u4e0d\u80fd\u76f4\u63a5\u7528\u8fd9\u6761\u5b9a\u7406\u3002",
+        ],
+      },
+    },
+    {
+      patterns: [
+        "tangent",
+        "chord and tangent",
+        "radius and tangent",
+        "\u5207\u7ebf",
+        "\u5f26\u548c\u5207\u7ebf",
+        "\u534a\u5f84\u4e0e\u5207\u7ebf",
+      ],
+      title: {
+        en: "Chord and tangent",
+        zh: "\u5f26\u4e0e\u5207\u7ebf",
+      },
+      paragraphs: {
+        en: [
+          "A chord joins two points on the circle, while a tangent touches the circle at exactly one point of contact.",
+          "When a radius meets a tangent at the point of contact, they form a right angle. That is often the first fact to use in a geometry proof.",
+          "If the question is about the angle between a chord and a tangent, the alternate segment theorem is usually the next theorem to check.",
+        ],
+        zh: [
+          "\u5f26\u662f\u8fde\u63a5\u5706\u4e0a\u4e24\u70b9\u7684\u7ebf\u6bb5\uff0c\u800c\u5207\u7ebf\u53ea\u5728\u4e00\u4e2a\u5207\u70b9\u4e0e\u5706\u76f8\u63a5\u3002",
+          "\u5f53\u534a\u5f84\u8fde\u5230\u5207\u70b9\u65f6\uff0c\u534a\u5f84\u4e0e\u5207\u7ebf\u5782\u76f4\uff0c\u4e5f\u5c31\u662f\u8bf4\u5b83\u4eec\u4f1a\u5f62\u6210 90 \u5ea6\u3002\u8fd9\u901a\u5e38\u662f\u8bc1\u660e\u91cc\u6700\u5148\u8981\u7528\u7684\u4e00\u6b65\u3002",
+          "\u5982\u679c\u9898\u76ee\u5173\u5fc3\u7684\u662f\u5f26\u4e0e\u5207\u7ebf\u6240\u6210\u7684\u89d2\uff0c\u90a3\u4e48\u5f80\u5f80\u8981\u7ee7\u7eed\u68c0\u67e5\u5207\u5f26\u5b9a\u7406\u3002",
+        ],
+      },
+    },
+    {
+      patterns: [
+        "cyclic quadrilateral",
+        "\u5185\u63a5\u56db\u8fb9\u5f62",
+        "\u5706\u5185\u63a5\u56db\u8fb9\u5f62",
+      ],
+      title: {
+        en: "Cyclic quadrilateral",
+        zh: "\u5706\u5185\u63a5\u56db\u8fb9\u5f62",
+      },
+      paragraphs: {
+        en: [
+          "For a cyclic quadrilateral, opposite interior angles add to 180 degrees. That makes one missing angle a quick supplement calculation.",
+          "If one side is extended, the exterior angle is equal to the interior opposite angle. That form is often easier to use in angle-chasing questions.",
+          "A strong proof route is to state that the quadrilateral is cyclic first, then choose whichever angle relation matches the diagram best.",
+        ],
+        zh: [
+          "\u5bf9\u4e8e\u5706\u5185\u63a5\u56db\u8fb9\u5f62\uff0c\u5bf9\u89d2\u4e4b\u548c\u7b49\u4e8e 180 \u5ea6\uff0c\u6240\u4ee5\u5f88\u591a\u7f3a\u89d2\u90fd\u80fd\u5feb\u901f\u7528\u8865\u89d2\u5173\u7cfb\u6c42\u51fa\u3002",
+          "\u5982\u679c\u5176\u4e2d\u4e00\u6761\u8fb9\u88ab\u5ef6\u957f\uff0c\u90a3\u4e48\u5916\u89d2\u7b49\u4e8e\u5185\u5bf9\u89d2\uff0c\u8fd9\u5728\u8ffd\u89d2\u9898\u91cc\u5f88\u5e38\u7528\u3002",
+          "\u66f4\u7a33\u7684\u5199\u6cd5\u662f\u5148\u6307\u51fa\u56db\u8fb9\u5f62\u5185\u63a5\u4e8e\u540c\u4e00\u4e2a\u5706\uff0c\u518d\u6839\u636e\u56fe\u5f62\u9009\u62e9\u5bf9\u89d2\u4e92\u8865\u6216\u8005\u5916\u89d2\u7b49\u4e8e\u5185\u5bf9\u89d2\u3002",
+        ],
+      },
+    },
+    {
+      patterns: [
+        "angle at the center",
+        "angle at the centre",
+        "circumference",
+        "\u5706\u5fc3\u89d2",
+        "\u5706\u5468\u89d2",
+      ],
+      title: {
+        en: "Centre and circumference",
+        zh: "\u5706\u5fc3\u89d2\u4e0e\u5706\u5468\u89d2",
+      },
+      paragraphs: {
+        en: [
+          "The angle at the centre is twice the angle at the circumference standing on the same arc.",
+          "So the key move is to match both angles to one intercepted arc. Once the arc is identified, the ratio between the two angles is immediate.",
+          "If radii are already drawn, the central angle is often the easiest anchor to use before moving back to the circumference angle.",
+        ],
+        zh: [
+          "\u540c\u5f27\u6240\u5bf9\u7684\u5706\u5fc3\u89d2\u7b49\u4e8e\u5706\u5468\u89d2\u7684 2 \u500d\u3002",
+          "\u6240\u4ee5\u89e3\u9898\u7684\u5173\u952e\u662f\u5148\u5224\u65ad\u8fd9\u4e24\u4e2a\u89d2\u662f\u4e0d\u662f\u5bf9\u540c\u4e00\u6bb5\u5f27\uff0c\u53ea\u8981\u5bf9\u7684\u662f\u540c\u5f27\uff0c\u500d\u6570\u5173\u7cfb\u5c31\u53ef\u4ee5\u76f4\u63a5\u5199\u51fa\u6765\u3002",
+          "\u5982\u679c\u56fe\u4e2d\u5df2\u7ecf\u753b\u51fa\u4e86\u534a\u5f84\uff0c\u901a\u5e38\u53ef\u4ee5\u5148\u6293\u4f4f\u5706\u5fc3\u89d2\uff0c\u518d\u5012\u56de\u53bb\u6c42\u5706\u5468\u89d2\u3002",
+        ],
+      },
+    },
+    {
+      patterns: [],
+      title: {
+        en: "Circle theorem walkthrough",
+        zh: "\u5706\u51e0\u4f55\u601d\u8def\u6574\u7406",
+      },
+      paragraphs: {
+        en: [
+          "Start by naming the objects in the diagram: radius, chord, tangent, diameter, arc, or cyclic quadrilateral. Most circle proofs become easier once the structure is explicit.",
+          "Then look for one of the high-frequency theorems: angle at the centre, angle in a semicircle, angles in the same segment, radius and tangent, tangent-chord, or opposite angles in a cyclic quadrilateral.",
+          "If you share the diagram letters or the exact given angle, I can turn this into a cleaner step-by-step proof.",
+        ],
+        zh: [
+          "\u5148\u628a\u56fe\u4e2d\u7684\u5143\u7d20\u8bf4\u6e05\u695a\uff1a\u534a\u5f84\u3001\u5f26\u3001\u5207\u7ebf\u3001\u76f4\u5f84\u3001\u5f27\uff0c\u6216\u8005\u5185\u63a5\u56db\u8fb9\u5f62\u3002\u5f88\u591a\u5706\u51e0\u4f55\u9898\u5728\u7ed3\u6784\u88ab\u70b9\u660e\u4e4b\u540e\u5c31\u4f1a\u7acb\u523b\u7b80\u5355\u5f88\u591a\u3002",
+          "\u7136\u540e\u518d\u53bb\u627e\u5e38\u7528\u5b9a\u7406\uff1a\u5706\u5fc3\u89d2\u4e0e\u5706\u5468\u89d2\uff0c\u534a\u5706\u6240\u5bf9\u89d2\uff0c\u540c\u5f27\u6240\u5bf9\u89d2\uff0c\u534a\u5f84\u4e0e\u5207\u7ebf\u5782\u76f4\uff0c\u5207\u5f26\u5b9a\u7406\uff0c\u6216\u8005\u5185\u63a5\u56db\u8fb9\u5f62\u5bf9\u89d2\u4e92\u8865\u3002",
+          "\u5982\u679c\u4f60\u53ef\u4ee5\u8865\u5145\u56fe\u4e2d\u5b57\u6bcd\u6216\u5df2\u77e5\u89d2\uff0c\u6211\u53ef\u4ee5\u628a\u8fd9\u4e2a\u601d\u8def\u6539\u5199\u6210\u66f4\u5b8c\u6574\u7684\u9010\u6b65\u8bc1\u660e\u3002",
+        ],
+      },
+    },
+  ];
+  let floatPromptPanel = null;
+  let floatResponsePanel = null;
+  let floatResponseTitle = null;
+  let floatResponseBody = null;
+  let floatResponseAnswer = null;
+  let floatResponseMinimize = null;
+  let isFloatResponseVisible = false;
+  let nextConversationId = 0;
+  const conversationHistory = [];
+  const floatPromptButtons = [];
+
+  const resolveFloatLanguage = (language = "") => {
+    if (typeof language === "string" && language.toLowerCase().startsWith("zh")) {
+      return "zh";
+    }
+
+    return document.documentElement.lang.toLowerCase().startsWith("zh") ? "zh" : "en";
+  };
+
+  const getFloatPromptData = (language = "") =>
+    floatPromptCopy[resolveFloatLanguage(language)] ?? floatPromptCopy.en;
+
+  const getFloatResponseUiData = (language = "") =>
+    floatResponseUiCopy[resolveFloatLanguage(language)] ?? floatResponseUiCopy.en;
+
+  const includesPromptPattern = (normalizedPrompt, patterns) =>
+    patterns.some((pattern) => normalizedPrompt.includes(pattern));
+
+  const buildFloatAnswer = (prompt, language = "") => {
+    const lang = resolveFloatLanguage(language);
+    const normalizedPrompt = prompt.trim().toLowerCase();
+    const matchedAnswer =
+      floatAnswerLibrary.find(
+        (entry) => entry.patterns.length && includesPromptPattern(normalizedPrompt, entry.patterns)
+      ) ?? floatAnswerLibrary[floatAnswerLibrary.length - 1];
+
+    return {
+      title: matchedAnswer.title[lang] ?? matchedAnswer.title.en,
+      paragraphs: matchedAnswer.paragraphs[lang] ?? matchedAnswer.paragraphs.en,
+    };
+  };
+
+  const hasConversationHistory = () => conversationHistory.length > 0;
+
+  const getLatestConversationTurn = () =>
+    hasConversationHistory() ? conversationHistory[conversationHistory.length - 1] : null;
+
+  const syncFloatResponseScrollState = () => {
+    if (
+      !(floatResponseBody instanceof HTMLElement) ||
+      !(floatResponseAnswer instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    const maxScroll = Math.max(
+      0,
+      floatResponseAnswer.scrollHeight - floatResponseAnswer.clientHeight
+    );
+    const isScrollable = maxScroll > 6;
+    const hasScrollTop = floatResponseAnswer.scrollTop > 6;
+    const hasScrollBottom = maxScroll - floatResponseAnswer.scrollTop > 6;
+
+    floatResponseBody.classList.toggle("is-scrollable", isScrollable);
+    floatResponseBody.classList.toggle("has-scroll-top", hasScrollTop);
+    floatResponseBody.classList.toggle("has-scroll-bottom", isScrollable && hasScrollBottom);
+  };
+
+  const getFloatResponseTitleText = (language = "") => {
+    const responseUi = getFloatResponseUiData(language);
+    const latestTurn = getLatestConversationTurn();
+
+    if (!latestTurn) {
+      return responseUi.brand;
+    }
+
+    if (latestTurn.status === "loading") {
+      return `${responseUi.brand} • ${responseUi.loadingTitle}`;
+    }
+
+    const latestAnswer = buildFloatAnswer(latestTurn.prompt, language);
+    return `${responseUi.brand} • ${latestAnswer.title}`;
+  };
+
+  const buildMainReplyText = (prompt, language = "") => {
+    const answer = buildFloatAnswer(prompt, language);
+    return answer.paragraphs.join("\n\n");
+  };
+
+  const createFloatLoadingNode = (language = "") => {
+    const responseUi = getFloatResponseUiData(language);
+    const loadingWrap = document.createElement("div");
+    loadingWrap.className = "ai-float-response-loading";
+
+    const loadingDots = document.createElement("div");
+    loadingDots.className = "ai-float-response-loading-dots";
+
+    for (let index = 0; index < 3; index += 1) {
+      const loadingDot = document.createElement("span");
+      loadingDot.className = "ai-float-response-loading-dot";
+      loadingDots.append(loadingDot);
+    }
+
+    const loadingLabel = document.createElement("p");
+    loadingLabel.className = "ai-float-response-loading-label";
+    loadingLabel.textContent = responseUi.loadingBody;
+
+    loadingWrap.append(loadingDots, loadingLabel);
+    return loadingWrap;
+  };
+
+  const createFloatResponseCopy = (prompt, language = "") => {
+    const answer = buildFloatAnswer(prompt, language);
+    const responseCopy = document.createElement("div");
+    responseCopy.className = "ai-float-response-copy";
+
+    answer.paragraphs.forEach((paragraph) => {
+      const paragraphNode = document.createElement("p");
+      paragraphNode.textContent = paragraph;
+      responseCopy.append(paragraphNode);
+    });
+
+    return responseCopy;
+  };
+
+  const syncFloatPromptVisibility = () => {
+    if (!(floatShell instanceof HTMLElement) || !(floatPromptPanel instanceof HTMLElement)) {
+      return;
+    }
+
+    const isVisible =
+      floatShell.classList.contains("is-expanded") &&
+      !floatShell.classList.contains("has-value") &&
+      !floatShell.classList.contains("has-response");
+
+    floatPromptPanel.setAttribute("aria-hidden", String(!isVisible));
+  };
+
+  const setFloatExpanded = (expanded) => {
+    if (!(floatShell instanceof HTMLElement)) {
+      return;
+    }
+
+    floatShell.classList.toggle("is-expanded", Boolean(expanded));
+    syncFloatPromptVisibility();
+  };
+
+  const setFloatResponseVisible = (visible, language = "") => {
+    if (!(floatShell instanceof HTMLElement)) {
+      return;
+    }
+
+    isFloatResponseVisible = Boolean(visible) && hasConversationHistory();
+    const isResponding = conversationHistory.some((turn) => turn.status === "loading");
+
+    floatShell.classList.toggle("has-response", isFloatResponseVisible);
+    floatShell.classList.toggle("is-responding", isFloatResponseVisible && isResponding);
+
+    if (floatResponsePanel instanceof HTMLElement) {
+      floatResponsePanel.setAttribute("aria-hidden", String(!isFloatResponseVisible));
+    }
+
+    if (floatResponseTitle instanceof HTMLElement) {
+      floatResponseTitle.textContent = isFloatResponseVisible
+        ? getFloatResponseTitleText(language)
+        : "";
+    }
+
+    syncFloatPromptVisibility();
+  };
+
+  const clearFloatResponse = (collapse = false) => {
+    setFloatResponseVisible(false);
+
+    if (floatResponseAnswer instanceof HTMLElement) {
+      floatResponseAnswer.scrollTop = 0;
+    }
+
+    if (floatResponseBody instanceof HTMLElement) {
+      floatResponseBody.classList.remove(
+        "is-scrollable",
+        "has-scroll-top",
+        "has-scroll-bottom"
+      );
+    }
+
+    if (collapse) {
+      setFloatExpanded(false);
+      return;
+    }
+
+    syncFloatPromptVisibility();
+  };
+
+  const scrollFloatResponseToBottom = () => {
+    if (!(floatResponseAnswer instanceof HTMLElement)) {
+      return;
+    }
+
+    const nextTop = floatResponseAnswer.scrollHeight;
+
+    if (prefersReducedMotion.matches || typeof floatResponseAnswer.scrollTo !== "function") {
+      floatResponseAnswer.scrollTop = nextTop;
+      return;
+    }
+
+    floatResponseAnswer.scrollTo({
+      top: nextTop,
+      behavior: "smooth",
+    });
+  };
+
+  const renderFloatResponseHistory = (language = "", options = {}) => {
+    if (
+      !(floatResponsePanel instanceof HTMLElement) ||
+      !(floatResponseTitle instanceof HTMLElement) ||
+      !(floatResponseAnswer instanceof HTMLElement)
+    ) {
+      return;
+    }
+
+    const { scrollToBottom = false } = options;
+
+    if (!hasConversationHistory()) {
+      floatResponseAnswer.replaceChildren();
+      setFloatResponseVisible(false, language);
+      return;
+    }
+
+    const responseList = document.createElement("div");
+    responseList.className = "ai-float-response-list";
+
+    conversationHistory.forEach((turn) => {
+      const entry = document.createElement("article");
+      entry.className = `ai-float-response-entry is-${turn.status}`;
+
+      const questionNode = document.createElement("p");
+      questionNode.className = "ai-float-response-question";
+      questionNode.textContent = turn.prompt;
+
+      const answerNode = document.createElement("div");
+      answerNode.className = "ai-float-response-answer";
+      answerNode.append(
+        turn.status === "loading"
+          ? createFloatLoadingNode(language)
+          : createFloatResponseCopy(turn.prompt, language)
+      );
+
+      entry.append(questionNode, answerNode);
+      responseList.append(entry);
+    });
+
+    floatResponseAnswer.replaceChildren(responseList);
+    setFloatResponseVisible(isFloatResponseVisible, language);
+
+    window.requestAnimationFrame(() => {
+      if (scrollToBottom) {
+        scrollFloatResponseToBottom();
+      }
+
+      syncFloatResponseScrollState();
+    });
+  };
+
+  const syncFloatPromptCopy = (language = "") => {
+    const promptData = getFloatPromptData(language);
+    const responseUi = getFloatResponseUiData(language);
+
+    if (floatInput instanceof HTMLInputElement) {
+      floatInput.placeholder = promptData.placeholder;
+    }
+
+    if (floatPromptPanel instanceof HTMLElement) {
+      floatPromptPanel.setAttribute("aria-label", promptData.label);
+    }
+
+    floatPromptButtons.forEach((button, index) => {
+      const prompt = promptData.prompts[index] ?? promptData.prompts[0] ?? "";
+      button.textContent = prompt;
+      button.dataset.prompt = prompt;
+      button.setAttribute("aria-label", prompt);
+    });
+
+    if (floatResponsePanel instanceof HTMLElement) {
+      floatResponsePanel.setAttribute("aria-label", responseUi.panelLabel);
+    }
+
+    if (floatResponseMinimize instanceof HTMLButtonElement) {
+      floatResponseMinimize.setAttribute("aria-label", responseUi.closeLabel);
+    }
+
+    if (hasConversationHistory()) {
+      renderFloatResponseHistory(language);
+    }
+  };
 
   if (floatShell instanceof HTMLElement) {
     let floatEntranceTimer = 0;
@@ -659,6 +1144,7 @@
     const hasPrompt = floatInput.value.trim().length > 0;
     floatShell.classList.toggle("has-value", hasPrompt);
     floatSend.disabled = !hasPrompt;
+    syncFloatPromptVisibility();
   };
 
   const focusComposer = (preventScroll = false) => {
@@ -673,29 +1159,47 @@
   };
 
   const scrollTranscriptToBottom = (behavior = "smooth") => {
-    const nextTop = transcript.scrollHeight;
+    const nextTop = messages.scrollHeight;
 
-    if (prefersReducedMotion.matches || typeof transcript.scrollTo !== "function") {
-      transcript.scrollTop = nextTop;
+    if (prefersReducedMotion.matches || typeof messages.scrollTo !== "function") {
+      messages.scrollTop = nextTop;
       return;
     }
 
-    transcript.scrollTo({
+    messages.scrollTo({
       top: nextTop,
       behavior,
     });
   };
 
-  const createMessage = (role, label, text) => {
+  const createMessage = (role, label, text, options = {}) => {
+    const { compact = false, detailed = false, loading = false } = options;
     const message = document.createElement("article");
     message.className = `ai-chat-message is-${role}`;
+
+    if (compact) {
+      message.classList.add("is-compact");
+    }
+
+    if (loading) {
+      message.classList.add("is-loading");
+    }
 
     const meta = document.createElement("p");
     meta.className = "ai-chat-message-meta";
     meta.textContent = label;
 
-    const bubble = document.createElement("p");
+    const bubble = document.createElement("div");
     bubble.className = "ai-chat-message-bubble";
+
+    if (detailed || loading) {
+      bubble.classList.add("is-detailed");
+    }
+
+    if (loading) {
+      bubble.classList.add("is-loading");
+    }
+
     bubble.textContent = text;
 
     message.append(meta, bubble);
@@ -703,24 +1207,77 @@
   };
 
   const buildTutorReply = () =>
-    "Ask a question about circle geometry and I'll help you think it through.";
+    "Ask a question about circle and I'll help you think it through.";
 
-  const appendTutorExchange = (prompt) => {
-    messages.append(createMessage("user", "You", prompt));
+  const renderMainTranscript = (language = "", behavior = "smooth") => {
+    messages.replaceChildren();
     messages.append(
-      createMessage(
-        "assistant",
-        `ArcMind - ${modelValue.textContent.trim()}`,
-        buildTutorReply()
-      )
+      createMessage("assistant", "ArcMind", buildTutorReply(), {
+        compact: true,
+      })
     );
 
+    conversationHistory.forEach((turn) => {
+      messages.append(createMessage("user", "You", turn.prompt));
+
+      const assistantText =
+        turn.status === "loading"
+          ? getFloatResponseUiData(language).loadingBody
+          : buildMainReplyText(turn.prompt, language);
+
+      messages.append(
+        createMessage(
+          "assistant",
+          `ArcMind - ${turn.model}`,
+          assistantText,
+          {
+            detailed: true,
+            loading: turn.status === "loading",
+          }
+        )
+      );
+    });
+
     requestAnimationFrame(() => {
-      scrollTranscriptToBottom();
+      scrollTranscriptToBottom(behavior);
     });
   };
 
+  const submitSharedPrompt = (prompt, source = "main") => {
+    const language = resolveFloatLanguage();
+    const turn = {
+      id: `arcmind-turn-${++nextConversationId}`,
+      prompt,
+      status: "loading",
+      model: modelValue.textContent.trim(),
+    };
+
+    conversationHistory.push(turn);
+
+    if (source === "float") {
+      setFloatExpanded(true);
+      setFloatResponseVisible(true, language);
+    }
+
+    renderMainTranscript(language);
+    renderFloatResponseHistory(language, {
+      scrollToBottom: source === "float" || isFloatResponseVisible,
+    });
+
+    window.setTimeout(() => {
+      turn.status = "ready";
+      const nextLanguage = resolveFloatLanguage();
+      renderMainTranscript(nextLanguage);
+      renderFloatResponseHistory(nextLanguage, {
+        scrollToBottom: isFloatResponseVisible,
+      });
+    }, prefersReducedMotion.matches ? 120 : 320);
+  };
+
   const revealArcMind = () => {
+    clearFloatResponse();
+    setFloatExpanded(false);
+
     if (aiStudySection instanceof HTMLElement) {
       aiStudySection.scrollIntoView({
         behavior: prefersReducedMotion.matches ? "auto" : "smooth",
@@ -750,7 +1307,7 @@
       return;
     }
 
-    appendTutorExchange(prompt);
+    submitSharedPrompt(prompt, "main");
     input.value = "";
     autoResizeInput();
     syncSendState();
@@ -788,6 +1345,96 @@
     floatInput instanceof HTMLInputElement &&
     floatSend instanceof HTMLButtonElement
   ) {
+    if (floatShell instanceof HTMLElement) {
+      floatResponsePanel = document.createElement("section");
+      floatResponsePanel.className = "ai-float-response";
+      floatResponsePanel.setAttribute("aria-hidden", "true");
+
+      const floatResponseShell = document.createElement("div");
+      floatResponseShell.className = "ai-float-response-shell";
+
+      const floatResponseHeader = document.createElement("div");
+      floatResponseHeader.className = "ai-float-response-header";
+
+      const floatResponseIdentity = document.createElement("div");
+      floatResponseIdentity.className = "ai-float-response-identity";
+
+      const floatResponseMark = document.createElement("span");
+      floatResponseMark.className = "ai-float-response-mark";
+      floatResponseMark.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.75"></circle><path d="M12 4.5v15"></path><path d="M4.5 12h15"></path><path d="M7.1 7.1 16.9 16.9"></path></svg>';
+
+      floatResponseTitle = document.createElement("p");
+      floatResponseTitle.className = "ai-float-response-title";
+
+      floatResponseIdentity.append(floatResponseMark, floatResponseTitle);
+
+      floatResponseMinimize = document.createElement("button");
+      floatResponseMinimize.type = "button";
+      floatResponseMinimize.className = "ai-float-response-minimize";
+      floatResponseMinimize.innerHTML =
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"></path></svg>';
+      floatResponseMinimize.addEventListener("click", () => {
+        clearFloatResponse(true);
+      });
+
+      floatResponseHeader.append(floatResponseIdentity, floatResponseMinimize);
+
+      floatResponseBody = document.createElement("div");
+      floatResponseBody.className = "ai-float-response-body";
+
+      floatResponseAnswer = document.createElement("div");
+      floatResponseAnswer.className = "ai-float-response-log";
+      floatResponseAnswer.setAttribute("aria-live", "polite");
+      floatResponseAnswer.setAttribute("aria-relevant", "additions text");
+      floatResponseAnswer.addEventListener("scroll", () => {
+        syncFloatResponseScrollState();
+      }, { passive: true });
+
+      floatResponseBody.append(floatResponseAnswer);
+
+      floatResponseShell.append(floatResponseHeader, floatResponseBody);
+      floatResponsePanel.append(floatResponseShell);
+      floatShell.insertBefore(floatResponsePanel, floatForm);
+
+      floatPromptPanel = document.createElement("div");
+      floatPromptPanel.className = "ai-float-prompts";
+      floatPromptPanel.setAttribute("role", "group");
+      floatPromptPanel.setAttribute("aria-hidden", "true");
+      floatShell.insertBefore(floatPromptPanel, floatForm);
+
+      for (let index = 0; index < 3; index += 1) {
+        const promptButton = document.createElement("button");
+        promptButton.type = "button";
+        promptButton.className = "ai-float-prompt";
+        promptButton.dataset.aiFloatPrompt = "";
+        promptButton.dataset.prompt = "";
+        promptButton.addEventListener("click", () => {
+          const nextPrompt = promptButton.dataset.prompt ?? "";
+          floatInput.value = nextPrompt;
+          syncFloatState();
+          setFloatExpanded(true);
+
+          try {
+            floatInput.focus({ preventScroll: true });
+          } catch (error) {
+            floatInput.focus();
+          }
+
+          const caret = floatInput.value.length;
+          floatInput.setSelectionRange(caret, caret);
+        });
+
+        floatPromptPanel.append(promptButton);
+        floatPromptButtons.push(promptButton);
+      }
+
+      syncFloatPromptCopy();
+      window.addEventListener("resize", () => {
+        syncFloatResponseScrollState();
+      });
+    }
+
     floatForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
@@ -798,14 +1445,26 @@
         return;
       }
 
-      appendTutorExchange(prompt);
+      submitSharedPrompt(prompt, "float");
       floatInput.value = "";
       syncFloatState();
-      revealArcMind();
     });
 
     floatInput.addEventListener("input", () => {
       syncFloatState();
+    });
+
+    floatInput.addEventListener("focus", () => {
+      if (hasConversationHistory()) {
+        setFloatExpanded(true);
+        setFloatResponseVisible(true, resolveFloatLanguage());
+        renderFloatResponseHistory(resolveFloatLanguage(), {
+          scrollToBottom: true,
+        });
+        return;
+      }
+
+      setFloatExpanded(true);
     });
 
     floatInput.addEventListener("keydown", (event) => {
@@ -841,6 +1500,49 @@
     });
   }
 
+  if (floatShell instanceof HTMLElement) {
+    const collapseFloatIfOutside = (target) => {
+      if (
+        !floatShell.classList.contains("is-expanded") &&
+        !floatShell.classList.contains("has-response")
+      ) {
+        return;
+      }
+
+      if (target instanceof Node && floatShell.contains(target)) {
+        return;
+      }
+
+      clearFloatResponse();
+      setFloatExpanded(false);
+    };
+
+    document.addEventListener("pointerdown", (event) => {
+      collapseFloatIfOutside(event.target);
+    });
+
+    document.addEventListener("focusin", (event) => {
+      collapseFloatIfOutside(event.target);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (
+        event.key !== "Escape" ||
+        (!floatShell.classList.contains("is-expanded") &&
+          !floatShell.classList.contains("has-response"))
+      ) {
+        return;
+      }
+
+      clearFloatResponse();
+      setFloatExpanded(false);
+
+      if (document.activeElement instanceof HTMLElement && floatShell.contains(document.activeElement)) {
+        document.activeElement.blur();
+      }
+    });
+  }
+
   if (floatShell instanceof HTMLElement && "IntersectionObserver" in window) {
     const dockTargets = [heroSection, aiStudySection].filter(
       (section) => section instanceof HTMLElement
@@ -849,7 +1551,13 @@
     if (dockTargets.length) {
       const activeDockTargets = new Set();
       const syncDockedState = () => {
-        floatShell.classList.toggle("is-docked-away", activeDockTargets.size > 0);
+        const shouldDockAway = activeDockTargets.size > 0;
+        floatShell.classList.toggle("is-docked-away", shouldDockAway);
+
+        if (shouldDockAway) {
+          clearFloatResponse();
+          setFloatExpanded(false);
+        }
       };
 
       const observer = new IntersectionObserver(
@@ -882,7 +1590,17 @@
   autoResizeInput();
   syncSendState();
   syncFloatState();
-  scrollTranscriptToBottom("auto");
+  syncFloatPromptCopy();
+  renderMainTranscript(resolveFloatLanguage(), "auto");
+  renderFloatResponseHistory(resolveFloatLanguage());
+
+  window.addEventListener("circlelab:languagechange", (event) => {
+    const nextLanguage = event.detail?.language ?? "";
+    syncFloatPromptCopy(nextLanguage);
+    renderMainTranscript(nextLanguage, "auto");
+    renderFloatResponseHistory(nextLanguage);
+    syncFloatState();
+  });
 })();
 
 (() => {
