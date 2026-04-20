@@ -1338,7 +1338,7 @@ body.is-auth-switching .auth-overlay {
   gap: clamp(0.85rem, 1.45vw, 1rem);
   min-width: 0;
   min-height: 0;
-  height: clamp(30.6rem, 38vw, 36.2rem);
+  height: clamp(34.2rem, 42.5vw, 39.8rem);
   padding: clamp(1rem, 1.9vw, 1.3rem);
   padding-bottom: clamp(0.44rem, 0.88vw, 0.68rem);
   border-radius: 24px;
@@ -1455,83 +1455,16 @@ body.is-auth-switching .auth-overlay {
   min-height: 0;
   overflow: auto;
   overscroll-behavior: contain;
-  scrollbar-gutter: stable both-edges;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ai-chat-scroll-thumb) var(--ai-chat-scroll-track);
+  scrollbar-gutter: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   padding: clamp(0.9rem, 1.55vw, 1.15rem);
-  padding-right: calc(clamp(0.9rem, 1.55vw, 1.15rem) + 0.34rem);
+  padding-right: clamp(0.9rem, 1.55vw, 1.15rem);
 }
 
 .ai-chat-messages::-webkit-scrollbar {
-  width: 0.56rem;
-}
-
-.ai-chat-messages::-webkit-scrollbar-button {
-  display: none;
   width: 0;
   height: 0;
-}
-
-.ai-chat-messages::-webkit-scrollbar-corner {
-  background: transparent;
-}
-
-.ai-chat-messages::-webkit-scrollbar-track {
-  margin-block: 0.46rem;
-  border: 0.08rem solid transparent;
-  border-radius: 999px;
-  background-clip: content-box;
-  box-shadow: inset 0 0 0 1px color-mix(in oklch, #faf9f5 7%, transparent);
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in oklch, var(--ai-chat-scroll-track) 78%, transparent) 18%,
-    var(--ai-chat-scroll-track) 52%,
-    color-mix(in oklch, var(--ai-chat-scroll-track) 78%, transparent) 82%,
-    transparent
-  );
-}
-
-.ai-chat-messages::-webkit-scrollbar-thumb {
-  min-height: 2.3rem;
-  border: 0.12rem solid transparent;
-  border-radius: 999px;
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklch, #faf9f5 10%, var(--ai-chat-scroll-thumb) 90%) 0%,
-    var(--ai-chat-scroll-thumb) 100%
-  );
-  background-clip: padding-box;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in oklch, #faf9f5 14%, transparent),
-    0 1px 2px color-mix(in oklch, black 10%, transparent);
-}
-
-.ai-chat-messages::-webkit-scrollbar-track:hover,
-.ai-chat-messages::-webkit-scrollbar-track:active {
-  box-shadow: inset 0 0 0 1px color-mix(in oklch, #faf9f5 7%, transparent);
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in oklch, var(--ai-chat-scroll-track) 78%, transparent) 18%,
-    var(--ai-chat-scroll-track) 52%,
-    color-mix(in oklch, var(--ai-chat-scroll-track) 78%, transparent) 82%,
-    transparent
-  );
-}
-
-.ai-chat-messages::-webkit-scrollbar-thumb:hover,
-.ai-chat-messages::-webkit-scrollbar-thumb:active {
-  border: 0.12rem solid transparent;
-  background: linear-gradient(
-    180deg,
-    color-mix(in oklch, #faf9f5 10%, var(--ai-chat-scroll-thumb) 90%) 0%,
-    var(--ai-chat-scroll-thumb) 100%
-  );
-  background-clip: padding-box;
-  box-shadow:
-    inset 0 0 0 1px color-mix(in oklch, #faf9f5 14%, transparent),
-    0 1px 2px color-mix(in oklch, black 10%, transparent);
 }
 
 .ai-chat-message {
@@ -1894,8 +1827,8 @@ body.is-auth-switching .auth-overlay {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 3rem;
-  height: 3rem;
+  width: 2.72rem;
+  height: 2.72rem;
   padding: 0;
   border-radius: 999px;
   border: 1px solid color-mix(in oklch, var(--accent) 24%, #faf9f5 12%);
@@ -3623,6 +3556,7 @@ body.is-auth-open .ai-float-shell {
 }
 
 .pricing-card-cta {
+  --pricing-cta-hover-scale: 1.007;
   margin-top: 0.9rem;
   display: inline-flex;
   align-items: center;
@@ -3638,6 +3572,8 @@ body.is-auth-open .ai-float-shell {
   font-weight: 800;
   letter-spacing: 0.01em;
   cursor: pointer;
+  transform: translateZ(0);
+  transform-origin: center center;
   transition:
     background-color 200ms ease,
     border-color 200ms ease,
@@ -3648,6 +3584,7 @@ body.is-auth-open .ai-float-shell {
 .pricing-card-cta:focus-visible {
   border-color: color-mix(in oklch, #faf9f5 28%, transparent);
   background: color-mix(in oklch, var(--chip-hover) 88%, var(--panel));
+  transform: translateZ(0) scale(var(--pricing-cta-hover-scale));
   outline: none;
 }
 
@@ -4149,7 +4086,7 @@ body.is-auth-open .ai-float-shell {
     border-radius: 18px;
     gap: 0.82rem;
     min-height: 0;
-    height: clamp(26.8rem, 88vw, 32.4rem);
+    height: clamp(29.8rem, 94vw, 35.4rem);
     padding: 0.85rem;
     padding-bottom: 0.46rem;
   }
@@ -4193,8 +4130,8 @@ body.is-auth-open .ai-float-shell {
   }
 
   .ai-chat-send {
-    width: 2.8rem;
-    height: 2.8rem;
+    width: 2.56rem;
+    height: 2.56rem;
   }
 
   .ai-float-shell {
@@ -6558,6 +6495,11 @@ body.is-auth-open {
   .pricing-view-btn,
   .pricing-card-cta {
     transition: none;
+  }
+
+  .pricing-card-cta:hover,
+  .pricing-card-cta:focus-visible {
+    transform: none;
   }
 
   .pricing-panel:not([hidden]) {
