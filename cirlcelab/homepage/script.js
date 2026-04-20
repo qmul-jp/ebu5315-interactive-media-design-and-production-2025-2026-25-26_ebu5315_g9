@@ -573,9 +573,20 @@
   const input = chatShell.querySelector(".ai-chat-draft");
   const sendButton = chatShell.querySelector(".ai-chat-send");
   const transcript = chatShell.querySelector(".ai-chat-transcript");
+  const emptyState = chatShell.querySelector("[data-ai-chat-empty]");
+  const emptySuggestionButtons = Array.from(
+    chatShell.querySelectorAll("[data-ai-chat-empty-suggestion]")
+  );
   const messages = chatShell.querySelector("[data-ai-chat-messages]");
   const modelValue = chatShell.querySelector(".ai-chat-model-picker-value");
   const attachButton = chatShell.querySelector(".ai-chat-icon-btn");
+  const sidebarActionButtons = Array.from(
+    chatShell.querySelectorAll("[data-ai-chat-sidebar-action]")
+  );
+  const sidebarPromptButtons = Array.from(
+    chatShell.querySelectorAll("[data-ai-chat-sidebar-intent]")
+  );
+  const sidebarResetButton = chatShell.querySelector("[data-ai-chat-reset]");
   const heroSection = document.getElementById("heroInteractive");
   const aiStudySection = document.querySelector(".ai-study-section");
   const floatShell = document.querySelector("[data-ai-float-shell]");
@@ -624,6 +635,27 @@
         "\u5f26\u548c\u5207\u7ebf\u6709\u4ec0\u4e48\u533a\u522b\uff1f",
         "\u4e3a\u4ec0\u4e48\u540c\u5f27\u6240\u5bf9\u7684\u89d2\u76f8\u7b49\uff1f",
       ],
+    },
+  };
+  const sidebarPromptCopy = {
+    en: {
+      theorem: "Help me review the angle at the centre theorem.",
+      proof: "Can we practise a circle theorem proof step by step?",
+      quiz: "Give me a circle theorem hint without the full answer.",
+      "history-centre":
+        "Why is the angle at the centre twice the angle at the circumference?",
+      "history-tangent": "Help me prove this tangent theorem.",
+      "history-cyclic": "Explain the cyclic quadrilateral theorem.",
+      "history-alternate": "Explain the alternate segment theorem.",
+    },
+    zh: {
+      theorem: "帮我复习一下圆心角与圆周角定理。",
+      proof: "我们可以一步一步练习一道圆几何证明题吗？",
+      quiz: "给我一个圆几何提示，但先不要直接给完整答案。",
+      "history-centre": "为什么同弧所对的圆心角是圆周角的两倍？",
+      "history-tangent": "帮我证明这道切线定理。",
+      "history-cyclic": "讲解一下圆内接四边形定理。",
+      "history-alternate": "解释一下切弦定理。",
     },
   };
   const floatResponseUiCopy = {
@@ -817,6 +849,24 @@
 
   const getFloatPromptData = (language = "") =>
     floatPromptCopy[resolveFloatLanguage(language)] ?? floatPromptCopy.en;
+
+  const getSidebarPrompt = (intent, language = "") => {
+    const lang = resolveFloatLanguage(language);
+    return sidebarPromptCopy[lang]?.[intent] ?? sidebarPromptCopy.en[intent] ?? "";
+  };
+
+  const setActiveSidebarAction = (intent = "ask") => {
+    sidebarActionButtons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      button.classList.toggle(
+        "is-active",
+        (button.dataset.aiChatSidebarAction?.trim() ?? "") === intent
+      );
+    });
+  };
 
   const getFloatResponseUiData = (language = "") =>
     floatResponseUiCopy[resolveFloatLanguage(language)] ?? floatResponseUiCopy.en;
@@ -1207,19 +1257,60 @@
     return message;
   };
 
-  const buildTutorReply = () =>
-    "Ask a question about circle and I'll help you think it through.";
+  const mainChatUiCopy = {
+    en: {
+      assistantLabel: "ArcMind",
+      userLabel: "You",
+      assistantPrefix: "ArcMind -",
+      welcome: "Ask a question about circle and I'll help you think it through.",
+    },
+    zh: {
+      assistantLabel: "ArcMind",
+      userLabel: "你",
+      assistantPrefix: "ArcMind -",
+      welcome: "问我任意圆几何问题，我会陪你一步步推理。",
+    },
+  };
+
+  const getMainChatUiData = (language = "") =>
+    mainChatUiCopy[resolveFloatLanguage(language)] ?? mainChatUiCopy.en;
+
+  const buildTutorReply = (language = "") => getMainChatUiData(language).welcome;
 
   const renderMainTranscript = (language = "", behavior = "smooth") => {
+    const uiData = getMainChatUiData(language);
+
     messages.replaceChildren();
-    messages.append(
-      createMessage("assistant", "ArcMind", buildTutorReply(), {
-        compact: true,
-      })
-    );
+
+    if (!hasConversationHistory()) {
+      if (emptyState instanceof HTMLElement) {
+        emptyState.hidden = false;
+      }
+
+      if (messages instanceof HTMLElement) {
+        messages.hidden = true;
+      }
+
+      if (transcript instanceof HTMLElement) {
+        transcript.classList.add("is-empty");
+      }
+      return;
+    }
+
+    if (emptyState instanceof HTMLElement) {
+      emptyState.hidden = true;
+    }
+
+    if (messages instanceof HTMLElement) {
+      messages.hidden = false;
+    }
+
+    if (transcript instanceof HTMLElement) {
+      transcript.classList.remove("is-empty");
+    }
 
     conversationHistory.forEach((turn) => {
-      messages.append(createMessage("user", "You", turn.prompt));
+      messages.append(createMessage("user", uiData.userLabel, turn.prompt));
 
       const assistantText =
         turn.status === "loading"
@@ -1229,7 +1320,7 @@
       messages.append(
         createMessage(
           "assistant",
-          `ArcMind - ${turn.model}`,
+          `${uiData.assistantPrefix} ${turn.model}`,
           assistantText,
           {
             detailed: true,
@@ -1242,6 +1333,20 @@
     requestAnimationFrame(() => {
       scrollTranscriptToBottom(behavior);
     });
+  };
+
+  const resetMainConversation = (focusAfter = true) => {
+    conversationHistory.length = 0;
+    renderMainTranscript(resolveFloatLanguage(), "auto");
+    renderFloatResponseHistory(resolveFloatLanguage());
+    setActiveSidebarAction("ask");
+
+    if (focusAfter) {
+      input.value = "";
+      autoResizeInput();
+      syncSendState();
+      focusComposer(true);
+    }
   };
 
   const submitSharedPrompt = (prompt, source = "main") => {
@@ -1273,6 +1378,21 @@
         scrollToBottom: isFloatResponseVisible,
       });
     }, prefersReducedMotion.matches ? 120 : 320);
+  };
+
+  const submitMainPrompt = (prompt, focusAfter = true) => {
+    if (!prompt) {
+      return;
+    }
+
+    submitSharedPrompt(prompt, "main");
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+
+    if (focusAfter) {
+      focusComposer(true);
+    }
   };
 
   const revealArcMind = () => {
@@ -1351,11 +1471,7 @@
       return;
     }
 
-    submitSharedPrompt(prompt, "main");
-    input.value = "";
-    autoResizeInput();
-    syncSendState();
-    focusComposer();
+    submitMainPrompt(prompt, true);
   });
 
   input.addEventListener("input", () => {
@@ -1381,6 +1497,56 @@
   if (attachButton instanceof HTMLButtonElement) {
     attachButton.addEventListener("click", () => {
       focusComposer();
+    });
+  }
+
+  emptySuggestionButtons.forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    button.addEventListener("click", () => {
+      const prompt = button.textContent?.trim() ?? "";
+      if (!prompt) {
+        return;
+      }
+
+      input.value = prompt;
+      autoResizeInput();
+      syncSendState();
+      focusComposer();
+      input.setSelectionRange(input.value.length, input.value.length);
+    });
+  });
+
+  sidebarPromptButtons.forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    button.addEventListener("click", () => {
+      const intent = button.dataset.aiChatSidebarIntent?.trim() ?? "";
+      if (button.hasAttribute("data-ai-chat-sidebar-action")) {
+        setActiveSidebarAction(intent || "ask");
+      }
+
+      if (intent === "ask") {
+        resetMainConversation(true);
+        return;
+      }
+
+      const prompt = getSidebarPrompt(intent);
+      if (!prompt) {
+        return;
+      }
+
+      submitMainPrompt(prompt, true);
+    });
+  });
+
+  if (sidebarResetButton instanceof HTMLButtonElement) {
+    sidebarResetButton.addEventListener("click", () => {
+      resetMainConversation(true);
     });
   }
 
