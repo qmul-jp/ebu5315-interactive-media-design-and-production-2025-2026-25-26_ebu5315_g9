@@ -583,6 +583,7 @@
   const floatInput = floatShell?.querySelector(".ai-float-input");
   const floatSend = floatShell?.querySelector(".ai-float-send");
   const floatFocusButton = floatShell?.querySelector("[data-ai-float-focus]");
+  const floatOpenButtons = Array.from(document.querySelectorAll("[data-open-float-chat]"));
   const prefersReducedMotion = typeof window.matchMedia === "function"
     ? window.matchMedia("(prefers-reduced-motion: reduce)")
     : { matches: false };
@@ -1297,6 +1298,49 @@
     }, compactViewport.matches ? 320 : 240);
   };
 
+  const setFloatHeroOverride = (enabled) => {
+    if (!(floatShell instanceof HTMLElement)) {
+      return;
+    }
+
+    floatShell.classList.toggle("is-hero-forced", Boolean(enabled));
+  };
+
+  const openFloatChatWindow = () => {
+    if (!(floatShell instanceof HTMLElement) || !(floatInput instanceof HTMLInputElement)) {
+      return;
+    }
+
+    const previousScrollX = window.scrollX;
+    const previousScrollY = window.scrollY;
+
+    setFloatHeroOverride(true);
+    floatShell.classList.add("is-ready");
+    floatShell.classList.remove("is-docked-away");
+    setFloatExpanded(true);
+
+    const language = resolveFloatLanguage();
+    if (hasConversationHistory()) {
+      setFloatResponseVisible(true, language);
+      renderFloatResponseHistory(language, { scrollToBottom: true });
+    }
+
+    try {
+      floatInput.focus({ preventScroll: true });
+    } catch (error) {
+      floatInput.focus();
+    }
+
+    window.scrollTo({
+      left: previousScrollX,
+      top: previousScrollY,
+      behavior: "auto",
+    });
+
+    const caret = floatInput.value.length;
+    floatInput.setSelectionRange(caret, caret);
+  };
+
   form.addEventListener("submit", (event) => {
     event.preventDefault();
 
@@ -1543,6 +1587,7 @@
 
       clearFloatResponse();
       setFloatExpanded(false);
+      setFloatHeroOverride(false);
     };
 
     document.addEventListener("pointerdown", (event) => {
@@ -1564,6 +1609,7 @@
 
       clearFloatResponse();
       setFloatExpanded(false);
+      setFloatHeroOverride(false);
 
       if (document.activeElement instanceof HTMLElement && floatShell.contains(document.activeElement)) {
         document.activeElement.blur();
@@ -1579,7 +1625,10 @@
     if (dockTargets.length) {
       const activeDockTargets = new Set();
       const syncDockedState = () => {
-        const shouldDockAway = activeDockTargets.size > 0;
+        const shouldDockAway =
+          activeDockTargets.size > 0 &&
+          !floatShell.classList.contains("is-hero-forced");
+
         floatShell.classList.toggle("is-docked-away", shouldDockAway);
 
         if (shouldDockAway) {
@@ -2768,6 +2817,14 @@
     });
   });
 
+  floatOpenButtons.forEach((button) => {
+    button.dataset.floatChatBound = "true";
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      openFloatChatWindow();
+    });
+  });
+
   contactCloseButtons.forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
@@ -2963,4 +3020,80 @@
   }
 
   applyHashState();
+})();
+
+// Fallback: always allow hero "Chat now" to force-open the floating chat window.
+(() => {
+  const triggerButtons = Array.from(
+    document.querySelectorAll("[data-open-float-chat]:not([data-float-chat-bound])")
+  );
+  if (!triggerButtons.length) {
+    return;
+  }
+
+  const forceOpenFloatChat = () => {
+    const floatShell = document.querySelector("[data-ai-float-shell]");
+    if (!(floatShell instanceof HTMLElement)) {
+      return;
+    }
+
+    floatShell.classList.add("is-ready", "is-expanded", "is-hero-forced");
+    floatShell.classList.remove("is-docked-away");
+    const previousScrollX = window.scrollX;
+    const previousScrollY = window.scrollY;
+
+    // Inline styles are a hard override in case any state class still hides the shell.
+    floatShell.style.opacity = "1";
+    floatShell.style.visibility = "visible";
+    floatShell.style.filter = "none";
+    floatShell.style.transform = "translate3d(-50%, 0, 0) scale(1)";
+
+    const floatInput = floatShell.querySelector(".ai-float-input");
+    if (!(floatInput instanceof HTMLInputElement)) {
+      return;
+    }
+
+    try {
+      floatInput.focus({ preventScroll: true });
+    } catch (error) {
+      floatInput.focus();
+    }
+
+    window.scrollTo({
+      left: previousScrollX,
+      top: previousScrollY,
+      behavior: "auto",
+    });
+
+    const caret = floatInput.value.length;
+    floatInput.setSelectionRange(caret, caret);
+  };
+
+  // Capture-phase delegated listener to avoid conflicts with other click handlers.
+  document.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const trigger = target.closest("[data-open-float-chat]");
+      if (!(trigger instanceof Element)) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      forceOpenFloatChat();
+    },
+    true
+  );
+
+  triggerButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      forceOpenFloatChat();
+    });
+  });
 })();

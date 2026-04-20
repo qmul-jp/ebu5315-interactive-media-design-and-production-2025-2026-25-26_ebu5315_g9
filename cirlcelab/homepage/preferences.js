@@ -56,7 +56,7 @@
       "hero.intro":
         "Learn the key rules of circle geometry through clear explanations, interactive visuals, and simple practice.",
       "hero.start": "Start Learning",
-      "hero.demo": "Watch Demo",
+      "hero.demo": "Chat now",
       "signup.title": "Create account",
       "signup.intro": "Welcome to your CircleLab workspace.",
       "signup.password_placeholder": "At least 8 characters",
@@ -128,7 +128,7 @@
       "hero.title": "轻松掌握圆几何",
       "hero.intro": "通过清晰讲解、交互图形和简明练习，学习圆几何的关键规则。",
       "hero.start": "开始学习",
-      "hero.demo": "观看演示",
+      "hero.demo": "立即聊天",
       "signup.title": "创建账号",
       "signup.intro": "欢迎来到你的 CircleLab 学习空间。",
       "signup.password_placeholder": "至少 8 个字符",
