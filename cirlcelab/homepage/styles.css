@@ -1879,34 +1879,34 @@ body.is-auth-switching .auth-overlay {
 .ai-float-shell {
   --ai-float-width-collapsed: min(calc(100% - 1.4rem), 21.2rem);
   --ai-float-width-expanded: min(calc(100% - 1.4rem), 40rem);
-  --ai-float-surface: color-mix(in oklch, #faf9f5 92%, var(--panel) 8%);
-  --ai-float-surface-bottom: color-mix(in oklch, #faf9f5 88%, var(--chip) 12%);
-  --ai-float-border: color-mix(in oklch, #faf9f5 72%, var(--accent) 28%);
-  --ai-float-text: color-mix(in oklch, var(--text) 42%, var(--muted) 58%);
-  --ai-float-icon: color-mix(in oklch, var(--text) 76%, var(--muted) 24%);
-  --ai-float-send-bg: color-mix(in oklch, var(--chip) 88%, #faf9f5 12%);
-  --ai-float-send-border: color-mix(in oklch, var(--text) 10%, transparent);
-  --ai-float-send-color: color-mix(in oklch, var(--muted) 76%, #faf9f5 24%);
+  --ai-float-surface: color-mix(in oklch, var(--panel) 84%, var(--accent) 16%);
+  --ai-float-surface-bottom: color-mix(in oklch, var(--chip) 78%, var(--panel) 22%);
+  --ai-float-border: color-mix(in oklch, var(--accent) 34%, #faf9f5 12%);
+  --ai-float-text: color-mix(in oklch, var(--text) 84%, var(--muted) 16%);
+  --ai-float-icon: color-mix(in oklch, var(--text) 92%, var(--accent) 8%);
+  --ai-float-send-bg: color-mix(in oklch, var(--chip-hover) 86%, var(--panel) 14%);
+  --ai-float-send-border: color-mix(in oklch, var(--accent) 24%, transparent);
+  --ai-float-send-color: color-mix(in oklch, var(--text) 90%, var(--muted) 10%);
   --ai-float-send-active-bg: color-mix(in oklch, var(--accent) 72%, #faf9f5 28%);
   --ai-float-send-active-color: var(--ink-dark);
-  --ai-float-glow-a: color-mix(in oklch, var(--accent) 24%, transparent);
-  --ai-float-glow-b: color-mix(in oklch, var(--accent-alt) 26%, transparent);
-  --ai-float-prompt-surface: color-mix(in oklch, #878785 94%, transparent);
-  --ai-float-prompt-surface-hover: color-mix(in oklch, #6A6B6A 95%, transparent);
-  --ai-float-prompt-border: color-mix(in oklch, #faf9f5 18%, #878785 82%);
-  --ai-float-prompt-highlight: color-mix(in oklch, #faf9f5 22%, transparent);
+  --ai-float-glow-a: color-mix(in oklch, var(--accent) 36%, transparent);
+  --ai-float-glow-b: color-mix(in oklch, var(--accent-alt) 28%, transparent);
+  --ai-float-prompt-surface: color-mix(in oklch, var(--chip) 78%, var(--panel) 22%);
+  --ai-float-prompt-surface-hover: color-mix(in oklch, var(--chip-hover) 78%, var(--panel) 22%);
+  --ai-float-prompt-border: color-mix(in oklch, var(--accent) 26%, #faf9f5 10%);
+  --ai-float-prompt-highlight: color-mix(in oklch, #faf9f5 16%, transparent);
   --ai-float-prompt-text: color-mix(in oklch, #faf9f5 95%, var(--accent) 5%);
-  --ai-float-response-surface: color-mix(in oklch, #7f807f 88%, transparent);
-  --ai-float-response-border: color-mix(in oklch, #faf9f5 14%, #6A6B6A 86%);
+  --ai-float-response-surface: color-mix(in oklch, var(--panel) 86%, var(--accent-deep) 14%);
+  --ai-float-response-border: color-mix(in oklch, var(--accent) 24%, #faf9f5 12%);
   --ai-float-response-text: color-mix(in oklch, #faf9f5 96%, var(--accent) 4%);
-  --ai-float-response-muted: color-mix(in oklch, #faf9f5 72%, var(--accent) 8%);
-  --ai-float-response-query-surface: color-mix(in oklch, #6A6B6A 92%, transparent);
-  --ai-float-response-query-border: color-mix(in oklch, #faf9f5 12%, #6A6B6A 88%);
-  --ai-float-response-mark-bg: #141413;
-  --ai-float-response-mark-color: #faf9f5;
-  --ai-float-response-scroll-track: color-mix(in oklch, #faf9f5 8%, transparent);
-  --ai-float-response-scroll-thumb: color-mix(in oklch, #faf9f5 34%, #6A6B6A 66%);
-  --ai-float-response-scroll-cue: color-mix(in oklch, #faf9f5 22%, transparent);
+  --ai-float-response-muted: color-mix(in oklch, var(--muted) 78%, #faf9f5 22%);
+  --ai-float-response-query-surface: color-mix(in oklch, var(--chip) 72%, var(--panel) 28%);
+  --ai-float-response-query-border: color-mix(in oklch, var(--accent) 22%, #faf9f5 8%);
+  --ai-float-response-mark-bg: color-mix(in oklch, var(--accent) 24%, var(--panel) 76%);
+  --ai-float-response-mark-color: color-mix(in oklch, #faf9f5 94%, var(--accent) 6%);
+  --ai-float-response-scroll-track: color-mix(in oklch, var(--accent) 12%, transparent);
+  --ai-float-response-scroll-thumb: color-mix(in oklch, var(--accent) 34%, #faf9f5 24%);
+  --ai-float-response-scroll-cue: color-mix(in oklch, var(--accent) 20%, transparent);
   position: fixed;
   left: 50%;
   bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(0.95rem, 2vw, 1.45rem));
@@ -2041,8 +2041,8 @@ body.is-auth-open .ai-float-shell {
   border-radius: clamp(1.65rem, 2.2vw, 2rem);
   border: 1px solid var(--ai-float-response-border);
   background: var(--ai-float-response-surface);
-  -webkit-backdrop-filter: blur(22px) saturate(0.94);
-  backdrop-filter: blur(22px) saturate(0.94);
+  -webkit-backdrop-filter: blur(100px) saturate(0.95) brightness(0.85);
+  backdrop-filter: blur(100px) saturate(0.95) brightness(0.85);
   box-shadow:
     0 28px 70px color-mix(in oklch, black 28%, transparent),
     inset 0 1px 0 color-mix(in oklch, #faf9f5 12%, transparent);
@@ -2433,6 +2433,9 @@ body.is-auth-open .ai-float-shell {
 }
 
 .ai-float-bar {
+  --ai-float-border-spot-x: 50%;
+  --ai-float-border-spot-y: 50%;
+  --ai-float-border-spot-size: 7.2rem;
   pointer-events: auto;
   position: relative;
   display: grid;
@@ -2460,13 +2463,47 @@ body.is-auth-open .ai-float-shell {
     box-shadow 220ms ease;
 }
 
+.ai-float-bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background:
+    radial-gradient(
+      circle var(--ai-float-border-spot-size) at var(--ai-float-border-spot-x)
+        var(--ai-float-border-spot-y),
+      color-mix(in oklch, var(--accent) 70%, #faf9f5 30%) 0%,
+      color-mix(in oklch, var(--accent) 42%, #faf9f5 58%) 26%,
+      transparent 72%
+    );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  transition: opacity 220ms ease;
+}
+
 .ai-float-shell.is-expanded .ai-float-bar,
+.ai-float-bar:hover,
 .ai-float-bar:focus-within {
   transform: translateY(-1px);
   border-color: color-mix(in oklch, var(--accent) 38%, #faf9f5 62%);
   box-shadow:
     0 22px 50px color-mix(in oklch, black 18%, transparent),
     inset 0 1px 0 color-mix(in oklch, #faf9f5 92%, transparent);
+}
+
+.ai-float-shell.is-expanded .ai-float-bar::before,
+.ai-float-bar:hover::before,
+.ai-float-bar:focus-within::before {
+  opacity: 1;
 }
 
 .ai-float-plus,
@@ -5707,7 +5744,7 @@ body.is-auth-open {
   --ai-float-send-active-color: #faf9f5;
   --ai-float-glow-a: color-mix(in oklch, var(--accent-lavender) 62%, transparent);
   --ai-float-glow-b: color-mix(in oklch, var(--accent-soft) 56%, transparent);
-  --ai-float-response-surface: color-mix(in oklch, #9a9894 86%, white 14%);
+  --ai-float-response-surface: color-mix(in oklch, #9a9894 99%, transparent);
   --ai-float-response-border: color-mix(in oklch, #ffffff 18%, #878785 82%);
   --ai-float-response-text: #faf9f5;
   --ai-float-response-muted: color-mix(in oklch, #faf9f5 74%, #141413 26%);

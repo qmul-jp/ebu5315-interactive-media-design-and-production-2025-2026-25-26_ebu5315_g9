@@ -1345,6 +1345,34 @@
     floatInput instanceof HTMLInputElement &&
     floatSend instanceof HTMLButtonElement
   ) {
+    const resetFloatBarBorderSpot = () => {
+      floatForm.style.setProperty("--ai-float-border-spot-x", "50%");
+      floatForm.style.setProperty("--ai-float-border-spot-y", "50%");
+    };
+
+    const updateFloatBarBorderSpot = (event) => {
+      const rect = floatForm.getBoundingClientRect();
+
+      if (!rect.width || !rect.height) {
+        return;
+      }
+
+      const x = Math.min(Math.max(event.clientX - rect.left, 0), rect.width);
+      const y = Math.min(Math.max(event.clientY - rect.top, 0), rect.height);
+
+      floatForm.style.setProperty("--ai-float-border-spot-x", `${x}px`);
+      floatForm.style.setProperty("--ai-float-border-spot-y", `${y}px`);
+    };
+
+    resetFloatBarBorderSpot();
+    floatForm.addEventListener("pointerenter", updateFloatBarBorderSpot, {
+      passive: true,
+    });
+    floatForm.addEventListener("pointermove", updateFloatBarBorderSpot, {
+      passive: true,
+    });
+    floatForm.addEventListener("pointerleave", resetFloatBarBorderSpot);
+
     if (floatShell instanceof HTMLElement) {
       floatResponsePanel = document.createElement("section");
       floatResponsePanel.className = "ai-float-response";
