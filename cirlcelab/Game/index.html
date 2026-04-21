@@ -5,14 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CircleLab</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="game.css">
     <style>
-        /* index.html 专属样式 */
+        :root {
+            --bg:        #f7f5f0;
+            --sidebar-bg:#ffffff;
+            --text:      #1a1a1a;
+            --text-sub:  #888;
+            --accent:    #1a1a1a;
+            --accent2:   #c8502a;
+            --border:    #e8e4dc;
+            --hover-bg:  #f0ede6;
+            --active-bg: #1a1a1a;
+            --active-text:#ffffff;
+            --header-bg: #ffffff;
+            --shadow:    0 1px 12px rgba(0,0,0,0.06);
+        }
+        [data-theme="dark"] {
+            --bg:        #141414;
+            --sidebar-bg:#1c1c1c;
+            --text:      #e8e4dc;
+            --text-sub:  #666;
+            --accent:    #e8e4dc;
+            --accent2:   #e8724a;
+            --border:    #2a2a2a;
+            --hover-bg:  #242424;
+            --active-bg: #e8e4dc;
+            --active-text:#141414;
+            --header-bg: #1c1c1c;
+            --shadow:    0 1px 12px rgba(0,0,0,0.3);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
             height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: 0;
+            transition: background 0.3s, color 0.3s;
         }
 
         /* ── HEADER ── */
@@ -77,16 +109,16 @@
             transition: background 0.2s, border-color 0.2s, color 0.2s;
             white-space: nowrap;
         }
-        .hbtn:hover  { background: var(--hover-bg); }
-        .hbtn.active { background: var(--active-bg); color: var(--active-text); border-color: var(--active-bg); }
-
-        /* 字号按钮微调 */
-        .font-btn {
-            font-weight: 600;
-            letter-spacing: 0.5px;
+        .hbtn:hover {
+            background: var(--hover-bg);
+        }
+        .hbtn.active {
+            background: var(--active-bg);
+            color: var(--active-text);
+            border-color: var(--active-bg);
         }
 
-        /* ── BODY WRAP ── */
+        /* ── BODY ── */
         .body-wrap {
             display: flex;
             flex: 1;
@@ -104,6 +136,7 @@
             overflow-y: auto;
             transition: background 0.3s, border-color 0.3s;
         }
+
         .sidebar-label {
             font-size: 0.68rem;
             letter-spacing: 0.1em;
@@ -112,6 +145,7 @@
             font-weight: 500;
             padding: 20px 18px 8px;
         }
+
         .nav-item {
             display: flex;
             align-items: flex-start;
@@ -122,8 +156,14 @@
             transition: background 0.15s, border-color 0.15s;
             text-decoration: none;
         }
-        .nav-item:hover  { background: var(--hover-bg); }
-        .nav-item.active { background: var(--hover-bg); border-left-color: var(--accent2); }
+        .nav-item:hover {
+            background: var(--hover-bg);
+        }
+        .nav-item.active {
+            background: var(--hover-bg);
+            border-left-color: var(--accent2);
+        }
+
         .nav-num {
             font-size: 0.68rem;
             color: var(--text-sub);
@@ -132,15 +172,24 @@
             flex-shrink: 0;
             width: 16px;
         }
-        .nav-text    { font-size: 0.82rem; color: var(--text); line-height: 1.4; font-weight: 400; }
-        .nav-text-en { font-size: 0.70rem; color: var(--text-sub); line-height: 1.3; margin-top: 1px; }
+        .nav-text {
+            font-size: 0.82rem;
+            color: var(--text);
+            line-height: 1.4;
+            font-weight: 400;
+        }
+        .nav-text-en {
+            font-size: 0.70rem;
+            color: var(--text-sub);
+            line-height: 1.3;
+            margin-top: 1px;
+        }
 
-        aside::-webkit-scrollbar       { width: 6px; }
+        /* scrollbar */
+        aside::-webkit-scrollbar { width: 6px; }
         aside::-webkit-scrollbar-track { background: var(--sidebar-bg); }
         aside::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
         aside::-webkit-scrollbar-thumb:hover { background: var(--text-sub); }
-
-        /* ── MAIN ── */
         main {
             flex: 1;
             display: flex;
@@ -148,6 +197,7 @@
             overflow: hidden;
             background: var(--bg);
         }
+
         .content-header {
             padding: 16px 28px 12px;
             border-bottom: 1px solid var(--border);
@@ -155,8 +205,16 @@
             flex-shrink: 0;
             transition: background 0.3s, border-color 0.3s;
         }
-        .content-title    { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); }
-        .content-title-en { font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; }
+        .content-title {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.15rem;
+            color: var(--text);
+        }
+        .content-title-en {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            margin-top: 2px;
+        }
 
         .welcome {
             flex: 1;
@@ -174,10 +232,20 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 1.8rem;
         }
-        .welcome h2 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text); }
-        .welcome p  { font-size: 0.85rem; }
+        .welcome h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.3rem;
+            color: var(--text);
+        }
+        .welcome p { font-size: 0.85rem; }
 
-        iframe { flex: 1; border: none; width: 100%; background: #ffffff; display: none; }
+        iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+            background: #ffffff;
+            display: none;
+        }
         iframe.visible { display: block; }
     </style>
 </head>
@@ -191,8 +259,6 @@
     <span class="header-subtitle" id="headerSub">圆形几何交互探索</span>
     <div class="header-spacer"></div>
     <div class="btn-group">
-        <button class="hbtn font-btn" id="btnFontMinus" title="减小字号">A-</button>
-        <button class="hbtn font-btn" id="btnFontPlus" title="增大字号">A+</button>
         <button class="hbtn" id="btnLang" onclick="toggleLang()">EN</button>
         <button class="hbtn" id="btnTheme" onclick="toggleTheme()">🌙</button>
     </div>
@@ -239,28 +305,26 @@
 
     let lang = 'zh';
     let activeIndex = -1;
-    let currentFontSize = 16;   // 基准字号 px，范围 12~20
 
     const i18n = {
-        zh: { sub: '圆形几何交互探索',        sidebarLabel: '目录',     welcomeTitle: '欢迎来到 CircleLab', welcomeSub: '从左侧目录选择一个主题开始探索' },
-        en: { sub: 'Interactive Circle Geometry', sidebarLabel: 'Contents', welcomeTitle: 'Welcome to CircleLab', welcomeSub: 'Select a topic from the sidebar to begin' }
+        zh: {
+            sub:         '圆形几何交互探索',
+            sidebarLabel:'目录',
+            welcomeTitle:'欢迎来到 CircleLab',
+            welcomeSub:  '从左侧目录选择一个主题开始探索',
+        },
+        en: {
+            sub:         'Interactive Circle Geometry',
+            sidebarLabel:'Contents',
+            welcomeTitle:'Welcome to CircleLab',
+            welcomeSub:  'Select a topic from the sidebar to begin',
+        }
     };
-
-    function setRootFontSize(size) {
-        size = Math.min(20, Math.max(12, size));
-        currentFontSize = size;
-        document.documentElement.style.fontSize = size + 'px';
-        // 同步到 iframe
-        broadcast({ _src: 'circlelab', fontSize: currentFontSize });
-    }
-
-    function changeFontSize(delta) {
-        setRootFontSize(currentFontSize + delta);
-    }
 
     function buildSidebar() {
         const aside = document.getElementById('sidebar');
         aside.innerHTML = '';
+
         const label = document.createElement('div');
         label.className = 'sidebar-label';
         label.id = 'sidebarLabel';
@@ -275,7 +339,7 @@
                 <span class="nav-num">${String(i + 1).padStart(2, '0')}</span>
                 <div>
                     <div class="nav-text">${lang === 'zh' ? t.zh : t.en}</div>
-                    <div class="nav-text-en">${lang === 'zh' ? t.en : t.zh}</div>
+                    ${lang === 'zh' ? `<div class="nav-text-en">${t.en}</div>` : `<div class="nav-text-en">${t.zh}</div>`}
                 </div>`;
             aside.appendChild(item);
         });
@@ -284,34 +348,36 @@
     function loadTopic(i) {
         activeIndex = i;
         const t = topics[i];
+
         document.getElementById('welcome').style.display = 'none';
         document.getElementById('contentHeader').style.display = 'block';
-        document.getElementById('contentTitle').textContent   = t.zh;
+        document.getElementById('contentTitle').textContent  = t.zh;
         document.getElementById('contentTitleEn').textContent = t.en;
 
         const frame = document.getElementById('contentFrame');
         frame.classList.add('visible');
         frame.src = t.file;
-        frame.onload = function () {
-            // 发送主题、语言、当前字号
+        // iframe加载完成后同步当前语言和主题
+        frame.onload = function() {
             broadcast({ _src: 'circlelab', lang: lang });
             broadcast({ _src: 'circlelab', theme: document.documentElement.getAttribute('data-theme') || 'light' });
-            broadcast({ _src: 'circlelab', fontSize: currentFontSize });
         };
+
         buildSidebar();
     }
 
     function broadcast(msg) {
         const frame = document.getElementById('contentFrame');
         if (frame && frame.contentWindow) {
-            try { frame.contentWindow.postMessage(msg, '*'); } catch (e) {}
+            try { frame.contentWindow.postMessage(msg, '*'); } catch(e) {}
         }
     }
 
     function toggleLang() {
         lang = lang === 'zh' ? 'en' : 'zh';
+        window._CL_lang = lang;
         document.getElementById('btnLang').textContent = lang === 'zh' ? 'EN' : '中';
-        document.getElementById('headerSub').textContent   = i18n[lang].sub;
+        document.getElementById('headerSub').textContent = i18n[lang].sub;
         document.getElementById('welcomeTitle').textContent = i18n[lang].welcomeTitle;
         document.getElementById('welcomeSub').textContent   = i18n[lang].welcomeSub;
         if (activeIndex >= 0) {
@@ -328,15 +394,10 @@
         const isDark = html.getAttribute('data-theme') === 'dark';
         const theme  = isDark ? 'light' : 'dark';
         html.setAttribute('data-theme', theme);
+        window._CL_theme = theme;
         document.getElementById('btnTheme').textContent = isDark ? '🌙' : '☀️';
         broadcast({ _src: 'circlelab', theme: theme });
     }
-
-    // 初始化根字号
-    setRootFontSize(16);
-    // 绑定字号按钮
-    document.getElementById('btnFontMinus').addEventListener('click', () => changeFontSize(-1));
-    document.getElementById('btnFontPlus').addEventListener('click', () => changeFontSize(1));
 
     buildSidebar();
 </script>
