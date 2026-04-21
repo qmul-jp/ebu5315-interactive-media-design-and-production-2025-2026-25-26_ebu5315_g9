@@ -233,10 +233,16 @@
 
     if (explicitLines.length) {
       return explicitLines.map((line) => ({
-        text: (line.dataset.cascadeSource || line.textContent || "")
+        text: (
+          line.dataset.i18n || line.dataset.i18nHtml
+            ? line.textContent || ""
+            : line.dataset.cascadeSource || line.textContent || ""
+        )
           .replace(/\s+/g, " ")
           .trim(),
         className: line.className,
+        i18nKey: line.dataset.i18n || "",
+        i18nHtmlKey: line.dataset.i18nHtml || "",
       }));
     }
 
@@ -278,6 +284,12 @@
       const lineEl = document.createElement("span");
       lineEl.className = line.className;
       lineEl.dataset.cascadeSource = line.text;
+      if (line.i18nKey) {
+        lineEl.dataset.i18n = line.i18nKey;
+      }
+      if (line.i18nHtmlKey) {
+        lineEl.dataset.i18nHtml = line.i18nHtmlKey;
+      }
       lineEl.style.setProperty(
         "--line-delay",
         `${index * 120}ms`

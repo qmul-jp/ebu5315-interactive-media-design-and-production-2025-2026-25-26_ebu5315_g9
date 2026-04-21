@@ -177,9 +177,9 @@
     "core.card3.title": "Learn in Motion",
     "core.card3.body":
       "Learn by doing, not just reading.<br />Play, explore, and challenge yourself.<br />Spot mistakes and improve without delay.",
-    "core.card4.title": "Concepts Come Alive",
+    "core.card4.title": "Learn in Cycles",
     "core.card4.body":
-      "Watch ideas unfold on screen.<br />Experience concepts through animation.<br />Learn in a more engaging way.",
+      "Study, play, and test in one connected flow.<br />Move between ideas, interaction, and practice with ease.<br />Build understanding through every step of the cycle.",
     "theorems.title": "Hands-On<br />Circle Theorems",
     "theorems.controls_aria": "Theorem navigation",
     "theorems.prev_aria": "Previous theorems",
@@ -401,9 +401,9 @@
     "core.card3.title": "在实践中学习",
     "core.card3.body":
       "不止是阅读，更要动手。<br />边玩边学，主动探索并挑战自己。<br />及时发现错误并快速改进。",
-    "core.card4.title": "概念真正可见",
+    "core.card4.title": "循环式学习",
     "core.card4.body":
-      "把抽象想法变成屏幕上的直观过程。<br />通过动画理解关键关系。<br />让学习更投入、更有趣。",
+      "在一个连贯流程中学习、游玩与测试。<br />在想法、互动和练习之间轻松切换。<br />通过循环中的每一步建立理解。",
     "theorems.title": "动手理解<br />圆几何定理",
     "theorems.controls_aria": "定理导航",
     "theorems.prev_aria": "上一组定理",
