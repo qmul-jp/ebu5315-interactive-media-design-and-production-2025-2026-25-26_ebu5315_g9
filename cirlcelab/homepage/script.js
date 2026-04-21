@@ -2933,6 +2933,7 @@
 
   let activeContactValidationField = null;
   let contactTopicFeedbackTimeout = 0;
+  let lastContactCloseAt = 0;
 
   const clearContactFieldError = (input) => {
     input.removeAttribute("aria-invalid");
@@ -3579,6 +3580,11 @@
       return;
     }
 
+    const now = window.performance?.now?.() ?? Date.now();
+    if (now - lastContactCloseAt < 260) {
+      return;
+    }
+
     if (shouldRememberTrigger(trigger)) {
       lastTrigger = trigger;
     }
@@ -3628,6 +3634,7 @@
     cancelOverlayClose(contactOverlay);
     cancelOverlayOpen(contactOverlay);
     contactOverlay.hidden = false;
+    contactOverlay.style.removeProperty("display");
     startOverlayOpen(contactOverlay);
     setHash("#contactOverlay");
     syncBodyState();
@@ -3638,13 +3645,12 @@
     });
   };
 
-  const closeContactOverlay = () => {
-    const currentPath = window.location.pathname.replace(/\\/g, "/");
-    const destination = currentPath.endsWith("/homepage.html") || currentPath.endsWith("homepage.html")
-      ? `${window.location.pathname}${window.location.search}`
-      : "homepage.html";
-
-    window.location.assign(destination);
+  const closeContactOverlay = (options = {}) => {
+    lastContactCloseAt = window.performance?.now?.() ?? Date.now();
+    closeOverlay(contactOverlay, "#contactOverlay", resetContactState, {
+      immediate: true,
+      ...options,
+    });
   };
 
   const setupFieldValidation = (
@@ -3744,26 +3750,6 @@
   });
 
   document.addEventListener(
-    "pointerdown",
-    (event) => {
-      const target = event.target;
-      if (!(target instanceof Element)) {
-        return;
-      }
-
-      const closeButton = target.closest("[data-contact-close]");
-      if (!(closeButton instanceof HTMLElement)) {
-        return;
-      }
-
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      closeContactOverlay();
-    },
-    true
-  );
-
-  document.addEventListener(
     "click",
     (event) => {
       const target = event.target;
@@ -3777,6 +3763,7 @@
       }
 
       event.preventDefault();
+      event.stopImmediatePropagation();
       closeContactOverlay();
     },
     true
