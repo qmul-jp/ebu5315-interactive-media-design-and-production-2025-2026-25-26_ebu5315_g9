@@ -1215,6 +1215,7 @@ with Ease</h1>
     </div>
 
     <div class="signup-overlay auth-overlay login-overlay contact-overlay" id="contactOverlay" data-contact-overlay hidden>
+      <div class="auth-overlay-backdrop" data-contact-close aria-hidden="true"></div>
       <div class="signup-modal login-modal contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
         <div class="signup-modal-showcase" aria-hidden="true">
           <svg class="signup-modal-geometry" viewBox="146 108 540 540" role="presentation" focusable="false">
@@ -1241,7 +1242,7 @@ with Ease</h1>
         </div>
 
         <section class="signup-modal-panel">
-          <button class="signup-modal-close" type="button" data-contact-close data-i18n-aria-label="contact.close_aria" aria-label="Close contact form">
+          <button class="signup-modal-close" type="button" data-contact-close data-i18n-aria-label="contact.close_aria" aria-label="Close contact form" onclick="window.location.assign('homepage.html'); return false;">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6 6 18 18" />
               <path d="M18 6 6 18" />

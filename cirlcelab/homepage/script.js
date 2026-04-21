@@ -836,7 +836,8 @@
   let floatResponseMinimize = null;
   let isFloatResponseVisible = false;
   let nextConversationId = 0;
-  const conversationHistory = [];
+  const mainConversationHistory = [];
+  const floatConversationHistory = [];
   const floatPromptButtons = [];
 
   const resolveFloatLanguage = (language = "") => {
@@ -888,10 +889,14 @@
     };
   };
 
-  const hasConversationHistory = () => conversationHistory.length > 0;
+  const hasMainConversationHistory = () => mainConversationHistory.length > 0;
 
-  const getLatestConversationTurn = () =>
-    hasConversationHistory() ? conversationHistory[conversationHistory.length - 1] : null;
+  const hasFloatConversationHistory = () => floatConversationHistory.length > 0;
+
+  const getLatestFloatConversationTurn = () =>
+    hasFloatConversationHistory()
+      ? floatConversationHistory[floatConversationHistory.length - 1]
+      : null;
 
   const syncFloatResponseScrollState = () => {
     if (
@@ -916,7 +921,7 @@
 
   const getFloatResponseTitleText = (language = "") => {
     const responseUi = getFloatResponseUiData(language);
-    const latestTurn = getLatestConversationTurn();
+    const latestTurn = getLatestFloatConversationTurn();
 
     if (!latestTurn) {
       return responseUi.brand;
@@ -998,8 +1003,8 @@
       return;
     }
 
-    isFloatResponseVisible = Boolean(visible) && hasConversationHistory();
-    const isResponding = conversationHistory.some((turn) => turn.status === "loading");
+    isFloatResponseVisible = Boolean(visible) && hasFloatConversationHistory();
+    const isResponding = floatConversationHistory.some((turn) => turn.status === "loading");
 
     floatShell.classList.toggle("has-response", isFloatResponseVisible);
     floatShell.classList.toggle("is-responding", isFloatResponseVisible && isResponding);
@@ -1069,7 +1074,7 @@
 
     const { scrollToBottom = false } = options;
 
-    if (!hasConversationHistory()) {
+    if (!hasFloatConversationHistory()) {
       floatResponseAnswer.replaceChildren();
       setFloatResponseVisible(false, language);
       return;
@@ -1078,7 +1083,7 @@
     const responseList = document.createElement("div");
     responseList.className = "ai-float-response-list";
 
-    conversationHistory.forEach((turn) => {
+    floatConversationHistory.forEach((turn) => {
       const entry = document.createElement("article");
       entry.className = `ai-float-response-entry is-${turn.status}`;
 
@@ -1137,7 +1142,7 @@
       floatResponseMinimize.setAttribute("aria-label", responseUi.closeLabel);
     }
 
-    if (hasConversationHistory()) {
+    if (hasFloatConversationHistory()) {
       renderFloatResponseHistory(language);
     }
   };
@@ -1282,7 +1287,7 @@
 
     messages.replaceChildren();
 
-    if (!hasConversationHistory()) {
+    if (!hasMainConversationHistory()) {
       if (emptyState instanceof HTMLElement) {
         emptyState.hidden = false;
       }
@@ -1309,7 +1314,7 @@
       transcript.classList.remove("is-empty");
     }
 
-    conversationHistory.forEach((turn) => {
+    mainConversationHistory.forEach((turn) => {
       messages.append(createMessage("user", uiData.userLabel, turn.prompt));
 
       const assistantText =
@@ -1336,9 +1341,8 @@
   };
 
   const resetMainConversation = (focusAfter = true) => {
-    conversationHistory.length = 0;
+    mainConversationHistory.length = 0;
     renderMainTranscript(resolveFloatLanguage(), "auto");
-    renderFloatResponseHistory(resolveFloatLanguage());
     setActiveSidebarAction("ask");
 
     if (focusAfter) {
@@ -1358,14 +1362,21 @@
       model: modelValue.textContent.trim(),
     };
 
-    conversationHistory.push(turn);
+    floatConversationHistory.push(turn);
+
+    if (source !== "float") {
+      mainConversationHistory.push(turn);
+    }
 
     if (source === "float") {
       setFloatExpanded(true);
       setFloatResponseVisible(true, language);
     }
 
-    renderMainTranscript(language);
+    if (source !== "float") {
+      renderMainTranscript(language);
+    }
+
     renderFloatResponseHistory(language, {
       scrollToBottom: source === "float" || isFloatResponseVisible,
     });
@@ -1373,7 +1384,11 @@
     window.setTimeout(() => {
       turn.status = "ready";
       const nextLanguage = resolveFloatLanguage();
-      renderMainTranscript(nextLanguage);
+
+      if (source !== "float") {
+        renderMainTranscript(nextLanguage);
+      }
+
       renderFloatResponseHistory(nextLanguage, {
         scrollToBottom: isFloatResponseVisible,
       });
@@ -1393,6 +1408,19 @@
     if (focusAfter) {
       focusComposer(true);
     }
+  };
+
+  const handleMainComposerSubmit = (focusAfter = true) => {
+    const prompt = input.value.trim();
+    if (!prompt) {
+      syncSendState();
+      focusComposer();
+      return false;
+    }
+
+    setActiveSidebarAction("ask");
+    submitMainPrompt(prompt, focusAfter);
+    return true;
   };
 
   const revealArcMind = () => {
@@ -1440,7 +1468,7 @@
     setFloatExpanded(true);
 
     const language = resolveFloatLanguage();
-    if (hasConversationHistory()) {
+    if (hasFloatConversationHistory()) {
       setFloatResponseVisible(true, language);
       renderFloatResponseHistory(language, { scrollToBottom: true });
     }
@@ -1463,15 +1491,12 @@
 
   form.addEventListener("submit", (event) => {
     event.preventDefault();
+    handleMainComposerSubmit(true);
+  });
 
-    const prompt = input.value.trim();
-    if (!prompt) {
-      syncSendState();
-      focusComposer();
-      return;
-    }
-
-    submitMainPrompt(prompt, true);
+  sendButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    handleMainComposerSubmit(true);
   });
 
   input.addEventListener("input", () => {
@@ -1485,13 +1510,7 @@
     }
 
     event.preventDefault();
-
-    if (typeof form.requestSubmit === "function") {
-      form.requestSubmit();
-      return;
-    }
-
-    sendButton.click();
+    handleMainComposerSubmit(true);
   });
 
   if (attachButton instanceof HTMLButtonElement) {
@@ -1511,11 +1530,8 @@
         return;
       }
 
-      input.value = prompt;
-      autoResizeInput();
-      syncSendState();
-      focusComposer();
-      input.setSelectionRange(input.value.length, input.value.length);
+      setActiveSidebarAction("ask");
+      submitMainPrompt(prompt, true);
     });
   });
 
@@ -1600,7 +1616,7 @@
       const floatResponseMark = document.createElement("span");
       floatResponseMark.className = "ai-float-response-mark";
       floatResponseMark.innerHTML =
-        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.75"></circle><path d="M12 4.5v15"></path><path d="M4.5 12h15"></path><path d="M7.1 7.1 16.9 16.9"></path></svg>';
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="6.4"></circle><path d="M12 5.6v12.8"></path><path d="M5.6 12h12.8"></path><path d="M16.6 7.4 7.4 16.6"></path></svg>';
 
       floatResponseTitle = document.createElement("p");
       floatResponseTitle.className = "ai-float-response-title";
@@ -1693,7 +1709,7 @@
     });
 
     floatInput.addEventListener("focus", () => {
-      if (hasConversationHistory()) {
+      if (hasFloatConversationHistory()) {
         setFloatExpanded(true);
         setFloatResponseVisible(true, resolveFloatLanguage());
         renderFloatResponseHistory(resolveFloatLanguage(), {
@@ -1843,6 +1859,730 @@
     renderMainTranscript(nextLanguage, "auto");
     renderFloatResponseHistory(nextLanguage);
     syncFloatState();
+  });
+})();
+
+(() => {
+  const chatShell = document.querySelector(".ai-chat-shell");
+  if (!(chatShell instanceof HTMLElement) || chatShell.dataset.aiFallbackBound === "true") {
+    return;
+  }
+
+  chatShell.dataset.aiFallbackBound = "true";
+
+  const form = chatShell.querySelector(".ai-chat-composer");
+  const input = chatShell.querySelector(".ai-chat-draft");
+  const sendButton = chatShell.querySelector(".ai-chat-send");
+  const transcript = chatShell.querySelector(".ai-chat-transcript");
+  const emptyState = chatShell.querySelector("[data-ai-chat-empty]");
+  const messages = chatShell.querySelector("[data-ai-chat-messages]");
+  const modelValue = chatShell.querySelector(".ai-chat-model-picker-value");
+  const attachButton = chatShell.querySelector(".ai-chat-icon-btn");
+  const resetButton = chatShell.querySelector("[data-ai-chat-reset]");
+  const suggestionButtons = Array.from(
+    chatShell.querySelectorAll("[data-ai-chat-empty-suggestion]")
+  );
+  const sidebarIntentButtons = Array.from(
+    chatShell.querySelectorAll("[data-ai-chat-sidebar-intent]")
+  );
+  const sidebarActionButtons = Array.from(
+    chatShell.querySelectorAll("[data-ai-chat-sidebar-action]")
+  );
+
+  if (
+    !(form instanceof HTMLFormElement) ||
+    !(input instanceof HTMLTextAreaElement) ||
+    !(sendButton instanceof HTMLButtonElement) ||
+    !(transcript instanceof HTMLElement) ||
+    !(messages instanceof HTMLElement) ||
+    !(modelValue instanceof HTMLElement)
+  ) {
+    return;
+  }
+
+  const prefersReducedMotion = typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false };
+  const maxComposerHeight = 172;
+  const fallbackHistory = [];
+  let nextFallbackId = 0;
+
+  const uiCopy = {
+    user: document.documentElement.lang.toLowerCase().startsWith("zh") ? "你" : "You",
+    assistantPrefix: "ArcMind -",
+  };
+
+  const sidebarPrompts = {
+    ask: "",
+    theorem: "Help me review a circle theorem step by step.",
+    proof: "Can we practise a circle theorem proof step by step?",
+    quiz: "Give me a hint for a circle theorem problem without the full answer.",
+    "history-centre":
+      "Why is the angle at the centre twice the angle at the circumference?",
+    "history-tangent": "Help me prove this tangent theorem.",
+    "history-cyclic": "Explain the cyclic quadrilateral theorem.",
+    "history-alternate": "Explain the alternate segment theorem.",
+  };
+
+  const autoResizeInput = () => {
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, maxComposerHeight)}px`;
+    input.style.overflowY = input.scrollHeight > maxComposerHeight ? "auto" : "hidden";
+  };
+
+  const syncSendState = () => {
+    sendButton.disabled = input.value.trim().length === 0;
+  };
+
+  const focusComposer = () => {
+    try {
+      input.focus({ preventScroll: true });
+    } catch (error) {
+      input.focus();
+    }
+
+    const caret = input.value.length;
+    input.setSelectionRange(caret, caret);
+  };
+
+  const setActiveSidebarAction = (intent = "ask") => {
+    sidebarActionButtons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      button.classList.toggle(
+        "is-active",
+        (button.dataset.aiChatSidebarAction?.trim() ?? "") === intent
+      );
+    });
+  };
+
+  const buildFallbackReply = (prompt) => {
+    const normalizedPrompt = prompt.trim().toLowerCase();
+
+    if (normalizedPrompt.includes("tangent") || normalizedPrompt.includes("切线")) {
+      return [
+        "Start at the point of contact. The first fact to check is whether a radius meets a tangent there, because that gives a right angle immediately.",
+        "If the question is about the angle between a tangent and a chord, the next theorem to test is the alternate segment theorem.",
+        "A clean write-up is: identify the tangent point, state the perpendicular radius fact or alternate segment theorem, then chase the remaining angle."
+      ].join("\n\n");
+    }
+
+    if (normalizedPrompt.includes("cyclic") || normalizedPrompt.includes("四边形")) {
+      return [
+        "For a cyclic quadrilateral, opposite angles sum to 180 degrees. That usually gives the fastest first step.",
+        "If one side is extended, the exterior angle equals the interior opposite angle, which is often easier to use than the supplementary-angle form.",
+        "Mark the cyclic shape clearly first, then choose the angle relation that matches the diagram."
+      ].join("\n\n");
+    }
+
+    if (
+      normalizedPrompt.includes("centre") ||
+      normalizedPrompt.includes("center") ||
+      normalizedPrompt.includes("circumference") ||
+      normalizedPrompt.includes("圆心角") ||
+      normalizedPrompt.includes("圆周角")
+    ) {
+      return [
+        "Match both angles to the same intercepted arc first. Once that arc is identified, the angle at the centre is twice the angle at the circumference.",
+        "So if you know the circumference angle, double it for the central angle. If you know the central angle, halve it for the circumference angle.",
+        "In a proof, explicitly name the common arc before writing the ratio."
+      ].join("\n\n");
+    }
+
+    return [
+      "Start by naming the diagram objects: radius, chord, tangent, diameter, arc, or cyclic quadrilateral. Circle-geometry questions get easier once the structure is explicit.",
+      "Then test the common theorems: angle at the centre, angle in a semicircle, angles in the same segment, radius and tangent, tangent-chord, or cyclic quadrilateral angle rules.",
+      "If you want, send the exact theorem or the angle values next, and I can turn this into a cleaner step-by-step simulated proof."
+    ].join("\n\n");
+  };
+
+  const createMessage = (role, label, text, options = {}) => {
+    const message = document.createElement("article");
+    message.className = `ai-chat-message is-${role}`;
+
+    if (role === "assistant") {
+      message.classList.add("is-compact");
+    }
+
+    const meta = document.createElement("p");
+    meta.className = "ai-chat-message-meta";
+    meta.textContent = label;
+
+    const bubble = document.createElement("div");
+    bubble.className = "ai-chat-message-bubble";
+    bubble.textContent = text;
+
+    if (options.detailed || options.loading) {
+      bubble.classList.add("is-detailed");
+    }
+
+    if (options.loading) {
+      message.classList.add("is-loading");
+      bubble.classList.add("is-loading");
+    }
+
+    message.append(meta, bubble);
+    return message;
+  };
+
+  const renderConversation = () => {
+    messages.replaceChildren();
+
+    if (!fallbackHistory.length) {
+      if (emptyState instanceof HTMLElement) {
+        emptyState.hidden = false;
+      }
+      messages.hidden = true;
+      transcript.classList.add("is-empty");
+      return;
+    }
+
+    if (emptyState instanceof HTMLElement) {
+      emptyState.hidden = true;
+    }
+    messages.hidden = false;
+    transcript.classList.remove("is-empty");
+
+    fallbackHistory.forEach((turn) => {
+      messages.append(createMessage("user", uiCopy.user, turn.prompt));
+      messages.append(
+        createMessage(
+          "assistant",
+          `${uiCopy.assistantPrefix} ${turn.model}`,
+          turn.status === "loading"
+            ? "Working through your circle-geometry question..."
+            : buildFallbackReply(turn.prompt),
+          { detailed: true, loading: turn.status === "loading" }
+        )
+      );
+    });
+
+    requestAnimationFrame(() => {
+      messages.scrollTop = messages.scrollHeight;
+    });
+  };
+
+  const submitPrompt = (prompt) => {
+    const cleanPrompt = prompt.trim();
+    if (!cleanPrompt) {
+      syncSendState();
+      focusComposer();
+      return;
+    }
+
+    fallbackHistory.push({
+      id: `fallback-turn-${++nextFallbackId}`,
+      prompt: cleanPrompt,
+      status: "loading",
+      model: modelValue.textContent.trim(),
+    });
+
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+    renderConversation();
+    focusComposer();
+
+    window.setTimeout(() => {
+      const latestTurn = fallbackHistory[fallbackHistory.length - 1];
+      if (!latestTurn) {
+        return;
+      }
+
+      latestTurn.status = "ready";
+      renderConversation();
+    }, prefersReducedMotion.matches ? 100 : 320);
+  };
+
+  const resetConversation = () => {
+    fallbackHistory.length = 0;
+    renderConversation();
+    setActiveSidebarAction("ask");
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+    focusComposer();
+  };
+
+  form.addEventListener(
+    "submit",
+    (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      submitPrompt(input.value);
+    },
+    true
+  );
+
+  sendButton.addEventListener(
+    "click",
+    (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      submitPrompt(input.value);
+    },
+    true
+  );
+
+  input.addEventListener("input", () => {
+    autoResizeInput();
+    syncSendState();
+  });
+
+  input.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.key !== "Enter" || event.shiftKey || event.isComposing) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      submitPrompt(input.value);
+    },
+    true
+  );
+
+  if (attachButton instanceof HTMLButtonElement) {
+    attachButton.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        focusComposer();
+      },
+      true
+    );
+  }
+
+  suggestionButtons.forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    button.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        setActiveSidebarAction("ask");
+        submitPrompt(button.textContent ?? "");
+      },
+      true
+    );
+  });
+
+  sidebarIntentButtons.forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    button.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        const intent = button.dataset.aiChatSidebarIntent?.trim() ?? "";
+        if (button.hasAttribute("data-ai-chat-sidebar-action")) {
+          setActiveSidebarAction(intent || "ask");
+        }
+
+        if (intent === "ask") {
+          resetConversation();
+          return;
+        }
+
+        submitPrompt(sidebarPrompts[intent] ?? button.textContent ?? "");
+      },
+      true
+    );
+  });
+
+  if (resetButton instanceof HTMLButtonElement) {
+    resetButton.addEventListener(
+      "click",
+      (event) => {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        resetConversation();
+      },
+      true
+    );
+  }
+
+  autoResizeInput();
+  syncSendState();
+  renderConversation();
+})();
+
+(() => {
+  const chatShell = document.querySelector(".ai-chat-shell");
+  if (
+    !(chatShell instanceof HTMLElement) ||
+    chatShell.dataset.aiHardOverrideBound === "true"
+  ) {
+    return;
+  }
+
+  chatShell.dataset.aiHardOverrideBound = "true";
+
+  const form = chatShell.querySelector(".ai-chat-composer");
+  const input = chatShell.querySelector(".ai-chat-draft");
+  const sendButton = chatShell.querySelector(".ai-chat-send");
+  const transcript = chatShell.querySelector(".ai-chat-transcript");
+  const emptyState = chatShell.querySelector("[data-ai-chat-empty]");
+  const messages = chatShell.querySelector("[data-ai-chat-messages]");
+  const modelValue = chatShell.querySelector(".ai-chat-model-picker-value");
+  const sidebarActionButtons = Array.from(
+    chatShell.querySelectorAll("[data-ai-chat-sidebar-action]")
+  );
+
+  if (
+    !(form instanceof HTMLFormElement) ||
+    !(input instanceof HTMLTextAreaElement) ||
+    !(sendButton instanceof HTMLButtonElement) ||
+    !(transcript instanceof HTMLElement) ||
+    !(messages instanceof HTMLElement)
+  ) {
+    return;
+  }
+
+  const prefersReducedMotion = typeof window.matchMedia === "function"
+    ? window.matchMedia("(prefers-reduced-motion: reduce)")
+    : { matches: false };
+  const maxComposerHeight = 172;
+  const conversation = [];
+  let nextId = 0;
+
+  const sidebarPrompts = {
+    theorem: "Help me review a circle theorem step by step.",
+    proof: "Can we practise a circle theorem proof step by step?",
+    quiz: "Give me a hint for a circle theorem problem without the full answer.",
+    "history-centre":
+      "Why is the angle at the centre twice the angle at the circumference?",
+    "history-tangent": "Help me prove this tangent theorem.",
+    "history-cyclic": "Explain the cyclic quadrilateral theorem.",
+    "history-alternate": "Explain the alternate segment theorem.",
+  };
+
+  const isZh = () => document.documentElement.lang.toLowerCase().startsWith("zh");
+
+  const getUiCopy = () => ({
+    user: isZh() ? "\u4f60" : "You",
+    assistantPrefix: "ArcMind -",
+    loading: isZh()
+      ? "\u6b63\u5728\u6574\u7406\u4f60\u7684\u5706\u51e0\u4f55\u95ee\u9898..."
+      : "Working through your circle-geometry question...",
+  });
+
+  const autoResizeInput = () => {
+    input.style.height = "auto";
+    input.style.height = `${Math.min(input.scrollHeight, maxComposerHeight)}px`;
+    input.style.overflowY = input.scrollHeight > maxComposerHeight ? "auto" : "hidden";
+  };
+
+  const syncSendState = () => {
+    sendButton.disabled = input.value.trim().length === 0;
+  };
+
+  const focusComposer = () => {
+    try {
+      input.focus({ preventScroll: true });
+    } catch (error) {
+      input.focus();
+    }
+
+    const caret = input.value.length;
+    input.setSelectionRange(caret, caret);
+  };
+
+  const setActiveSidebarAction = (intent = "ask") => {
+    sidebarActionButtons.forEach((button) => {
+      if (!(button instanceof HTMLButtonElement)) {
+        return;
+      }
+
+      button.classList.toggle(
+        "is-active",
+        (button.dataset.aiChatSidebarAction?.trim() ?? "") === intent
+      );
+    });
+  };
+
+  const buildReply = (prompt) => {
+    const normalizedPrompt = prompt.trim().toLowerCase();
+
+    if (normalizedPrompt.includes("tangent")) {
+      return [
+        "Start at the point of contact. First check whether a radius meets the tangent there, because that gives a right angle immediately.",
+        "If the question is about the angle between a chord and a tangent, the alternate segment theorem is usually the next step.",
+        "A clean proof is: identify the contact point, state the tangent fact, then chase the remaining angle.",
+      ].join("\n\n");
+    }
+
+    if (normalizedPrompt.includes("cyclic")) {
+      return [
+        "For a cyclic quadrilateral, opposite angles sum to 180 degrees. That is often the fastest first step.",
+        "If one side is extended, the exterior angle equals the interior opposite angle, which is often even cleaner.",
+        "Mark the cyclic shape first, then choose the angle relation that matches the diagram.",
+      ].join("\n\n");
+    }
+
+    if (
+      normalizedPrompt.includes("centre") ||
+      normalizedPrompt.includes("center") ||
+      normalizedPrompt.includes("circumference")
+    ) {
+      return [
+        "Match both angles to the same intercepted arc first. Once that arc is identified, the angle at the centre is twice the angle at the circumference.",
+        "So if you know the circumference angle, double it for the central angle. If you know the central angle, halve it for the circumference angle.",
+        "In a proof, explicitly name the common arc before writing the ratio.",
+      ].join("\n\n");
+    }
+
+    return [
+      "Start by naming the key objects in the diagram: radius, chord, tangent, diameter, arc, or cyclic quadrilateral.",
+      "Then test the common circle theorems: angle at the centre, angle in a semicircle, angles in the same segment, radius and tangent, tangent-chord, or cyclic quadrilateral angle rules.",
+      "Send the theorem name or given angles next and I can keep the simulated walkthrough going step by step.",
+    ].join("\n\n");
+  };
+
+  const createMessage = (role, label, text, options = {}) => {
+    const message = document.createElement("article");
+    message.className = `ai-chat-message is-${role}`;
+
+    if (role === "assistant") {
+      message.classList.add("is-compact");
+    }
+
+    if (options.loading) {
+      message.classList.add("is-loading");
+    }
+
+    const meta = document.createElement("p");
+    meta.className = "ai-chat-message-meta";
+    meta.textContent = label;
+
+    const bubble = document.createElement("div");
+    bubble.className = "ai-chat-message-bubble";
+    bubble.textContent = text;
+
+    if (options.detailed || options.loading) {
+      bubble.classList.add("is-detailed");
+    }
+
+    if (options.loading) {
+      bubble.classList.add("is-loading");
+    }
+
+    message.append(meta, bubble);
+    return message;
+  };
+
+  const syncTranscriptVisibility = (hasMessages) => {
+    if (emptyState instanceof HTMLElement) {
+      emptyState.hidden = hasMessages;
+      emptyState.style.display = hasMessages ? "none" : "";
+      emptyState.setAttribute("aria-hidden", String(hasMessages));
+    }
+
+    messages.hidden = !hasMessages;
+    messages.style.display = hasMessages ? "flex" : "none";
+    messages.setAttribute("aria-hidden", String(!hasMessages));
+    transcript.classList.toggle("is-empty", !hasMessages);
+  };
+
+  const renderConversation = () => {
+    const uiCopy = getUiCopy();
+    messages.replaceChildren();
+
+    if (!conversation.length) {
+      syncTranscriptVisibility(false);
+      return;
+    }
+
+    conversation.forEach((turn) => {
+      messages.append(createMessage("user", uiCopy.user, turn.prompt));
+      messages.append(
+        createMessage(
+          "assistant",
+          `${uiCopy.assistantPrefix} ${turn.model}`,
+          turn.status === "loading" ? uiCopy.loading : buildReply(turn.prompt),
+          { detailed: true, loading: turn.status === "loading" }
+        )
+      );
+    });
+
+    syncTranscriptVisibility(true);
+
+    requestAnimationFrame(() => {
+      messages.scrollTop = messages.scrollHeight;
+    });
+  };
+
+  const submitPrompt = (prompt) => {
+    const cleanPrompt = prompt.trim();
+    if (!cleanPrompt) {
+      syncSendState();
+      focusComposer();
+      return;
+    }
+
+    setActiveSidebarAction("ask");
+    conversation.push({
+      id: `override-turn-${++nextId}`,
+      prompt: cleanPrompt,
+      status: "loading",
+      model: modelValue instanceof HTMLElement ? modelValue.textContent.trim() : "GPT-5.4",
+    });
+
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+    renderConversation();
+    focusComposer();
+
+    window.setTimeout(() => {
+      const latestTurn = conversation[conversation.length - 1];
+      if (!latestTurn) {
+        return;
+      }
+
+      latestTurn.status = "ready";
+      renderConversation();
+    }, prefersReducedMotion.matches ? 120 : 320);
+  };
+
+  const resetConversation = () => {
+    conversation.length = 0;
+    input.value = "";
+    autoResizeInput();
+    syncSendState();
+    setActiveSidebarAction("ask");
+    renderConversation();
+    focusComposer();
+  };
+
+  chatShell.addEventListener(
+    "submit",
+    (event) => {
+      const target = event.target;
+      if (target !== form) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      submitPrompt(input.value);
+    },
+    true
+  );
+
+  chatShell.addEventListener(
+    "keydown",
+    (event) => {
+      if (event.target !== input) {
+        return;
+      }
+
+      if (event.key !== "Enter" || event.shiftKey || event.isComposing) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      submitPrompt(input.value);
+    },
+    true
+  );
+
+  chatShell.addEventListener(
+    "input",
+    (event) => {
+      if (event.target !== input) {
+        return;
+      }
+
+      autoResizeInput();
+      syncSendState();
+    },
+    true
+  );
+
+  chatShell.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const button = target.closest("button");
+      if (!(button instanceof HTMLButtonElement) || !chatShell.contains(button)) {
+        return;
+      }
+
+      if (button.classList.contains("ai-chat-send")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        submitPrompt(input.value);
+        return;
+      }
+
+      if (button.hasAttribute("data-ai-chat-empty-suggestion")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        submitPrompt(button.textContent ?? "");
+        return;
+      }
+
+      if (button.hasAttribute("data-ai-chat-reset")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        resetConversation();
+        return;
+      }
+
+      if (button.classList.contains("ai-chat-icon-btn")) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        focusComposer();
+        return;
+      }
+
+      const intent = button.dataset.aiChatSidebarIntent?.trim() ?? "";
+      if (!intent) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+
+      if (button.hasAttribute("data-ai-chat-sidebar-action")) {
+        setActiveSidebarAction(intent || "ask");
+      }
+
+      if (intent === "ask") {
+        resetConversation();
+        return;
+      }
+
+      submitPrompt(sidebarPrompts[intent] ?? button.textContent ?? "");
+    },
+    true
+  );
+
+  window.addEventListener("circlelab:languagechange", () => {
+    renderConversation();
+  });
+
+  autoResizeInput();
+  syncSendState();
+  queueMicrotask(() => {
+    renderConversation();
   });
 })();
 
@@ -2559,13 +3299,13 @@
     overlay,
     hash,
     resetState,
-    { restoreFocus = true, clearUrl = true } = {}
+    { restoreFocus = true, clearUrl = true, immediate = false } = {}
   ) => {
     if (!(overlay instanceof HTMLElement) || overlay.hidden) {
       return;
     }
 
-    hideOverlay(overlay, hash, resetState, { clearUrl });
+    hideOverlay(overlay, hash, resetState, { clearUrl, immediate });
 
     if (!isAnyOverlayOpen() && restoreFocus && lastTrigger instanceof HTMLElement) {
       lastTrigger.focus();
@@ -2898,8 +3638,13 @@
     });
   };
 
-  const closeContactOverlay = (options) => {
-    closeOverlay(contactOverlay, "#contactOverlay", resetContactState, options);
+  const closeContactOverlay = () => {
+    const currentPath = window.location.pathname.replace(/\\/g, "/");
+    const destination = currentPath.endsWith("/homepage.html") || currentPath.endsWith("homepage.html")
+      ? `${window.location.pathname}${window.location.search}`
+      : "homepage.html";
+
+    window.location.assign(destination);
   };
 
   const setupFieldValidation = (
@@ -2997,6 +3742,45 @@
       closeContactOverlay();
     });
   });
+
+  document.addEventListener(
+    "pointerdown",
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const closeButton = target.closest("[data-contact-close]");
+      if (!(closeButton instanceof HTMLElement)) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      closeContactOverlay();
+    },
+    true
+  );
+
+  document.addEventListener(
+    "click",
+    (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      const closeButton = target.closest("[data-contact-close]");
+      if (!(closeButton instanceof HTMLElement)) {
+        return;
+      }
+
+      event.preventDefault();
+      closeContactOverlay();
+    },
+    true
+  );
 
   if (signupOverlay instanceof HTMLElement) {
     signupOverlay.addEventListener("click", (event) => {
