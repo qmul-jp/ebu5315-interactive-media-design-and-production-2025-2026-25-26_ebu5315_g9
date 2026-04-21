@@ -5,30 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>点与圆的位置关系 - CircleLab</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
     <style>
-        :root {
-            --bg:        #f7f5f0;
-            --card-bg:   #ffffff;
-            --text:      #1a1a1a;
-            --text-sub:  #888;
-            --accent2:   #c8502a;
-            --border:    #e8e4dc;
-            --hover-bg:  #f0ede6;
-            --shadow:    0 1px 12px rgba(0,0,0,0.06);
-        }
-        [data-theme="dark"] {
-            --bg:        #141414;
-            --card-bg:   #1c1c1c;
-            --text:      #e8e4dc;
-            --text-sub:  #666;
-            --accent2:   #e8724a;
-            --border:    #2a2a2a;
-            --hover-bg:  #242424;
-            --shadow:    0 1px 12px rgba(0,0,0,0.3);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg); color: var(--text);
             transition: background 0.3s, color 0.3s;
             padding: 20px 24px 28px; min-height: 100vh;
@@ -41,7 +21,7 @@
             overflow: hidden; transition: background 0.3s, border-color 0.3s;
         }
         .card-header { padding: 20px 28px 12px; border-bottom: 1px solid var(--border); }
-        .card-header .title { font-family: 'DM Serif Display', serif; font-size: 1.35rem; color: var(--text); }
+        .card-header .title { font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif; font-size: 1.35rem; color: var(--text); }
         .card-header .sub-en { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; }
         .canvas-container { padding: 28px 28px 16px; display: flex; justify-content: center; background: var(--card-bg); }
         canvas {
@@ -104,6 +84,9 @@
     const radius=150;
     let O={x:300,y:250}, A={x:480,y:250};
     let dragging=false, dragTarget=null;
+
+    // 初始化根字号（独立于父页面，但会接收同步）
+    document.documentElement.style.fontSize = '16px';
 
     function update(){
         const OA=Math.hypot(A.x-O.x, A.y-O.y);
@@ -176,6 +159,7 @@
     const obs=new MutationObserver(()=>update());
     obs.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 
+    // 处理来自父窗口的消息（主题、语言、字号）
     window.addEventListener('message',ev=>{
         if(!ev.data||ev.data._src!=='circlelab') return;
         if(ev.data.theme) document.documentElement.setAttribute('data-theme',ev.data.theme);
@@ -185,6 +169,12 @@
             const zh=ev.data.lang==='zh';
             document.querySelectorAll('[data-cl-zh]').forEach(el=>el.style.display=zh?'':'none');
             document.querySelectorAll('[data-cl-en]').forEach(el=>el.style.display=zh?'none':'');
+        }
+        if(typeof ev.data.fontSize === 'number'){
+            // 同步根字号
+            let fs = ev.data.fontSize;
+            fs = Math.min(20, Math.max(12, fs));
+            document.documentElement.style.fontSize = fs + 'px';
         }
         update();
     });
