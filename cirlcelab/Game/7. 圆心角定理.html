@@ -5,28 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>圆心角定理 - CircleLab</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
     <style>
-        :root {
-            --bg:        #f7f5f0;
-            --card-bg:   #ffffff;
-            --text:      #1a1a1a;
-            --text-sub:  #888;
-            --accent2:   #c8502a;
-            --border:    #e8e4dc;
-            --hover-bg:  #f0ede6;
-            --shadow:    0 1px 12px rgba(0,0,0,0.06);
-        }
-        [data-theme="dark"] {
-            --bg:        #141414;
-            --card-bg:   #1c1c1c;
-            --text:      #e8e4dc;
-            --text-sub:  #666;
-            --accent2:   #e8724a;
-            --border:    #2a2a2a;
-            --hover-bg:  #242424;
-            --shadow:    0 1px 12px rgba(0,0,0,0.3);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg); color: var(--text);
@@ -110,6 +90,8 @@
     const cx=300, cy=250, R=180;
     let angleA=10, angleB=80, angleC=160, angleD=230;
     let dragging=false, dragTarget=null;
+
+    document.documentElement.style.fontSize = '16px';
     const SNAP=5;
 
     function d2r(d){return d*Math.PI/180;}
@@ -239,6 +221,11 @@
             document.querySelectorAll('[data-cl-zh]').forEach(el=>el.style.display=zh?'':'none');
             document.querySelectorAll('[data-cl-en]').forEach(el=>el.style.display=zh?'none':'');
         }
+        if(typeof ev.data.fontSize === 'number'){
+                let fs = ev.data.fontSize;
+                fs = Math.min(20, Math.max(12, fs));
+                document.documentElement.style.fontSize = fs + 'px';
+            }
         update();
     });
     window._clRedraw=update;
