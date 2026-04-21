@@ -9,14 +9,21 @@
         try {
           const theme = window.localStorage.getItem("circlelab-theme");
           const language = window.localStorage.getItem("circlelab-language");
+          const fontScale = window.localStorage.getItem("circlelab-font-scale");
           if (theme !== "dark") {
             document.documentElement.dataset.theme = "light";
           } else {
             delete document.documentElement.dataset.theme;
           }
+          if (fontScale === "small" || fontScale === "large") {
+            document.documentElement.dataset.fontScale = fontScale;
+          } else {
+            delete document.documentElement.dataset.fontScale;
+          }
           document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
         } catch (error) {
           document.documentElement.dataset.theme = "light";
+          delete document.documentElement.dataset.fontScale;
           document.documentElement.lang = "en";
         }
       })();
@@ -92,6 +99,27 @@
                     <button class="settings-option" type="button" data-theme-option="light">
                       <span data-i18n="settings.theme_light">Light</span>
                     </button>
+                  </div>
+                </section>
+                <section class="settings-section" data-i18n-aria-label="settings.font_section_aria" aria-label="Text size settings">
+                  <p class="settings-label" data-i18n="settings.font_size">Text Size</p>
+                  <div class="settings-font-slider" role="group" data-i18n-aria-label="settings.font_group_aria" aria-label="Text size">
+                    <input
+                      class="settings-font-range"
+                      type="range"
+                      min="0"
+                      max="2"
+                      step="1"
+                      value="1"
+                      data-font-scale-range
+                      data-i18n-aria-label="settings.font_slider_aria"
+                      aria-label="Adjust text size"
+                    />
+                    <div class="settings-font-ticks" aria-hidden="true">
+                      <span class="settings-font-tick"></span>
+                      <span class="settings-font-tick"></span>
+                      <span class="settings-font-tick"></span>
+                    </div>
                   </div>
                 </section>
               </div>

@@ -10,6 +10,7 @@
   --font-sans: "Manrope", "Noto Sans SC", "Source Han Sans SC", "PingFang SC",
     "Microsoft YaHei", sans-serif;
   --font-display: "Anthropic Serif", "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  --font-scale: 1;
   --section-title-line-height: 1.18;
   --section-title-letter-spacing: -0.008em;
   --section-title-line-gap: 0.24em;
@@ -49,8 +50,8 @@
   --hero-point-center: color-mix(in oklch, var(--accent) 76%, white);
   --hero-point: color-mix(in oklch, var(--accent) 90%, white);
   --hero-point-muted: color-mix(in oklch, var(--accent-alt) 80%, white);
-  --button-radius: 0.88rem;
-  --button-radius-compact: 0.88rem;
+  --button-radius: 0.6rem;
+  --button-radius-compact: 0.6rem;
   --pricing-card-divider: color-mix(in oklch, #faf9f5 12%, transparent);
   --pricing-surface-border: color-mix(in oklch, #faf9f5 10%, transparent);
   --page-gutter: clamp(1.6rem, 5vw, 4rem);
@@ -65,6 +66,14 @@
     "Microsoft YaHei", "Heiti SC", sans-serif;
   --font-display: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong",
     "SimSun", serif;
+}
+
+:root[data-font-scale="small"] {
+  --font-scale: 0.94;
+}
+
+:root[data-font-scale="large"] {
+  --font-scale: 1.08;
 }
 
 :root[data-theme="light"] {
@@ -93,8 +102,8 @@
   --card-on-dark-soft: #1F1E1D;
   --cta-dark: #1F1E1D;
   --cta-dark-hover: #141413;
-  --button-radius: 0.88rem;
-  --button-radius-compact: 0.88rem;
+  --button-radius: 0.6rem;
+  --button-radius-compact: 0.6rem;
   --pricing-card-divider: #cec6ba;
   --pricing-surface-border: #e8e6dc;
   --button-primary-bg: #141413;
@@ -137,6 +146,7 @@
 }
 
 html {
+  font-size: calc(16px * var(--font-scale));
   overflow-x: clip;
 }
 
@@ -587,7 +597,7 @@ body.is-auth-switching .auth-overlay {
   border-radius: var(--button-radius);
   border: none;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 600;
   transition:
     background-color 240ms ease,
     color 240ms ease;
@@ -3508,7 +3518,7 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   grid-auto-flow: column;
   gap: 0.28rem;
   padding: 0.28rem;
-  border-radius: 1.18rem;
+  border-radius: 0.6rem;
   border: 1px solid color-mix(in oklch, #faf9f5 14%, transparent);
   background:
     linear-gradient(
@@ -4153,8 +4163,8 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   border-radius: var(--button-radius);
   border: 1px solid transparent;
   text-decoration: none;
-  font-size: 0.98rem;
-  font-weight: 800;
+  font-size: 1.04rem;
+  font-weight: 700;
   line-height: 1.18;
   letter-spacing: 0.01em;
   transition:
@@ -5409,6 +5419,12 @@ body.is-auth-open {
   --settings-option-active-shadow:
     0 8px 18px color-mix(in oklch, var(--accent) 18%, transparent),
     inset 0 1px 0 color-mix(in oklch, #faf9f5 22%, transparent);
+  --settings-slider-line: color-mix(in oklch, var(--settings-label-color) 56%, transparent);
+  --settings-slider-tick: color-mix(in oklch, var(--settings-label-color) 84%, #faf9f5 16%);
+  --settings-slider-thumb-bg: var(--settings-slider-tick);
+  --settings-slider-thumb-border: transparent;
+  --settings-slider-thumb-shadow: none;
+  --settings-slider-focus-ring: color-mix(in oklch, var(--accent) 40%, transparent);
   position: absolute;
   top: calc(100% + 0.7rem);
   right: 0;
@@ -5474,6 +5490,105 @@ body.is-auth-open {
     background 220ms ease,
     border-color 220ms ease,
     box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.settings-font-slider {
+  position: relative;
+  justify-self: end;
+  width: min(11.2rem, 100%);
+  min-width: 10.5rem;
+  min-height: 2.3rem;
+  display: grid;
+  align-items: center;
+}
+
+.settings-font-slider::before {
+  content: "";
+  position: absolute;
+  left: 0.32rem;
+  right: 0.32rem;
+  top: 50%;
+  height: 2px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: var(--settings-slider-line);
+  pointer-events: none;
+}
+
+.settings-font-ticks {
+  position: absolute;
+  left: 0.32rem;
+  right: 0.32rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  pointer-events: none;
+}
+
+.settings-font-tick {
+  width: 2px;
+  height: 0.98rem;
+  border-radius: 999px;
+  background: var(--settings-slider-tick);
+}
+
+.settings-font-range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 2.3rem;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+
+.settings-font-range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: transparent;
+}
+
+.settings-font-range::-moz-range-track {
+  height: 2px;
+  background: transparent;
+}
+
+.settings-font-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-top: -0.49rem;
+  border-radius: 50%;
+  border: 1px solid var(--settings-slider-thumb-border);
+  background: var(--settings-slider-thumb-bg);
+  box-shadow: var(--settings-slider-thumb-shadow);
+}
+
+.settings-font-range::-moz-range-thumb {
+  width: 1.2rem;
+  height: 1.2rem;
+  border-radius: 50%;
+  border: 1px solid var(--settings-slider-thumb-border);
+  background: var(--settings-slider-thumb-bg);
+  box-shadow: var(--settings-slider-thumb-shadow);
+}
+
+.settings-font-range:focus-visible {
+  outline: none;
+}
+
+.settings-font-range:focus-visible::-webkit-slider-thumb {
+  box-shadow:
+    0 0 0 3px var(--settings-slider-focus-ring);
+}
+
+.settings-font-range:focus-visible::-moz-range-thumb {
+  box-shadow:
+    0 0 0 3px var(--settings-slider-focus-ring);
 }
 
 .settings-option {
@@ -6982,8 +7097,20 @@ body.is-auth-open {
   background: #1F1E1D;
 }
 
-:root[data-theme="light"] .hero-btn,
-:root[data-theme="light"] .callout-btn,
+:root[data-theme="light"] .hero-btn {
+  border-radius: var(--button-radius);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  box-shadow: none;
+}
+
+:root[data-theme="light"] .callout-btn {
+  border-radius: var(--button-radius);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  box-shadow: none;
+}
+
 :root[data-theme="light"] .pricing-card-cta,
 :root[data-theme="light"] .theorem-cta-btn,
 :root[data-theme="light"] .signup-submit {
@@ -7118,6 +7245,8 @@ body.is-auth-open {
   --settings-option-active-bg: #faf9f5;
   --settings-option-active-border: #cec6ba;
   --settings-option-active-shadow: none;
+  --settings-slider-thumb-bg: var(--settings-slider-tick);
+  --settings-slider-thumb-border: transparent;
 }
 
 :root[data-theme="light"] .settings-dropdown[data-preview-theme="dark"],
@@ -7178,6 +7307,8 @@ body.is-auth-open {
   --settings-option-active-bg: #faf9f5;
   --settings-option-active-border: #cec6ba;
   --settings-option-active-shadow: none;
+  --settings-slider-thumb-bg: var(--settings-slider-tick);
+  --settings-slider-thumb-border: transparent;
 }
 
 :root[data-theme="light"] .auth-overlay {
@@ -7559,6 +7690,12 @@ body.is-auth-open {
   }
 
   .settings-options {
+    min-width: 0;
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .settings-font-slider {
     min-width: 0;
     width: 100%;
     justify-self: stretch;

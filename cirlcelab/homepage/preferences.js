@@ -9,6 +9,7 @@
   const STORAGE_KEYS = {
     language: "circlelab-language",
     theme: "circlelab-theme",
+    fontScale: "circlelab-font-scale",
   };
 
   const dictionaries = {
@@ -47,10 +48,15 @@
       "settings.title": "Preferences",
       "settings.language": "Language",
       "settings.theme": "Theme",
+      "settings.font_size": "Text Size",
       "settings.language_en": "English",
       "settings.language_zh": "简体中文",
       "settings.theme_dark": "Dark",
       "settings.theme_light": "Light",
+      "settings.font_small": "Small",
+      "settings.font_medium": "Medium",
+      "settings.font_large": "Large",
+      "settings.font_slider_aria": "Adjust text size",
       "hero.kicker": "CIRCLE LAB",
       "hero.title": "Master Circle Geometry with Ease",
       "hero.intro":
@@ -120,10 +126,15 @@
       "settings.title": "偏好设置",
       "settings.language": "语言",
       "settings.theme": "主题",
+      "settings.font_size": "字号",
       "settings.language_en": "English",
       "settings.language_zh": "简体中文",
       "settings.theme_dark": "深色",
       "settings.theme_light": "浅色",
+      "settings.font_small": "小",
+      "settings.font_medium": "中",
+      "settings.font_large": "大",
+      "settings.font_slider_aria": "调整字号",
       "hero.kicker": "CIRCLE LAB",
       "hero.title": "轻松掌握圆几何",
       "hero.intro": "通过清晰讲解、交互图形和简明练习，学习圆几何的关键规则。",
@@ -166,6 +177,8 @@
     "settings.language_group_aria": "Language",
     "settings.theme_section_aria": "Theme settings",
     "settings.theme_group_aria": "Theme",
+    "settings.font_section_aria": "Text size settings",
+    "settings.font_group_aria": "Text size",
     "core.title.line1": "A Reimagined",
     "core.title.line2": "Approach to Geometry",
     "core.card1.title": "Powered by AI",
@@ -389,6 +402,8 @@
     "settings.language_group_aria": "语言",
     "settings.theme_section_aria": "主题设置",
     "settings.theme_group_aria": "主题",
+    "settings.font_section_aria": "字号设置",
+    "settings.font_group_aria": "字号",
     "settings.language_en": "英语",
     "core.title.line1": "重塑你的",
     "core.title.line2": "几何学习方式",
@@ -616,6 +631,13 @@
 
     return "light";
   };
+  const normalizeFontScale = (value) => {
+    if (value === "small" || value === "large") {
+      return value;
+    }
+
+    return "normal";
+  };
 
   const readStoredPreference = (key) => {
     try {
@@ -635,6 +657,31 @@
 
   let currentLanguage = normalizeLanguage(readStoredPreference(STORAGE_KEYS.language));
   let currentTheme = normalizeTheme(readStoredPreference(STORAGE_KEYS.theme));
+  let currentFontScale = normalizeFontScale(
+    readStoredPreference(STORAGE_KEYS.fontScale)
+  );
+  const FONT_SCALE_STEPS = ["small", "normal", "large"];
+  const getFontScaleStep = (fontScale) =>
+    Math.max(0, FONT_SCALE_STEPS.indexOf(normalizeFontScale(fontScale)));
+  const getFontScaleFromStep = (step) => {
+    const stepValue = Number.parseInt(step, 10);
+    if (!Number.isFinite(stepValue)) {
+      return "normal";
+    }
+
+    return FONT_SCALE_STEPS[Math.min(FONT_SCALE_STEPS.length - 1, Math.max(0, stepValue))];
+  };
+  const getFontScaleValueKey = (fontScale) => {
+    if (fontScale === "small") {
+      return "settings.font_small";
+    }
+
+    if (fontScale === "large") {
+      return "settings.font_large";
+    }
+
+    return "settings.font_medium";
+  };
 
   const translate = (key, fallback = "") =>
     multilineCopy[currentLanguage]?.[key] ??
@@ -665,6 +712,20 @@
       const isSelected = button.dataset.themeOption === currentTheme;
       button.classList.toggle("is-selected", isSelected);
       button.setAttribute("aria-pressed", String(isSelected));
+    });
+  };
+  const syncFontScaleControl = () => {
+    document.querySelectorAll("[data-font-scale-range]").forEach((range) => {
+      if (!(range instanceof HTMLInputElement)) {
+        return;
+      }
+
+      const currentStep = getFontScaleStep(currentFontScale);
+      range.value = String(currentStep);
+      range.setAttribute(
+        "aria-valuetext",
+        translate(getFontScaleValueKey(currentFontScale), range.getAttribute("aria-valuetext") ?? "")
+      );
     });
   };
 
@@ -719,6 +780,7 @@
     }
 
     syncLanguageButtons();
+    syncFontScaleControl();
     window.dispatchEvent(
       new CustomEvent("circlelab:languagechange", {
         detail: {
@@ -743,6 +805,21 @@
     }
 
     syncThemeButtons();
+  };
+  const applyFontScale = (fontScale, persist = true) => {
+    currentFontScale = normalizeFontScale(fontScale);
+
+    if (currentFontScale === "normal") {
+      delete root.dataset.fontScale;
+    } else {
+      root.dataset.fontScale = currentFontScale;
+    }
+
+    if (persist) {
+      writeStoredPreference(STORAGE_KEYS.fontScale, currentFontScale);
+    }
+
+    syncFontScaleControl();
   };
 
   const closeMenu = (settingsRoot) => {
@@ -771,6 +848,7 @@
     const menu = settingsRoot.querySelector("[data-settings-menu]");
     const languageButtons = settingsRoot.querySelectorAll("[data-language-option]");
     const themeButtons = settingsRoot.querySelectorAll("[data-theme-option]");
+    const fontScaleRanges = settingsRoot.querySelectorAll("[data-font-scale-range]");
 
     if (!(toggle instanceof HTMLButtonElement) || !(menu instanceof HTMLElement)) {
       return;
@@ -834,6 +912,22 @@
         applyTheme(button.dataset.themeOption);
       });
     });
+
+    fontScaleRanges.forEach((range) => {
+      if (!(range instanceof HTMLInputElement)) {
+        return;
+      }
+
+      const updateFontScale = () => {
+        applyFontScale(getFontScaleFromStep(range.value));
+      };
+
+      range.addEventListener("input", updateFontScale);
+      range.addEventListener("change", () => {
+        range.blur();
+        updateFontScale();
+      });
+    });
   };
 
   document.addEventListener("click", (event) => {
@@ -860,6 +954,7 @@
   });
 
   applyTheme(currentTheme, false);
+  applyFontScale(currentFontScale, false);
   applyLanguage(currentLanguage, false);
   document.querySelectorAll("[data-settings]").forEach(initSettingsMenu);
 
@@ -867,7 +962,9 @@
     t: translate,
     getLanguage: () => currentLanguage,
     getTheme: () => currentTheme,
+    getFontScale: () => currentFontScale,
     setLanguage: applyLanguage,
     setTheme: applyTheme,
+    setFontScale: applyFontScale,
   };
 })();
