@@ -909,15 +909,14 @@ body.is-auth-switching .auth-overlay {
     100%,
     calc(
       (
-          var(
-            --theorem-card-width,
-            calc(
-              (
-                  100% -
-                  (var(--theorem-gap) * (var(--theorem-visible-current) - 1))
-                ) /
-                var(--theorem-visible-current)
-            )
+        var(
+          --theorem-card-width,
+          calc(
+            (
+              100% -
+              (var(--theorem-gap) * (var(--theorem-visible-current) - 1))
+            ) /
+              var(--theorem-visible-current)
           )
         ) * var(--theorem-visible-current)
       ) +
@@ -2673,7 +2672,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .ai-float-shell {
-  --ai-float-width-collapsed: min(calc(100% - 1.4rem), 21.2rem);
+  --ai-float-width-collapsed: min(calc(100% - 1.4rem), 18.4rem);
   --ai-float-width-expanded: min(calc(100% - 1.4rem), 34rem);
   --ai-float-surface: color-mix(in oklch, var(--panel) 84%, var(--accent) 16%);
   --ai-float-surface-bottom: color-mix(in oklch, var(--chip) 78%, var(--panel) 22%);
@@ -2687,11 +2686,12 @@ body.is-auth-switching .auth-overlay {
   --ai-float-send-active-color: var(--ink-dark);
   --ai-float-glow-a: color-mix(in oklch, var(--accent) 36%, transparent);
   --ai-float-glow-b: color-mix(in oklch, var(--accent-alt) 28%, transparent);
-  --ai-float-prompt-surface: color-mix(in oklch, var(--chip) 82%, var(--panel) 18%);
-  --ai-float-prompt-surface-hover: color-mix(in oklch, var(--chip-hover) 76%, var(--panel) 24%);
-  --ai-float-prompt-border: color-mix(in oklch, var(--accent) 16%, var(--chip) 84%);
-  --ai-float-prompt-highlight: color-mix(in oklch, #faf9f5 10%, transparent);
-  --ai-float-prompt-text: color-mix(in oklch, var(--text) 90%, var(--accent) 10%);
+  --ai-float-prompt-surface: color-mix(in oklch, var(--chip) 78%, var(--panel) 22%);
+  --ai-float-prompt-surface-hover: color-mix(in oklch, var(--chip-hover) 72%, var(--panel) 28%);
+  --ai-float-prompt-border: color-mix(in oklch, var(--accent) 15%, var(--chip) 85%);
+  --ai-float-prompt-border-hover: color-mix(in oklch, var(--accent) 24%, var(--chip-hover) 76%);
+  --ai-float-prompt-highlight: color-mix(in oklch, #faf9f5 12%, transparent);
+  --ai-float-prompt-text: color-mix(in oklch, #faf9f5 90%, var(--accent-alt) 10%);
   --ai-float-response-surface: color-mix(in oklch, var(--panel) 86%, var(--accent-deep) 14%);
   --ai-float-response-border: color-mix(in oklch, var(--accent) 24%, #faf9f5 12%);
   --ai-float-response-text: color-mix(in oklch, #faf9f5 96%, var(--accent) 4%);
@@ -2838,9 +2838,9 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   gap: clamp(0.9rem, 1.4vw, 1.12rem);
-  min-height: clamp(22rem, 52vh, 28.8rem);
-  max-height: min(80vh, 28.8rem);
-  padding: clamp(1rem, 1.55vw, 1.2rem);
+  min-height: clamp(20.8rem, 49vh, 26.8rem);
+  max-height: min(76vh, 26.8rem);
+  padding: clamp(0.92rem, 1.42vw, 1.08rem);
   border-radius: clamp(0.88rem, 1.3vw, 1.08rem);
   border: 1px solid var(--ai-float-response-border);
   background: var(--ai-float-response-surface);
@@ -3149,7 +3149,7 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   bottom: calc(100% + 0.72rem);
   display: grid;
   justify-items: start;
-  gap: 0.62rem;
+  gap: 0.54rem;
   width: 100%;
   opacity: 0;
   visibility: hidden;
@@ -3178,9 +3178,9 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   isolation: isolate;
   overflow: hidden;
   width: fit-content;
-  max-width: min(100%, 31rem);
-  min-height: clamp(2.44rem, 4vw, 2.78rem);
-  padding: 0.42rem 0.94rem;
+  max-width: min(100%, 29rem);
+  min-height: clamp(2.24rem, 3.7vw, 2.56rem);
+  padding: 0.34rem 0.82rem;
   border: 1px solid var(--ai-float-prompt-border);
   border-radius: 999px;
   background: var(--ai-float-prompt-surface);
@@ -3188,7 +3188,7 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   backdrop-filter: blur(16px) saturate(1.06);
   color: var(--ai-float-prompt-text);
   font: inherit;
-  font-size: clamp(0.8rem, 1.04vw, 0.87rem);
+  font-size: clamp(0.76rem, 0.96vw, 0.83rem);
   font-weight: 500;
   line-height: 1.14;
   text-align: left;
@@ -3226,7 +3226,10 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
 .ai-float-prompt:hover,
 .ai-float-prompt:focus-visible {
   background: var(--ai-float-prompt-surface-hover);
-  border-color: color-mix(in oklch, var(--accent) 24%, var(--chip-hover) 76%);
+  border-color: var(
+    --ai-float-prompt-border-hover,
+    color-mix(in oklch, var(--accent) 24%, var(--chip-hover) 76%)
+  );
   transform: translate3d(0, -1px, 0);
   outline: none;
   box-shadow:
@@ -3245,9 +3248,9 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: clamp(0.24rem, 0.68vw, 0.44rem);
-  min-height: clamp(2.68rem, 4.4vw, 3.08rem);
-  padding: clamp(0.24rem, 0.62vw, 0.34rem) clamp(0.34rem, 0.76vw, 0.48rem)
-    clamp(0.24rem, 0.62vw, 0.34rem) clamp(0.56rem, 1.06vw, 0.68rem);
+  min-height: clamp(2.48rem, 4vw, 2.86rem);
+  padding: clamp(0.18rem, 0.52vw, 0.28rem) clamp(0.34rem, 0.76vw, 0.48rem)
+    clamp(0.18rem, 0.52vw, 0.28rem) clamp(0.56rem, 1.06vw, 0.68rem);
   border-radius: 999px;
   border: 1px solid var(--ai-float-border);
   background: linear-gradient(
@@ -4948,15 +4951,15 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   }
 
   .ai-float-shell {
-    --ai-float-width-collapsed: min(calc(100% - 1.1rem), 19.2rem);
+    --ai-float-width-collapsed: min(calc(100% - 1.1rem), 16.4rem);
     --ai-float-width-expanded: min(calc(100% - 1.1rem), 27rem);
     bottom: calc(env(safe-area-inset-bottom, 0px) + 0.82rem);
   }
 
   .ai-float-response-shell {
-    min-height: clamp(19rem, 56vh, 22.9rem);
-    max-height: min(74vh, 22.9rem);
-    padding: 0.9rem;
+    min-height: clamp(18rem, 52vh, 21.4rem);
+    max-height: min(70vh, 21.4rem);
+    padding: 0.82rem;
     border-radius: 0.98rem;
   }
 
@@ -4974,8 +4977,8 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   }
 
   .ai-float-bar {
-    min-height: 2.9rem;
-    padding: 0.24rem 0.4rem 0.24rem 0.6rem;
+    min-height: 2.56rem;
+    padding: 0.18rem 0.34rem 0.18rem 0.48rem;
   }
 
 }
@@ -5266,7 +5269,7 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   }
 
   .ai-float-shell {
-    --ai-float-width-collapsed: min(calc(100% - 0.9rem), 16.8rem);
+    --ai-float-width-collapsed: min(calc(100% - 0.9rem), 14.4rem);
     --ai-float-width-expanded: min(calc(100% - 0.9rem), 18rem);
     bottom: calc(env(safe-area-inset-bottom, 0px) + 0.68rem);
   }
@@ -5276,10 +5279,10 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   }
 
   .ai-float-response-shell {
-    min-height: 15.25rem;
-    max-height: min(62vh, 15.25rem);
-    gap: 0.82rem;
-    padding: 0.82rem;
+    min-height: 14.2rem;
+    max-height: min(58vh, 14.2rem);
+    gap: 0.72rem;
+    padding: 0.72rem;
     border-radius: 0.9rem;
   }
 
@@ -5323,22 +5326,22 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
   }
 
   .ai-float-prompts {
-    gap: 0.48rem;
+    gap: 0.42rem;
     bottom: calc(100% + 0.6rem);
   }
 
   .ai-float-prompt {
     max-width: 100%;
-    min-height: 2.46rem;
-    padding: 0.38rem 0.76rem;
-    font-size: 0.72rem;
+    min-height: 2.24rem;
+    padding: 0.3rem 0.66rem;
+    font-size: 0.68rem;
     line-height: 1.14;
   }
 
   .ai-float-bar {
-    min-height: 2.72rem;
+    min-height: 2.36rem;
     gap: 0.24rem;
-    padding: 0.22rem 0.26rem 0.22rem 0.46rem;
+    padding: 0.16rem 0.22rem 0.16rem 0.4rem;
   }
 
   .ai-float-plus,
@@ -7294,6 +7297,12 @@ body.is-auth-open {
   --ai-float-send-active-color: #faf9f5;
   --ai-float-glow-a: color-mix(in oklch, var(--accent-lavender) 62%, transparent);
   --ai-float-glow-b: color-mix(in oklch, var(--accent-soft) 56%, transparent);
+  --ai-float-prompt-surface: color-mix(in oklch, #878785 94%, transparent);
+  --ai-float-prompt-surface-hover: color-mix(in oklch, #6A6B6A 95%, transparent);
+  --ai-float-prompt-border: color-mix(in oklch, #faf9f5 18%, #878785 82%);
+  --ai-float-prompt-border-hover: color-mix(in oklch, #faf9f5 24%, #6A6B6A 76%);
+  --ai-float-prompt-highlight: color-mix(in oklch, #faf9f5 16%, transparent);
+  --ai-float-prompt-text: color-mix(in oklch, #faf9f5 95%, var(--accent) 5%);
   --ai-float-response-surface: #6A6B6A;
   --ai-float-response-border: #6A6B6A;
   --ai-float-response-text: #faf9f5;
