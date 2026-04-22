@@ -500,6 +500,10 @@ window.CircleLabDebug = window.CircleLabDebug || {};
     direction: 0,
     frame: 0,
     pointerId: null,
+    activator: null,
+    activationTimer: 0,
+    suppressClickFor: null,
+    suppressClickTimer: 0,
   };
 
   const getHoldScrollSpeed = () => {
@@ -510,16 +514,12 @@ window.CircleLabDebug = window.CircleLabDebug || {};
     return Math.max(4, Math.min(9, cardWidth / 46));
   };
 
-  const isBlankCarouselTarget = (target) => {
-    if (!(target instanceof Element)) {
-      return false;
-    }
-    return !target.closest(
-      ".theorem-frame, .theorem-nav-btn, iframe, button, a, input, textarea, select, label"
-    );
-  };
-
   const stopHoldScroll = (snap = true) => {
+    if (holdScrollState.activationTimer) {
+      window.clearTimeout(holdScrollState.activationTimer);
+      holdScrollState.activationTimer = 0;
+    }
+
     if (holdScrollState.frame) {
       window.cancelAnimationFrame(holdScrollState.frame);
       holdScrollState.frame = 0;
@@ -527,22 +527,35 @@ window.CircleLabDebug = window.CircleLabDebug || {};
 
     const wasActive = holdScrollState.active;
     const pointerId = holdScrollState.pointerId;
+    const activator = holdScrollState.activator;
     holdScrollState.active = false;
     holdScrollState.direction = 0;
     holdScrollState.pointerId = null;
+    holdScrollState.activator = null;
     carousel.removeAttribute("data-theorem-hold-scroll");
 
     if (
+      activator instanceof Element &&
       pointerId !== null &&
-      typeof carousel.hasPointerCapture === "function" &&
-      carousel.hasPointerCapture(pointerId)
+      typeof activator.hasPointerCapture === "function" &&
+      activator.hasPointerCapture(pointerId)
     ) {
-      carousel.releasePointerCapture(pointerId);
+      activator.releasePointerCapture(pointerId);
     }
 
     if (wasActive && snap) {
       alignViewportToCardBoundary();
       updateButtons();
+    }
+
+    if (wasActive) {
+      if (holdScrollState.suppressClickTimer) {
+        window.clearTimeout(holdScrollState.suppressClickTimer);
+      }
+      holdScrollState.suppressClickTimer = window.setTimeout(() => {
+        holdScrollState.suppressClickFor = null;
+        holdScrollState.suppressClickTimer = 0;
+      }, 260);
     }
   };
 
@@ -576,8 +589,8 @@ window.CircleLabDebug = window.CircleLabDebug || {};
     holdScrollState.frame = window.requestAnimationFrame(runHoldScroll);
   };
 
-  const startHoldScroll = (event) => {
-    if (event.button !== 0 || !isBlankCarouselTarget(event.target)) {
+  const activateButtonHoldScroll = (button, pointerId) => {
+    if (!(button instanceof HTMLElement) || button.disabled) {
       return;
     }
 
@@ -586,22 +599,47 @@ window.CircleLabDebug = window.CircleLabDebug || {};
       return;
     }
 
-    const rect = carousel.getBoundingClientRect();
-    const direction = event.clientX < rect.left + rect.width / 2 ? -1 : 1;
+    const direction = Number.parseInt(
+      button.getAttribute("data-theorem-nav") || "0",
+      10
+    );
     if (!direction) {
       return;
     }
 
-    event.preventDefault();
     stopHoldScroll(false);
     holdScrollState.active = true;
     holdScrollState.direction = direction;
-    holdScrollState.pointerId = event.pointerId;
-    if (typeof carousel.setPointerCapture === "function") {
-      carousel.setPointerCapture(event.pointerId);
+    holdScrollState.pointerId = pointerId;
+    holdScrollState.activator = button;
+    holdScrollState.suppressClickFor = button;
+    if (typeof button.setPointerCapture === "function") {
+      button.setPointerCapture(pointerId);
     }
     carousel.setAttribute("data-theorem-hold-scroll", direction < 0 ? "left" : "right");
     holdScrollState.frame = window.requestAnimationFrame(runHoldScroll);
+  };
+
+  const queueButtonHoldScroll = (event) => {
+    const button = event.currentTarget;
+    if (
+      event.button !== 0 ||
+      !(button instanceof HTMLElement) ||
+      button.disabled
+    ) {
+      return;
+    }
+
+    if (holdScrollState.activationTimer) {
+      window.clearTimeout(holdScrollState.activationTimer);
+    }
+
+    holdScrollState.pointerId = event.pointerId;
+    holdScrollState.activator = button;
+    holdScrollState.activationTimer = window.setTimeout(() => {
+      holdScrollState.activationTimer = 0;
+      activateButtonHoldScroll(button, event.pointerId);
+    }, 180);
   };
 
   const collectTheoremMetrics = () => {
@@ -670,7 +708,22 @@ window.CircleLabDebug = window.CircleLabDebug || {};
   };
 
   buttons.forEach((button) => {
-    button.addEventListener("click", () => {
+    button.addEventListener("pointerdown", queueButtonHoldScroll);
+    button.addEventListener("lostpointercapture", () => {
+      stopHoldScroll(true);
+    });
+    button.addEventListener("click", (event) => {
+      if (holdScrollState.suppressClickFor === button) {
+        if (holdScrollState.suppressClickTimer) {
+          window.clearTimeout(holdScrollState.suppressClickTimer);
+          holdScrollState.suppressClickTimer = 0;
+        }
+        holdScrollState.suppressClickFor = null;
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        return;
+      }
+
       const dir = Number.parseInt(button.getAttribute("data-theorem-nav"), 10) || 1;
       viewport.scrollBy({
         left: dir * getPageDistance(),
@@ -680,23 +733,11 @@ window.CircleLabDebug = window.CircleLabDebug || {};
   });
 
   viewport.addEventListener("scroll", updateButtons, { passive: true });
-  carousel.addEventListener("pointerdown", startHoldScroll);
   window.addEventListener("pointerup", () => {
     stopHoldScroll(true);
   });
   window.addEventListener("pointercancel", () => {
     stopHoldScroll(true);
-  });
-  carousel.addEventListener("lostpointercapture", () => {
-    stopHoldScroll(true);
-  });
-  carousel.addEventListener("pointerleave", (event) => {
-    if (
-      holdScrollState.active &&
-      holdScrollState.pointerId === event.pointerId
-    ) {
-      stopHoldScroll(true);
-    }
   });
   window.addEventListener("resize", () => {
     stopHoldScroll(false);

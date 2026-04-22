@@ -218,10 +218,10 @@ body.is-auth-switching .auth-overlay {
 
 .nav-shell {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: clamp(1rem, 2.4vw, 2rem);
-  min-height: 5.1rem;
+  gap: clamp(0.4rem, 1.2vw, 2rem);
+  min-height: clamp(3.4rem, 5.2vw, 5.1rem);
 }
 
 .brand {
@@ -232,9 +232,9 @@ body.is-auth-switching .auth-overlay {
 }
 
 .brand img {
-  height: clamp(46px, 5.1vw, 62px);
+  height: clamp(28px, 4vw, 62px);
   width: auto;
-  max-width: min(38vw, 214px);
+  max-width: min(30vw, 214px);
   display: block;
 }
 
@@ -245,15 +245,18 @@ body.is-auth-switching .auth-overlay {
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 0.8rem;
+  gap: clamp(0.16rem, 0.6vw, 0.8rem);
+  flex-wrap: nowrap;
 }
 
 .primary-nav {
   justify-self: center;
+  min-width: 0;
 }
 
 .account-nav {
   justify-self: end;
+  min-width: 0;
 }
 
 .settings-shell {
@@ -265,15 +268,16 @@ body.is-auth-switching .auth-overlay {
   align-items: center;
   justify-content: center;
   position: relative;
-  min-height: 2.9rem;
-  padding: 0.58rem 1.3rem;
+  min-height: clamp(1.9rem, 2.9vw, 2.9rem);
+  padding: clamp(0.2rem, 0.5vw, 0.58rem) clamp(0.34rem, 0.9vw, 1.3rem);
   border-radius: 12px;
   border: none;
   color: var(--muted);
   text-decoration: none;
   font-weight: 500;
-  font-size: 1.02rem;
-  letter-spacing: 0.01em;
+  font-size: clamp(0.72rem, 0.95vw, 1.02rem);
+  letter-spacing: 0;
+  white-space: nowrap;
   transition:
     background-color 220ms ease,
     color 220ms ease,
@@ -331,8 +335,8 @@ body.is-auth-switching .auth-overlay {
 
 .account-nav .nav-link.login-btn,
 .account-nav .nav-link.signup-btn {
-  min-height: 2.55rem;
-  padding: 0.4rem 1rem;
+  min-height: clamp(1.9rem, 2.55vw, 2.55rem);
+  padding: clamp(0.18rem, 0.45vw, 0.4rem) clamp(0.42rem, 0.8vw, 1rem);
   border-radius: var(--button-radius);
 }
 
@@ -346,7 +350,7 @@ body.is-auth-switching .auth-overlay {
 }
 
 .account-nav .nav-link.signup-btn {
-  min-width: 6.25rem;
+  min-width: clamp(3.7rem, 5.8vw, 6.25rem);
   color: color-mix(in oklch, var(--accent) 84%, #faf9f5 16%);
   background: transparent;
   border: 1.5px solid var(--accent);
@@ -362,13 +366,13 @@ body.is-auth-switching .auth-overlay {
 
 :root:lang(zh-CN) .account-nav .nav-link.login-btn,
 :root:lang(zh-CN) .account-nav .nav-link.signup-btn {
-  min-width: 4.8rem;
-  padding-inline: 0.9rem;
+  min-width: clamp(3.25rem, 4.8vw, 4.8rem);
+  padding-inline: clamp(0.42rem, 0.72vw, 0.9rem);
 }
 
 .account-nav .nav-link.setting-btn {
-  width: 2.55rem;
-  height: 2.55rem;
+  width: clamp(1.9rem, 2.55vw, 2.55rem);
+  height: clamp(1.9rem, 2.55vw, 2.55rem);
   padding: 0;
   border-radius: var(--button-radius);
   color: var(--muted);
@@ -386,8 +390,8 @@ body.is-auth-switching .auth-overlay {
 }
 
 .account-nav .nav-link.setting-btn svg {
-  width: 1.28rem;
-  height: 1.28rem;
+  width: clamp(0.96rem, 1.2vw, 1.28rem);
+  height: clamp(0.96rem, 1.2vw, 1.28rem);
   display: block;
   fill: none;
   filter: none;
@@ -1354,6 +1358,8 @@ body.is-auth-switching .auth-overlay {
 }
 
 .ai-chat-demo {
+  --ai-chat-shell-height: clamp(34.2rem, 42.5vw, 39.8rem);
+  --ai-chat-shell-scale: 1;
   min-width: 0;
   min-height: 0;
   container-type: inline-size;
@@ -1363,10 +1369,13 @@ body.is-auth-switching .auth-overlay {
 .ai-chat-stage {
   position: relative;
   display: grid;
-  align-items: center;
+  align-items: start;
+  justify-items: stretch;
+  --ai-chat-shell-scale: 0.96;
   min-width: 0;
-  height: 100%;
-  min-height: 0;
+  width: 100%;
+  height: calc(var(--ai-chat-shell-height) * var(--ai-chat-shell-scale));
+  min-height: calc(var(--ai-chat-shell-height) * var(--ai-chat-shell-scale));
 }
 
 .ai-chat-glow {
@@ -1404,13 +1413,15 @@ body.is-auth-switching .auth-overlay {
 }
 
 .ai-chat-shell {
-  position: relative;
+  position: absolute;
   display: grid;
   grid-template-rows: auto minmax(0, 1fr) auto;
   gap: clamp(0.85rem, 1.45vw, 1rem);
   min-width: 0;
   min-height: 0;
-  height: clamp(34.2rem, 42.5vw, 39.8rem);
+  inset: 0 0 auto 0;
+  width: 100%;
+  height: var(--ai-chat-shell-height);
   padding: clamp(1rem, 1.9vw, 1.3rem);
   padding-bottom: clamp(0.44rem, 0.88vw, 0.68rem);
   border-radius: 24px;
@@ -1425,6 +1436,8 @@ body.is-auth-switching .auth-overlay {
     0 12px 28px color-mix(in oklch, black 10%, transparent),
     inset 0 1px 0 color-mix(in oklch, #faf9f5 7%, transparent);
   overflow: hidden;
+  transform: scale(var(--ai-chat-shell-scale));
+  transform-origin: top right;
 }
 
 .ai-chat-shell::before {
@@ -1896,13 +1909,32 @@ body.is-auth-switching .auth-overlay {
     margin-inline-start: 0;
   }
 
-  .ai-chat-shell {
-    transform: scale(0.96);
-    transform-origin: center center;
-  }
-
   .ai-chat-stage {
     align-items: start;
+  }
+}
+
+@container (max-width: 58rem) {
+  .ai-chat-stage {
+    --ai-chat-shell-scale: 0.92;
+  }
+}
+
+@container (max-width: 50rem) {
+  .ai-chat-stage {
+    --ai-chat-shell-scale: 0.88;
+  }
+}
+
+@container (max-width: 42rem) {
+  .ai-chat-stage {
+    --ai-chat-shell-scale: 0.84;
+  }
+}
+
+@container (max-width: 36rem) {
+  .ai-chat-stage {
+    --ai-chat-shell-scale: 0.8;
   }
 }
 
@@ -4714,19 +4746,23 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
 
 @media (max-width: 980px) {
   .nav-shell {
-    grid-template-columns: 1fr auto;
-    min-height: 4.9rem;
-    padding: 0.65rem 0;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-height: 4.1rem;
+    padding: 0.35rem 0;
+    gap: 0.4rem;
   }
 
   .primary-nav {
-    grid-column: 1 / -1;
     justify-self: stretch;
   }
 
   .primary-nav ul {
     justify-content: center;
-    padding-top: 0.35rem;
+    min-width: 0;
+  }
+
+  .account-nav ul {
+    justify-content: flex-end;
   }
 
   .hero-interactive {
@@ -4885,16 +4921,62 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
 }
 
 @media (max-width: 620px) {
+  .site-header {
+    padding-inline: 0.42rem;
+  }
+
+  .nav-shell {
+    gap: 0.18rem;
+    min-height: 3.45rem;
+  }
+
+  .brand img {
+    height: 26px;
+    max-width: min(22vw, 78px);
+  }
+
   .nav-link {
-    min-height: 2.45rem;
-    padding: 0.4rem 0.8rem;
-    font-size: 0.93rem;
+    min-height: 1.92rem;
+    padding: 0.18rem 0.34rem;
+    font-size: 0.72rem;
   }
 
   .account-nav ul,
   .primary-nav ul {
-    gap: 0.3rem;
-    flex-wrap: wrap;
+    gap: 0.12rem;
+    flex-wrap: nowrap;
+  }
+
+  .primary-nav .nav-link::after {
+    left: 0.38rem;
+    right: 0.38rem;
+    bottom: 0.3rem;
+  }
+
+  .account-nav .nav-link.login-btn,
+  .account-nav .nav-link.signup-btn {
+    min-height: 1.92rem;
+    padding-inline: 0.42rem;
+  }
+
+  :root:lang(zh-CN) .account-nav .nav-link.login-btn,
+  :root:lang(zh-CN) .account-nav .nav-link.signup-btn {
+    min-width: 0;
+    padding-inline: 0.38rem;
+  }
+
+  .account-nav .nav-link.signup-btn {
+    min-width: 3.35rem;
+  }
+
+  .account-nav .nav-link.setting-btn {
+    width: 1.92rem;
+    height: 1.92rem;
+  }
+
+  .account-nav .nav-link.setting-btn svg {
+    width: 0.9rem;
+    height: 0.9rem;
   }
 
   .settings-dropdown {
@@ -4958,10 +5040,13 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
     line-height: 1.62;
   }
 
+  .ai-chat-demo {
+    --ai-chat-shell-height: clamp(34rem, 122vw, 41rem);
+  }
+
   .ai-chat-shell {
     border-radius: 0.56rem;
     min-height: 0;
-    height: clamp(34rem, 122vw, 41rem);
     padding: 0.72rem;
   }
 
@@ -7867,4 +7952,181 @@ body.is-auth-open {
 
 
 
+
+@media (max-width: 420px) {
+  .site-header {
+    padding-inline: 0.28rem;
+  }
+
+  .nav-shell {
+    gap: 0.08rem;
+  }
+
+  .brand img {
+    height: 24px;
+    max-width: min(20vw, 68px);
+  }
+
+  .nav-link {
+    min-height: 1.82rem;
+    padding: 0.14rem 0.26rem;
+    font-size: 0.68rem;
+  }
+
+  .primary-nav ul,
+  .account-nav ul {
+    gap: 0.08rem;
+  }
+
+  .account-nav .nav-link.login-btn,
+  .account-nav .nav-link.signup-btn {
+    padding-inline: 0.34rem;
+  }
+
+  .account-nav .nav-link.signup-btn {
+    min-width: 3rem;
+  }
+
+  .account-nav .nav-link.setting-btn {
+    width: 1.82rem;
+    height: 1.82rem;
+  }
+}
+
+@container (max-width: 40rem) {
+  .ai-chat-demo .ai-chat-workspace {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3.04fr);
+    gap: clamp(0.52rem, 0.9vw, 0.74rem);
+    padding: 0;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar {
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    gap: 0.74rem;
+    padding: 0.76rem 0.7rem 0.8rem;
+    border-radius: 0.34rem 0.48rem 0.38rem 0.62rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-section {
+    gap: 0.38rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-list,
+  .ai-chat-demo .ai-chat-sidebar-history {
+    grid-template-columns: 1fr;
+    gap: 0.24rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-action,
+  .ai-chat-demo .ai-chat-sidebar-history-item {
+    gap: 0.48rem;
+    padding: 0.54rem 0.58rem;
+    border-radius: 0.34rem;
+    font-size: 0.92rem;
+  }
+
+  .ai-chat-demo .ai-chat-main {
+    --ai-chat-main-pad-y: 0.7rem;
+    --ai-chat-main-pad-x: 0.74rem;
+    gap: 0.68rem;
+    padding: var(--ai-chat-main-pad-y) var(--ai-chat-main-pad-x);
+  }
+
+  .ai-chat-demo .ai-chat-browser-bar {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    gap: clamp(0.78rem, 1.18vw, 1.02rem);
+    padding: 0.22rem 0.62rem 0.66rem 0.62rem;
+  }
+
+  .ai-chat-demo .ai-chat-browser-actions {
+    display: inline-flex;
+  }
+
+  .ai-chat-demo .ai-chat-browser-nav {
+    gap: 0.34rem;
+  }
+
+  .ai-chat-demo .ai-chat-browser-tool.is-panel {
+    display: inline-flex;
+  }
+
+  .ai-chat-demo .ai-chat-toolbar {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 0.28rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .ai-chat-demo .ai-chat-workspace {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 3.04fr);
+    gap: clamp(0.52rem, 0.9vw, 0.74rem);
+    padding: 0;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar {
+    grid-template-rows: auto auto auto minmax(0, 1fr);
+    gap: 0.74rem;
+    padding: 0.76rem 0.7rem 0.8rem;
+    border-radius: 0.34rem 0.48rem 0.38rem 0.62rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-head {
+    gap: 0.5rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-brand-mark .ai-chat-sidebar-brand-lockup {
+    width: 9.4rem;
+    height: 1.95rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-new {
+    justify-self: center;
+    min-width: 9.6rem;
+    min-height: 2.18rem;
+    padding: 0.42rem 0.82rem;
+    border-radius: 0.74rem;
+    font-size: 0.88rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-list,
+  .ai-chat-demo .ai-chat-sidebar-history {
+    grid-template-columns: 1fr;
+    gap: 0.24rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-action,
+  .ai-chat-demo .ai-chat-sidebar-history-item {
+    gap: 0.48rem;
+    padding: 0.54rem 0.58rem;
+    border-radius: 0.34rem;
+    font-size: 0.92rem;
+  }
+
+  .ai-chat-demo .ai-chat-sidebar-action span,
+  .ai-chat-demo .ai-chat-sidebar-history-item span {
+    white-space: nowrap;
+  }
+
+  .ai-chat-demo .ai-chat-main {
+    --ai-chat-main-pad-y: 0.7rem;
+    --ai-chat-main-pad-x: 0.74rem;
+    gap: 0.68rem;
+    padding: var(--ai-chat-main-pad-y) var(--ai-chat-main-pad-x);
+  }
+
+  .ai-chat-demo .ai-chat-browser-bar {
+    grid-template-columns: auto auto minmax(0, 1fr) auto;
+    gap: clamp(0.78rem, 1.18vw, 1.02rem);
+    padding: 0.22rem 0.62rem 0.66rem 0.62rem;
+  }
+
+  .ai-chat-demo .ai-chat-browser-actions {
+    display: inline-flex;
+  }
+
+  .ai-chat-demo .ai-chat-toolbar {
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    gap: 0.28rem;
+  }
+}
 
