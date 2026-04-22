@@ -788,8 +788,10 @@ body.is-auth-switching .auth-overlay {
 
 .theorems-carousel {
   --theorem-visible: 3;
+  --theorem-visible-current: var(--theorem-visible);
   --theorem-gap: clamp(0.85rem, 1.6vw, 1.15rem);
   --theorem-text-scale: 1.24;
+  --theorem-card-padding: 17.6px;
   margin-top: clamp(6.3rem, 12.75vw, 10.2rem);
   padding: clamp(1.35rem, 3vw, 2rem);
   border-radius: 20px;
@@ -884,23 +886,49 @@ body.is-auth-switching .auth-overlay {
 
 .theorems-carousel-viewport {
   overflow: hidden;
+  width: min(
+    100%,
+    calc(
+      (
+          var(
+            --theorem-card-width,
+            calc(
+              (
+                  100% -
+                  (var(--theorem-gap) * (var(--theorem-visible-current) - 1))
+                ) /
+                var(--theorem-visible-current)
+            )
+          )
+        ) * var(--theorem-visible-current)
+      ) +
+        (var(--theorem-gap) * (var(--theorem-visible-current) - 1))
+    )
+  );
+  margin-inline: auto;
 }
 
 .theorems-carousel-track {
   display: grid;
   grid-auto-flow: column;
   grid-auto-columns:
-    calc(
-      (100% - (var(--theorem-gap) * (var(--theorem-visible) - 1))) /
-        var(--theorem-visible)
+    var(
+      --theorem-card-width,
+      calc(
+        (100% - (var(--theorem-gap) * (var(--theorem-visible-current) - 1))) /
+          var(--theorem-visible-current)
+      )
     );
   gap: var(--theorem-gap);
   scroll-behavior: smooth;
+  justify-content: start;
 }
 
 .theorem-frame {
-  min-height: 230px;
-  padding: clamp(1.1rem, 2vw, 1.4rem);
+  inline-size: var(--theorem-card-width, auto);
+  min-inline-size: var(--theorem-card-width, 0);
+  min-block-size: var(--theorem-card-height, 230px);
+  padding: var(--theorem-card-padding);
   border-radius: 12px;
   border: 1px solid color-mix(in oklch, #faf9f5 18%, transparent);
   background:
@@ -911,6 +939,10 @@ body.is-auth-switching .auth-overlay {
       color-mix(in oklch, var(--chip) 90%, var(--accent) 10%) 0%,
       color-mix(in oklch, var(--panel) 91%, var(--accent-deep) 9%) 100%
     );
+}
+
+.theorem-frame:not(.theorem-frame-cta) {
+  block-size: var(--theorem-card-height, auto);
 }
 
 .theorem-frame-no {
@@ -950,6 +982,8 @@ body.is-auth-switching .auth-overlay {
   display: grid;
   place-items: center;
   margin-top: 1.1rem;
+  inline-size: var(--theorem-embed-size, 100%);
+  max-inline-size: none;
   border-radius: 10px;
   border: 1px solid color-mix(in oklch, #faf9f5 18%, transparent);
   overflow: hidden;
@@ -4905,7 +4939,6 @@ body.is-auth-open .ai-float-shell:not(.is-hero-forced) {
 
   .theorems-carousel {
     --theorem-visible: 1;
-    --theorem-text-scale: 1.14;
     border-radius: 16px;
     padding: 1rem;
   }

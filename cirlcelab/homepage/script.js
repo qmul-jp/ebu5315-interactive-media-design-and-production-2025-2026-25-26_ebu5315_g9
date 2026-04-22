@@ -1,3 +1,5 @@
+window.CircleLabDebug = window.CircleLabDebug || {};
+
 (() => {
   const hero = document.getElementById("heroInteractive");
   if (!hero) {
@@ -360,11 +362,19 @@
 (() => {
   const viewport = document.getElementById("theoremsViewport");
   if (!viewport) {
+    window.CircleLabDebug.getTheoremMetrics = () => ({
+      available: false,
+      reason: "The current page does not contain the theorem carousel.",
+    });
     return;
   }
 
   const carousel = viewport.closest(".theorems-carousel");
   if (!carousel) {
+    window.CircleLabDebug.getTheoremMetrics = () => ({
+      available: false,
+      reason: "The theorem carousel wrapper was not found.",
+    });
     return;
   }
   const track = viewport.querySelector(".theorems-carousel-track");
@@ -373,8 +383,45 @@
   );
 
   if (!track || !buttons.length) {
+    window.CircleLabDebug.getTheoremMetrics = () => ({
+      available: false,
+      reason: "The theorem carousel track or navigation buttons are missing.",
+    });
     return;
   }
+
+  const freezeRenderedTheoremSize = () => {
+    if (carousel.dataset.theoremSizeLocked === "true") {
+      return;
+    }
+
+    const firstCard = track.querySelector(".theorem-frame:not(.theorem-frame-cta)");
+    if (!(firstCard instanceof HTMLElement)) {
+      return;
+    }
+
+    const embed = firstCard.querySelector(".theorem-embed");
+    const cardRect = firstCard.getBoundingClientRect();
+    const embedRect =
+      embed instanceof HTMLElement ? embed.getBoundingClientRect() : null;
+    const computedCarousel = window.getComputedStyle(carousel);
+    const textScale = computedCarousel.getPropertyValue("--theorem-text-scale").trim();
+
+    if (cardRect.width > 0) {
+      carousel.style.setProperty("--theorem-card-width", `${cardRect.width}px`);
+      carousel.style.setProperty("--theorem-card-height", `${cardRect.height}px`);
+    }
+
+    if (embedRect && embedRect.width > 0) {
+      carousel.style.setProperty("--theorem-embed-size", `${embedRect.width}px`);
+    }
+
+    if (textScale) {
+      carousel.style.setProperty("--theorem-text-scale", textScale);
+    }
+
+    carousel.dataset.theoremSizeLocked = "true";
+  };
 
   const getGap = () => {
     const style = window.getComputedStyle(track);
@@ -392,8 +439,52 @@
 
   const getVisibleCount = () => {
     const style = window.getComputedStyle(carousel);
+    const value = Number.parseInt(
+      style.getPropertyValue("--theorem-visible-current"),
+      10
+    );
+    return Number.isFinite(value) && value > 0 ? value : 3;
+  };
+
+  const getBaseVisibleCount = () => {
+    const style = window.getComputedStyle(carousel);
     const value = Number.parseInt(style.getPropertyValue("--theorem-visible"), 10);
     return Number.isFinite(value) && value > 0 ? value : 3;
+  };
+
+  const getCarouselContentWidth = () => {
+    const style = window.getComputedStyle(carousel);
+    const paddingInline =
+      Number.parseFloat(style.paddingLeft || "0") +
+      Number.parseFloat(style.paddingRight || "0");
+    return Math.max(0, carousel.clientWidth - paddingInline);
+  };
+
+  const updateVisibleCardsForSpace = () => {
+    const cardWidth = getCardWidth();
+    const gap = getGap();
+    const baseVisible = getBaseVisibleCount();
+    const availableWidth = getCarouselContentWidth();
+
+    if (!(cardWidth > 0) || !(availableWidth > 0)) {
+      return;
+    }
+
+    const fitCount = Math.max(
+      1,
+      Math.floor((availableWidth + gap) / (cardWidth + gap))
+    );
+    const nextVisible = Math.max(1, Math.min(baseVisible, fitCount));
+    carousel.style.setProperty("--theorem-visible-current", `${nextVisible}`);
+  };
+
+  const alignViewportToCardBoundary = () => {
+    const step = getStep();
+    if (!(step > 0)) {
+      return;
+    }
+    const snapped = Math.round(viewport.scrollLeft / step) * step;
+    viewport.scrollLeft = snapped;
   };
 
   const getStep = () => {
@@ -403,6 +494,166 @@
   const getPageDistance = () => {
     return getStep() * getVisibleCount();
   };
+
+  const holdScrollState = {
+    active: false,
+    direction: 0,
+    frame: 0,
+    pointerId: null,
+  };
+
+  const getHoldScrollSpeed = () => {
+    const cardWidth = getCardWidth();
+    if (!(cardWidth > 0)) {
+      return 6;
+    }
+    return Math.max(4, Math.min(9, cardWidth / 46));
+  };
+
+  const isBlankCarouselTarget = (target) => {
+    if (!(target instanceof Element)) {
+      return false;
+    }
+    return !target.closest(
+      ".theorem-frame, .theorem-nav-btn, iframe, button, a, input, textarea, select, label"
+    );
+  };
+
+  const stopHoldScroll = (snap = true) => {
+    if (holdScrollState.frame) {
+      window.cancelAnimationFrame(holdScrollState.frame);
+      holdScrollState.frame = 0;
+    }
+
+    const wasActive = holdScrollState.active;
+    const pointerId = holdScrollState.pointerId;
+    holdScrollState.active = false;
+    holdScrollState.direction = 0;
+    holdScrollState.pointerId = null;
+    carousel.removeAttribute("data-theorem-hold-scroll");
+
+    if (
+      pointerId !== null &&
+      typeof carousel.hasPointerCapture === "function" &&
+      carousel.hasPointerCapture(pointerId)
+    ) {
+      carousel.releasePointerCapture(pointerId);
+    }
+
+    if (wasActive && snap) {
+      alignViewportToCardBoundary();
+      updateButtons();
+    }
+  };
+
+  const runHoldScroll = () => {
+    if (!holdScrollState.active || !holdScrollState.direction) {
+      return;
+    }
+
+    const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    if (maxScroll <= 0) {
+      stopHoldScroll(false);
+      return;
+    }
+
+    const speed = getHoldScrollSpeed();
+    const next = Math.max(
+      0,
+      Math.min(maxScroll, viewport.scrollLeft + speed * holdScrollState.direction)
+    );
+
+    viewport.scrollLeft = next;
+    updateButtons();
+
+    const atStart = next <= 0.5 && holdScrollState.direction < 0;
+    const atEnd = next >= maxScroll - 0.5 && holdScrollState.direction > 0;
+    if (atStart || atEnd) {
+      stopHoldScroll(true);
+      return;
+    }
+
+    holdScrollState.frame = window.requestAnimationFrame(runHoldScroll);
+  };
+
+  const startHoldScroll = (event) => {
+    if (event.button !== 0 || !isBlankCarouselTarget(event.target)) {
+      return;
+    }
+
+    const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
+    if (maxScroll <= 0) {
+      return;
+    }
+
+    const rect = carousel.getBoundingClientRect();
+    const direction = event.clientX < rect.left + rect.width / 2 ? -1 : 1;
+    if (!direction) {
+      return;
+    }
+
+    event.preventDefault();
+    stopHoldScroll(false);
+    holdScrollState.active = true;
+    holdScrollState.direction = direction;
+    holdScrollState.pointerId = event.pointerId;
+    if (typeof carousel.setPointerCapture === "function") {
+      carousel.setPointerCapture(event.pointerId);
+    }
+    carousel.setAttribute("data-theorem-hold-scroll", direction < 0 ? "left" : "right");
+    holdScrollState.frame = window.requestAnimationFrame(runHoldScroll);
+  };
+
+  const collectTheoremMetrics = () => {
+    const frames = Array.from(track.querySelectorAll(".theorem-frame"));
+    const metrics = frames.map((frame, index) => {
+      const embed = frame.querySelector(".theorem-embed");
+      const iframe = embed ? embed.querySelector("iframe") : null;
+      const frameRect = frame.getBoundingClientRect();
+      const embedRect = embed ? embed.getBoundingClientRect() : null;
+      const iframeRect = iframe ? iframe.getBoundingClientRect() : null;
+
+      return {
+        index: index + 1,
+        cardWidth: Number(frameRect.width.toFixed(2)),
+        cardHeight: Number(frameRect.height.toFixed(2)),
+        embedWidth: embedRect ? Number(embedRect.width.toFixed(2)) : 0,
+        embedHeight: embedRect ? Number(embedRect.height.toFixed(2)) : 0,
+        iframeWidth: iframeRect ? Number(iframeRect.width.toFixed(2)) : 0,
+        iframeHeight: iframeRect ? Number(iframeRect.height.toFixed(2)) : 0,
+      };
+    });
+
+    return {
+      windowWidth: Number(window.innerWidth.toFixed(2)),
+      viewportWidth: Number(viewport.getBoundingClientRect().width.toFixed(2)),
+      visibleCount: getVisibleCount(),
+      gap: Number(getGap().toFixed(2)),
+      cards: metrics,
+    };
+  };
+
+  const reportTheoremMetrics = () => {
+    const metrics = collectTheoremMetrics();
+    if (window.console && typeof window.console.groupCollapsed === "function") {
+      window.console.groupCollapsed("[CircleLab] theorem metrics");
+      window.console.log({
+        windowWidth: metrics.windowWidth,
+        viewportWidth: metrics.viewportWidth,
+        visibleCount: metrics.visibleCount,
+        gap: metrics.gap,
+      });
+      if (typeof window.console.table === "function") {
+        window.console.table(metrics.cards);
+      } else {
+        window.console.log(metrics.cards);
+      }
+      window.console.groupEnd();
+    }
+    return metrics;
+  };
+
+  window.CircleLabDebug.getTheoremMetrics = collectTheoremMetrics;
 
   const updateButtons = () => {
     const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
@@ -429,8 +680,38 @@
   });
 
   viewport.addEventListener("scroll", updateButtons, { passive: true });
-  window.addEventListener("resize", updateButtons);
-  updateButtons();
+  carousel.addEventListener("pointerdown", startHoldScroll);
+  window.addEventListener("pointerup", () => {
+    stopHoldScroll(true);
+  });
+  window.addEventListener("pointercancel", () => {
+    stopHoldScroll(true);
+  });
+  carousel.addEventListener("lostpointercapture", () => {
+    stopHoldScroll(true);
+  });
+  carousel.addEventListener("pointerleave", (event) => {
+    if (
+      holdScrollState.active &&
+      holdScrollState.pointerId === event.pointerId
+    ) {
+      stopHoldScroll(true);
+    }
+  });
+  window.addEventListener("resize", () => {
+    stopHoldScroll(false);
+    updateVisibleCardsForSpace();
+    alignViewportToCardBoundary();
+    updateButtons();
+    reportTheoremMetrics();
+  });
+  requestAnimationFrame(() => {
+    freezeRenderedTheoremSize();
+    updateVisibleCardsForSpace();
+    alignViewportToCardBoundary();
+    updateButtons();
+    reportTheoremMetrics();
+  });
 })();
 
 (() => {
