@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>弧、弦、圆心角、圆周角 - CircleLab</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
+    <style>
+    /* 覆盖 game.css 中的部分数值，以保持与原页面完全一致 */
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px 24px 28px;
+        margin: 0;
+    }
+    .circle-card {
+        max-width: 860px;   /* 原页面稍宽 */
+    }
+    .canvas-container {
+        padding: 24px 28px 12px;  /* 原页面特有内边距 */
+    }
+    /* 数据面板（game.css 中没有，必须保留） */
+    .data-panel {
+        margin: 8px 28px 20px;
+        background: var(--hover-bg);
+        border-radius: 20px;
+        padding: 18px 20px;
+        transition: background 0.2s;
+    }
+    .formula-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: baseline;
+        gap: 24px;
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+        border-bottom: 1px dashed var(--border);
+        text-align: center;
+    }
+    .formula-row:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .metric {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text);
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+    .metric-value {
+        font-family: 'DM Sans', Arial, "Microsoft YaHei", sans-serif;
+        font-weight: 600;
+        background: var(--card-bg);
+        padding: 2px 10px;
+        border-radius: 24px;
+        color: var(--accent2);
+        font-size: 0.95rem;
+        letter-spacing: 0.3px;
+    }
+    .theorem-block {
+        margin-top: 10px;
+        text-align: center;
+        font-weight: 500;
+        font-size: 0.9rem;
+        color: var(--text);
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+    .theorem-badge {
+        background: var(--card-bg);
+        padding: 6px 16px;
+        border-radius: 40px;
+        font-family: 'DM Sans', Arial, sans-serif;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border: 1px solid var(--border);
+    }
+    /* 响应式微调（与原页面一致） */
+    @media (max-width: 700px) {
+        .data-panel { margin: 8px 20px 20px; }
+        .canvas-container { padding: 20px; }
+        .formula-row { gap: 12px; }
+    }
+</style>
+</head>
+<body>
+<div class="circle-card">
+    <div class="card-header">
+        <div class="title" data-cl-zh>弧、弦、圆心角、圆周角</div>
+        <div class="title" data-cl-en style="display:none">Arc, Chord, Central &amp; Inscribed Angle</div>
+        <div class="sub-en" data-cl-zh>弧 · 弦 · 圆心角 · 圆周角</div>
+        <div class="sub-en" data-cl-en style="display:none">Arc · Chord · Central Angle · Inscribed Angle</div>
+    </div>
+    <div class="canvas-container">
+        <canvas id="circleCanvas" width="600" height="500" style="width:100%; height:auto; max-width:600px; aspect-ratio:600/500"></canvas>
+    </div>
+    <div class="descriptions">
+        <div class="desc-item"><span class="desc-symbol"><span class="arc-label"><span class="arc-symbol">⌢</span>AB</span></span>&nbsp;<span data-cl-zh>是⊙O的一条弧</span><span data-cl-en style="display:none">is an arc of ⊙O</span></div>
+        <div class="desc-item"><span class="desc-symbol">AB</span> <span data-cl-zh>是⊙O的一条弦</span><span data-cl-en style="display:none">is a chord of ⊙O</span></div>
+        <div class="desc-item"><span class="desc-symbol">∠AOB</span> <span data-cl-zh>是圆心角</span><span data-cl-en style="display:none">is the central angle</span></div>
+        <div class="desc-item"><span class="desc-symbol">∠ACB</span> <span data-cl-zh>是圆周角</span><span data-cl-en style="display:none">is an inscribed angle</span></div>
+    </div>
+    <div class="theorem" data-cl-zh>📐 圆心角是顶点在圆心的角；圆周角是顶点在圆上、两边与圆相交的角</div>
+    <div class="theorem" data-cl-en style="display:none">📐 Central angle: vertex at center. Inscribed angle: vertex on circle, sides intersecting the circle.</div>
+    <div class="interact-hint">
+        <span>🖱️ <span data-cl-zh>拖拽 A、B、C 三点改变位置</span><span data-cl-en style="display:none">Drag points A, B, C to change positions</span></span>
+    </div>
+</div>
+<script>
+(function(){
+    function _fg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#e8e4dc':'#1a1a1a'; }
+    function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#1c1c1c':'#ffffff'; }
+
+    const CX=300, CY=250, R=180;
+    let angleA=30, angleB=120, angleC=200;
+    const canvas=document.getElementById('circleCanvas'), ctx=canvas.getContext('2d');
+    let isDragging=false, draggedPoint=null;
+
+    document.documentElement.style.fontSize = '16px';
+
+    function pt(deg){ const r=deg*Math.PI/180; return {x:CX+R*Math.cos(r), y:CY+R*Math.sin(r)}; }
+
+    function drawCanvas(){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle=_bg(); ctx.fillRect(0,0,canvas.width,canvas.height);
+        const pA=pt(angleA), pB=pt(angleB), pC=pt(angleC);
+        const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+
+        // 圆
+        ctx.beginPath(); ctx.arc(CX,CY,R,0,2*Math.PI);
+        ctx.strokeStyle=_fg(); ctx.lineWidth=1.8; ctx.stroke();
+
+        // 弦（虚线）
+        ctx.setLineDash([4,2]); ctx.strokeStyle=isDark?'#555':'#bbb'; ctx.lineWidth=1.5;
+        [[pA,pB],[pA,pC],[pB,pC]].forEach(([a,b])=>{ ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); });
+        ctx.setLineDash([]);
+
+        // 半径OA, OB
+        ctx.strokeStyle=isDark?'#444':'#ddd'; ctx.lineWidth=1.5;
+        [pA,pB].forEach(p=>{ ctx.beginPath(); ctx.moveTo(CX,CY); ctx.lineTo(p.x,p.y); ctx.stroke(); });
+
+        // 圆心O
+        ctx.beginPath(); ctx.arc(CX,CY,4,0,2*Math.PI); ctx.fillStyle=_fg(); ctx.fill();
+        ctx.font='500 14px "DM Sans", Arial, sans-serif'; ctx.fillStyle=_fg();
+        ctx.fillText('O', CX-15, CY-10);
+
+        // 三点
+        [[pA,'A','#e74c3c'],[pB,'B','#3498db'],[pC,'C','#27ae60']].forEach(([p,l,c])=>{
+            ctx.beginPath(); ctx.arc(p.x,p.y,6,0,2*Math.PI); ctx.fillStyle=c; ctx.fill();
+            ctx.fillStyle=_fg(); ctx.fillText(l, p.x+8, p.y-8);
+        });
+    }
+
+    function getMousePos(e){
+        const rect=canvas.getBoundingClientRect();
+        const cx=(e.touches?e.touches[0].clientX:e.clientX), cy=(e.touches?e.touches[0].clientY:e.clientY);
+        return {x:(cx-rect.left)*(600/rect.width), y:(cy-rect.top)*(500/rect.height)};
+    }
+
+    function handleStart(e){
+        const m=getMousePos(e);
+        [[angleA,'A'],[angleB,'B'],[angleC,'C']].forEach(([a,l])=>{
+            const p=pt(a); if(Math.hypot(m.x-p.x,m.y-p.y)<18){ isDragging=true; draggedPoint=l; }
+        });
+    }
+    function handleMove(e){
+        if(!isDragging) return;
+        const m=getMousePos(e), deg=Math.atan2(m.y-CY,m.x-CX)*180/Math.PI;
+        if(draggedPoint==='A') angleA=deg; else if(draggedPoint==='B') angleB=deg; else if(draggedPoint==='C') angleC=deg;
+        drawCanvas();
+    }
+    canvas.addEventListener('mousedown',handleStart);
+    window.addEventListener('mousemove',handleMove);
+    window.addEventListener('mouseup',()=>{isDragging=false; draggedPoint=null;});
+    canvas.addEventListener('touchstart',e=>{e.preventDefault();handleStart(e);},{passive:false});
+    window.addEventListener('touchmove',e=>{handleMove(e);},{passive:false});
+    window.addEventListener('touchend',()=>{isDragging=false; draggedPoint=null;});
+
+    const obs=new MutationObserver(()=>drawCanvas());
+    obs.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+    window.addEventListener('message',ev=>{
+        if(!ev.data||ev.data._src!=='circlelab') return;
+        if(ev.data.theme) document.documentElement.setAttribute('data-theme',ev.data.theme);
+        if(ev.data.lang){
+            const zh=ev.data.lang==='zh';
+            document.querySelectorAll('[data-cl-zh]').forEach(el=>el.style.display=zh?'':'none');
+            document.querySelectorAll('[data-cl-en]').forEach(el=>el.style.display=zh?'none':'');
+        }
+        if(typeof ev.data.fontSize === 'number'){
+                let fs = ev.data.fontSize;
+                fs = Math.min(20, Math.max(12, fs));
+                document.documentElement.style.fontSize = fs + 'px';
+            }
+        drawCanvas();
+    });
+    window._clRedraw=drawCanvas;
+    window.addEventListener('load',drawCanvas);
+    drawCanvas();
+})();
+</script>
+</body>
+</html>
