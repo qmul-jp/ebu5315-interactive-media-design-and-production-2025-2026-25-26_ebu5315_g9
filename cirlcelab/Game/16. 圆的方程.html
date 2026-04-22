@@ -21,7 +21,7 @@
         }
 
         .circle-card {
-            max-width: 820px;
+            max-width: 860px;
             width: 100%;
             background: var(--card-bg);
             border-radius: 24px;
@@ -114,6 +114,26 @@
             border-top: 1px solid var(--border);
             padding-top: 16px;
         }
+        
+        /* ===== 新增功能：点在圆上时显示的图片容器样式（完全独立，不影响任何原有布局）===== */
+        .oncircle-img-wrapper {
+            text-align: center;
+            margin: 0 28px 18px;          /* 与定理块和交互提示协调，不拥挤 */
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        .oncircle-img-wrapper img {
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            max-height: 160px;             /* 卡片宽度范围内舒适 */
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -131,6 +151,12 @@
 
     <div class="descriptions" id="descArea"></div>
     <div class="theorem" id="theoremText"></div>
+    
+    <!-- 新增：点在圆上时显示图片的容器（默认隐藏，位于定理块下方，交互提示上方） -->
+    <div id="onCircleImageContainer" class="oncircle-img-wrapper" style="display: none;">
+        <img src="在圆上.png" alt="点在圆上示意图" id="onCircleImg">
+    </div>
+    
     <div class="interact-hint">
         <span>🖱️ <span data-cl-zh>拖拽圆心 O、圆上点 A 或探测点 P</span><span data-cl-en style="display:none">Drag center O, point A on circle, or probe point P</span></span>
     </div>
@@ -243,6 +269,17 @@
             setTheorem(theoremHtml);
 
             drawCanvas(r, r2, onCircle, inside, statusColor);
+            
+            // ========== 新增功能：点在圆上时显示图片，否则隐藏（不改变任何原有逻辑和样式）==========
+            const imgContainer = document.getElementById('onCircleImageContainer');
+            if (imgContainer) {
+                if (onCircle) {
+                    imgContainer.style.display = 'block';
+                } else {
+                    imgContainer.style.display = 'none';
+                }
+            }
+            // ========== 新增功能结束 ==========
         }
 
         function drawCanvas(r, r2, onCircle, inside, pColor) {
