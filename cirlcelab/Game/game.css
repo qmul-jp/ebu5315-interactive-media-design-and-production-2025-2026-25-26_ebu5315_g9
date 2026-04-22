@@ -7,14 +7,14 @@
 
 /* ── CSS 变量（亮色主题默认值） ── */
 :root {
-    --bg:          #f7f5f0;
+    --bg:          #faf9f5;
     --card-bg:     #ffffff;
-    --sidebar-bg:  #ffffff;
-    --header-bg:   #ffffff;
-    --text:        #1a1a1a;
+    --sidebar-bg:  #faf9f5;
+    --header-bg:   #faf9f5;
+    --text:        #1f1e1d;
     --text-sub:    #888;
     --accent:      #1a1a1a;
-    --accent2:     #c8502a;
+    --accent2:     #d97757;
     --border:      #e8e4dc;
     --hover-bg:    #f0ede6;
     --active-bg:   #1a1a1a;
@@ -31,7 +31,7 @@
     --text:        #e8e4dc;
     --text-sub:    #666;
     --accent:      #e8e4dc;
-    --accent2:     #e8724a;
+    --accent2:     #d97757;
     --border:      #2a2a2a;
     --hover-bg:    #242424;
     --active-bg:   #e8e4dc;
