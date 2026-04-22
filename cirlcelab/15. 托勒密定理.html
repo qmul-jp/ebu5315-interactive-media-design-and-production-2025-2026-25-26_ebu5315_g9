@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>托勒密定理 - CircleLab</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            padding: 20px 24px 28px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circle-card {
+            max-width: 860px;
+            width: 100%;
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .card-header {
+            padding: 20px 28px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        .card-header .title {
+            font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif;
+            font-size: 1.35rem;
+            color: var(--text);
+        }
+        .card-header .sub-en {
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+
+        .canvas-container {
+            padding: 24px 28px 12px;
+            display: flex;
+            justify-content: center;
+            background: var(--card-bg);
+        }
+
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 16px;
+            background: var(--card-bg);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border);
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .descriptions {
+            margin: 12px 28px 8px;
+            line-height: 1.8;
+            font-size: 0.9rem;
+            color: var(--text);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            border-top: 1px dashed var(--border);
+            padding-top: 16px;
+        }
+        .desc-item {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            background: var(--hover-bg);
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .desc-symbol {
+            font-weight: 600;
+            color: var(--accent2);
+            font-family: 'DM Sans', Arial, sans-serif;
+        }
+
+        .theorem {
+            margin: 8px 28px 16px;
+            background: var(--hover-bg);
+            border-left: 4px solid var(--accent2);
+            padding: 14px 18px;
+            border-radius: 14px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text);
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .interact-hint {
+            margin: 0 28px 24px;
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            display: flex;
+            gap: 18px;
+            justify-content: center;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="circle-card">
+    <div class="card-header">
+        <div class="title" data-cl-zh>托勒密定理</div>
+        <div class="title" data-cl-en style="display:none">Ptolemy's Theorem</div>
+        <div class="sub-en" data-cl-zh>圆内接四边形 · 对角线乘积 = 对边乘积之和</div>
+        <div class="sub-en" data-cl-en style="display:none">Cyclic quadrilateral · AC·BD = AB·CD + AD·BC</div>
+    </div>
+
+    <div class="canvas-container">
+        <canvas id="circleCanvas" width="620" height="460" style="width:100%; height:auto; max-width:620px; aspect-ratio:620/460"></canvas>
+    </div>
+
+    <div class="descriptions" id="descArea"></div>
+    <div class="theorem" id="theoremText"></div>
+    <div class="interact-hint">
+        <span>🖱️ <span data-cl-zh>拖拽顶点 A、B、C、D 改变四边形</span><span data-cl-en style="display:none">Drag A, B, C, D to reshape the cyclic quadrilateral</span></span>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const canvas = document.getElementById('circleCanvas');
+        const ctx    = canvas.getContext('2d');
+        const CANVAS_W = 620, CANVAS_H = 460;
+        const cx = 300, cy = 230, radius = 175;
+
+        // 四点角度（度），将自动排序以保持圆上顺序
+        let angA = 20, angB = 100, angC = 200, angD = 310;
+        let dragging = false, dragTarget = null;
+        document.documentElement.style.fontSize = '16px';
+
+        function _fg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#e8e4dc' : '#1a1a1a'; }
+        function _bg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1c1c1c' : '#ffffff'; }
+        function _isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+        function _lang()   { return (window._CL && window._CL.lang) || 'zh'; }
+
+        function d2r(d) { return d * Math.PI / 180; }
+        function r2d(r) { return r * 180 / Math.PI; }
+        function pt(deg) { return { x: cx + radius * Math.cos(d2r(deg)), y: cy + radius * Math.sin(d2r(deg)) }; }
+        function dist(p, q) { return Math.hypot(p.x - q.x, p.y - q.y); }
+
+        // 线段标注（带偏移）
+        function labelSeg(p1, p2, text, color, offset) {
+            const mx = (p1.x + p2.x) / 2;
+            const my = (p1.y + p2.y) / 2;
+            const dx = p2.x - p1.x, dy = p2.y - p1.y;
+            const len = Math.hypot(dx, dy);
+            if (len < 1e-6) return;
+            const nx = -dy / len * (offset || 14);
+            const ny =  dx / len * (offset || 14);
+            ctx.fillStyle = color;
+            ctx.font = '12px "DM Sans", sans-serif';
+            ctx.fillText(text, mx + nx, my + ny);
+        }
+
+        function drawPoint(p, r, fill, label, labelOffset) {
+            ctx.beginPath(); ctx.arc(p.x, p.y, r, 0, 2*Math.PI);
+            ctx.fillStyle = fill; ctx.fill();
+            if (label) {
+                ctx.fillStyle = _fg();
+                ctx.font = '500 14px "DM Sans", Arial, sans-serif';
+                ctx.fillText(label, p.x+(labelOffset?.x||8), p.y+(labelOffset?.y||-8));
+            }
+        }
+
+        // 更新描述区域与定理文字
+        function setDesc(html) { document.getElementById('descArea').innerHTML = html; }
+        function setTheorem(text) { document.getElementById('theoremText').textContent = text; }
+
+        function update() {
+            // 确保四点按角度顺序排列（避免自交四边形）
+            let angles = [angA, angB, angC, angD];
+            angles = angles.map(a => ((a % 360) + 360) % 360);
+            angles.sort((a, b) => a - b);
+            [angA, angB, angC, angD] = angles;
+
+            const pA = pt(angA), pB = pt(angB), pC = pt(angC), pD = pt(angD);
+            const AC = dist(pA, pC), BD = dist(pB, pD);
+            const AB = dist(pA, pB), CD = dist(pC, pD);
+            const AD = dist(pA, pD), BC = dist(pB, pC);
+
+            const prodDiag = AC * BD;
+            const prodAB_CD = AB * CD;
+            const prodAD_BC = AD * BC;
+            const sumOpp = prodAB_CD + prodAD_BC;
+            const isEqual = Math.abs(prodDiag - sumOpp) < 1.0;
+            const eqColor = isEqual ? '#27ae60' : '#e67e22';
+            const isZh = _lang() === 'zh';
+
+            // 构建描述区域 (desc-item)
+            const descHtml = `
+                <div class="desc-item"><span class="desc-symbol">AC</span> = ${AC.toFixed(1)}</div>
+                <div class="desc-item"><span class="desc-symbol">BD</span> = ${BD.toFixed(1)}</div>
+                <div class="desc-item"><span class="desc-symbol">AC·BD</span> = ${prodDiag.toFixed(1)}</div>
+                <div class="desc-item"><span class="desc-symbol">AB·CD</span> = ${prodAB_CD.toFixed(1)}</div>
+                <div class="desc-item"><span class="desc-symbol">AD·BC</span> = ${prodAD_BC.toFixed(1)}</div>
+                <div class="desc-item"><span class="desc-symbol">AB·CD+AD·BC</span> = ${sumOpp.toFixed(1)}</div>
+                <div class="desc-item" style="color:${eqColor}">${isEqual ? (isZh ? 'AC·BD = 对边积和 ✓' : 'AC·BD = sum ✓') : (isZh ? '不相等' : 'Not equal')}</div>
+            `;
+            setDesc(descHtml);
+            setTheorem(isZh
+                ? '圆内接四边形中，对角线乘积等于两组对边乘积之和：AC · BD = AB · CD + AD · BC'
+                : 'In a cyclic quadrilateral, the product of the diagonals equals the sum of the products of opposite sides: AC·BD = AB·CD + AD·BC');
+
+            drawCanvas(pA, pB, pC, pD, AC, BD, AB, CD, AD, BC, isEqual);
+        }
+
+        function drawCanvas(pA, pB, pC, pD, AC, BD, AB, CD, AD, BC, isEqual) {
+            ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
+            ctx.fillStyle = _bg();
+            ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
+
+            const isDark = _isDark();
+            const circleColor = isDark ? '#555' : '#bbb';
+            const diagColor1 = '#8e44ad';   // AC
+            const diagColor2 = '#e67e22';   // BD
+            const sideColor1 = '#e74c3c';   // AB, CD (红色组)
+            const sideColor2 = '#2980b9';   // AD, BC (蓝色组)
+            const green = '#27ae60';
+            const pointFill = isEqual ? green : '#e74c3c';
+
+            // 画圆
+            ctx.beginPath();
+            ctx.arc(cx, cy, radius, 0, 2 * Math.PI);
+            ctx.strokeStyle = circleColor;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+
+            // 可选：画圆心（淡灰色小点）
+            ctx.beginPath(); ctx.arc(cx, cy, 3, 0, 2*Math.PI);
+            ctx.fillStyle = isDark ? '#777' : '#aaa';
+            ctx.fill();
+
+            // 四边形填充 (半透明，仅作视觉层次)
+            ctx.beginPath();
+            ctx.moveTo(pA.x, pA.y); ctx.lineTo(pB.x, pB.y);
+            ctx.lineTo(pC.x, pC.y); ctx.lineTo(pD.x, pD.y);
+            ctx.closePath();
+            ctx.fillStyle = isDark ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.02)';
+            ctx.fill();
+
+            // 对角线 (虚线)
+            ctx.setLineDash([6, 3]);
+            ctx.lineWidth = 1.8;
+            ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pC.x, pC.y);
+            ctx.strokeStyle = diagColor1; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pB.x, pB.y); ctx.lineTo(pD.x, pD.y);
+            ctx.strokeStyle = diagColor2; ctx.stroke();
+            ctx.setLineDash([]);
+
+            // 边 AB、CD (对边组1)
+            ctx.lineWidth = 2.2;
+            ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pB.x, pB.y);
+            ctx.strokeStyle = sideColor1; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pC.x, pC.y); ctx.lineTo(pD.x, pD.y);
+            ctx.strokeStyle = sideColor1; ctx.stroke();
+
+            // 边 AD、BC (对边组2)
+            ctx.beginPath(); ctx.moveTo(pA.x, pA.y); ctx.lineTo(pD.x, pD.y);
+            ctx.strokeStyle = sideColor2; ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(pB.x, pB.y); ctx.lineTo(pC.x, pC.y);
+            ctx.strokeStyle = sideColor2; ctx.stroke();
+
+            // 标注长度
+            labelSeg(pA, pC, `AC=${AC.toFixed(1)}`, diagColor1, -16);
+            labelSeg(pB, pD, `BD=${BD.toFixed(1)}`, diagColor2,  16);
+            labelSeg(pA, pB, `AB=${AB.toFixed(1)}`, sideColor1, -14);
+            labelSeg(pC, pD, `CD=${CD.toFixed(1)}`, sideColor1, -14);
+            labelSeg(pA, pD, `AD=${AD.toFixed(1)}`, sideColor2,  14);
+            labelSeg(pB, pC, `BC=${BC.toFixed(1)}`, sideColor2,  14);
+
+            // 绘制四个顶点 (带偏移标签)
+            const pts = [
+                { p:pA, l:'A', ang:angA },
+                { p:pB, l:'B', ang:angB },
+                { p:pC, l:'C', ang:angC },
+                { p:pD, l:'D', ang:angD }
+            ];
+            pts.forEach(({ p, l }) => {
+                drawPoint(p, 6, pointFill, l, { x: (p.x-cx)/radius*14, y: (p.y-cy)/radius*14 });
+            });
+        }
+
+        // ---------- 鼠标/触摸交互 ----------
+        function getMousePos(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: (clientX - rect.left) * (CANVAS_W / rect.width),
+                y: (clientY - rect.top)  * (CANVAS_H / rect.height)
+            };
+        }
+
+        function handleStart(e) {
+            e.preventDefault();
+            const m = getMousePos(e);
+            const targets = [
+                { id:'A', p:pt(angA) }, { id:'B', p:pt(angB) },
+                { id:'C', p:pt(angC) }, { id:'D', p:pt(angD) }
+            ];
+            for (const t of targets) {
+                if (Math.hypot(m.x - t.p.x, m.y - t.p.y) < 16) {
+                    dragging = true;
+                    dragTarget = t.id;
+                    break;
+                }
+            }
+        }
+
+        function handleMove(e) {
+            if (!dragging) return;
+            e.preventDefault();
+            const m = getMousePos(e);
+            const deg = r2d(Math.atan2(m.y - cy, m.x - cx));
+            if (dragTarget === 'A') angA = deg;
+            else if (dragTarget === 'B') angB = deg;
+            else if (dragTarget === 'C') angC = deg;
+            else if (dragTarget === 'D') angD = deg;
+            update();
+        }
+
+        function handleEnd(e) {
+            dragging = false;
+            dragTarget = null;
+        }
+
+        canvas.addEventListener('mousedown', handleStart);
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleEnd);
+        canvas.addEventListener('touchstart', handleStart, { passive: false });
+        window.addEventListener('touchmove', handleMove, { passive: false });
+        window.addEventListener('touchend', handleEnd);
+
+        // 主题/语言切换 (与13、14完全一致)
+        const observer = new MutationObserver(() => { update(); });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+        window.addEventListener('message', (ev) => {
+            if (!ev.data || ev.data._src !== 'circlelab') return;
+            if (ev.data.theme) document.documentElement.setAttribute('data-theme', ev.data.theme);
+            if (ev.data.lang) {
+                const isZh = ev.data.lang === 'zh';
+                if (!window._CL) window._CL = {};
+                window._CL.lang = ev.data.lang;
+                document.querySelectorAll('[data-cl-zh]').forEach(el => el.style.display = isZh ? '' : 'none');
+                document.querySelectorAll('[data-cl-en]').forEach(el => el.style.display = isZh ? 'none' : '');
+            }
+            if(typeof ev.data.fontSize === 'number'){
+                let fs = ev.data.fontSize;
+                fs = Math.min(20, Math.max(12, fs));
+                document.documentElement.style.fontSize = fs + 'px';
+            }
+            update();
+        });
+
+        // 初始化
+        window.addEventListener('load', () => {
+            // 确保语言显示正确
+            const isZh = _lang() === 'zh';
+            document.querySelectorAll('[data-cl-zh]').forEach(el => el.style.display = isZh ? '' : 'none');
+            document.querySelectorAll('[data-cl-en]').forEach(el => el.style.display = isZh ? 'none' : '');
+            update();
+        });
+        update();
+    })();
+</script>
+</body>
+</html>

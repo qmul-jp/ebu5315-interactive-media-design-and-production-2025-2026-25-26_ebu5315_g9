@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>圆内接四边形的性质 - CircleLab</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
+    <style>
+        body {
+            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg); color: var(--text);
+            transition: background 0.3s, color 0.3s;
+            padding: 20px 24px 28px; min-height: 100vh;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .circle-card {
+            max-width: 860px; width: 100%;
+            background: var(--card-bg); border-radius: 24px;
+            box-shadow: var(--shadow); border: 1px solid var(--border);
+            overflow: hidden; transition: background 0.3s, border-color 0.3s;
+        }
+        .card-header { padding: 20px 28px 12px; border-bottom: 1px solid var(--border); }
+        .card-header .title { font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif; font-size: 1.35rem; color: var(--text); }
+        .card-header .sub-en { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; }
+        .canvas-container { padding: 28px 28px 16px; display: flex; justify-content: center; background: var(--card-bg); }
+        canvas {
+            display: block; margin: 0 auto; border-radius: 16px; background: var(--card-bg);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03); border: 1px solid var(--border);
+            transition: background 0.2s, border-color 0.2s;
+        }
+        .data-panel {
+            margin: 8px 28px 8px; background: var(--hover-bg);
+            border-radius: 20px; padding: 16px 20px; transition: background 0.2s;
+        }
+        .formula-row {
+            display: flex; flex-wrap: wrap; justify-content: center;
+            align-items: baseline; gap: 24px; margin-bottom: 10px;
+            padding-bottom: 10px; border-bottom: 1px dashed var(--border); text-align: center;
+        }
+        .formula-row:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .metric { font-size: 0.9rem; font-weight: 500; color: var(--text); display: flex; align-items: baseline; gap: 6px; }
+        .metric-value {
+            font-weight: 600; background: var(--card-bg); padding: 2px 10px;
+            border-radius: 24px; color: var(--accent2); font-size: 0.95rem;
+        }
+        .eq-badge {
+            padding: 2px 10px; border-radius: 24px; font-size: 0.85rem;
+            font-weight: 600; background: var(--card-bg);
+        }
+        .eq { color: #27ae60; }
+        .neq { color: #e67e22; }
+        .theorem {
+            margin: 8px 28px 28px; background: var(--hover-bg);
+            border-left: 4px solid var(--accent2); padding: 16px 20px;
+            border-radius: 14px; font-size: 0.9rem; line-height: 1.5;
+            color: var(--text); text-align: center; transition: background 0.2s;
+        }
+        .interact-hint {
+            margin: 0 28px 24px; font-size: 0.7rem; color: var(--text-sub);
+            display: flex; gap: 18px; justify-content: center;
+            border-top: 1px solid var(--border); padding-top: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="circle-card">
+    <div class="card-header">
+        <div class="title" data-cl-zh>圆内接四边形的性质</div>
+        <div class="title" data-cl-en style="display:none">Inscribed Quadrilateral Properties</div>
+        <div class="sub-en" data-cl-zh>对角互补 · 外角等于内对角</div>
+        <div class="sub-en" data-cl-en style="display:none">Opposite angles supplementary · Exterior angle = non-adjacent interior angle</div>
+    </div>
+    <div class="canvas-container">
+        <canvas id="circleCanvas" width="620" height="500" style="width:100%; height:auto; max-width:620px; aspect-ratio:620/500"></canvas>
+    </div>
+    <div class="data-panel" id="dataPanel"></div>
+    <div class="theorem" data-cl-zh>📐 圆内接四边形的对角互补；一个外角等于其内对角</div>
+    <div class="theorem" data-cl-en style="display:none">📐 Opposite angles of an inscribed quadrilateral are supplementary; an exterior angle equals the non-adjacent interior angle</div>
+    <div class="interact-hint">
+        <span>🖱️ <span data-cl-zh>拖拽四顶点 A、B、C、D</span><span data-cl-en style="display:none">Drag vertices A, B, C, D</span></span>
+    </div>
+</div>
+<script>
+(function(){
+    function _fg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#e8e4dc':'#1a1a1a'; }
+    function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#1c1c1c':'#ffffff'; }
+    function _lang(){ return (window._CL&&window._CL.lang)||'zh'; }
+
+    const canvas=document.getElementById('circleCanvas'),ctx=canvas.getContext('2d');
+    const cx=300,cy=245,R=180;
+    let angA=200,angB=300,angC=30,angD=120;
+    let dragging=false,dragTarget=null;
+    document.documentElement.style.fontSize = '16px';
+
+    function d2r(d){return d*Math.PI/180;}
+    function r2d(r){return r*180/Math.PI;}
+    function pt(deg){return{x:cx+R*Math.cos(d2r(deg)),y:cy+R*Math.sin(d2r(deg))};}
+    function angleBetween(a,b,c){
+        const v1={x:a.x-b.x,y:a.y-b.y},v2={x:c.x-b.x,y:c.y-b.y};
+        const dot=v1.x*v2.x+v1.y*v2.y,len=Math.hypot(v1.x,v1.y)*Math.hypot(v2.x,v2.y);
+        if(len<1e-9) return 0;
+        return r2d(Math.acos(Math.max(-1,Math.min(1,dot/len))));
+    }
+    function eqBadge(sum,target,tol){
+        return Math.abs(sum-target)<tol
+            ?`<span class="eq-badge eq">= ${target}° ✓</span>`
+            :`<span class="eq-badge neq">≠ ${target}°</span>`;
+    }
+    function drawAngleArc(vertex,from,to,r,color){
+        const a1=Math.atan2(from.y-vertex.y,from.x-vertex.x);
+        const a2=Math.atan2(to.y-vertex.y,to.x-vertex.x);
+        ctx.beginPath();ctx.arc(vertex.x,vertex.y,r,a1,a2);
+        ctx.strokeStyle=color;ctx.lineWidth=1.5;ctx.stroke();
+    }
+
+    function update(){
+        const pA=pt(angA),pB=pt(angB),pC=pt(angC),pD=pt(angD);
+        const iA=angleBetween(pD,pA,pB),iB=angleBetween(pA,pB,pC);
+        const iC=angleBetween(pB,pC,pD),iD=angleBetween(pC,pD,pA);
+        const sumAC=iA+iC,sumBD=iB+iD,extC=180-iC;
+        const isZh=_lang()==='zh';
+
+        document.getElementById('dataPanel').innerHTML=`
+            <div class="formula-row">
+                <div class="metric">∠A = <span class="metric-value">${iA.toFixed(1)}°</span></div>
+                <div class="metric">∠C = <span class="metric-value">${iC.toFixed(1)}°</span></div>
+                <div class="metric">∠A + ∠C = <span class="metric-value">${sumAC.toFixed(1)}°</span> ${eqBadge(sumAC,180,1)}</div>
+            </div>
+            <div class="formula-row">
+                <div class="metric">∠B = <span class="metric-value">${iB.toFixed(1)}°</span></div>
+                <div class="metric">∠D = <span class="metric-value">${iD.toFixed(1)}°</span></div>
+                <div class="metric">∠B + ∠D = <span class="metric-value">${sumBD.toFixed(1)}°</span> ${eqBadge(sumBD,180,1)}</div>
+            </div>
+            <div class="formula-row">
+                <div class="metric">${isZh?'外角 ∠DCE':'Exterior ∠DCE'} = <span class="metric-value">${extC.toFixed(1)}°</span></div>
+                <div class="metric">∠A = <span class="metric-value">${iA.toFixed(1)}°</span></div>
+                <div class="metric">${Math.abs(extC-iA)<1?`<span class="eq-badge eq">∠DCE = ∠A ✓</span>`:`<span class="eq-badge neq">∠DCE ≠ ∠A</span>`}</div>
+            </div>`;
+
+        drawCanvas(pA,pB,pC,pD,iA,iB,iC,iD);
+    }
+
+    function drawCanvas(pA,pB,pC,pD,iA,iB,iC,iD){
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        ctx.fillStyle=_bg();ctx.fillRect(0,0,canvas.width,canvas.height);
+        const isDark=document.documentElement.getAttribute('data-theme')==='dark';
+
+        ctx.beginPath();ctx.arc(cx,cy,R,0,2*Math.PI);
+        ctx.strokeStyle=isDark?'#555':'#bbb';ctx.lineWidth=1.5;ctx.stroke();
+
+        ctx.beginPath();ctx.moveTo(pA.x,pA.y);ctx.lineTo(pB.x,pB.y);
+        ctx.lineTo(pC.x,pC.y);ctx.lineTo(pD.x,pD.y);ctx.closePath();
+        ctx.strokeStyle=_fg();ctx.lineWidth=2;ctx.stroke();
+
+        const dirBC={x:pC.x-pB.x,y:pC.y-pB.y},lenBC=Math.hypot(dirBC.x,dirBC.y);
+        const E={x:pC.x+(dirBC.x/lenBC)*60,y:pC.y+(dirBC.y/lenBC)*60};
+        ctx.beginPath();ctx.moveTo(pB.x,pB.y);ctx.lineTo(E.x,E.y);
+        ctx.strokeStyle='#e67e22';ctx.lineWidth=1.8;ctx.setLineDash([5,3]);ctx.stroke();ctx.setLineDash([]);
+
+        drawAngleArc(pC,E,pD,22,'#e67e22');
+        drawAngleArc(pA,pB,pD,22,'#e74c3c');
+        drawAngleArc(pB,pC,pA,22,'#3498db');
+        drawAngleArc(pC,pD,pB,22,'#9b59b6');
+        drawAngleArc(pD,pA,pC,22,'#16a085');
+
+        ctx.fillStyle='#e67e22';ctx.font='13px "DM Sans",sans-serif';ctx.fillText('E',E.x+6,E.y-4);
+
+        [{p:pA,l:'A',c:'#e74c3c'},{p:pB,l:'B',c:'#3498db'},{p:pC,l:'C',c:'#9b59b6'},{p:pD,l:'D',c:'#16a085'}].forEach(({p,l,c})=>{
+            ctx.beginPath();ctx.arc(p.x,p.y,6,0,2*Math.PI);ctx.fillStyle=c;ctx.fill();
+            ctx.fillStyle=_fg();ctx.font='500 14px "DM Sans",Arial,sans-serif';
+            const dx=p.x-cx,dy=p.y-cy,len=Math.hypot(dx,dy);
+            ctx.fillText(l,p.x+(dx/len)*14,p.y+(dy/len)*14);
+        });
+    }
+
+    function getMousePos(e){
+        const rect=canvas.getBoundingClientRect();
+        return {x:(e.clientX-rect.left)*(620/rect.width),y:(e.clientY-rect.top)*(500/rect.height)};
+    }
+    canvas.addEventListener('mousedown',e=>{
+        const m=getMousePos(e);
+        [{a:angA,t:'A'},{a:angB,t:'B'},{a:angC,t:'C'},{a:angD,t:'D'}].forEach(({a,t})=>{
+            const p=pt(a);if(Math.hypot(m.x-p.x,m.y-p.y)<15){dragging=true;dragTarget=t;}
+        });
+    });
+    window.addEventListener('mousemove',e=>{
+        if(!dragging) return;
+        const m=getMousePos(e),deg=r2d(Math.atan2(m.y-cy,m.x-cx));
+        if(dragTarget==='A') angA=deg; else if(dragTarget==='B') angB=deg;
+        else if(dragTarget==='C') angC=deg; else if(dragTarget==='D') angD=deg;
+        update();
+    });
+    window.addEventListener('mouseup',()=>{dragging=false;dragTarget=null;});
+
+    const obs=new MutationObserver(()=>update());
+    obs.observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+    window.addEventListener('message',ev=>{
+        if(!ev.data||ev.data._src!=='circlelab') return;
+        if(ev.data.theme) document.documentElement.setAttribute('data-theme',ev.data.theme);
+        if(ev.data.lang){
+            if(!window._CL) window._CL={};
+            window._CL.lang=ev.data.lang;
+            const zh=ev.data.lang==='zh';
+            document.querySelectorAll('[data-cl-zh]').forEach(el=>el.style.display=zh?'':'none');
+            document.querySelectorAll('[data-cl-en]').forEach(el=>el.style.display=zh?'none':'');
+        }
+        if(typeof ev.data.fontSize === 'number'){
+                let fs = ev.data.fontSize;
+                fs = Math.min(20, Math.max(12, fs));
+                document.documentElement.style.fontSize = fs + 'px';
+            }
+        update();
+    });
+    window._clRedraw=update;
+    window.addEventListener('load',update);
+    update();
+})();
+</script>
+</body>
+</html>
