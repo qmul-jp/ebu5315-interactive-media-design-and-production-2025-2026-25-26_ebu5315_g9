@@ -148,8 +148,8 @@
   --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --font-body: "PingFang SC", "Hiragino Sans GB", "Source Han Sans SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
-  --font-title: "Noto Serif SC", "Source Han Serif SC", "STZhongsong", serif;
+  --font-body: "Noto Sans SC", "Source Han Sans SC", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  --font-title: "Source Han Serif SC", "Noto Serif SC", "STZhongsong", serif;
 }
 
 :root[data-theme="dark"] {
@@ -1713,7 +1713,7 @@ button:disabled {
 }
 
 .home-theorem-figure text {
-  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  font-family: var(--font-body);
   font-size: 12px;
   font-weight: 600;
   fill: var(--theorem-ink);
@@ -2337,20 +2337,17 @@ body.exam-focus-mode #feedback {
 }
 
 body.exam-focus-mode .page {
-  max-width: 1380px;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.86fr);
+  max-width: 1120px;
+  grid-template-columns: minmax(0, 1fr);
 }
 
 body.exam-focus-mode .question-panel {
-  grid-column: 1 / 2;
+  grid-column: 1 / -1;
   padding: var(--space-5);
 }
 
 body.exam-focus-mode .side-panel {
-  grid-column: 2 / 3;
-  position: sticky;
-  top: var(--space-3);
-  min-height: calc(100vh - (var(--space-3) * 2));
+  display: none !important;
 }
 
 body.exam-focus-mode #questionWrap {
