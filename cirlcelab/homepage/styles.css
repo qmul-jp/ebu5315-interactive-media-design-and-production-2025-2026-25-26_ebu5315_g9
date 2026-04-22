@@ -7388,6 +7388,14 @@ body.is-auth-open {
   box-shadow: none;
 }
 
+:root[data-theme="light"] .theorem-cta-btn-alt:hover,
+:root[data-theme="light"] .theorem-cta-btn-alt:focus-visible {
+  color: #141413;
+  border-color: color-mix(in oklch, var(--card-deep-olive) 44%, #cec6ba 56%);
+  background: color-mix(in oklch, #e8e6dc 76%, var(--card-deep-olive) 24%);
+  box-shadow: none;
+}
+
 :root[data-theme="light"] .hero-btn.primary,
 :root[data-theme="light"] .callout-btn-primary {
   color: #faf9f5;

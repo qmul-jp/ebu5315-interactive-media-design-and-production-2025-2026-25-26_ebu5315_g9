@@ -464,7 +464,7 @@
     "ai.demo.welcome": "问我任意圆几何问题，我会陪你一步步推理。",
     "ai.demo.composer_aria": "AI 输入区",
     "ai.demo.ask_label": "向 ArcMind 提问",
-    "ai.demo.placeholder": "随便问一个圆几何问题",
+    "ai.demo.placeholder": "有问题，尽管问",
     "ai.demo.hint": "按 Enter 发送，按 Shift+Enter 换行。",
     "ai.demo.attach_aria": "添加附件",
     "ai.demo.select_model_aria": "选择模型",
@@ -603,7 +603,7 @@
     "float.form_aria": "快速向 ArcMind 提问",
     "float.focus_aria": "聚焦 ArcMind",
     "float.ask_label": "向 ArcMind 提问",
-    "float.placeholder": "向 ArcMind 提问",
+    "float.placeholder": "有问题，尽管问",
     "float.send_aria": "发送给 ArcMind",
   };
 

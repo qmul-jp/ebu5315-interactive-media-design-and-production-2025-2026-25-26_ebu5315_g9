@@ -963,7 +963,7 @@ window.CircleLabDebug = window.CircleLabDebug || {};
     },
     zh: {
       label: "\u63a8\u8350\u7684\u5706\u51e0\u4f55\u95ee\u9898",
-      placeholder: "\u968f\u4fbf\u95ee\u4e00\u4e2a\u5706\u51e0\u4f55\u95ee\u9898",
+      placeholder: "\u6709\u95ee\u9898\uff0c\u5c3d\u7ba1\u95ee",
       prompts: [
         "\u5982\u4f55\u8bc1\u660e\u534a\u5706\u6240\u5bf9\u7684\u89d2\u662f 90 \u5ea6\uff1f",
         "\u5f26\u548c\u5207\u7ebf\u6709\u4ec0\u4e48\u533a\u522b\uff1f",
