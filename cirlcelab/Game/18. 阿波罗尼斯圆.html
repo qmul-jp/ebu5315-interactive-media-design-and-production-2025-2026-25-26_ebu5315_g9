@@ -5,42 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阿波罗尼斯圆 - CircleLab</title>
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="game.css">
     <style>
-        :root {
-            --bg:        #f7f5f0;
-            --card-bg:   #ffffff;
-            --text:      #1a1a1a;
-            --text-sub:  #888;
-            --accent:    #1a1a1a;
-            --accent2:   #c8502a;
-            --border:    #e8e4dc;
-            --hover-bg:  #f0ede6;
-            --active-bg: #1a1a1a;
-            --active-text:#ffffff;
-            --shadow:    0 1px 12px rgba(0,0,0,0.06);
-            --grid:      #e8e4dc;
-            --purple:    #8e44ad;
-        }
-        [data-theme="dark"] {
-            --bg:        #141414;
-            --card-bg:   #1c1c1c;
-            --text:      #e8e4dc;
-            --text-sub:  #666;
-            --accent:    #e8e4dc;
-            --accent2:   #e8724a;
-            --border:    #2a2a2a;
-            --hover-bg:  #242424;
-            --active-bg: #e8e4dc;
-            --active-text:#141414;
-            --shadow:    0 1px 12px rgba(0,0,0,0.3);
-            --grid:      #2a2a2a;
-            --purple:    #b983ff;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
             transition: background 0.3s, color 0.3s;
@@ -67,7 +35,7 @@
             border-bottom: 1px solid var(--border);
         }
         .card-header .title {
-            font-family: 'DM Serif Display', serif;
+            font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif;
             font-size: 1.35rem;
             color: var(--text);
         }
@@ -230,6 +198,7 @@
         let k = 2.0;
 
         let dragging = false, dragTarget = null;
+        document.documentElement.style.fontSize = '16px';
 
         // ---------- 辅助函数 ----------
         function _fg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#e8e4dc' : '#1a1a1a'; }
@@ -295,10 +264,13 @@
             `;
             setDesc(descHtml);
 
-            // 判定 P 与圆的关系
+            // 修正：基于几何位置（圆心距与半径）判断 P 相对于圆的位置，而非简单比较比值
             const distToCenter = dist2(Px, Py, ap.cx, ap.cy);
-            const tol = 0.15;
+            const tol = 0.12;          // 容差，判定圆上
             const onCircle = Math.abs(distToCenter - ap.R) < tol;
+            const insideCircle = (!onCircle) && (distToCenter < ap.R);
+            const outsideCircle = (!onCircle) && (distToCenter > ap.R);
+            
             const green = '#27ae60', orange = '#e67e22', blue = '#2980b9';
             let pColor, statusZh, statusEn;
 
@@ -306,18 +278,14 @@
                 pColor = green;
                 statusZh = `PA/PB ≈ ${k.toFixed(1)} ✓，P 在阿波罗尼斯圆上`;
                 statusEn = `PA/PB ≈ ${k.toFixed(1)} ✓, P is on the Apollonius circle`;
-            } else if (Math.abs(ratio - k) < 0.15) {
-                pColor = green;
-                statusZh = `PA/PB ≈ ${k.toFixed(1)} ✓`;
-                statusEn = `PA/PB ≈ ${k.toFixed(1)} ✓`;
-            } else if (ratio < k) {
-                pColor = blue;
-                statusZh = `PA/PB = ${ratio.toFixed(2)} < ${k.toFixed(1)}，P 在圆外`;
-                statusEn = `PA/PB = ${ratio.toFixed(2)} < ${k.toFixed(1)}, P outside`;
-            } else {
+            } else if (insideCircle) {
                 pColor = orange;
-                statusZh = `PA/PB = ${ratio.toFixed(2)} > ${k.toFixed(1)}，P 在圆内`;
-                statusEn = `PA/PB = ${ratio.toFixed(2)} > ${k.toFixed(1)}, P inside`;
+                statusZh = `PA/PB = ${ratio.toFixed(2)}，P 在圆内 (圆心距 ${distToCenter.toFixed(2)} < 半径 ${ap.R.toFixed(2)})`;
+                statusEn = `PA/PB = ${ratio.toFixed(2)}, P inside circle (d = ${distToCenter.toFixed(2)} < R = ${ap.R.toFixed(2)})`;
+            } else { // outsideCircle
+                pColor = blue;
+                statusZh = `PA/PB = ${ratio.toFixed(2)}，P 在圆外 (圆心距 ${distToCenter.toFixed(2)} > 半径 ${ap.R.toFixed(2)})`;
+                statusEn = `PA/PB = ${ratio.toFixed(2)}, P outside circle (d = ${distToCenter.toFixed(2)} > R = ${ap.R.toFixed(2)})`;
             }
 
             const theoremHtml = isZh
@@ -513,6 +481,11 @@
                 window._CL.lang = ev.data.lang;
                 document.querySelectorAll('[data-cl-zh]').forEach(el => el.style.display = isZh ? '' : 'none');
                 document.querySelectorAll('[data-cl-en]').forEach(el => el.style.display = isZh ? 'none' : '');
+            }
+            if(typeof ev.data.fontSize === 'number'){
+                let fs = ev.data.fontSize;
+                fs = Math.min(20, Math.max(12, fs));
+                document.documentElement.style.fontSize = fs + 'px';
             }
             update();
         });

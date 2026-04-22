@@ -9,22 +9,70 @@
 <body>
   <header class="app-header motion-item motion-delay-1">
     <nav class="top-nav" id="pageTabs" aria-label="main navigation">
-      <div class="nav-cluster nav-cluster-pages">
-        <button class="tab-btn active" id="homePageBtn" type="button">首页</button>
-        <button class="tab-btn" id="practicePageBtn" type="button">练习页</button>
-        <button class="tab-btn" id="sectionsPageBtn" type="button">Sections页</button>
-      </div>
       <div class="nav-cluster nav-cluster-tools">
-        <button class="tab-btn" id="wrongModeBtn" type="button">错题本</button>
-        <button class="tab-btn" id="examModeBtn" type="button">考试模式</button>
+        <button class="ghost-btn" id="colorSafeToggleBtn" type="button">色弱友好</button>
+        <button class="ghost-btn font-size-btn" id="fontDecreaseBtn" type="button" aria-label="减小字号" title="减小字号">A-</button>
+        <button class="ghost-btn font-size-btn" id="fontResetBtn" type="button" aria-label="恢复默认字号" title="恢复默认字号">A</button>
+        <button class="ghost-btn font-size-btn" id="fontIncreaseBtn" type="button" aria-label="增大字号" title="增大字号">A+</button>
+        <button class="ghost-btn pure-mode-toggle" id="pureModeToggleBtn" type="button">纯净做题</button>
         <button class="ghost-btn" id="themeToggleBtn" type="button">深色模式</button>
         <button class="ghost-btn" id="langToggleBtn" type="button">EN</button>
-        <button class="ghost-btn" id="pureModeBtn" type="button">纯净模式</button>
       </div>
     </nav>
   </header>
 
   <main class="page">
+    <aside class="panel page-nav-sidebar motion-item motion-delay-1" id="pageNavSidebar">
+      <nav class="page-nav-rail" aria-label="page navigation">
+        <button class="page-nav-btn active" id="homePageBtn" type="button" data-nav-label="首页" aria-label="首页" title="首页">
+          <span class="page-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M3.5 10.5 12 3.75l8.5 6.75"></path>
+              <path d="M6.5 9.75V20h11V9.75"></path>
+              <path d="M9.5 20v-5.5h5V20"></path>
+            </svg>
+          </span>
+          <span class="page-nav-label">首页</span>
+        </button>
+        <button class="page-nav-btn" id="practicePageBtn" type="button" data-nav-label="练习页" aria-label="练习页" title="练习页">
+          <span class="page-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M7 4.5h8.25L19 8.25V19a1.5 1.5 0 0 1-1.5 1.5H7A1.5 1.5 0 0 1 5.5 19V6A1.5 1.5 0 0 1 7 4.5Z"></path>
+              <path d="M14.75 4.75V8.5h3.75"></path>
+              <path d="M8.5 12h7"></path>
+              <path d="M8.5 15.5h7"></path>
+            </svg>
+          </span>
+          <span class="page-nav-label">练习页</span>
+        </button>
+        <button class="page-nav-btn" id="sectionsPageBtn" type="button" data-nav-label="Sections页" aria-label="Sections页" title="Sections页">
+          <span class="page-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <rect x="4" y="5" width="6.5" height="6.5" rx="1.5"></rect>
+              <rect x="13.5" y="5" width="6.5" height="6.5" rx="1.5"></rect>
+              <rect x="4" y="14.5" width="6.5" height="6.5" rx="1.5"></rect>
+              <rect x="13.5" y="14.5" width="6.5" height="6.5" rx="1.5"></rect>
+            </svg>
+          </span>
+          <span class="page-nav-label">Sections页</span>
+        </button>
+        <button class="page-nav-btn page-nav-btn-exam" id="examModeBtn" type="button" data-nav-label="考试模式" aria-label="考试模式" title="考试模式">
+          <span class="page-nav-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" focusable="false" aria-hidden="true">
+              <path d="M8 4.5h8"></path>
+              <path d="M12 4.5V8"></path>
+              <path d="M6.75 9.5h10.5"></path>
+              <path d="M8 3.75h8"></path>
+              <path d="M7.25 9.5c-.92 1.08-1.5 2.49-1.5 4.03 0 3.43 2.8 6.22 6.25 6.22s6.25-2.79 6.25-6.22c0-1.54-.58-2.95-1.5-4.03"></path>
+              <path d="m12 13.5 2.65-1.72"></path>
+              <circle cx="12" cy="13.5" r="1"></circle>
+            </svg>
+          </span>
+          <span class="page-nav-label">考试模式</span>
+        </button>
+      </nav>
+    </aside>
+
     <section class="hero motion-item motion-delay-1" id="heroSection">
       <h1 id="heroTitle">圆相关知识点的习题</h1>
       <p id="heroDesc">支持判题反馈、答案解析、错题本记录（自动保存到本地浏览器）</p>
@@ -33,9 +81,6 @@
     <section class="panel question-panel motion-item motion-delay-2">
       <div class="mode-row practice-toolbar motion-item motion-delay-2" id="modeControls">
         <button class="tab-btn active" id="allModeBtn" type="button">全部题目</button>
-        <button class="ghost-btn" id="clearWrongBtn" type="button">清空错题本</button>
-        <button class="ghost-btn danger hidden" id="confirmClearWrongBtn" type="button">确认清空</button>
-        <button class="ghost-btn hidden" id="cancelClearWrongBtn" type="button">取消</button>
       </div>
 
       <div class="mode-row filters motion-item motion-delay-3" id="filtersRow">
@@ -152,7 +197,27 @@
 
       <section id="homePage" class="subpage home-page motion-item motion-delay-4">
         <h3 id="homePageTitle">欢迎来到做题主页</h3>
-        <p id="homePageDesc">你可以从这里快速进入练习、考试或章节学习。想专注作答可启用纯净模式。</p>
+        <p id="homePageDesc">你可以从这里快速进入练习、考试或章节学习。</p>
+        <section class="home-focus" aria-labelledby="homeFocusTitle">
+          <div class="home-focus-head">
+            <span class="home-focus-eyebrow" id="homeFocusEyebrow">圆几何速记</span>
+            <h4 id="homeFocusTitle">三个常用切入点</h4>
+          </div>
+          <div class="home-focus-list">
+            <article class="home-focus-item">
+              <b id="homeFocusFact1Title">先看同弧</b>
+              <p id="homeFocusFact1Desc">同一条弧常常同时连出圆心角、圆周角、弦长和弧长的关系。</p>
+            </article>
+            <article class="home-focus-item">
+              <b id="homeFocusFact2Title">再看切线</b>
+              <p id="homeFocusFact2Desc">见到切线，优先联想“半径垂直切线”、切线长定理和弦切角定理。</p>
+            </article>
+            <article class="home-focus-item">
+              <b id="homeFocusFact3Title">最后找圆幂</b>
+              <p id="homeFocusFact3Desc">相交弦、切割线、割线三类题，很多都能统一回到圆幂定理。</p>
+            </article>
+          </div>
+        </section>
         <section class="home-overview" aria-label="home overview">
           <article class="home-metric">
             <span id="homeMetricQuestionsLabel">题库总题数</span>
@@ -211,11 +276,28 @@
             <button class="action-btn" id="homeOpenSectionsBtn" type="button">查看 Sections</button>
           </article>
         </div>
+        <section class="home-theorem-gallery" aria-labelledby="homeTheoremGalleryTitle">
+          <div class="home-theorem-head">
+            <div class="home-theorem-intro">
+              <span class="home-theorem-eyebrow" id="homeTheoremEyebrow">定理画廊</span>
+              <h4 id="homeTheoremGalleryTitle">随机圆定理演示</h4>
+              <p id="homeTheoremGalleryDesc">从你当前题库章节中随机抽取几条定理，用英文示意图快速回顾。</p>
+            </div>
+            <button class="ghost-btn home-theorem-refresh" id="homeTheoremRefreshBtn" type="button">换一组</button>
+          </div>
+          <div class="home-theorem-grid" id="homeTheoremGrid"></div>
+        </section>
       </section>
 
       <section id="sectionsPage" class="subpage motion-item motion-delay-4 hidden">
         <h3 id="sectionsPageTitle">Section Overview</h3>
         <p id="sectionsPageDesc">可点击进入对应 section 练习。</p>
+        <div class="sections-toolbar">
+          <label class="select-wrap sections-level-filter" for="sectionsLevelSelect">
+            <span id="sectionsLevelLabel">按 Level 选择</span>
+            <select class="filter-select" id="sectionsLevelSelect"></select>
+          </label>
+        </div>
         <div id="sectionsGrid" class="section-grid"></div>
       </section>
     </section>
@@ -225,6 +307,12 @@
         <div class="side-panel-copy">
           <h3 class="side-title" id="wrongTitle">错题本</h3>
           <p class="side-tip" id="wrongHint">答错题目会自动加入错题本。</p>
+          <div class="side-panel-actions">
+            <button class="tab-btn side-panel-action" id="wrongModeBtn" type="button">错题本</button>
+            <button class="ghost-btn side-panel-action" id="clearWrongBtn" type="button">清空错题本</button>
+            <button class="ghost-btn danger side-panel-action hidden" id="confirmClearWrongBtn" type="button">确认清空</button>
+            <button class="ghost-btn side-panel-action hidden" id="cancelClearWrongBtn" type="button">取消</button>
+          </div>
         </div>
         <button class="ghost-btn sidebar-toggle-btn" id="wrongPanelToggleBtn" type="button" aria-expanded="true">收起错题本</button>
       </div>
@@ -244,12 +332,25 @@
         pagePractice: "练习页",
         pageSections: "Sections页",
         navWrong: "错题本",
-        pureModeOn: "纯净模式",
-        pureModeOff: "退出纯净模式",
         themeToDark: "深色模式",
         themeToLight: "浅色模式",
+        colorSafeOn: "色弱友好",
+        colorSafeOff: "标准配色",
+        fontDecrease: "减小字号",
+        fontIncrease: "增大字号",
+        fontReset: "恢复默认字号",
+        pureModeOn: "纯净做题",
+        pureModeOff: "退出纯净",
         homePageTitle: "欢迎来到做题主页",
-        homePageDesc: "你可以从这里快速进入练习、考试或章节学习。想专注作答可启用纯净模式。",
+        homePageDesc: "你可以从这里快速进入练习、考试或章节学习。",
+        homeFocusEyebrow: "圆几何速记",
+        homeFocusTitle: "三个常用切入点",
+        homeFocusFact1Title: "先看同弧",
+        homeFocusFact1Desc: "同一条弧常常同时连出圆心角、圆周角、弦长和弧长的关系。",
+        homeFocusFact2Title: "再看切线",
+        homeFocusFact2Desc: "见到切线，优先联想“半径垂直切线”、切线长定理和弦切角定理。",
+        homeFocusFact3Title: "最后找圆幂",
+        homeFocusFact3Desc: "相交弦、切割线、割线三类题，很多都能统一回到圆幂定理。",
         homeCardPracticeTitle: "开始练习",
         homeCardPracticeDesc: "进入题库刷题，支持即时反馈、解析和错题本。",
         homeCardPracticeBtn: "进入练习",
@@ -269,6 +370,10 @@
         homeGuideStep1: "1. 先从“开始练习”建立基础，再看解析查缺补漏。",
         homeGuideStep2: "2. 完成一轮后进入“考试模式”，检查综合掌握情况。",
         homeGuideStep3: "3. 针对错题回到章节学习，逐步提升 Level。",
+        homeTheoremEyebrow: "定理画廊",
+        homeTheoremTitle: "随机圆定理演示",
+        homeTheoremDesc: "从你当前题库章节中随机抽取几条定理，用英文示意图快速回顾。",
+        homeTheoremShuffle: "换一组",
         modeAll: "全部题目",
         modeWrong: "错题本练习",
         enterExamMode: "考试模式",
@@ -305,8 +410,11 @@
         levelPrefix: "Level",
         sectionsPageTitle: "Section 概览",
         sectionsPageDesc: "可点击进入对应 section 练习。",
+        sectionsLevelLabel: "按 Level 选择",
+        allLevels: "全部 Level",
         sectionCount: "题目数：{count}",
         sectionLevels: "覆盖 Level：{levels}",
+        sectionsEmptyLevel: "当前 Level {level} 暂无对应章节。",
         startSection: "进入本 Section",
         levelUpTitle: "Level 提升",
         levelUpText: "已升级到 Level {level}。",
@@ -377,12 +485,25 @@
         pagePractice: "Practice",
         pageSections: "Sections",
         navWrong: "Wrong Book",
-        pureModeOn: "Pure Mode",
-        pureModeOff: "Exit Pure Mode",
         themeToDark: "Dark Mode",
         themeToLight: "Light Mode",
+        colorSafeOn: "Color-Safe Mode",
+        colorSafeOff: "Standard Colors",
+        fontDecrease: "Decrease font size",
+        fontIncrease: "Increase font size",
+        fontReset: "Reset font size",
+        pureModeOn: "Focus Practice",
+        pureModeOff: "Exit Focus",
         homePageTitle: "Welcome to the Quiz Homepage",
-        homePageDesc: "Start from here: practice, exam, or section-based learning. Turn on pure mode for focused answering.",
+        homePageDesc: "Start from here: practice, exam, or section-based learning.",
+        homeFocusEyebrow: "Circle Cheatsheet",
+        homeFocusTitle: "Three Reliable Entry Points",
+        homeFocusFact1Title: "Start with the same arc",
+        homeFocusFact1Desc: "One arc often links central angles, inscribed angles, chord length, and arc measure at once.",
+        homeFocusFact2Title: "Then inspect tangents",
+        homeFocusFact2Desc: "When a tangent appears, first test radius-perpendicular, tangent segments, and tangent-chord angles.",
+        homeFocusFact3Title: "Finish with power",
+        homeFocusFact3Desc: "Intersecting chords, tangent-secant, and secant-secant problems often collapse into power of a point.",
         homeCardPracticeTitle: "Start Practice",
         homeCardPracticeDesc: "Practice from the bank with instant feedback, analysis, and wrong-book tracking.",
         homeCardPracticeBtn: "Go Practice",
@@ -402,6 +523,10 @@
         homeGuideStep1: "1. Start with Practice to build the basics, then use analysis to close gaps.",
         homeGuideStep2: "2. After one pass, switch to Exam Mode to check integrated mastery.",
         homeGuideStep3: "3. Return to section learning for wrong questions and raise your Level steadily.",
+        homeTheoremEyebrow: "Theorem Gallery",
+        homeTheoremTitle: "Random Circle Theorem Visuals",
+        homeTheoremDesc: "A rotating set of English theorem sketches drawn from the sections already covered in your bank.",
+        homeTheoremShuffle: "Shuffle Set",
         modeAll: "All Questions",
         modeWrong: "Wrong Book",
         enterExamMode: "Exam Mode",
@@ -438,8 +563,11 @@
         levelPrefix: "Level",
         sectionsPageTitle: "Section Overview",
         sectionsPageDesc: "Click to enter that section.",
+        sectionsLevelLabel: "Filter by Level",
+        allLevels: "All Levels",
         sectionCount: "Questions: {count}",
         sectionLevels: "Levels: {levels}",
+        sectionsEmptyLevel: "No sections match Level {level} right now.",
         startSection: "Open This Section",
         levelUpTitle: "Level Up",
         levelUpText: "You advanced to Level {level}.",
@@ -7068,6 +7196,9 @@
     const THEME_KEY = "quiz_theme_v1";
     const WRONG_PANEL_KEY = "quiz_wrong_panel_collapsed_v1";
     const EXAM_STATE_KEY = "quiz_exam_state_v1";
+    const COLOR_SAFE_KEY = "quiz_color_safe_v1";
+    const FONT_SCALE_KEY = "quiz_font_scale_v1";
+    const PURE_MODE_KEY = "quiz_pure_mode_v1";
     const EXAM_WARNING_THRESHOLDS = [600, 300, 60];
     const MAX_LEVEL = Math.max(...questionBank.map((q) => q.level || 1));
     const sectionIds = Object.keys(sectionMap);
@@ -7093,7 +7224,6 @@
       homePageBtn: document.getElementById("homePageBtn"),
       practicePageBtn: document.getElementById("practicePageBtn"),
       sectionsPageBtn: document.getElementById("sectionsPageBtn"),
-      pureModeBtn: document.getElementById("pureModeBtn"),
       pageTabs: document.getElementById("pageTabs"),
       modeControls: document.getElementById("modeControls"),
       filtersRow: document.getElementById("filtersRow"),
@@ -7101,6 +7231,11 @@
       examSectionPicker: document.getElementById("examSectionPicker"),
       allModeBtn: document.getElementById("allModeBtn"), wrongModeBtn: document.getElementById("wrongModeBtn"),
       examModeBtn: document.getElementById("examModeBtn"),
+      colorSafeToggleBtn: document.getElementById("colorSafeToggleBtn"),
+      fontDecreaseBtn: document.getElementById("fontDecreaseBtn"),
+      fontResetBtn: document.getElementById("fontResetBtn"),
+      fontIncreaseBtn: document.getElementById("fontIncreaseBtn"),
+      pureModeToggleBtn: document.getElementById("pureModeToggleBtn"),
       clearWrongBtn: document.getElementById("clearWrongBtn"),
       confirmClearWrongBtn: document.getElementById("confirmClearWrongBtn"),
       cancelClearWrongBtn: document.getElementById("cancelClearWrongBtn"),
@@ -7108,6 +7243,8 @@
       langToggleBtn: document.getElementById("langToggleBtn"),
       sectionLabel: document.getElementById("sectionLabel"),
       sectionSelect: document.getElementById("sectionSelect"),
+      sectionsLevelLabel: document.getElementById("sectionsLevelLabel"),
+      sectionsLevelSelect: document.getElementById("sectionsLevelSelect"),
       examSectionLabel: document.getElementById("examSectionLabel"),
       examSectionSelectAllBtn: document.getElementById("examSectionSelectAllBtn"),
       examSectionClearAllBtn: document.getElementById("examSectionClearAllBtn"),
@@ -7160,6 +7297,14 @@
       homePage: document.getElementById("homePage"),
       homePageTitle: document.getElementById("homePageTitle"),
       homePageDesc: document.getElementById("homePageDesc"),
+      homeFocusEyebrow: document.getElementById("homeFocusEyebrow"),
+      homeFocusTitle: document.getElementById("homeFocusTitle"),
+      homeFocusFact1Title: document.getElementById("homeFocusFact1Title"),
+      homeFocusFact1Desc: document.getElementById("homeFocusFact1Desc"),
+      homeFocusFact2Title: document.getElementById("homeFocusFact2Title"),
+      homeFocusFact2Desc: document.getElementById("homeFocusFact2Desc"),
+      homeFocusFact3Title: document.getElementById("homeFocusFact3Title"),
+      homeFocusFact3Desc: document.getElementById("homeFocusFact3Desc"),
       homeMetricQuestionsLabel: document.getElementById("homeMetricQuestionsLabel"),
       homeMetricSectionsLabel: document.getElementById("homeMetricSectionsLabel"),
       homeMetricWrongLabel: document.getElementById("homeMetricWrongLabel"),
@@ -7175,6 +7320,11 @@
       homeGuideStep1: document.getElementById("homeGuideStep1"),
       homeGuideStep2: document.getElementById("homeGuideStep2"),
       homeGuideStep3: document.getElementById("homeGuideStep3"),
+      homeTheoremEyebrow: document.getElementById("homeTheoremEyebrow"),
+      homeTheoremGalleryTitle: document.getElementById("homeTheoremGalleryTitle"),
+      homeTheoremGalleryDesc: document.getElementById("homeTheoremGalleryDesc"),
+      homeTheoremRefreshBtn: document.getElementById("homeTheoremRefreshBtn"),
+      homeTheoremGrid: document.getElementById("homeTheoremGrid"),
       homeCardPracticeTitle: document.getElementById("homeCardPracticeTitle"),
       homeCardPracticeDesc: document.getElementById("homeCardPracticeDesc"),
       homeStartPracticeBtn: document.getElementById("homeStartPracticeBtn"),
@@ -7199,7 +7349,7 @@
     let activePage = "home";
     let currentIndex = 0;
     let lang = loadLang();
-    let pureMode = false;
+    let sectionsLevelFilter = "all";
     let selectedSection = "all";
     let currentLevel = 1;
     let smartMode = true;
@@ -7220,11 +7370,16 @@
     let lastRenderedQuestionId = null;
     let lastRenderedWrongListKey = "";
     let lastRenderedSectionsLang = "";
+    let lastRenderedHomeTheoremKey = "";
     let themePreference = loadThemePreference();
+    let colorSafeMode = loadColorSafePreference();
+    let fontScale = loadFontScalePreference();
+    let pureMode = loadPureModePreference();
     const questionMeta = {};
     const prefersDarkScheme = window.matchMedia("(prefers-color-scheme: dark)");
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let currentQuestions = [];
+    let homeTheoremSelection = [];
 
     function loadWrongBook() {
       try {
@@ -7280,9 +7435,45 @@
       const value = localStorage.getItem(THEME_KEY);
       return value === "dark" || value === "light" ? value : null;
     }
+    function loadColorSafePreference() {
+      return localStorage.getItem(COLOR_SAFE_KEY) === "1";
+    }
+    function saveColorSafePreference() {
+      localStorage.setItem(COLOR_SAFE_KEY, colorSafeMode ? "1" : "0");
+    }
+    function loadFontScalePreference() {
+      const value = Number(localStorage.getItem(FONT_SCALE_KEY));
+      if (!Number.isFinite(value)) return 1;
+      return Math.max(0.9, Math.min(1.25, Math.round(value * 100) / 100));
+    }
+    function loadPureModePreference() {
+      return localStorage.getItem(PURE_MODE_KEY) === "1";
+    }
+    function saveFontScalePreference() {
+      localStorage.setItem(FONT_SCALE_KEY, String(fontScale));
+    }
+    function savePureModePreference() {
+      localStorage.setItem(PURE_MODE_KEY, pureMode ? "1" : "0");
+    }
     function saveThemePreference() {
       if (themePreference) localStorage.setItem(THEME_KEY, themePreference);
       else localStorage.removeItem(THEME_KEY);
+    }
+    function applyAccessibilityPreferences() {
+      document.documentElement.style.setProperty("--font-scale", String(fontScale));
+      document.documentElement.setAttribute("data-color-safe", colorSafeMode ? "true" : "false");
+      if (els.colorSafeToggleBtn) {
+        els.colorSafeToggleBtn.setAttribute("aria-pressed", String(colorSafeMode));
+      }
+      if (els.fontDecreaseBtn) {
+        els.fontDecreaseBtn.disabled = fontScale <= 0.9;
+      }
+      if (els.fontIncreaseBtn) {
+        els.fontIncreaseBtn.disabled = fontScale >= 1.25;
+      }
+      if (els.fontResetBtn) {
+        els.fontResetBtn.disabled = Math.abs(fontScale - 1) < 0.001;
+      }
     }
     function getResolvedTheme() {
       if (themePreference) return themePreference;
@@ -7307,6 +7498,48 @@
       applyTheme();
       render();
     }
+    function adjustFontScale(delta) {
+      const next = Math.max(0.9, Math.min(1.25, Math.round((fontScale + delta) * 100) / 100));
+      if (Math.abs(next - fontScale) < 0.001) return;
+      fontScale = next;
+      saveFontScalePreference();
+      applyAccessibilityPreferences();
+    }
+    function resetFontScale() {
+      if (Math.abs(fontScale - 1) < 0.001) return;
+      fontScale = 1;
+      saveFontScalePreference();
+      applyAccessibilityPreferences();
+    }
+    function toggleColorSafeMode() {
+      colorSafeMode = !colorSafeMode;
+      saveColorSafePreference();
+      applyAccessibilityPreferences();
+      applyStaticTexts();
+    }
+    function togglePureMode() {
+      if (examMode) return;
+      pureMode = !pureMode;
+      if (pureMode) {
+        activePage = "practice";
+      }
+      savePureModePreference();
+      render();
+    }
+
+    function pickRandomItems(items, count) {
+      const pool = items.slice();
+      for (let i = pool.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      return pool.slice(0, Math.min(count, pool.length));
+    }
+
+    function refreshHomeTheoremSelection() {
+      homeTheoremSelection = pickRandomItems(homeTheoremCatalog, 4);
+      lastRenderedHomeTheoremKey = "";
+    }
 
     function t(key, vars) {
       const dict = i18n[lang] || i18n.zh;
@@ -7315,10 +7548,692 @@
       return text;
     }
 
-    function getText(value) { return typeof value === "string" ? value : (value && (value[lang] || value.zh || value.en)) || ""; }
+    const sectionEnglishLabels = {
+      kp01: "Basic Definition of a Circle",
+      kp02: "Circumference and Area of a Circle",
+      kp03: "Arcs, Chords, Central Angles, and Inscribed Angles",
+      kp04: "Position of a Point Relative to a Circle",
+      kp05: "Position of a Line Relative to a Circle",
+      kp06: "Perpendicular Diameter Theorem",
+      kp07: "Central Angle Theorem",
+      kp08: "Inscribed Angle Theorem",
+      kp09: "Properties of a Cyclic Quadrilateral",
+      kp10: "Tests and Properties of Tangents",
+      kp11: "Tangent-Segment Theorem",
+      kp12: "Tangent-Chord Angle Theorem",
+      kp13: "Intersecting Chords Theorem",
+      kp14: "Tangent-Secant Theorem",
+      kp15: "Secant-Secant Theorem",
+      kp16: "Power of a Point",
+      kp17: "Relative Positions of Two Circles",
+      kp18: "Common Tangents of Two Circles",
+      kp19: "Regular Polygons Inscribed in a Circle",
+      kp20: "Sectors and Segments",
+      kp22: "Circumcircle of a Triangle",
+      kp23: "Incircle of a Triangle",
+      kp24: "Criterion for Four Points Being Concyclic",
+      kp25: "Ptolemy's Theorem",
+      kp26: "Equation of a Circle (Standard Form)",
+      kp27: "Equation of a Circle (General Form)",
+      kp28: "Position of a Point Relative to a Circle (Algebraic Method)",
+      kp29: "Position of a Line Relative to a Circle (Algebraic Method)",
+      kp30: "Equation of a Tangent to a Circle",
+      kp31: "Equation of the Chord of Contact",
+      kp32: "Family of Circles",
+      kp33: "Parametric Equation of a Circle",
+      kp34: "Polar Equation of a Circle",
+      kp35: "Apollonius Circle",
+      kp36: "Optimization Problems Involving Circles",
+      kp37: "Radical Axis",
+      kp38: "Equation of the Common Chord of Two Circles",
+      kp39: "Common Auxiliary Lines in Advanced Circle Geometry"
+    };
+
+    const homeTheoremCatalog = [
+      {
+        sectionId: "kp06",
+        accent: "sand",
+        title: "Perpendicular Diameter Theorem",
+        formula: "AM = MB",
+        statement: "A diameter perpendicular to a chord bisects the chord and the corresponding arcs.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="108" cy="90" r="56" class="theorem-main"/>
+            <path d="M68 50A56 56 0 0 1 148 50" class="theorem-soft"/>
+            <line x1="108" y1="34" x2="108" y2="146" class="theorem-main"/>
+            <line x1="62" y1="90" x2="154" y2="90" class="theorem-accent-line"/>
+            <path d="M101 83h11v11" class="theorem-main"/>
+            <circle cx="62" cy="90" r="4" class="point"/>
+            <circle cx="154" cy="90" r="4" class="point"/>
+            <circle cx="108" cy="90" r="4" class="point"/>
+            <text x="48" y="85">A</text>
+            <text x="160" y="85">B</text>
+            <text x="115" y="85">M</text>
+            <text x="116" y="42">D</text>
+            <text x="116" y="160">E</text>
+          </svg>`
+      },
+      {
+        sectionId: "kp07",
+        accent: "sage",
+        title: "Central Angle Theorem",
+        formula: "m∠AOB = m⌢AB",
+        statement: "The measure of a central angle equals the measure of its intercepted arc.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="108" cy="92" r="56" class="theorem-main"/>
+            <path d="M70 50A56 56 0 0 1 152 62" class="theorem-soft"/>
+            <line x1="108" y1="92" x2="72" y2="50" class="theorem-accent-line"/>
+            <line x1="108" y1="92" x2="152" y2="62" class="theorem-accent-line"/>
+            <path d="M101 87A15 15 0 0 1 118 74" class="theorem-main"/>
+            <circle cx="72" cy="50" r="4" class="point"/>
+            <circle cx="152" cy="62" r="4" class="point"/>
+            <circle cx="108" cy="92" r="4" class="point"/>
+            <text x="59" y="46">A</text>
+            <text x="159" y="58">B</text>
+            <text x="116" y="106">O</text>
+          </svg>`
+      },
+      {
+        sectionId: "kp08",
+        accent: "blue",
+        title: "Inscribed Angle Theorem",
+        formula: "∠APB = 1/2 m⌢AB",
+        statement: "An inscribed angle equals half the measure of the arc it intercepts.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="108" cy="88" r="56" class="theorem-main"/>
+            <path d="M68 48A56 56 0 0 1 148 52" class="theorem-soft"/>
+            <line x1="68" y1="48" x2="110" y2="140" class="theorem-accent-line"/>
+            <line x1="148" y1="52" x2="110" y2="140" class="theorem-accent-line"/>
+            <path d="M103 126A15 15 0 0 1 118 126" class="theorem-main"/>
+            <circle cx="68" cy="48" r="4" class="point"/>
+            <circle cx="148" cy="52" r="4" class="point"/>
+            <circle cx="110" cy="140" r="4" class="point"/>
+            <text x="55" y="44">A</text>
+            <text x="155" y="48">B</text>
+            <text x="118" y="155">P</text>
+          </svg>`
+      },
+      {
+        sectionId: "kp11",
+        accent: "rose",
+        title: "Tangent-Segment Theorem",
+        formula: "PA = PB",
+        statement: "Tangents drawn from the same external point to a circle have equal lengths.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="108" cy="90" r="48" class="theorem-main"/>
+            <line x1="154" y1="72" x2="234" y2="90" class="theorem-accent-line"/>
+            <line x1="154" y1="108" x2="234" y2="90" class="theorem-accent-line"/>
+            <circle cx="154" cy="72" r="4" class="point"/>
+            <circle cx="154" cy="108" r="4" class="point"/>
+            <circle cx="234" cy="90" r="4" class="point"/>
+            <text x="161" y="68">A</text>
+            <text x="161" y="122">B</text>
+            <text x="242" y="86">P</text>
+          </svg>`
+      },
+      {
+        sectionId: "kp12",
+        accent: "gold",
+        title: "Tangent-Chord Angle Theorem",
+        formula: "∠TAB = 1/2 m⌢AB",
+        statement: "The angle between a tangent and a chord equals half the measure of its intercepted arc.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="120" cy="92" r="54" class="theorem-main"/>
+            <line x1="66" y1="30" x2="66" y2="154" class="theorem-accent-line"/>
+            <line x1="66" y1="92" x2="160" y2="56" class="theorem-accent-line"/>
+            <path d="M66 92A54 54 0 0 1 160 56" class="theorem-soft"/>
+            <path d="M75 87A16 16 0 0 1 86 80" class="theorem-main"/>
+            <circle cx="66" cy="92" r="4" class="point"/>
+            <circle cx="160" cy="56" r="4" class="point"/>
+            <text x="53" y="88">A</text>
+            <text x="166" y="52">B</text>
+            <text x="53" y="148">T</text>
+          </svg>`
+      },
+      {
+        sectionId: "kp13",
+        accent: "sage",
+        title: "Intersecting Chords Theorem",
+        formula: "PA·PB = PC·PD",
+        statement: "When two chords intersect inside a circle, the products of their segments are equal.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="110" cy="90" r="56" class="theorem-main"/>
+            <line x1="66" y1="56" x2="154" y2="124" class="theorem-accent-line"/>
+            <line x1="70" y1="126" x2="152" y2="54" class="theorem-accent-line"/>
+            <circle cx="110" cy="90" r="4" class="point"/>
+            <circle cx="66" cy="56" r="4" class="point"/>
+            <circle cx="154" cy="124" r="4" class="point"/>
+            <circle cx="70" cy="126" r="4" class="point"/>
+            <circle cx="152" cy="54" r="4" class="point"/>
+            <text x="53" y="52">A</text>
+            <text x="160" y="136">B</text>
+            <text x="56" y="141">C</text>
+            <text x="159" y="50">D</text>
+            <text x="118" y="86">P</text>
+          </svg>`
+      },
+      {
+        sectionId: "kp14",
+        accent: "rose",
+        title: "Tangent-Secant Theorem",
+        formula: "PT² = PA·PB",
+        statement: "For an external point, the tangent length squared equals the product of the whole secant and its external segment.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="128" cy="92" r="46" class="theorem-main"/>
+            <line x1="174" y1="66" x2="234" y2="92" class="theorem-accent-line"/>
+            <line x1="234" y1="92" x2="82" y2="92" class="theorem-accent-line"/>
+            <circle cx="174" cy="66" r="4" class="point"/>
+            <circle cx="174" cy="92" r="4" class="point"/>
+            <circle cx="82" cy="92" r="4" class="point"/>
+            <circle cx="234" cy="92" r="4" class="point"/>
+            <text x="181" y="62">T</text>
+            <text x="181" y="88">A</text>
+            <text x="68" y="88">B</text>
+            <text x="241" y="88">P</text>
+          </svg>`
+      },
+      {
+        sectionId: "kp16",
+        accent: "blue",
+        title: "Power of a Point",
+        formula: "Pow(P) = PA·PB",
+        statement: "The power of a point is invariant across every secant, chord, or tangent drawn through that point.",
+        svg: `
+          <svg viewBox="0 0 280 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="110" cy="90" r="56" class="theorem-main"/>
+            <line x1="54" y1="80" x2="166" y2="100" class="theorem-accent-line"/>
+            <line x1="84" y1="138" x2="142" y2="42" class="theorem-accent-line"/>
+            <circle cx="54" cy="80" r="4" class="point"/>
+            <circle cx="166" cy="100" r="4" class="point"/>
+            <circle cx="84" cy="138" r="4" class="point"/>
+            <circle cx="142" cy="42" r="4" class="point"/>
+            <circle cx="110" cy="90" r="4" class="point"/>
+            <text x="41" y="76">A</text>
+            <text x="173" y="96">B</text>
+            <text x="70" y="152">C</text>
+            <text x="149" y="38">D</text>
+            <text x="118" y="86">P</text>
+          </svg>`
+      }
+    ];
+
+    const exactEnglishTextMap = {
+      "无法确定": "Cannot be determined",
+      "相交": "Intersect",
+      "相切": "Tangent",
+      "相离": "Separate",
+      "外切": "Externally tangent",
+      "外离": "Externally separate",
+      "内切": "Internally tangent",
+      "内含": "One inside the other",
+      "内部": "Inside",
+      "外部": "Outside",
+      "上": "On",
+      "圆上": "On the circle",
+      "点在圆上": "The point lies on the circle",
+      "点在圆内": "The point lies inside the circle",
+      "点在圆外": "The point lies outside the circle",
+      "共圆": "Concyclic",
+      "不共圆": "Not concyclic",
+      "一定共圆": "Definitely concyclic",
+      "可能共圆": "Possibly concyclic",
+      "直角": "Right angle",
+      "2倍": "twice",
+      "4倍": "four times",
+      "6倍": "six times",
+      "不变": "unchanged",
+      "相似三角形；托勒密": "similar triangles; Ptolemy's theorem",
+      "相似三角形": "similar triangles",
+      "托勒密": "Ptolemy's theorem",
+      "圆（或⊙O）": "circle (or ⊙O)",
+      "圆（阿波罗尼斯圆）": "circle (Apollonius circle)",
+      "两圆心连线所在直线": "the line through the two centers",
+      "半圆所对的圆周角是直角": "An inscribed angle subtending a semicircle is a right angle",
+      "圆内接四边形的对角互补": "Opposite angles of a cyclic quadrilateral are supplementary",
+      "圆周角的度数等于圆心角度数的一半": "An inscribed angle measures half the corresponding central angle",
+      "需计算，略": "Needs computation; omitted"
+    };
+
+    const orderedZhEnReplacements = [
+      ["下列关于圆的定义，说法正确的是", "Which of the following statements about the definition of a circle is correct"],
+      ["下列关于圆心、半径、直径的说法中，正确的有", "Which of the following statements about the center, radius, and diameter are correct"],
+      ["下列关于直线与圆的位置关系，下列说法正确的有", "Which of the following statements about the relative position of a line and a circle are correct"],
+      ["下列关于三角形内心的说法，正确的有", "Which of the following statements about the incenter of a triangle are correct"],
+      ["下列条件中，能判定A、B、C、D四点共圆的是", "Which of the following conditions can be used to determine that points A, B, C, and D are concyclic"],
+      ["下列命题中，正确的有", "Which of the following propositions are correct"],
+      ["下列说法正确的有", "Which of the following statements are correct"],
+      ["下列说法中，正确的是", "Which of the following statements is correct"],
+      ["在⊙O中，下列说法正确的有", "In circle ⊙O, which of the following statements are correct"],
+      ["关于切点弦方程，下列说法正确的有", "Which of the following statements about the equation of the chord of contact are correct"],
+      ["过圆外一点作圆的切线，下列说法正确的有", "Which of the following statements about drawing tangents from a point outside a circle are correct"],
+      ["关于圆的一般方程", "Regarding the general equation of a circle"],
+      ["圆的基本定义", "basic definition of a circle"],
+      ["圆的周长和面积", "circumference and area of a circle"],
+      ["弧、弦、圆心角、圆周角", "arcs, chords, central angles, and inscribed angles"],
+      ["点与圆的位置关系（代数法）", "position of a point relative to a circle (algebraic method)"],
+      ["直线与圆的位置关系（代数法）", "position of a line relative to a circle (algebraic method)"],
+      ["点与圆的位置关系", "position of a point relative to a circle"],
+      ["直线与圆的位置关系", "position of a line relative to a circle"],
+      ["圆内接四边形性质", "properties of a cyclic quadrilateral"],
+      ["切线的判定与性质", "tests and properties of tangents"],
+      ["切线长定理", "tangent-segment theorem"],
+      ["弦切角定理", "tangent-chord angle theorem"],
+      ["相交弦定理", "intersecting chords theorem"],
+      ["切割线定理", "tangent-secant theorem"],
+      ["割线定理", "secant-secant theorem"],
+      ["圆幂定理", "power of a point theorem"],
+      ["两圆的位置关系", "relative positions of two circles"],
+      ["两圆的公切线", "common tangents of two circles"],
+      ["圆的内接正多边形", "regular polygons inscribed in a circle"],
+      ["扇形与弓形", "sectors and segments"],
+      ["三角形的外接圆", "circumcircle of a triangle"],
+      ["三角形的内切圆", "incircle of a triangle"],
+      ["四点共圆的判定", "criterion for four points being concyclic"],
+      ["托勒密定理", "Ptolemy's theorem"],
+      ["圆的方程（标准式）", "equation of a circle (standard form)"],
+      ["圆的方程（一般式）", "equation of a circle (general form)"],
+      ["圆的切线方程", "equation of a tangent to a circle"],
+      ["切点弦方程", "equation of the chord of contact"],
+      ["圆系方程", "family of circles"],
+      ["圆的参数方程", "parametric equation of a circle"],
+      ["圆的极坐标方程", "polar equation of a circle"],
+      ["阿波罗尼斯圆", "Apollonius circle"],
+      ["圆的最值问题", "optimization problems involving circles"],
+      ["根轴（等幂轴）", "radical axis"],
+      ["圆与圆的公共弦方程", "equation of the common chord of two circles"],
+      ["圆的几何综合题常用辅助线", "common auxiliary lines in advanced circle geometry"],
+      ["平行线", "parallel line"],
+      ["椭圆", "ellipse"],
+      ["双曲线", "hyperbola"],
+      ["全等", "congruent"],
+      ["构成等边三角形", "form an equilateral triangle"],
+      ["构成直角三角形", "form a right triangle"],
+      ["构成", "form"],
+      ["描述的是", "describes "],
+      ["是圆周角定理的推论", "is a corollary of the inscribed angle theorem"],
+      ["是圆幂定理的一种特殊情况", "is a special case of the power of a point theorem"],
+      ["是圆幂定理在切线情况下的特例", "is a special case of the power of a point theorem for tangents"],
+      ["是圆幂定理在割线情况下的形式", "is the secant form of the power of a point theorem"],
+      ["是切线长定理的内容", "is a statement of the tangent-segment theorem"],
+      ["是切割线定理的内容", "is a statement of the tangent-secant theorem"],
+      ["是割线定理的内容", "is a statement of the secant-secant theorem"],
+      ["是圆幂定理的核心", "is the core statement of the power of a point theorem"],
+      ["切线可视为割线的极限情况", "a tangent can be viewed as the limiting case of a secant"],
+      ["缺少", "missing"],
+      ["连接", "connect"],
+      ["相交于点", "intersect at point "],
+      ["圆心距为", "the distance between centers is "],
+      ["圆心距", "distance between centers"],
+      ["外公切线长", "external common tangent length"],
+      ["内公切线长", "internal common tangent length"],
+      ["扇形面积", "sector area"],
+      ["弓形面积", "segment area"],
+      ["上一点", "a point on"],
+      ["互补", "supplementary"],
+      ["角平分线", "angle bisector"],
+      ["垂直平分线", "perpendicular bisector"],
+      ["中垂线", "perpendicular bisector"],
+      ["中点", "midpoint"],
+      ["顶点", "vertex"],
+      ["公共弦", "common chord"],
+      ["公共点", "common point"],
+      ["连心线", "line joining the centers"],
+      ["轨迹", "locus"],
+      ["定值", "constant"],
+      ["性质", "property"],
+      ["内容", "content"],
+      ["特例", "special case"],
+      ["推论", "corollary"],
+      ["核心", "core"],
+      ["负值", "negative"],
+      ["外心", "circumcenter"],
+      ["锐角三角形", "acute triangle"],
+      ["钝角三角形", "obtuse triangle"],
+      ["辅助线", "auxiliary line"],
+      ["弦心距", "distance from the center to the chord"],
+      ["端点", "endpoint"],
+      ["平分线", "bisector"],
+      ["垂线", "perpendicular line"],
+      ["到一条直线距离等于定长的所有点的集合", "the set of all points in a plane whose distance to a line is a fixed constant"],
+      ["到定点距离等于定长的所有点的集合", "the set of all points in a plane whose distance to a fixed point is a fixed constant"],
+      ["到两个定点距离之和为常数的所有点的集合", "the set of all points in a plane whose sum of distances to two fixed points is constant"],
+      ["到两个定点距离之差为常数的所有点的集合", "the set of all points in a plane whose difference of distances to two fixed points is constant"],
+      ["组成的图形是", "forms the figure "],
+      ["到原点的距离", "distance to the origin"],
+      ["到圆心距离", "distance to the center"],
+      ["到直线距离", "distance to the line"],
+      ["到圆", "to the circle "],
+      ["到点", "to point "],
+      ["最小距离为", "minimum distance is "],
+      ["最大距离为", "maximum distance is "],
+      ["的值为", "the value is "],
+      ["的取值范围是", "the range of values is "],
+      ["的半径为", "the radius is "],
+      ["的直径是", "the diameter is "],
+      ["的面积是", "the area is "],
+      ["的面积扩大到原来的", "the area becomes "],
+      ["的周长是", "the circumference is "],
+      ["的圆心为", "the center is "],
+      ["圆心坐标为", "the center is "],
+      ["截得的弦长为", "has chord length "],
+      ["所在直线方程为", "lies on the line with equation "],
+      ["切线方程为", "the tangent equation is "],
+      ["处的切线方程为", "the tangent equation is "],
+      ["的位置关系是", "the relative position is "],
+      ["的位置关系", "relative position"],
+      ["在圆外", "outside the circle"],
+      ["在圆内", "inside the circle"],
+      ["在圆上", "on the circle"],
+      ["在点", "at point "],
+      ["过圆上点", "through a point on the circle"],
+      ["过圆外一点", "through a point outside the circle"],
+      ["过两圆交点", "through the intersection points of the two circles"],
+      ["过该点", "through that point"],
+      ["过点", "through point "],
+      ["被圆", "cut by the circle "],
+      ["引两条切线", "draw two tangents"],
+      ["引圆的两条切线", "draw two tangents to the circle"],
+      ["作圆的切线", "draw tangents to the circle"],
+      ["的交点", "intersection point(s)"],
+      ["半径相等的两个圆是等圆", "Two circles with equal radii are congruent"],
+      ["半径相等的两个圆，面积相等", "Two circles with equal radii have equal areas"],
+      ["直径相等的两个圆，周长相等", "Two circles with equal diameters have equal circumferences"],
+      ["圆周长与直径的比值是π", "The ratio of a circle's circumference to its diameter is π"],
+      ["直径是圆中最长的弦", "The diameter is the longest chord in a circle"],
+      ["圆心是圆内的一个点，且到圆上任意一点的距离相等", "The center is a point inside the circle and is equidistant from every point on the circle"],
+      ["直径是半径的2倍，因此直径也是弦", "The diameter is twice the radius, so the diameter is also a chord"],
+      ["若要求整数", "If an integer is required"],
+      ["若直线", "If the line "],
+      ["若方程", "If the equation "],
+      ["若点", "If the point "],
+      ["若一个圆的", "If a circle's "],
+      ["若一个圆", "If a circle "],
+      ["若", "If "],
+      ["已知", "Given "],
+      ["则它的", "then its "],
+      ["则下列说法正确的有", "then which of the following statements are correct"],
+      ["则下列说法正确的是", "then which of the following statements is correct"],
+      ["则下列说法正确", "then the following statements are correct"],
+      ["则", "then "],
+      ["圆心角", "central angle"],
+      ["圆周角", "inscribed angle"],
+      ["圆心", "center"],
+      ["半径", "radius"],
+      ["直径", "diameter"],
+      ["弦长", "chord length"],
+      ["弦", "chord"],
+      ["弧", "arc"],
+      ["切线长", "tangent length"],
+      ["切点弦", "chord of contact"],
+      ["切点", "point of tangency"],
+      ["切线", "tangent"],
+      ["割线", "secant"],
+      ["公切线", "common tangent"],
+      ["相离", "separate"],
+      ["相交", "intersect"],
+      ["相切", "are tangent"],
+      ["外切", "externally tangent"],
+      ["内切", "internally tangent"],
+      ["外离", "externally separate"],
+      ["内含", "one circle inside the other"],
+      ["共圆", "concyclic"],
+      ["不共圆", "not concyclic"],
+      ["外接圆", "circumcircle"],
+      ["内切圆", "incircle"],
+      ["内心", "incenter"],
+      ["垂径定理", "perpendicular diameter theorem"],
+      ["圆幂", "power of a point"],
+      ["根轴", "radical axis"],
+      ["参数方程", "parametric equation"],
+      ["极坐标方程", "polar equation"],
+      ["最小距离", "minimum distance"],
+      ["最大距离", "maximum distance"],
+      ["距离", "distance"],
+      ["位置关系", "relative position"],
+      ["方程", "equation"],
+      ["面积", "area"],
+      ["周长", "circumference"],
+      ["边长", "side length"],
+      ["斜边", "hypotenuse"],
+      ["直角边", "leg"],
+      ["等边三角形", "equilateral triangle"],
+      ["直角三角形", "right triangle"],
+      ["相似三角形", "similar triangles"],
+      ["半圆", "semicircle"],
+      ["对角互补", "opposite angles are supplementary"],
+      ["正确应为", "The correct answer should be "],
+      ["答案为", "The answer is "],
+      ["A正确", "A is correct"],
+      ["B正确", "B is correct"],
+      ["C正确", "C is correct"],
+      ["D正确", "D is correct"],
+      ["四个选项均正确", "All four options are correct"],
+      ["两种形式等价", "The two forms are equivalent"],
+      ["利用", "Using "],
+      ["计算错误", "Computation error"],
+      ["更严谨", "More rigorously"],
+      ["可设", "Let "],
+      ["可表示为", "can be written as "],
+      ["可得", "we get "],
+      ["解得", "solving gives "],
+      ["代入得", "Substituting gives "],
+      ["联立方程后", "After solving the system"],
+      ["由海伦公式", "By Heron's formula"],
+      ["由", "From "],
+      ["因为", "Because "],
+      ["所以", "so "],
+      ["故", "therefore "],
+      ["得", "we get "],
+      ["应检验", "it should be checked"],
+      ["需单独讨论", "needs to be discussed separately"],
+      ["不能判定", "cannot be determined"],
+      ["可判断", "can be determined"],
+      ["在内部", "inside"],
+      ["在外部", "outside"],
+      ["在圆外", "outside the circle"],
+      ["在圆内", "inside the circle"],
+      ["在圆上", "on the circle"],
+      ["圆外一点", "a point outside the circle"],
+      ["圆上点", "a point on the circle"],
+      ["点", "point "],
+      ["直线", "line "],
+      ["圆", "circle "],
+      ["经过", "passes through "],
+      ["过点", "through point "],
+      ["过圆外一点", "through a point outside the circle"],
+      ["作圆的切线", "draw tangents to the circle"],
+      ["引两条切线", "draw two tangents"],
+      ["两条切线", "two tangents"],
+      ["有（ ）", "is ( )"],
+      ["的是（ ）", "is ( )"],
+      ["是（ ）", "is ( )"],
+      ["为______。", "is ______."],
+      ["为______", "is ______"],
+      ["为（ ）", "is ( )"],
+      ["填“共圆”或“不共圆”", 'fill in "concyclic" or "not concyclic"'],
+      ["正确的有（ ）", "are correct ( )"],
+      ["正确的是（ ）", "is correct ( )"]
+    ];
+
+    const fallbackZhWordMap = {
+      "圆内接四边形": "cyclic quadrilateral",
+      "相交弦定理": "intersecting chords theorem",
+      "切割线定理": "tangent-secant theorem",
+      "割线定理": "secant-secant theorem",
+      "弦切角定理": "tangent-chord angle theorem",
+      "切线长定理": "tangent-segment theorem",
+      "圆幂定理": "power of a point theorem",
+      "垂径定理": "perpendicular diameter theorem",
+      "圆周角定理": "inscribed angle theorem",
+      "圆心角定理": "central angle theorem",
+      "阿波罗尼斯圆": "Apollonius circle",
+      "根轴": "radical axis",
+      "等幂轴": "radical axis",
+      "外公切线": "external common tangent",
+      "内公切线": "internal common tangent",
+      "公切线": "common tangent",
+      "外接圆": "circumcircle",
+      "内切圆": "incircle",
+      "外心": "circumcenter",
+      "内心": "incenter",
+      "角平分线": "angle bisector",
+      "垂直平分线": "perpendicular bisector",
+      "中垂线": "perpendicular bisector",
+      "半周长": "semiperimeter",
+      "海伦公式": "Heron's formula",
+      "等边三角形": "equilateral triangle",
+      "直角三角形": "right triangle",
+      "锐角三角形": "acute triangle",
+      "钝角三角形": "obtuse triangle",
+      "相似三角形": "similar triangles",
+      "公共弦": "common chord",
+      "连心线": "line joining the centers",
+      "弦心距": "distance from the center to the chord",
+      "辅助线": "auxiliary line",
+      "轨迹": "locus",
+      "定值": "constant",
+      "性质": "property",
+      "特例": "special case",
+      "推论": "corollary",
+      "核心": "core",
+      "内容": "content",
+      "平行线": "parallel line",
+      "椭圆": "ellipse",
+      "双曲线": "hyperbola",
+      "切线": "tangent",
+      "割线": "secant",
+      "弦": "chord",
+      "弧": "arc",
+      "圆心": "center",
+      "半径": "radius",
+      "直径": "diameter",
+      "圆心角": "central angle",
+      "圆周角": "inscribed angle",
+      "弦长": "chord length",
+      "周长": "circumference",
+      "面积": "area",
+      "方程": "equation",
+      "距离": "distance",
+      "位置关系": "relative position",
+      "公共点": "common point",
+      "中点": "midpoint",
+      "顶点": "vertex",
+      "边长": "side length",
+      "斜边": "hypotenuse",
+      "直角边": "leg",
+      "端点": "endpoint",
+      "点": "point",
+      "线": "line",
+      "圆": "circle",
+      "角": "angle",
+      "相交": "intersect",
+      "相切": "tangent",
+      "相离": "separate",
+      "外切": "externally tangent",
+      "内切": "internally tangent",
+      "外离": "externally separate",
+      "内含": "one inside the other",
+      "共圆": "concyclic",
+      "互补": "supplementary",
+      "平分": "bisect",
+      "构成": "form",
+      "连接": "connect",
+      "相等": "equal",
+      "正确": "correct",
+      "错误": "incorrect",
+      "内部": "inside",
+      "外部": "outside",
+      "上": "on",
+      "下": "below",
+      "中": "in",
+      "内": "inside",
+      "外": "outside",
+      "长": "length",
+      "幂": "power",
+      "值": "value",
+      "图": "figure"
+    };
+
+    const fallbackZhTerms = Object.keys(fallbackZhWordMap).sort((a, b) => b.length - a.length);
+
+    function translateRemainingChineseToken(token) {
+      let index = 0;
+      let result = "";
+
+      while (index < token.length) {
+        let matched = false;
+        for (const term of fallbackZhTerms) {
+          if (token.startsWith(term, index)) {
+            result += `${fallbackZhWordMap[term]} `;
+            index += term.length;
+            matched = true;
+            break;
+          }
+        }
+
+        if (!matched) {
+          index += 1;
+        }
+      }
+
+      return result.replace(/\s{2,}/g, " ").trim();
+    }
+
+    function translateGeometryText(text) {
+      if (lang !== "en" || typeof text !== "string" || !/[\u4e00-\u9fff]/.test(text)) return text;
+      if (exactEnglishTextMap[text]) return exactEnglishTextMap[text];
+
+      let output = text;
+
+      orderedZhEnReplacements.forEach(([zhText, enText]) => {
+        output = output.split(zhText).join(enText);
+      });
+
+      output = output
+        .replace(/“/g, '"')
+        .replace(/”/g, '"')
+        .replace(/（/g, "(")
+        .replace(/）/g, ")")
+        .replace(/，/g, ", ")
+        .replace(/。/g, ". ")
+        .replace(/；/g, "; ")
+        .replace(/：/g, ": ")
+        .replace(/、/g, ", ")
+        .replace(/若\s+/g, "If ")
+        .replace(/则\s+/g, "then ")
+        .replace(/设/g, "Let ")
+        .replace(/即/g, "i.e. ")
+        .replace(/或/g, " or ")
+        .replace(/且/g, " and ")
+        .replace(/与/g, " and ")
+        .replace(/同理/g, "Similarly")
+        .replace(/选([A-D])/g, "choose $1")
+        .replace(/([A-D])、([A-D])/g, "$1, $2")
+        .replace(/([A-D])是/g, "$1 is ")
+        .replace(/[\u4e00-\u9fff]+/g, (token) => ` ${translateRemainingChineseToken(token)} `)
+        .replace(/\s{2,}/g, " ")
+        .replace(/\s+([,.;:)])/g, "$1")
+        .replace(/([(])\s+/g, "$1")
+        .replace(/\s+([)])+/g, "$1")
+        .trim();
+
+      return output;
+    }
+
+    function getText(value) {
+      const raw = typeof value === "string" ? value : (value && (value[lang] || value.zh || value.en)) || "";
+      return translateGeometryText(raw);
+    }
     function clearAnswerRecords() { Object.keys(answerRecords).forEach((key) => delete answerRecords[key]); }
 
     function getSectionLabelById(sectionId) {
+      if (lang === "en" && sectionEnglishLabels[sectionId]) return sectionEnglishLabels[sectionId];
       return getText(sectionMap[sectionId] ? sectionMap[sectionId].label : sectionId);
     }
 
@@ -7416,6 +8331,20 @@
         selectedSection = "all";
       }
       els.sectionSelect.value = selectedSection;
+    }
+
+    function populateSectionsLevelSelect() {
+      const oldValue = els.sectionsLevelSelect.value || sectionsLevelFilter;
+      const options = [`<option value="all">${t("allLevels")}</option>`]
+        .concat(Array.from({ length: MAX_LEVEL }, (_, index) => {
+          const level = index + 1;
+          return `<option value="${level}">${t("levelPrefix")} ${level}</option>`;
+        }));
+      els.sectionsLevelSelect.innerHTML = options.join("");
+      sectionsLevelFilter = oldValue === "all" || (/^\d+$/.test(oldValue) && Number(oldValue) >= 1 && Number(oldValue) <= MAX_LEVEL)
+        ? oldValue
+        : "all";
+      els.sectionsLevelSelect.value = sectionsLevelFilter;
     }
 
     function clampExamMinutes(value) {
@@ -7536,7 +8465,6 @@
       examSummary = null;
       mode = "all";
       activePage = "practice";
-      pureMode = false;
       examDurationMinutes = state.duration;
       examDeadlineTs = state.endsAt;
       examSectionSet.clear();
@@ -7607,16 +8535,23 @@
     }
 
     function renderSectionsPage(force = false) {
-      if (!force && lastRenderedSectionsLang === lang) return;
-      lastRenderedSectionsLang = lang;
+      const renderKey = `${lang}|${sectionsLevelFilter}`;
+      if (!force && lastRenderedSectionsLang === renderKey) return;
+      lastRenderedSectionsLang = renderKey;
       const cards = sectionIds.map((sectionId) => {
         const stat = sectionStats[sectionId] || { count: 0, levels: new Set() };
-        const levels = [...stat.levels].sort((a, b) => a - b).join(", ") || "-";
+        const filteredCount = sectionsLevelFilter === "all"
+          ? stat.count
+          : questionBank.filter((q) => q.section === sectionId && String(q.level || 1) === sectionsLevelFilter).length;
+        if (sectionsLevelFilter !== "all" && filteredCount === 0) return null;
+        const levels = sectionsLevelFilter === "all"
+          ? ([...stat.levels].sort((a, b) => a - b).join(", ") || "-")
+          : sectionsLevelFilter;
         const wrapper = document.createElement("div");
         wrapper.className = "section-card";
         wrapper.innerHTML = `
           <b>${getSectionLabelById(sectionId)}</b>
-          <span>${t("sectionCount", { count: stat.count })}</span>
+          <span>${t("sectionCount", { count: filteredCount })}</span>
           <span>${t("sectionLevels", { levels })}</span>
         `;
         const btn = document.createElement("button");
@@ -7626,15 +8561,22 @@
         btn.addEventListener("click", () => {
           selectedSection = sectionId;
           activePage = "practice";
-          currentLevel = 1;
+          currentLevel = sectionsLevelFilter === "all" ? 1 : Number(sectionsLevelFilter);
           clearAnswerRecords();
           refreshQuestionPool();
           render();
         });
         wrapper.appendChild(btn);
         return wrapper;
-      });
+      }).filter(Boolean);
       els.sectionsGrid.innerHTML = "";
+      if (!cards.length) {
+        const empty = document.createElement("div");
+        empty.className = "empty section-empty";
+        empty.textContent = t("sectionsEmptyLevel", { level: sectionsLevelFilter });
+        els.sectionsGrid.appendChild(empty);
+        return;
+      }
       cards.forEach((el) => els.sectionsGrid.appendChild(el));
     }
 
@@ -7884,20 +8826,28 @@
       const onHomePage = activePage === "home";
       const onPracticePage = activePage === "practice";
       const onSectionsPage = activePage === "sections";
+      const canCollapseWrongPanel = !(examMode && examStarted && !examSubmitted);
+      if (pureMode && !onPracticePage) {
+        pureMode = false;
+        savePureModePreference();
+      }
+      const purePracticeMode = pureMode && onPracticePage && !examMode;
       document.body.classList.toggle("overview-mode", onHomePage || onSectionsPage);
-      document.body.classList.toggle("pure-mode", pureMode);
+      document.body.classList.toggle("home-overview-mode", onHomePage);
       document.body.classList.toggle("exam-focus-mode", examMode && examStarted && !examSubmitted);
-      document.body.classList.toggle("wrong-panel-collapsed", onPracticePage && !pureMode && !examMode && wrongPanelCollapsed);
+      document.body.classList.toggle("practice-pure-mode", purePracticeMode);
+      document.body.classList.toggle("wrong-panel-collapsed", canCollapseWrongPanel && wrongPanelCollapsed);
       els.homePageBtn.classList.toggle("active", onHomePage);
       els.practicePageBtn.classList.toggle("active", onPracticePage);
       els.sectionsPageBtn.classList.toggle("active", onSectionsPage);
       els.allModeBtn.classList.toggle("active", mode === "all");
       els.wrongModeBtn.classList.toggle("active", mode === "wrong" && !examMode);
       els.examModeBtn.classList.toggle("active", examMode);
-      els.pureModeBtn.classList.toggle("active", pureMode);
       els.wrongModeBtn.disabled = examMode;
       els.clearWrongBtn.disabled = examMode;
       els.sectionSelect.disabled = examMode;
+      els.pureModeToggleBtn.disabled = examMode;
+      els.pureModeToggleBtn.setAttribute("aria-pressed", String(purePracticeMode));
       els.showAnswerBtn.disabled = examMode && !examSubmitted;
       els.smartNextBtn.disabled = !onPracticePage || examMode;
       els.examSectionSelectAllBtn.disabled = !examMode || examStarted || examSubmitted;
@@ -7906,13 +8856,13 @@
       els.examApplyTimeBtn.disabled = !examMode || examStarted || examSubmitted;
       els.examStartBtn.disabled = !examMode || examStarted || examSubmitted;
       els.submitPaperBtn.classList.toggle("hidden", !(examMode && examStarted && !examSubmitted));
-      els.heroSection.classList.toggle("hidden", !onHomePage || pureMode);
-      els.sidePanel.classList.toggle("hidden", !onPracticePage || pureMode || examMode);
+      els.heroSection.classList.toggle("hidden", !onHomePage);
+      els.sidePanel.classList.toggle("hidden", onHomePage);
       els.modeControls.classList.toggle("hidden", !onPracticePage);
       els.filtersRow.classList.toggle("hidden", !onPracticePage);
       els.sectionFilterWrap.classList.toggle("hidden", examMode);
       els.examSectionPicker.classList.toggle("hidden", !(onPracticePage && examMode && !examStarted));
-      els.statsPanel.classList.toggle("hidden", !onPracticePage || pureMode);
+      els.statsPanel.classList.toggle("hidden", !onPracticePage);
       els.examNavigator.classList.add("hidden");
       els.questionWrap.classList.toggle("hidden", !onPracticePage || (examMode && (!examStarted || examSubmitted)));
       els.examResultsPage.classList.toggle("hidden", !(onPracticePage && examMode && examSubmitted));
@@ -7934,6 +8884,10 @@
       stopExamTimer();
       examMode = nextExamMode;
       activePage = "practice";
+      if (examMode && pureMode) {
+        pureMode = false;
+        savePureModePreference();
+      }
       setClearConfirmState(false);
       if (examMode) {
         examStarted = false;
@@ -7988,13 +8942,13 @@
     function formatAnswer(question, answer) {
       if (question.type === "single") return getText(question.options[answer]);
       if (question.type === "multiple") return answer.map((i) => getText(question.options[i])).join(lang === "zh" ? "、" : ", ");
-      return Array.isArray(answer) ? answer.join(" / ") : String(answer);
+      return Array.isArray(answer) ? answer.map((item) => translateGeometryText(String(item))).join(" / ") : translateGeometryText(String(answer));
     }
 
     function formatUserAnswer(question, userAnswer) {
       if (question.type === "single") return Number.isInteger(userAnswer) ? getText(question.options[userAnswer]) : t("noAnswer");
       if (question.type === "multiple") return userAnswer.length ? userAnswer.map((i) => getText(question.options[i])).join(lang === "zh" ? "、" : ", ") : t("noAnswer");
-      return userAnswer ? userAnswer : t("noAnswer");
+      return userAnswer ? translateGeometryText(String(userAnswer)) : t("noAnswer");
     }
 
     function evaluateAnswer(question, userAnswer) {
@@ -8083,17 +9037,37 @@
     }
 
     function applyStaticTexts() {
+      const setPageNavLabel = (button, label) => {
+        if (!button) return;
+        button.setAttribute("data-nav-label", label);
+        button.setAttribute("aria-label", label);
+        button.setAttribute("title", label);
+        const labelNode = button.querySelector(".page-nav-label");
+        if (labelNode) labelNode.textContent = label;
+      };
       document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
       document.title = t("pageTitle");
       els.heroTitle.textContent = t("heroTitle");
       els.heroDesc.textContent = t("heroDesc");
-      els.homePageBtn.textContent = t("pageHome");
-      els.practicePageBtn.textContent = t("pagePractice");
-      els.sectionsPageBtn.textContent = t("pageSections");
-      els.pureModeBtn.textContent = pureMode ? t("pureModeOff") : t("pureModeOn");
+      setPageNavLabel(els.homePageBtn, t("pageHome"));
+      setPageNavLabel(els.practicePageBtn, t("pagePractice"));
+      setPageNavLabel(els.sectionsPageBtn, t("pageSections"));
       els.allModeBtn.textContent = t("modeAll");
       els.wrongModeBtn.textContent = t("navWrong");
-      els.examModeBtn.textContent = examMode ? t("exitExamMode") : t("enterExamMode");
+      setPageNavLabel(els.examModeBtn, examMode ? t("exitExamMode") : t("enterExamMode"));
+      els.colorSafeToggleBtn.textContent = colorSafeMode ? t("colorSafeOff") : t("colorSafeOn");
+      els.colorSafeToggleBtn.setAttribute("aria-label", colorSafeMode ? t("colorSafeOff") : t("colorSafeOn"));
+      els.colorSafeToggleBtn.setAttribute("title", colorSafeMode ? t("colorSafeOff") : t("colorSafeOn"));
+      els.fontDecreaseBtn.setAttribute("aria-label", t("fontDecrease"));
+      els.fontDecreaseBtn.setAttribute("title", t("fontDecrease"));
+      els.fontResetBtn.setAttribute("aria-label", t("fontReset"));
+      els.fontResetBtn.setAttribute("title", t("fontReset"));
+      els.fontIncreaseBtn.setAttribute("aria-label", t("fontIncrease"));
+      els.fontIncreaseBtn.setAttribute("title", t("fontIncrease"));
+      const pureModeActive = pureMode && activePage === "practice" && !examMode;
+      els.pureModeToggleBtn.textContent = pureModeActive ? t("pureModeOff") : t("pureModeOn");
+      els.pureModeToggleBtn.setAttribute("aria-label", pureModeActive ? t("pureModeOff") : t("pureModeOn"));
+      els.pureModeToggleBtn.setAttribute("title", pureModeActive ? t("pureModeOff") : t("pureModeOn"));
       els.clearWrongBtn.textContent = t("clearWrong");
       els.confirmClearWrongBtn.textContent = t("clearConfirm");
       els.cancelClearWrongBtn.textContent = t("clearCancel");
@@ -8124,6 +9098,14 @@
       els.wrongPanelToggleBtn.textContent = t(wrongPanelCollapsed ? "wrongExpand" : "wrongCollapse");
       els.homePageTitle.textContent = t("homePageTitle");
       els.homePageDesc.textContent = t("homePageDesc");
+      els.homeFocusEyebrow.textContent = t("homeFocusEyebrow");
+      els.homeFocusTitle.textContent = t("homeFocusTitle");
+      els.homeFocusFact1Title.textContent = t("homeFocusFact1Title");
+      els.homeFocusFact1Desc.textContent = t("homeFocusFact1Desc");
+      els.homeFocusFact2Title.textContent = t("homeFocusFact2Title");
+      els.homeFocusFact2Desc.textContent = t("homeFocusFact2Desc");
+      els.homeFocusFact3Title.textContent = t("homeFocusFact3Title");
+      els.homeFocusFact3Desc.textContent = t("homeFocusFact3Desc");
       els.homeMetricQuestionsLabel.textContent = t("homeMetricQuestionsLabel");
       els.homeMetricSectionsLabel.textContent = t("homeMetricSectionsLabel");
       els.homeMetricWrongLabel.textContent = t("homeMetricWrongLabel");
@@ -8133,6 +9115,10 @@
       els.homeGuideStep1.textContent = t("homeGuideStep1");
       els.homeGuideStep2.textContent = t("homeGuideStep2");
       els.homeGuideStep3.textContent = t("homeGuideStep3");
+      els.homeTheoremEyebrow.textContent = t("homeTheoremEyebrow");
+      els.homeTheoremGalleryTitle.textContent = t("homeTheoremTitle");
+      els.homeTheoremGalleryDesc.textContent = t("homeTheoremDesc");
+      els.homeTheoremRefreshBtn.textContent = t("homeTheoremShuffle");
       els.homeCardPracticeTitle.textContent = t("homeCardPracticeTitle");
       els.homeCardPracticeDesc.textContent = t("homeCardPracticeDesc");
       els.homeStartPracticeBtn.textContent = t("homeCardPracticeBtn");
@@ -8144,6 +9130,7 @@
       els.homeOpenSectionsBtn.textContent = t("homeCardSectionBtn");
       els.sectionsPageTitle.textContent = t("sectionsPageTitle");
       els.sectionsPageDesc.textContent = t("sectionsPageDesc");
+      els.sectionsLevelLabel.textContent = t("sectionsLevelLabel");
       els.examResultsTitle.textContent = t("examResultsTitle");
       els.examResultsDesc.textContent = t("examResultsDesc");
       els.examResultsCorrectLabel.textContent = t("examResultsCorrect");
@@ -8154,8 +9141,10 @@
       els.examResultsReviewDesc.textContent = t("examResultsReviewDesc");
       els.examRetryBtn.textContent = t("examResultsRetry");
       populateSectionSelect();
+      populateSectionsLevelSelect();
       updateSectionOwnerBadge();
       updateExamTimerDisplay();
+      applyAccessibilityPreferences();
       syncWrongPanelState();
     }
 
@@ -8186,8 +9175,53 @@
       els.homeProgressFill.style.width = `${percent}%`;
     }
 
+    function renderHomeTheoremGallery(force = false) {
+      if (!homeTheoremSelection.length) refreshHomeTheoremSelection();
+      const key = homeTheoremSelection.map((item) => item.title).join("|");
+      if (!force && key === lastRenderedHomeTheoremKey) return;
+      lastRenderedHomeTheoremKey = key;
+      els.homeTheoremGrid.innerHTML = "";
+      homeTheoremSelection.forEach((demo) => {
+        const card = document.createElement("article");
+        card.className = "home-theorem-card";
+        card.dataset.accent = demo.accent;
+
+        const meta = document.createElement("div");
+        meta.className = "home-theorem-meta";
+
+        const section = document.createElement("span");
+        section.className = "home-theorem-section";
+        section.textContent = sectionEnglishLabels[demo.sectionId] || demo.title;
+
+        const formula = document.createElement("span");
+        formula.className = "home-theorem-formula";
+        formula.textContent = demo.formula;
+
+        const title = document.createElement("h5");
+        title.className = "home-theorem-card-title";
+        title.textContent = demo.title;
+
+        const statement = document.createElement("p");
+        statement.className = "home-theorem-card-desc";
+        statement.textContent = demo.statement;
+
+        const figure = document.createElement("div");
+        figure.className = "home-theorem-figure";
+        figure.setAttribute("aria-hidden", "true");
+        figure.innerHTML = demo.svg;
+
+        const copy = document.createElement("div");
+        copy.className = "home-theorem-copy";
+
+        meta.append(section, formula);
+        copy.append(title, statement);
+        card.append(meta, figure, copy);
+        els.homeTheoremGrid.appendChild(card);
+      });
+    }
+
     function syncWrongPanelState() {
-      const canCollapse = activePage === "practice" && !pureMode && !examMode;
+      const canCollapse = !(examMode && examStarted && !examSubmitted);
       const collapsed = canCollapse && wrongPanelCollapsed;
       document.body.classList.toggle("wrong-panel-collapsed", collapsed);
       els.sidePanelBody.classList.toggle("hidden", collapsed);
@@ -8236,6 +9270,7 @@
       renderExamSectionPicker();
       syncControlState();
       renderHomeOverview();
+      renderHomeTheoremGallery();
       renderWrongList();
       renderSectionsPage();
       renderExamNavigator();
@@ -8403,14 +9438,6 @@
       });
     }
 
-    function togglePureMode() {
-      pureMode = !pureMode;
-      if (pureMode) {
-        activePage = "practice";
-      }
-      render();
-    }
-
     function toggleLang() {
       lang = lang === "zh" ? "en" : "zh";
       saveLang();
@@ -8421,7 +9448,6 @@
     els.submitBtn.addEventListener("click", submitAnswer);
     els.homePageBtn.addEventListener("click", () => {
       if (!leaveExamModeForNavigation()) return;
-      pureMode = false;
       activePage = "home";
       render();
     });
@@ -8431,11 +9457,9 @@
     });
     els.sectionsPageBtn.addEventListener("click", () => {
       if (!leaveExamModeForNavigation()) return;
-      pureMode = false;
       activePage = "sections";
       render();
     });
-    els.pureModeBtn.addEventListener("click", togglePureMode);
     els.homeStartPracticeBtn.addEventListener("click", () => {
       activePage = "practice";
       render();
@@ -8450,9 +9474,12 @@
     });
     els.homeOpenSectionsBtn.addEventListener("click", () => {
       if (!leaveExamModeForNavigation()) return;
-      pureMode = false;
       activePage = "sections";
       render();
+    });
+    els.homeTheoremRefreshBtn.addEventListener("click", () => {
+      refreshHomeTheoremSelection();
+      renderHomeTheoremGallery(true);
     });
     els.showAnswerBtn.addEventListener("click", () => {
       if (!currentQuestions.length) return;
@@ -8472,6 +9499,10 @@
         refreshQuestionPool();
         render();
       });
+    });
+    els.sectionsLevelSelect.addEventListener("change", () => {
+      sectionsLevelFilter = els.sectionsLevelSelect.value || "all";
+      renderSectionsPage(true);
     });
     els.examSectionSelectAllBtn.addEventListener("click", () => {
       sectionIds.forEach((id) => examSectionSet.add(id));
@@ -8515,6 +9546,11 @@
     });
     els.cancelClearWrongBtn.addEventListener("click", () => setClearConfirmState(false));
     els.wrongPanelToggleBtn.addEventListener("click", toggleWrongPanel);
+    els.colorSafeToggleBtn.addEventListener("click", toggleColorSafeMode);
+    els.fontDecreaseBtn.addEventListener("click", () => adjustFontScale(-0.1));
+    els.fontResetBtn.addEventListener("click", resetFontScale);
+    els.fontIncreaseBtn.addEventListener("click", () => adjustFontScale(0.1));
+    els.pureModeToggleBtn.addEventListener("click", togglePureMode);
     els.themeToggleBtn.addEventListener("click", toggleTheme);
     els.submitPaperBtn.addEventListener("click", submitPaper);
     els.examStartBtn.addEventListener("click", startExamSession);
@@ -8532,8 +9568,9 @@
     } else if (typeof prefersDarkScheme.addListener === "function") {
       prefersDarkScheme.addListener(handleSystemThemeChange);
     }
-
+    refreshHomeTheoremSelection();
     applyTheme();
+    applyAccessibilityPreferences();
     setupMicroInteractions();
     if (!restoreExamState()) {
       currentQuestions = getCurrentQuestions();

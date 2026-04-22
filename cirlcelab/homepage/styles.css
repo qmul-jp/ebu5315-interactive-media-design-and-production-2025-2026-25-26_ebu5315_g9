@@ -266,6 +266,10 @@ body.is-auth-switching .auth-overlay {
   position: relative;
 }
 
+.settings-shell {
+  position: relative;
+}
+
 .nav-link {
   display: inline-flex;
   align-items: center;
@@ -350,6 +354,10 @@ body.is-auth-switching .auth-overlay {
   min-height: clamp(1.9rem, 2.55vw, 2.55rem);
   padding: clamp(0.18rem, 0.45vw, 0.4rem) clamp(0.42rem, 0.8vw, 1rem);
   border-radius: var(--button-radius);
+}
+
+.account-nav .nav-link.login-btn {
+  background: color-mix(in oklch, var(--chip) 70%, transparent);
 }
 
 .account-nav .nav-link.login-btn {
@@ -8328,6 +8336,7 @@ body.is-auth-open {
   .account-nav .nav-link.signup-btn {
     min-width: 3rem;
   }
+}
 
   .account-nav .nav-link.setting-btn {
     width: 1.82rem;
@@ -8341,6 +8350,7 @@ body.is-auth-open {
     gap: clamp(0.52rem, 0.9vw, 0.74rem);
     padding: 0;
   }
+}
 
   .ai-chat-demo .ai-chat-sidebar {
     grid-template-rows: auto auto auto minmax(0, 1fr);
@@ -8352,6 +8362,7 @@ body.is-auth-open {
   .ai-chat-demo .ai-chat-sidebar-section {
     gap: 0.38rem;
   }
+}
 
   .ai-chat-demo .ai-chat-sidebar-list,
   .ai-chat-demo .ai-chat-sidebar-history {
@@ -8366,6 +8377,7 @@ body.is-auth-open {
     border-radius: 0.34rem;
     font-size: 0.92rem;
   }
+}
 
   .ai-chat-demo .ai-chat-main {
     --ai-chat-main-pad-y: 0.7rem;
