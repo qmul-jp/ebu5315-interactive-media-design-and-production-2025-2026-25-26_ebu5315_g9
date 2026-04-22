@@ -57,6 +57,17 @@
       "settings.font_medium": "Medium",
       "settings.font_large": "Large",
       "settings.font_slider_aria": "Adjust text size",
+      "cookie.aria": "Cookie preferences dialog",
+      "cookie.title": "We value your privacy",
+      "cookie.copy":
+        'We use cookies to improve your browsing experience and remember your preferences on this device.',
+      "cookie.policy": "Privacy Policy",
+      "cookie.manage": "Manage cookies",
+      "cookie.accept": "Accept all cookies",
+      "cookie.detail_1":
+        "This demo only uses local storage to remember theme, language, and text size on this device.",
+      "cookie.detail_2":
+        "Analytics and advertising cookies are not connected in this static build.",
       "hero.kicker": "CIRCLE LAB",
       "hero.title": "Master Circle Geometry with Ease",
       "hero.intro":
@@ -135,6 +146,17 @@
       "settings.font_medium": "中",
       "settings.font_large": "大",
       "settings.font_slider_aria": "调整字号",
+      "cookie.aria": "Cookie 偏好弹窗",
+      "cookie.title": "我们重视你的隐私",
+      "cookie.copy":
+        "我们使用 cookie 与本地存储来优化浏览体验，并在这台设备上记住你的 CircleLab 偏好设置。",
+      "cookie.policy": "隐私说明",
+      "cookie.manage": "管理 Cookie",
+      "cookie.accept": "接受全部 Cookie",
+      "cookie.detail_1":
+        "这个演示版只会用本地存储记住主题、语言和字号，不会上传到服务器。",
+      "cookie.detail_2":
+        "当前静态版本没有接入分析追踪或广告类 cookie。",
       "hero.kicker": "CIRCLE LAB",
       "hero.title": "轻松掌握圆几何",
       "hero.intro": "通过清晰讲解、交互图形和简明练习，学习圆几何的关键规则。",

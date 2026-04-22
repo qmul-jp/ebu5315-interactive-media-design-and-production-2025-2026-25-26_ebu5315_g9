@@ -4295,6 +4295,79 @@ window.CircleLabDebug = window.CircleLabDebug || {};
 
 // Fallback: always allow hero "Chat now" to force-open the floating chat window.
 (() => {
+  const cookieBanner = document.querySelector("[data-cookie-banner]");
+  if (!(cookieBanner instanceof HTMLElement)) {
+    return;
+  }
+
+  const closeDelayMs = 280;
+  const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+  const dismissButtons = Array.from(
+    cookieBanner.querySelectorAll("[data-cookie-dismiss]")
+  );
+  let isClosing = false;
+  let closeFallbackTimer = null;
+
+  const finishClosingCookieBanner = () => {
+    if (closeFallbackTimer !== null) {
+      window.clearTimeout(closeFallbackTimer);
+      closeFallbackTimer = null;
+    }
+
+    cookieBanner.hidden = true;
+    cookieBanner.classList.remove("is-closing");
+    isClosing = false;
+  };
+
+  const closeCookieBanner = () => {
+    if (cookieBanner.hidden || isClosing) {
+      return;
+    }
+
+    if (reduceMotion) {
+      finishClosingCookieBanner();
+      return;
+    }
+
+    isClosing = true;
+    cookieBanner.classList.add("is-closing");
+
+    const handleTransitionEnd = (event) => {
+      if (event.target !== cookieBanner || event.propertyName !== "transform") {
+        return;
+      }
+
+      cookieBanner.removeEventListener("transitionend", handleTransitionEnd);
+      finishClosingCookieBanner();
+    };
+
+    cookieBanner.addEventListener("transitionend", handleTransitionEnd);
+    closeFallbackTimer = window.setTimeout(() => {
+      cookieBanner.removeEventListener("transitionend", handleTransitionEnd);
+      finishClosingCookieBanner();
+    }, closeDelayMs + 80);
+  };
+
+  dismissButtons.forEach((button) => {
+    if (!(button instanceof HTMLButtonElement)) {
+      return;
+    }
+
+    button.addEventListener("click", () => {
+      closeCookieBanner();
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape" || cookieBanner.hidden) {
+      return;
+    }
+
+    closeCookieBanner();
+  });
+})();
+
+(() => {
   const triggerButtons = Array.from(
     document.querySelectorAll("[data-open-float-chat]:not([data-float-chat-bound])")
   );
