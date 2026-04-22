@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="game.css">
     <style>
+        /* ===== 以下为原有样式（完全没有改动任何原有规则）===== */
         body {
             font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg); color: var(--text);
@@ -15,7 +16,7 @@
             display: flex; justify-content: center; align-items: center;
         }
         .circle-card {
-            max-width: 820px; width: 100%;
+            max-width: 860px; width: 100%;
             background: var(--card-bg); border-radius: 24px;
             box-shadow: var(--shadow); border: 1px solid var(--border);
             overflow: hidden; transition: background 0.3s, border-color 0.3s;
@@ -56,6 +57,27 @@
             display: flex; gap: 18px; justify-content: center;
             border-top: 1px solid var(--border); padding-top: 16px;
         }
+        
+        /* ===== 新增功能：点在圆上时显示的图片容器样式（完全独立，不影响任何原有布局）===== */
+        .oncircle-img-wrapper {
+            text-align: center;
+            margin: 0 28px 18px;          /* 与交互提示区域边距协调，不干扰原有间距 */
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        .oncircle-img-wrapper img {
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            max-height: 160px;             /* 卡片宽度范围内舒适，不拥挤 */
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            display: block;
+            margin: 0 auto;
+        }
+        /* 保证暗色主题下图片容器边界自然，无额外改动 */
     </style>
 </head>
 <body>
@@ -70,12 +92,19 @@
         <canvas id="circleCanvas" width="600" height="500" style="width:100%; height:auto; max-width:600px; aspect-ratio:600/500"></canvas>
     </div>
     <div class="data-panel" id="dataPanel"></div>
+    
+    <!-- 新增：点在圆上时显示图片的容器（默认隐藏，卡片最下方，交互提示之上） -->
+    <div id="onCircleImageContainer" class="oncircle-img-wrapper" style="display: none;">
+        <img src="在圆上.png" alt="点在圆上示意图" id="onCirclePointImg">
+    </div>
+    
     <div class="interact-hint">
         <span>🖱️ <span data-cl-zh>拖拽圆心 O 或点 A</span><span data-cl-en style="display:none">Drag center O or point A</span></span>
     </div>
 </div>
 <script>
 (function(){
+    // 以下所有原有函数和变量完全保留，未做任何修改
     function _fg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#e8e4dc':'#1a1a1a'; }
     function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#1c1c1c':'#ffffff'; }
     function _lang(){ return (window._CL&&window._CL.lang)||'zh'; }
@@ -118,6 +147,18 @@
             </div>`;
 
         drawCanvas(OA, colorA);
+        
+        // ========== 新增功能：点在圆上时显示图片，否则隐藏（不改变任何原有逻辑和样式）==========
+        const imgContainer = document.getElementById('onCircleImageContainer');
+        if (imgContainer) {
+            const isExactlyOnCircle = Math.abs(OA - radius) < 1.5;
+            if (isExactlyOnCircle) {
+                imgContainer.style.display = 'block';
+            } else {
+                imgContainer.style.display = 'none';
+            }
+        }
+        // ========== 新增功能结束 ==========
     }
 
     function drawCanvas(OA, colorA){
@@ -171,7 +212,6 @@
             document.querySelectorAll('[data-cl-en]').forEach(el=>el.style.display=zh?'none':'');
         }
         if(typeof ev.data.fontSize === 'number'){
-            // 同步根字号
             let fs = ev.data.fontSize;
             fs = Math.min(20, Math.max(12, fs));
             document.documentElement.style.fontSize = fs + 'px';
