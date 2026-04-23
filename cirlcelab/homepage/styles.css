@@ -10,7 +10,8 @@
   --font-sans: "Manrope", "Noto Sans SC", "Source Han Sans SC", "PingFang SC",
     "Microsoft YaHei", sans-serif;
   --font-display: "Anthropic Serif", "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
-  --font-scale: 1;
+  --font-scale: 0.94;
+  --settings-font-step: 1;
   --nav-primary-scale: 1;
   --section-title-line-height: 1.18;
   --section-title-letter-spacing: -0.008em;
@@ -67,16 +68,6 @@
     "Microsoft YaHei", "Heiti SC", sans-serif;
   --font-display: "Source Han Serif SC", "Noto Serif SC", "Songti SC", "STSong",
     "SimSun", serif;
-}
-
-:root[data-font-scale="small"] {
-  --font-scale: 0.94;
-  --nav-primary-scale: 0.97;
-}
-
-:root[data-font-scale="large"] {
-  --font-scale: 1.08;
-  --nav-primary-scale: 1.07;
 }
 
 :root[data-theme="light"] {
@@ -1194,6 +1185,7 @@ body.is-auth-switching .auth-overlay {
       color-mix(in oklch, var(--accent) 35%, var(--panel))
     );
   color: color-mix(in oklch, #faf9f5 84%, var(--muted) 16%);
+  text-decoration: none;
   font-size: 0.97rem;
   font-weight: 700;
   letter-spacing: 0.01em;
@@ -5602,12 +5594,10 @@ body.is-auth-open {
   --settings-option-hover-bg: color-mix(in oklch, var(--accent) 10%, transparent);
   --settings-option-hover-border: color-mix(in oklch, #faf9f5 14%, transparent);
   --settings-option-hover-shadow: none;
-  --settings-option-active-color: color-mix(in oklch, var(--ink-dark) 72%, #faf9f5 28%);
-  --settings-option-active-bg: color-mix(in oklch, var(--accent) 68%, #faf9f5);
-  --settings-option-active-border: transparent;
-  --settings-option-active-shadow:
-    0 8px 18px color-mix(in oklch, var(--accent) 18%, transparent),
-    inset 0 1px 0 color-mix(in oklch, #faf9f5 22%, transparent);
+  --settings-option-active-color: var(--accent);
+  --settings-option-active-bg: transparent;
+  --settings-option-active-border: var(--accent);
+  --settings-option-active-shadow: none;
   --settings-slider-line: color-mix(in oklch, var(--settings-label-color) 56%, transparent);
   --settings-slider-tick: color-mix(in oklch, var(--settings-label-color) 84%, #faf9f5 16%);
   --settings-slider-thumb-bg: var(--settings-slider-tick);
@@ -5868,6 +5858,41 @@ body.is-auth-open {
   pointer-events: none;
 }
 
+.settings-font-active-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(0.32rem + (var(--settings-font-step) * ((100% - 0.64rem) / 3)));
+  width: 0.82rem;
+  height: 0.82rem;
+  border-radius: 50%;
+  background: var(--settings-slider-thumb-bg);
+  box-shadow:
+    0 0 0 1px var(--settings-slider-thumb-border),
+    0 6px 14px color-mix(in oklch, var(--settings-slider-thumb-bg) 26%, transparent);
+  pointer-events: none;
+  z-index: 1;
+  transform: translate(-50%, -50%);
+  transition:
+    left 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 280ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 220ms ease,
+    box-shadow 240ms ease;
+}
+
+.settings-font-active-dot::after {
+  content: "";
+  position: absolute;
+  inset: -0.34rem;
+  border-radius: 50%;
+  background: color-mix(in oklch, var(--settings-slider-thumb-bg) 18%, transparent);
+  opacity: 0;
+  transform: scale(0.55);
+}
+
+.settings-font-slider.is-animating .settings-font-active-dot::after {
+  animation: settings-font-dot-pulse 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .settings-font-ticks {
   position: absolute;
   left: 0.32rem;
@@ -5916,18 +5941,18 @@ body.is-auth-open {
   height: 1.2rem;
   margin-top: -0.49rem;
   border-radius: 50%;
-  border: 1px solid var(--settings-slider-thumb-border);
-  background: var(--settings-slider-thumb-bg);
-  box-shadow: var(--settings-slider-thumb-shadow);
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
 .settings-font-range::-moz-range-thumb {
   width: 1.2rem;
   height: 1.2rem;
   border-radius: 50%;
-  border: 1px solid var(--settings-slider-thumb-border);
-  background: var(--settings-slider-thumb-bg);
-  box-shadow: var(--settings-slider-thumb-shadow);
+  border: 1px solid transparent;
+  background: transparent;
+  box-shadow: none;
 }
 
 .settings-font-range:focus-visible {
@@ -5942,6 +5967,23 @@ body.is-auth-open {
 .settings-font-range:focus-visible::-moz-range-thumb {
   box-shadow:
     0 0 0 3px var(--settings-slider-focus-ring);
+}
+
+@keyframes settings-font-dot-pulse {
+  0% {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+
+  30% {
+    opacity: 0.7;
+    transform: scale(0.96);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.24);
+  }
 }
 
 .settings-option {
@@ -7683,12 +7725,10 @@ body.is-auth-open {
   --settings-option-hover-bg: color-mix(in oklch, oklch(0.74 0.14 170) 10%, transparent);
   --settings-option-hover-border: color-mix(in oklch, #faf9f5 14%, transparent);
   --settings-option-hover-shadow: none;
-  --settings-option-active-color: color-mix(in oklch, oklch(0.2 0.02 190) 72%, #faf9f5 28%);
-  --settings-option-active-bg: color-mix(in oklch, oklch(0.74 0.14 170) 68%, #faf9f5);
-  --settings-option-active-border: transparent;
-  --settings-option-active-shadow:
-    0 8px 18px color-mix(in oklch, oklch(0.74 0.14 170) 18%, transparent),
-    inset 0 1px 0 color-mix(in oklch, #faf9f5 22%, transparent);
+  --settings-option-active-color: oklch(0.74 0.14 170);
+  --settings-option-active-bg: transparent;
+  --settings-option-active-border: oklch(0.74 0.14 170);
+  --settings-option-active-shadow: none;
 }
 
 :root[data-theme="light"] .settings-dropdown[data-preview-theme="light"],
@@ -8336,8 +8376,6 @@ body.is-auth-open {
   .account-nav .nav-link.signup-btn {
     min-width: 3rem;
   }
-}
-
   .account-nav .nav-link.setting-btn {
     width: 1.82rem;
     height: 1.82rem;
@@ -8350,7 +8388,6 @@ body.is-auth-open {
     gap: clamp(0.52rem, 0.9vw, 0.74rem);
     padding: 0;
   }
-}
 
   .ai-chat-demo .ai-chat-sidebar {
     grid-template-rows: auto auto auto minmax(0, 1fr);
@@ -8362,7 +8399,6 @@ body.is-auth-open {
   .ai-chat-demo .ai-chat-sidebar-section {
     gap: 0.38rem;
   }
-}
 
   .ai-chat-demo .ai-chat-sidebar-list,
   .ai-chat-demo .ai-chat-sidebar-history {
@@ -8377,7 +8413,6 @@ body.is-auth-open {
     border-radius: 0.34rem;
     font-size: 0.92rem;
   }
-}
 
   .ai-chat-demo .ai-chat-main {
     --ai-chat-main-pad-y: 0.7rem;
@@ -8500,4 +8535,3 @@ body.is-auth-open {
     gap: 0.28rem;
   }
 }
-

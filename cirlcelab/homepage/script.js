@@ -423,6 +423,14 @@ window.CircleLabDebug = window.CircleLabDebug || {};
     carousel.dataset.theoremSizeLocked = "true";
   };
 
+  const unlockRenderedTheoremSize = () => {
+    delete carousel.dataset.theoremSizeLocked;
+    carousel.style.removeProperty("--theorem-card-width");
+    carousel.style.removeProperty("--theorem-card-height");
+    carousel.style.removeProperty("--theorem-embed-size");
+    carousel.style.removeProperty("--theorem-visible-current");
+  };
+
   const getGap = () => {
     const style = window.getComputedStyle(track);
     const gap = Number.parseFloat(style.columnGap || style.gap || "0");
@@ -693,6 +701,17 @@ window.CircleLabDebug = window.CircleLabDebug || {};
 
   window.CircleLabDebug.getTheoremMetrics = collectTheoremMetrics;
 
+  const syncTheoremLayout = () => {
+    unlockRenderedTheoremSize();
+    window.requestAnimationFrame(() => {
+      freezeRenderedTheoremSize();
+      updateVisibleCardsForSpace();
+      alignViewportToCardBoundary();
+      updateButtons();
+      reportTheoremMetrics();
+    });
+  };
+
   const updateButtons = () => {
     const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
     const current = viewport.scrollLeft;
@@ -741,17 +760,14 @@ window.CircleLabDebug = window.CircleLabDebug || {};
   });
   window.addEventListener("resize", () => {
     stopHoldScroll(false);
-    updateVisibleCardsForSpace();
-    alignViewportToCardBoundary();
-    updateButtons();
-    reportTheoremMetrics();
+    syncTheoremLayout();
+  });
+  window.addEventListener("circlelab:font-scale-change", () => {
+    stopHoldScroll(false);
+    syncTheoremLayout();
   });
   requestAnimationFrame(() => {
-    freezeRenderedTheoremSize();
-    updateVisibleCardsForSpace();
-    alignViewportToCardBoundary();
-    updateButtons();
-    reportTheoremMetrics();
+    syncTheoremLayout();
   });
 })();
 

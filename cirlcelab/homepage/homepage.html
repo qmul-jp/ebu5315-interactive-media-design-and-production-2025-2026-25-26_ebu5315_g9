@@ -9,21 +9,18 @@
         try {
           const theme = window.localStorage.getItem("circlelab-theme");
           const language = window.localStorage.getItem("circlelab-language");
-          const fontScale = window.localStorage.getItem("circlelab-font-scale");
           if (theme !== "dark") {
             document.documentElement.dataset.theme = "light";
           } else {
             delete document.documentElement.dataset.theme;
           }
-          if (fontScale === "small" || fontScale === "large") {
-            document.documentElement.dataset.fontScale = fontScale;
-          } else {
-            delete document.documentElement.dataset.fontScale;
-          }
+          document.documentElement.style.setProperty("--font-scale", "0.94");
+          document.documentElement.style.setProperty("--settings-font-step", "1");
           document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
         } catch (error) {
           document.documentElement.dataset.theme = "light";
-          delete document.documentElement.dataset.fontScale;
+          document.documentElement.style.setProperty("--font-scale", "0.94");
+          document.documentElement.style.setProperty("--settings-font-step", "1");
           document.documentElement.lang = "en";
         }
       })();
@@ -52,8 +49,8 @@
         <nav class="primary-nav" data-i18n-aria-label="nav.primary_aria" aria-label="Primary">
           <ul>
             <li><a class="nav-link is-active" href="#" data-i18n="nav.home">Home</a></li>
-            <li><a class="nav-link" href="#" data-i18n="nav.game">Game</a></li>
-            <li><a class="nav-link" href="#" data-i18n="nav.quiz">Quiz</a></li>
+            <li><a class="nav-link" href="../Game/index.html" data-i18n="nav.game">Game</a></li>
+            <li><a class="nav-link" href="../quiz/quiz.html" data-i18n="nav.quiz">Quiz</a></li>
           </ul>
         </nav>
 
@@ -108,14 +105,16 @@
                       class="settings-font-range"
                       type="range"
                       min="0"
-                      max="2"
+                      max="3"
                       step="1"
                       value="1"
                       data-font-scale-range
                       data-i18n-aria-label="settings.font_slider_aria"
                       aria-label="Adjust text size"
                     />
+                    <span class="settings-font-active-dot" aria-hidden="true"></span>
                     <div class="settings-font-ticks" aria-hidden="true">
+                      <span class="settings-font-tick"></span>
                       <span class="settings-font-tick"></span>
                       <span class="settings-font-tick"></span>
                       <span class="settings-font-tick"></span>
@@ -426,7 +425,7 @@ with Ease</h1>
             <article class="theorem-frame theorem-frame-zoom-06">
               <span class="theorem-frame-no">06</span>
               <h3 data-i18n="theorem.6.title">Tangents from a Point</h3>
-              <p data-i18n="theorem.6.desc">
+              <p data-i18n-html="theorem.6.desc">
                 Tangents from the same point are equal in length.
               </p>
               <div class="theorem-embed">
@@ -489,14 +488,14 @@ with Ease</h1>
                 deeper experience.
               </p>
               <div class="theorem-cta-actions" data-i18n-aria-label="theorem.cta.actions_aria" aria-label="Challenge actions">
-                <button class="theorem-cta-btn" type="button">
+                <a class="theorem-cta-btn" href="../quiz/quiz.html">
                   <span data-i18n="theorem.cta.quiz">Start Quiz</span>
                   <span class="theorem-cta-btn-icon" aria-hidden="true"></span>
-                </button>
-                <button class="theorem-cta-btn theorem-cta-btn-alt" type="button">
+                </a>
+                <a class="theorem-cta-btn theorem-cta-btn-alt" href="../Game/index.html">
                   <span data-i18n="theorem.cta.play">Play Now</span>
                   <span class="theorem-cta-btn-icon" aria-hidden="true"></span>
-                </button>
+                </a>
               </div>
             </article>
           </div>
@@ -992,8 +991,8 @@ with Ease</h1>
               <ul>
                 <li><a href="#" data-i18n="footer.home">Home</a></li>
                 <li><a href="#" data-i18n="footer.theorems">Theorems</a></li>
-                <li><a href="#" data-i18n="footer.quizzes">Quizzes</a></li>
-                <li><a href="#" data-i18n="footer.games">Games</a></li>
+                <li><a href="../quiz/quiz.html" data-i18n="footer.quizzes">Quizzes</a></li>
+                <li><a href="../Game/index.html" data-i18n="footer.games">Games</a></li>
               </ul>
             </div>
 
@@ -1510,4 +1509,3 @@ Share your questions, ideas, or feedback anytime.
     <script src="hero-chat-now.js"></script>
   </body>
 </html>
-
