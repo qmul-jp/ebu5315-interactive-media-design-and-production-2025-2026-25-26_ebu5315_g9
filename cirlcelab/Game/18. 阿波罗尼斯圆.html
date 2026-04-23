@@ -296,8 +296,8 @@
                 <div class="desc-item"><span class="desc-symbol">A</span> = (${fmt(Ax)}, ${fmt(Ay)})</div>
                 <div class="desc-item"><span class="desc-symbol">B</span> = (${fmt(Bx)}, ${fmt(By)})</div>
                 <div class="desc-item"><span class="desc-symbol">AB</span> = ${fmt(AB)}</div>
-                <div class="desc-item"><span class="desc-symbol">圆心</span> = (${fmt(ap.cx)}, ${fmt(ap.cy)})</div>
-                <div class="desc-item"><span class="desc-symbol">半径 R</span> = ${fmt(ap.R)}</div>
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '圆心' : 'Center'}</span> = (${fmt(ap.cx)}, ${fmt(ap.cy)})</div>
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '半径 R' : 'Radius R'}</span> = ${fmt(ap.R)}</div>
                 <div class="desc-item"><span class="desc-symbol">P</span> = (${fmt(Px)}, ${fmt(Py)})</div>
                 <div class="desc-item"><span class="desc-symbol">PA/PB</span> = ${isFinite(ratio) ? ratio.toFixed(2) : '∞'}</div>
             `;

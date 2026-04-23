@@ -160,6 +160,42 @@
         .content-title    { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); }
         .content-title-en { font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; }
 
+        /* ── Breadcrumb ── */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 28px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            flex-shrink: 0;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .breadcrumb-home {
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: color 0.15s;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .breadcrumb-home:hover { color: var(--accent2); }
+        .breadcrumb-sep {
+            color: var(--border);
+            font-size: 0.7rem;
+            user-select: none;
+            margin: 0 1px;
+        }
+        .breadcrumb-current {
+            color: var(--text);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 320px;
+        }
+
         /* ========= 欢迎区域全新设计：黑板图片按原尺寸比例居中，无裁剪，文字下移 ========= */
         .welcome {
             flex: 1;
@@ -277,6 +313,11 @@
     <aside id="sidebar"></aside>
 
     <main id="mainArea">
+        <nav class="breadcrumb" id="breadcrumb" style="display:none">
+            <span class="breadcrumb-home" id="breadcrumbHome" onclick="goHome()">首页</span>
+            <span class="breadcrumb-sep">／</span>
+            <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+        </nav>
         <div class="content-header" id="contentHeader" style="display:none">
             <div class="content-title" id="contentTitle"></div>
             <div class="content-title-en" id="contentTitleEn"></div>
@@ -329,12 +370,14 @@
             sidebarLabel: '📖 目录',     
             welcomeTitle: '欢迎来到 CircleLab', 
             welcomeSub: '从左侧目录选择一个主题开始探索',
+            breadcrumbHome: '首页',
         },
         en: { 
             sub: 'Interactive Circle Geometry', 
             sidebarLabel: '📖 Contents', 
             welcomeTitle: 'Welcome to CircleLab', 
             welcomeSub: 'Select a topic from the sidebar to begin',
+            breadcrumbHome: 'Home',
         }
     };
 
@@ -395,6 +438,14 @@
         if (welcomeDiv) welcomeDiv.style.display = 'none';
         if (contentHeaderDiv) contentHeaderDiv.style.display = 'block';
         
+        // 显示并更新 breadcrumb
+        const breadcrumb = document.getElementById('breadcrumb');
+        const breadcrumbHome = document.getElementById('breadcrumbHome');
+        const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+        if (breadcrumb) breadcrumb.style.display = 'flex';
+        if (breadcrumbHome) breadcrumbHome.textContent = i18n[lang].breadcrumbHome;
+        if (breadcrumbCurrent) breadcrumbCurrent.textContent = lang === 'zh' ? t.zh : t.en;
+        
         // 更新头部标题
         const titleElem = document.getElementById('contentTitle');
         const titleEnElem = document.getElementById('contentTitleEn');
@@ -450,6 +501,15 @@
             const contentTitleEn = document.getElementById('contentTitleEn');
             if (contentTitle) contentTitle.textContent = lang === 'zh' ? t.zh : t.en;
             if (contentTitleEn) contentTitleEn.textContent = lang === 'zh' ? t.en : t.zh;
+            // 同步更新 breadcrumb
+            const breadcrumbHome = document.getElementById('breadcrumbHome');
+            const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+            if (breadcrumbHome) breadcrumbHome.textContent = i18n[lang].breadcrumbHome;
+            if (breadcrumbCurrent) breadcrumbCurrent.textContent = lang === 'zh' ? t.zh : t.en;
+        } else {
+            // 未加载主题时也更新 Home 文字（breadcrumb 此时是隐藏的，预更新备用）
+            const breadcrumbHome = document.getElementById('breadcrumbHome');
+            if (breadcrumbHome) breadcrumbHome.textContent = i18n[lang].breadcrumbHome;
         }
         // 重建侧边栏（目录文字中英同步）
         buildSidebar();
@@ -491,6 +551,20 @@
         if (plusBtn) plusBtn.addEventListener('click', () => changeFontSize(1));
     }
     
+    // 点击 breadcrumb 首页返回欢迎界面
+    function goHome() {
+        activeIndex = -1;
+        const welcomeDiv = document.getElementById('welcome');
+        const contentHeaderDiv = document.getElementById('contentHeader');
+        const frame = document.getElementById('contentFrame');
+        const breadcrumb = document.getElementById('breadcrumb');
+        if (welcomeDiv) welcomeDiv.style.display = '';
+        if (contentHeaderDiv) contentHeaderDiv.style.display = 'none';
+        if (frame) { frame.classList.remove('visible'); frame.src = 'about:blank'; }
+        if (breadcrumb) breadcrumb.style.display = 'none';
+        buildSidebar();
+    }
+
     // 初始化主题偏好恢复 + 启动应用
     function init() {
         setRootFontSize(16);
@@ -525,8 +599,8 @@
         // 挂载全局切换函数 (供内联onclick使用)
         window.toggleLang = toggleLang;
         window.toggleTheme = toggleTheme;
+        window.goHome = goHome;
     }
-    
     // 启动
     window.addEventListener('DOMContentLoaded', init);
 </script>
