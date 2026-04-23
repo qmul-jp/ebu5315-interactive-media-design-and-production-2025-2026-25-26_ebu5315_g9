@@ -246,9 +246,9 @@
 
             // 构建描述区域
             const descHtml = `
-                <div class="desc-item"><span class="desc-symbol">圆心 O</span> = (${fmt(oa)}, ${fmt(ob)})</div>
-                <div class="desc-item"><span class="desc-symbol">半径 r</span> = ${r.toFixed(2)}</div>
-                <div class="desc-item"><span class="desc-symbol">点 P</span> = (${fmt(Px)}, ${fmt(Py)})</div>
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '圆心 O' : 'Center O'}</span> = (${fmt(oa)}, ${fmt(ob)})</div>
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '半径 r' : 'Radius r'}</span> = ${r.toFixed(2)}</div>
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '点 P' : 'Point P'}</span> = (${fmt(Px)}, ${fmt(Py)})</div>
                 <div class="desc-item"><span class="desc-symbol">|OP|²</span> = ${op2.toFixed(2)}</div>
                 <div class="desc-item"><span class="desc-symbol">r²</span> = ${r2.toFixed(2)}</div>
                 <div class="desc-item" style="color:${statusColor}">${isZh ? statusZh : statusEn}</div>
@@ -265,7 +265,7 @@
 
             const theoremHtml = isZh
                 ? `圆的标准方程：${eqStr}<br><span style="font-size:0.85rem; opacity:0.8;">圆心 (a, b)，半径 r，点 P(x, y) 满足 (x−a)²+(y−b)² = r² 则在圆上</span>`
-                : `Standard form: ${eqStr}<br><span style="font-size:0.85rem; opacity:0.8;">Center (a, b), radius r. Point P(x,y) lies on the circle iff (x−a)²+(y−b)² = r²</span>`;
+                : `Standard form: ${eqStr}<br><span style="font-size:0.85rem; opacity:0.8;">Center (a, b), radius r. Point P(x,y) lies on the circle if (x−a)²+(y−b)² = r²</span>`;
             setTheorem(theoremHtml);
 
             drawCanvas(r, r2, onCircle, inside, statusColor);

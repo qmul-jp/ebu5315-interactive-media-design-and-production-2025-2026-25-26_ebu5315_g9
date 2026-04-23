@@ -337,9 +337,9 @@
                 lineEqStr = `y = ${kPart}${mPart}`;
             }
 
-            const descHtml = `
-                <div class="desc-item"><span class="desc-symbol">圆</span> ${circleEq}</div>
-                <div class="desc-item"><span class="desc-symbol">直线</span> ${lineEqStr}</div>
+           const descHtml = `
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '圆' : 'Circle'}</span> ${circleEq}</div>
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '直线' : 'Line'}</span> ${lineEqStr}</div>
                 <div class="desc-item"><span class="desc-symbol">Δ</span> = ${deltaDisplay}</div>
                 <div class="desc-item">${statusHtml}</div>
                 <div class="desc-item" style="color:${lineColor}">${isZh ? conclusionZh : conclusionEn}</div>
