@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="Mascot smile">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f4fbff"/>
+      <stop offset="100%" stop-color="#dff5d5"/>
+    </linearGradient>
+    <linearGradient id="hair" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#d4fbff"/>
+      <stop offset="100%" stop-color="#8ce4ef"/>
+    </linearGradient>
+    <linearGradient id="bow" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#4a7fd8"/>
+      <stop offset="100%" stop-color="#1f4e97"/>
+    </linearGradient>
+  </defs>
+  <rect width="220" height="220" rx="32" fill="url(#bg)"/>
+  <g transform="translate(18 16)">
+    <path d="M18 30c18-18 50-20 70-8l-10 26c-20-8-40-8-60 0Z" fill="url(#bow)" stroke="#183f78" stroke-width="4"/>
+    <path d="M98 12c18-6 42-4 66 18l-4 18c-20-10-40-12-58-8Z" fill="url(#bow)" stroke="#183f78" stroke-width="4"/>
+    <ellipse cx="92" cy="102" rx="84" ry="82" fill="#fff8ee" stroke="#22334f" stroke-width="4"/>
+    <path d="M42 48c16-26 44-38 76-38 26 0 52 10 72 34-20 2-34 20-40 34-10-8-18-14-28-14-10 0-16 6-22 12-8-10-18-18-34-18-10 0-18 4-24 10 2-6 0-12 0-20Z" fill="url(#hair)" stroke="#2a6f88" stroke-width="4"/>
+    <path d="M76 8c18 6 28 18 30 30-4 8-10 16-20 24-2-16-10-30-10-54Z" fill="#9debf4" stroke="#2a6f88" stroke-width="4"/>
+    <path d="M26 140c8 16 24 28 40 34-18 2-34-6-46-18Z" fill="#8fe3ec" stroke="#2a6f88" stroke-width="4"/>
+    <path d="M152 138c-6 18-18 28-34 36 22 0 38-10 48-22Z" fill="#8fe3ec" stroke="#2a6f88" stroke-width="4"/>
+    <ellipse cx="64" cy="106" rx="24" ry="34" fill="#275ea7"/>
+    <ellipse cx="136" cy="106" rx="24" ry="34" fill="#275ea7"/>
+    <ellipse cx="56" cy="94" rx="6" ry="10" fill="#fff"/>
+    <ellipse cx="128" cy="94" rx="6" ry="10" fill="#fff"/>
+    <path d="M40 76c12-8 28-8 40 0" stroke="#38243a" stroke-width="5" stroke-linecap="round"/>
+    <path d="M118 76c12-8 28-8 40 0" stroke="#38243a" stroke-width="5" stroke-linecap="round"/>
+    <circle cx="42" cy="136" r="10" fill="#ffc8cf"/>
+    <circle cx="156" cy="136" r="10" fill="#ffc8cf"/>
+    <path d="M84 150c10 12 24 12 32 0" fill="none" stroke="#5b4b59" stroke-width="5" stroke-linecap="round"/>
+    <path d="M58 178c18-8 64-8 84 0l-10 16H68Z" fill="#d34c49" stroke="#8a2a28" stroke-width="4"/>
+    <path d="M94 176h12v28H94Z" fill="#2271b6"/>
+  </g>
+</svg>
