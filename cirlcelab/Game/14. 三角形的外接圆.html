@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三角形的外接圆 - CircleLab</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="game.css">
     <style>
         body {
-            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Noto Sans SC', 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
             transition: background 0.3s, color 0.3s;
@@ -20,7 +20,7 @@
         }
 
         .circle-card {
-            max-width: 820px;
+            max-width: 860px;
             width: 100%;
             background: var(--card-bg);
             border-radius: 24px;
@@ -35,7 +35,7 @@
             border-bottom: 1px solid var(--border);
         }
         .card-header .title {
-            font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif;
+            font-family: 'Source Han Serif SC', 'Noto Serif SC', 'Anthropic Serif', Georgia, serif;
             font-size: 1.35rem;
             color: var(--text);
         }
@@ -87,7 +87,7 @@
         .desc-symbol {
             font-weight: 600;
             color: var(--accent2);
-            font-family: 'DM Sans', Arial, sans-serif;
+            font-family: 'Noto Sans SC', 'Manrope', Arial, sans-serif;
         }
 
         .theorem {
@@ -113,6 +113,26 @@
             border-top: 1px solid var(--border);
             padding-top: 16px;
         }
+        
+        /* ===== 新增功能：直角三角形时显示的图片容器样式（完全独立，不影响任何原有布局）===== */
+        .right-triangle-img-wrapper {
+            text-align: center;
+            margin: 0 28px 18px;          /* 与定理块和交互提示协调，不拥挤 */
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        .right-triangle-img-wrapper img {
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            max-height: 160px;             /* 卡片宽度范围内舒适 */
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -128,6 +148,12 @@
     </div>
     <div class="descriptions" id="descArea"></div>
     <div class="theorem" id="theoremText"></div>
+    
+    <!-- 新增：三角形为直角三角形时显示图片的容器（默认隐藏，位于定理块下方，交互提示上方） -->
+    <div id="rightTriangleImageContainer" class="right-triangle-img-wrapper" style="display: none;">
+        <img src="直角三角形.png" alt="直角三角形及其外接圆示意图" id="rightTriangleImg">
+    </div>
+    
     <div class="interact-hint">
         <span>🖱️ <span data-cl-zh>拖拽顶点 A、B、C 改变三角形</span><span data-cl-en style="display:none">Drag vertices A, B, C to reshape the triangle</span></span>
     </div>
@@ -146,7 +172,7 @@
         document.documentElement.style.fontSize = '16px';
 
         function _fg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#e8e4dc' : '#1a1a1a'; }
-        function _bg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1c1c1c' : '#ffffff'; }
+        function _bg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? (getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#181F23') : '#ffffff'; }
         function _isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
         function _lang()   { return (window._CL && window._CL.lang) || 'zh'; }
 
@@ -187,7 +213,7 @@
             ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.stroke();
         }
 
-        function updateTexts(angles, R, oColor) {
+        function updateTexts(angles, R, oColor, isRight) {
             const isZh = _lang() === 'zh';
             const maxAngle = Math.max(angles.A, angles.B, angles.C);
             const tol = 0.8;
@@ -279,19 +305,19 @@
                 ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, 2 * Math.PI);
                 ctx.fillStyle = '#e74c3c'; ctx.fill();
                 const ddx = p.x-gx, ddy = p.y-gy, ll = Math.hypot(ddx, ddy);
-                ctx.fillStyle = _fg(); ctx.font = '500 14px "DM Sans", Arial, sans-serif';
+                ctx.fillStyle = _fg(); ctx.font = '500 14px "Noto Sans SC", "Manrope", Arial, sans-serif';
                 ctx.fillText(l, p.x+(ddx/ll)*16, p.y+(ddy/ll)*16);
             });
 
             // 外心 O
             ctx.beginPath(); ctx.arc(O.x, O.y, 6, 0, 2 * Math.PI);
             ctx.fillStyle = oColor; ctx.fill();
-            ctx.fillStyle = _fg(); ctx.font = '500 14px "DM Sans", Arial, sans-serif';
+            ctx.fillStyle = _fg(); ctx.font = '500 14px "Noto Sans SC", "Manrope", Arial, sans-serif';
             ctx.fillText('O', O.x+9, O.y-6);
 
             // R 标注
             const mOA = midpoint(O, A);
-            ctx.fillStyle = oColor; ctx.font = '12px "DM Sans", sans-serif';
+            ctx.fillStyle = oColor; ctx.font = '12px "Noto Sans SC", "Manrope", sans-serif';
             ctx.fillText('R='+R.toFixed(1), mOA.x+6, mOA.y-4);
         }
 
@@ -302,9 +328,21 @@
             const R = dist(O, A);
             const maxAngle = Math.max(angles.A, angles.B, angles.C);
             const tol = 0.8;
-            const oColor = Math.abs(maxAngle - 90) < tol ? '#27ae60' : (maxAngle < 90 ? '#2980b9' : '#e67e22');
-            updateTexts(angles, R, oColor);
+            const isRight = Math.abs(maxAngle - 90) < tol;
+            const oColor = isRight ? '#27ae60' : (maxAngle < 90 ? '#2980b9' : '#e67e22');
+            updateTexts(angles, R, oColor, isRight);
             drawCanvas(O, R, angles, oColor);
+            
+            // ========== 新增功能：直角三角形时显示图片，否则隐藏（不改变任何原有逻辑和样式）==========
+            const imgContainer = document.getElementById('rightTriangleImageContainer');
+            if (imgContainer) {
+                if (isRight) {
+                    imgContainer.style.display = 'block';
+                } else {
+                    imgContainer.style.display = 'none';
+                }
+            }
+            // ========== 新增功能结束 ==========
         }
 
         function getMousePos(e) {
@@ -362,7 +400,50 @@
 
         window.addEventListener('load', () => { update(); });
         update();
+        let mascotDragReported = false;
+        let mascotPointerDown = false;
+        let mascotStartPoint = null;
+        function getMascotPoint(event) {
+            if (event.touches && event.touches[0]) {
+                return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+            }
+            if (event.changedTouches && event.changedTouches[0]) {
+                return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+            }
+            return { x: event.clientX, y: event.clientY };
+        }
+        function reportMascotDrag() {
+            if (mascotDragReported) return;
+            mascotDragReported = true;
+            try {
+                window.parent.postMessage({ _src: 'circlelab', mascotDrag: true }, '*');
+            } catch (e) {}
+        }
+        function handleMascotDragStart(event) {
+            mascotPointerDown = true;
+            mascotStartPoint = getMascotPoint(event);
+        }
+        function handleMascotDragMove(event) {
+            if (!mascotPointerDown || mascotDragReported || !mascotStartPoint) return;
+            const currentPoint = getMascotPoint(event);
+            if (Math.hypot(currentPoint.x - mascotStartPoint.x, currentPoint.y - mascotStartPoint.y) < 6) return;
+            reportMascotDrag();
+        }
+        function handleMascotDragEnd() {
+            mascotPointerDown = false;
+            mascotStartPoint = null;
+        }
+
+        canvas.addEventListener('mousedown', handleMascotDragStart);
+        canvas.addEventListener('touchstart', handleMascotDragStart, { passive: true });
+        window.addEventListener('mousemove', handleMascotDragMove);
+        window.addEventListener('touchmove', handleMascotDragMove, { passive: true });
+        window.addEventListener('mouseup', handleMascotDragEnd);
+        window.addEventListener('touchend', handleMascotDragEnd);
+        window.addEventListener('touchcancel', handleMascotDragEnd);
+        window.addEventListener('blur', handleMascotDragEnd);
     })();
 </script>
 </body>
 </html>
+
