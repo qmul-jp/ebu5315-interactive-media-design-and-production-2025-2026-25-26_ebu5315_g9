@@ -16,8 +16,6 @@
 
 ## External CSS file must be used.
 
-## when adjust screen layout or mobile layout, always use the adapt skill
-
 ## Skill Usage Rules
 
 All tasks MUST follow this workflow:
