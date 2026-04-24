@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="styles.css?v=20260424-1" />
   </head>
   <body>
     <header class="app-header site-header motion-item motion-delay-1">
@@ -20,7 +20,7 @@
           href="../homepage/homepage.html"
           aria-label="CircleLab home"
         >
-          <img src="../homepage/logowhite.svg" alt="CircleLab logo" />
+          <img src="./icon/logowhite.png" alt="CircleLab logo" />
         </a>
 
         <div class="nav-copy" aria-live="polite">
@@ -349,6 +349,24 @@
             <span id="questionProgress">0 / 0</span>
           </div>
 
+          <div class="exam-status-bar hidden" id="examStatusBar">
+            <span class="exam-status-question" id="examStatusQuestion"
+              >Question 1 / 1</span
+            >
+            <div class="exam-status-timer-wrap">
+              <span class="exam-status-timer" id="examStatusTimer"
+                >Time 45:00</span
+              >
+              <button
+                class="ghost-btn exam-status-toggle"
+                id="examTimerToggleBtn"
+                type="button"
+                aria-pressed="false"
+              >
+                Hide Time
+              </button>
+            </div>
+          </div>
           <h2 id="questionStem"></h2>
           <form id="answerForm" class="options"></form>
 
@@ -641,6 +659,13 @@
                 type="button"
               >
                 查看错题本
+              </button>
+              <button
+                class="ghost-btn side-panel-action wrong-book-action"
+                id="exitWrongBtn"
+                type="button"
+              >
+                閫€鍑洪敊棰樻湰
               </button>
               <button
                 class="ghost-btn side-panel-action wrong-book-action wrong-book-clear-btn"
@@ -9179,6 +9204,7 @@
       const EXAM_STATE_KEY = "quiz_exam_state_v1";
       const COLOR_SAFE_KEY = "quiz_color_safe_v1";
       const FONT_SCALE_KEY = "quiz_font_scale_v5";
+      const EXAM_TIMER_VISIBILITY_KEY = "quiz_exam_timer_visible_v1";
       const PURE_MODE_KEY = "quiz_pure_mode_v1";
       const FONT_SCALE_PRESETS = [0.88, 0.94, 1, 1.06];
       const FONT_SCALE_NAMES = ["smaller", "normal", "medium", "large"];
@@ -9241,6 +9267,7 @@
         examSectionPicker: document.getElementById("examSectionPicker"),
         allModeBtn: document.getElementById("allModeBtn"),
         wrongModeBtn: document.getElementById("wrongModeBtn"),
+        exitWrongBtn: document.getElementById("exitWrongBtn"),
         examModeBtn: document.getElementById("examModeBtn"),
         colorSafeToggleBtn: document.getElementById("colorSafeToggleBtn"),
         clearWrongBtn: document.getElementById("clearWrongBtn"),
@@ -9264,6 +9291,10 @@
         examTimeUnit: document.getElementById("examTimeUnit"),
         examApplyTimeBtn: document.getElementById("examApplyTimeBtn"),
         examTimerValue: document.getElementById("examTimerValue"),
+        examStatusBar: document.getElementById("examStatusBar"),
+        examStatusQuestion: document.getElementById("examStatusQuestion"),
+        examStatusTimer: document.getElementById("examStatusTimer"),
+        examTimerToggleBtn: document.getElementById("examTimerToggleBtn"),
         examSectionList: document.getElementById("examSectionList"),
         examStartPanel: document.getElementById("examStartPanel"),
         examStartHint: document.getElementById("examStartHint"),
@@ -9432,6 +9463,7 @@
       let pendingSubmitPaperConfirm = false;
       let pendingExamRestored = false;
       let pendingExamAutoSubmit = false;
+      let examTimerVisible = loadExamTimerVisibilityPreference();
       let wrongPanelCollapsed = loadWrongPanelPreference();
       let visitTick = 0;
       let lastRenderedQuestionId = null;
@@ -9726,6 +9758,15 @@
       }
       function saveColorSafePreference() {
         localStorage.setItem(COLOR_SAFE_KEY, colorSafeMode ? "1" : "0");
+      }
+      function loadExamTimerVisibilityPreference() {
+        return localStorage.getItem(EXAM_TIMER_VISIBILITY_KEY) !== "0";
+      }
+      function saveExamTimerVisibilityPreference() {
+        localStorage.setItem(
+          EXAM_TIMER_VISIBILITY_KEY,
+          examTimerVisible ? "1" : "0",
+        );
       }
       function loadFontScalePreference() {
         return FONT_SCALE_PRESETS[1];
@@ -10948,6 +10989,46 @@
           examMode && !examStarted && !examSubmitted
             ? t("examReadyTime", { time: clock })
             : t("examTimeRemaining", { time: clock });
+        if (els.examStatusTimer) {
+          els.examStatusTimer.textContent =
+            (lang === "zh" ? "剩余时间 " : "Time ") + clock;
+          els.examStatusTimer.classList.toggle("hidden", !examTimerVisible);
+        }
+        if (els.examTimerToggleBtn) {
+          els.examTimerToggleBtn.textContent =
+            lang === "zh"
+              ? examTimerVisible
+                ? "隐藏时间"
+                : "显示时间"
+              : examTimerVisible
+                ? "Hide Time"
+                : "Show Time";
+          els.examTimerToggleBtn.setAttribute(
+            "aria-pressed",
+            String(!examTimerVisible),
+          );
+        }
+      }
+
+      function syncExamStatusBar() {
+        const shouldShow = examMode && examStarted && !examSubmitted;
+        els.examStatusBar?.classList.toggle("hidden", !shouldShow);
+        if (!shouldShow) return;
+        const total = Math.max(0, currentQuestions.length);
+        const current = total ? currentIndex + 1 : 0;
+        if (els.examStatusQuestion) {
+          els.examStatusQuestion.textContent =
+            lang === "zh"
+              ? `题号 ${current} / ${total}`
+              : `Question ${current} / ${total}`;
+        }
+        updateExamTimerDisplay();
+      }
+
+      function toggleExamTimerVisibility() {
+        examTimerVisible = !examTimerVisible;
+        saveExamTimerVisibilityPreference();
+        updateExamTimerDisplay();
       }
 
       function persistExamState() {
@@ -11654,8 +11735,13 @@
           "active",
           mode === "wrong" && !examMode,
         );
+        els.exitWrongBtn.classList.toggle(
+          "hidden",
+          mode !== "wrong" || examMode,
+        );
         els.examModeBtn.classList.toggle("active", examMode);
         els.wrongModeBtn.disabled = examMode;
+        els.exitWrongBtn.disabled = examMode;
         els.clearWrongBtn.disabled = examMode;
         els.sectionSelect.disabled = examMode;
         els.showAnswerBtn.disabled = examMode && !examSubmitted;
@@ -11710,6 +11796,7 @@
           "hidden",
           !onPracticeSurface || (examMode && (!examStarted || examSubmitted)),
         );
+        syncExamStatusBar();
         els.examResultsPage.classList.toggle(
           "hidden",
           !(onPracticeSurface && examMode && examSubmitted),
@@ -11893,6 +11980,7 @@
       }
 
       function enterPracticePageWithRandomStart() {
+        if (!leaveExamModeForNavigation()) return;
         activePage = "practice";
         sectionPracticeActive = false;
         if (!examMode) {
@@ -12741,6 +12829,8 @@
           colorSafeMode ? t("colorSafeOff") : t("colorSafeOn"),
         );
         applyAccessibilityPreferences();
+        els.exitWrongBtn.textContent =
+          lang === "zh" ? "退出错题本" : "Exit Mistake Log";
         els.clearWrongBtn.textContent = t("clearWrong");
         els.confirmClearWrongBtn.textContent = t("clearConfirm");
         els.cancelClearWrongBtn.textContent = t("clearCancel");
@@ -13017,6 +13107,7 @@
         );
         els.questionType.textContent = `${getTypeLabel(question.type)} | ${getSectionLabelById(question.section)} | Level ${question.level || 1}`;
         els.questionProgress.textContent = `${currentIndex + 1} / ${currentQuestions.length}`;
+        syncExamStatusBar();
         els.questionStem.textContent = getText(question.stem);
         renderOptions(question);
 
@@ -13271,11 +13362,13 @@
       });
       els.allModeBtn.addEventListener("click", () => setMode("all"));
       els.wrongModeBtn.addEventListener("click", () => setMode("wrong"));
+      els.exitWrongBtn.addEventListener("click", () => setMode("all"));
       els.examModeBtn.addEventListener("click", () => {
         if (examMode) return;
         sectionPracticeActive = false;
         setExamMode(true);
       });
+      els.examTimerToggleBtn?.addEventListener("click", toggleExamTimerVisibility);
       els.clearWrongBtn.addEventListener("click", () => {
         if (examMode) return;
         setClearConfirmState(true);
