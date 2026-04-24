@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>三角形的外接圆 - CircleLab</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="game.css">
     <style>
         body {
-            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Noto Sans SC', 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
             transition: background 0.3s, color 0.3s;
@@ -35,7 +35,7 @@
             border-bottom: 1px solid var(--border);
         }
         .card-header .title {
-            font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif;
+            font-family: 'Source Han Serif SC', 'Noto Serif SC', 'Anthropic Serif', Georgia, serif;
             font-size: 1.35rem;
             color: var(--text);
         }
@@ -87,7 +87,7 @@
         .desc-symbol {
             font-weight: 600;
             color: var(--accent2);
-            font-family: 'DM Sans', Arial, sans-serif;
+            font-family: 'Noto Sans SC', 'Manrope', Arial, sans-serif;
         }
 
         .theorem {
@@ -172,7 +172,7 @@
         document.documentElement.style.fontSize = '16px';
 
         function _fg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#e8e4dc' : '#1a1a1a'; }
-        function _bg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1c1c1c' : '#ffffff'; }
+        function _bg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? (getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#181F23') : '#ffffff'; }
         function _isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
         function _lang()   { return (window._CL && window._CL.lang) || 'zh'; }
 
@@ -305,19 +305,19 @@
                 ctx.beginPath(); ctx.arc(p.x, p.y, 6, 0, 2 * Math.PI);
                 ctx.fillStyle = '#e74c3c'; ctx.fill();
                 const ddx = p.x-gx, ddy = p.y-gy, ll = Math.hypot(ddx, ddy);
-                ctx.fillStyle = _fg(); ctx.font = '500 14px "DM Sans", Arial, sans-serif';
+                ctx.fillStyle = _fg(); ctx.font = '500 14px "Noto Sans SC", "Manrope", Arial, sans-serif';
                 ctx.fillText(l, p.x+(ddx/ll)*16, p.y+(ddy/ll)*16);
             });
 
             // 外心 O
             ctx.beginPath(); ctx.arc(O.x, O.y, 6, 0, 2 * Math.PI);
             ctx.fillStyle = oColor; ctx.fill();
-            ctx.fillStyle = _fg(); ctx.font = '500 14px "DM Sans", Arial, sans-serif';
+            ctx.fillStyle = _fg(); ctx.font = '500 14px "Noto Sans SC", "Manrope", Arial, sans-serif';
             ctx.fillText('O', O.x+9, O.y-6);
 
             // R 标注
             const mOA = midpoint(O, A);
-            ctx.fillStyle = oColor; ctx.font = '12px "DM Sans", sans-serif';
+            ctx.fillStyle = oColor; ctx.font = '12px "Noto Sans SC", "Manrope", sans-serif';
             ctx.fillText('R='+R.toFixed(1), mOA.x+6, mOA.y-4);
         }
 
@@ -400,7 +400,50 @@
 
         window.addEventListener('load', () => { update(); });
         update();
+        let mascotDragReported = false;
+        let mascotPointerDown = false;
+        let mascotStartPoint = null;
+        function getMascotPoint(event) {
+            if (event.touches && event.touches[0]) {
+                return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+            }
+            if (event.changedTouches && event.changedTouches[0]) {
+                return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+            }
+            return { x: event.clientX, y: event.clientY };
+        }
+        function reportMascotDrag() {
+            if (mascotDragReported) return;
+            mascotDragReported = true;
+            try {
+                window.parent.postMessage({ _src: 'circlelab', mascotDrag: true }, '*');
+            } catch (e) {}
+        }
+        function handleMascotDragStart(event) {
+            mascotPointerDown = true;
+            mascotStartPoint = getMascotPoint(event);
+        }
+        function handleMascotDragMove(event) {
+            if (!mascotPointerDown || mascotDragReported || !mascotStartPoint) return;
+            const currentPoint = getMascotPoint(event);
+            if (Math.hypot(currentPoint.x - mascotStartPoint.x, currentPoint.y - mascotStartPoint.y) < 6) return;
+            reportMascotDrag();
+        }
+        function handleMascotDragEnd() {
+            mascotPointerDown = false;
+            mascotStartPoint = null;
+        }
+
+        canvas.addEventListener('mousedown', handleMascotDragStart);
+        canvas.addEventListener('touchstart', handleMascotDragStart, { passive: true });
+        window.addEventListener('mousemove', handleMascotDragMove);
+        window.addEventListener('touchmove', handleMascotDragMove, { passive: true });
+        window.addEventListener('mouseup', handleMascotDragEnd);
+        window.addEventListener('touchend', handleMascotDragEnd);
+        window.addEventListener('touchcancel', handleMascotDragEnd);
+        window.addEventListener('blur', handleMascotDragEnd);
     })();
 </script>
 </body>
 </html>
+

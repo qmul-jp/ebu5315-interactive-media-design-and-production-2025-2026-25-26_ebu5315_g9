@@ -237,7 +237,7 @@
       "The radius is perpendicular to the tangent at the point of contact.",
     "theorem.5.iframe_title": "Circle Theorem 5 - Radius to a Tangent",
     "theorem.6.title": "Tangents from a Point",
-    "theorem.6.desc": "Tangents from the same point are equal in length.<br /><br />",
+    "theorem.6.desc": "Tangents from the same point are equal in length.",
     "theorem.6.iframe_title":
       "Circle Theorem 6 - Tangents from a Point to a Circle",
     "theorem.7.title": "Bisected Angle of Tangents",
@@ -452,7 +452,7 @@
     "theorem.2.desc": "半圆所对角恒为 90°。",
     "theorem.2.iframe_title": "圆定理 2 - 半圆所对角",
     "theorem.3.title": "同弧所对角",
-    "theorem.3.desc": "同弧所对的圆周角相等。",
+    "theorem.3.desc": "同弧所对的圆周角相等。<br /><br />",
     "theorem.3.iframe_title": "圆定理 3 - 同弧所对角",
     "theorem.4.title": "圆内接四边形",
     "theorem.4.desc": "圆内接四边形的对角和为 180°。",
@@ -631,8 +631,6 @@
 
   Object.assign(dictionaries.en, enExtendedCopy, enPricingAndFooterCopy);
   Object.assign(dictionaries.zh, zhExtendedCopy, zhPricingAndFooterCopy);
-  dictionaries.en["settings.font_smaller"] = "Smaller";
-  dictionaries.zh["settings.font_smaller"] = "更小";
 
   const multilineCopy = {
     en: {
@@ -655,19 +653,12 @@
 
     return "light";
   };
-  const FONT_SCALE_PRESETS = [0.88, 0.94, 1, 1.06];
-  const FONT_SCALE_NAMES = ["smaller", "normal", "medium", "large"];
   const normalizeFontScale = (value) => {
-    const numericValue = Number(value);
-    if (!Number.isFinite(numericValue)) {
-      return FONT_SCALE_PRESETS[1];
+    if (value === "small" || value === "large") {
+      return value;
     }
 
-    return FONT_SCALE_PRESETS.reduce((closest, preset) =>
-      Math.abs(preset - numericValue) < Math.abs(closest - numericValue)
-        ? preset
-        : closest
-    );
+    return "normal";
   };
 
   const readStoredPreference = (key) => {
@@ -688,45 +679,30 @@
 
   let currentLanguage = normalizeLanguage(readStoredPreference(STORAGE_KEYS.language));
   let currentTheme = normalizeTheme(readStoredPreference(STORAGE_KEYS.theme));
-  let currentFontScale = FONT_SCALE_PRESETS[1];
-  let fontScaleAnimationTimer = null;
-  const getFontScaleStep = (fontScale = currentFontScale) =>
-    FONT_SCALE_PRESETS.reduce(
-      (bestIndex, preset, index) =>
-        Math.abs(preset - fontScale) <
-        Math.abs(FONT_SCALE_PRESETS[bestIndex] - fontScale)
-          ? index
-          : bestIndex,
-      0
-    );
+  let currentFontScale = normalizeFontScale(
+    readStoredPreference(STORAGE_KEYS.fontScale)
+  );
+  const FONT_SCALE_STEPS = ["small", "normal", "large"];
+  const getFontScaleStep = (fontScale) =>
+    Math.max(0, FONT_SCALE_STEPS.indexOf(normalizeFontScale(fontScale)));
   const getFontScaleFromStep = (step) => {
     const stepValue = Number.parseInt(step, 10);
     if (!Number.isFinite(stepValue)) {
-      return FONT_SCALE_PRESETS[1];
+      return "normal";
     }
 
-    const nextIndex = Math.min(
-      FONT_SCALE_PRESETS.length - 1,
-      Math.max(0, stepValue)
-    );
-    return FONT_SCALE_PRESETS[nextIndex];
+    return FONT_SCALE_STEPS[Math.min(FONT_SCALE_STEPS.length - 1, Math.max(0, stepValue))];
   };
   const getFontScaleValueKey = (fontScale) => {
-    const fontScaleIndex = getFontScaleStep(fontScale);
-
-    if (fontScaleIndex <= 0) {
-      return "settings.font_smaller";
-    }
-
-    if (fontScaleIndex === 1) {
+    if (fontScale === "small") {
       return "settings.font_small";
     }
 
-    if (fontScaleIndex === 2) {
-      return "settings.font_medium";
+    if (fontScale === "large") {
+      return "settings.font_large";
     }
 
-    return "settings.font_large";
+    return "settings.font_medium";
   };
 
   const translate = (key, fallback = "") =>
@@ -773,29 +749,6 @@
         translate(getFontScaleValueKey(currentFontScale), range.getAttribute("aria-valuetext") ?? "")
       );
     });
-  };
-  const animateFontScaleSelection = () => {
-    document.querySelectorAll(".settings-font-slider").forEach((slider) => {
-      if (!(slider instanceof HTMLElement)) {
-        return;
-      }
-
-      slider.classList.remove("is-animating");
-      void slider.offsetWidth;
-      slider.classList.add("is-animating");
-    });
-
-    if (fontScaleAnimationTimer) {
-      window.clearTimeout(fontScaleAnimationTimer);
-    }
-
-    fontScaleAnimationTimer = window.setTimeout(() => {
-      document.querySelectorAll(".settings-font-slider").forEach((slider) => {
-        if (slider instanceof HTMLElement) {
-          slider.classList.remove("is-animating");
-        }
-      });
-    }, 420);
   };
 
   const applyLanguage = (language, persist = true) => {
@@ -877,36 +830,18 @@
   };
   const applyFontScale = (fontScale, persist = true) => {
     currentFontScale = normalizeFontScale(fontScale);
-    const fontScaleIndex = getFontScaleStep(currentFontScale);
-    root.style.setProperty("--font-scale", String(currentFontScale));
-    root.style.setProperty("--settings-font-step", String(fontScaleIndex));
 
-    if (FONT_SCALE_NAMES[fontScaleIndex] === "normal") {
+    if (currentFontScale === "normal") {
       delete root.dataset.fontScale;
     } else {
-      root.dataset.fontScale = FONT_SCALE_NAMES[fontScaleIndex];
+      root.dataset.fontScale = currentFontScale;
     }
 
     if (persist) {
-      try {
-        window.localStorage.removeItem(STORAGE_KEYS.fontScale);
-      } catch (error) {
-        // Ignore storage failures in static mode.
-      }
+      writeStoredPreference(STORAGE_KEYS.fontScale, currentFontScale);
     }
 
     syncFontScaleControl();
-    window.dispatchEvent(
-      new CustomEvent("circlelab:font-scale-change", {
-        detail: {
-          fontScale: currentFontScale,
-          step: fontScaleIndex,
-        },
-      })
-    );
-    if (persist) {
-      animateFontScaleSelection();
-    }
   };
 
   const closeMenu = (settingsRoot) => {

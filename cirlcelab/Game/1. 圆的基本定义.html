@@ -1,10 +1,10 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>圆的基本定义 - CircleLab</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="game.css">
     <style>
         /* 页面独有布局 */
@@ -35,7 +35,6 @@
     <div class="theorem" id="theoremText"></div>
     <div class="interact-hint">
         <span>🖱️ <span data-cl-zh>拖拽红点 A 改变半径</span><span data-cl-en style="display:none">Drag point A</span></span>
-        <span>🔘 <span data-cl-zh>拖拽圆心 O 平移</span><span data-cl-en style="display:none">Drag center O</span></span>
     </div>
 </div>
 
@@ -43,7 +42,7 @@
     (function(){
         const canvas = document.getElementById('circleCanvas');
         const ctx = canvas.getContext('2d');
-        const CANVAS_FONT = '500 14px "DM Sans", -apple-system, Arial, sans-serif';
+        const CANVAS_FONT = '500 14px "Noto Sans SC", "Manrope", -apple-system, Arial, sans-serif';
 
         let O = { x: 300, y: 250 };
         let radius = 150, angleA = -30, dragging = false, dragTarget = null;
@@ -188,7 +187,50 @@
         window.addEventListener('load', () => { updateTexts(); drawCanvas(); });
         updateTexts();
         drawCanvas();
+        let mascotDragReported = false;
+        let mascotPointerDown = false;
+        let mascotStartPoint = null;
+        function getMascotPoint(event) {
+            if (event.touches && event.touches[0]) {
+                return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+            }
+            if (event.changedTouches && event.changedTouches[0]) {
+                return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+            }
+            return { x: event.clientX, y: event.clientY };
+        }
+        function reportMascotDrag() {
+            if (mascotDragReported) return;
+            mascotDragReported = true;
+            try {
+                window.parent.postMessage({ _src: 'circlelab', mascotDrag: true }, '*');
+            } catch (e) {}
+        }
+        function handleMascotDragStart(event) {
+            mascotPointerDown = true;
+            mascotStartPoint = getMascotPoint(event);
+        }
+        function handleMascotDragMove(event) {
+            if (!mascotPointerDown || mascotDragReported || !mascotStartPoint) return;
+            const currentPoint = getMascotPoint(event);
+            if (Math.hypot(currentPoint.x - mascotStartPoint.x, currentPoint.y - mascotStartPoint.y) < 6) return;
+            reportMascotDrag();
+        }
+        function handleMascotDragEnd() {
+            mascotPointerDown = false;
+            mascotStartPoint = null;
+        }
+
+        canvas.addEventListener('mousedown', handleMascotDragStart);
+        canvas.addEventListener('touchstart', handleMascotDragStart, { passive: true });
+        window.addEventListener('mousemove', handleMascotDragMove);
+        window.addEventListener('touchmove', handleMascotDragMove, { passive: true });
+        window.addEventListener('mouseup', handleMascotDragEnd);
+        window.addEventListener('touchend', handleMascotDragEnd);
+        window.addEventListener('touchcancel', handleMascotDragEnd);
+        window.addEventListener('blur', handleMascotDragEnd);
     })();
 </script>
 </body>
 </html>
+

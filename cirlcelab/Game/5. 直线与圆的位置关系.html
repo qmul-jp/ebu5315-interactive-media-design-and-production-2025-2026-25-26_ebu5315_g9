@@ -1,15 +1,15 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>直线与圆的位置关系 - CircleLab</title>
     <link rel="stylesheet" href="game.css">
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         /* ===== 以下为原有样式（完全没有改动任何原有规则）===== */
         body {
-            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Noto Sans SC', 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg); color: var(--text);
             transition: background 0.3s, color 0.3s;
             padding: 20px 24px 28px; min-height: 100vh;
@@ -22,7 +22,7 @@
             overflow: hidden; transition: background 0.3s, border-color 0.3s;
         }
         .card-header { padding: 20px 28px 12px; border-bottom: 1px solid var(--border); }
-        .card-header .title { font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif; font-size: 1.35rem; color: var(--text); }
+        .card-header .title { font-family: 'Source Han Serif SC', 'Noto Serif SC', 'Anthropic Serif', Georgia, serif; font-size: 1.35rem; color: var(--text); }
         .card-header .sub-en { font-size: 0.75rem; color: var(--text-sub); margin-top: 4px; }
         .canvas-container { padding: 28px 28px 16px; display: flex; justify-content: center; background: var(--card-bg); }
         canvas {
@@ -105,7 +105,7 @@
 (function(){
     // 以下所有原有函数和变量完全保留，未做任何修改（除了新增图片显示逻辑）
     function _fg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#e8e4dc':'#1a1a1a'; }
-    function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?'#1c1c1c':'#ffffff'; }
+    function _bg(){ return document.documentElement.getAttribute('data-theme')==='dark'?(getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#181F23'):'#ffffff'; }
     function _lang(){ return (window._CL&&window._CL.lang)||'zh'; }
 
     const canvas=document.getElementById('circleCanvas'), ctx=canvas.getContext('2d');
@@ -208,11 +208,11 @@
         drawRightAngle(O,f,P1,P2);
 
         const mx=(O.x+f.x)/2, my=(O.y+f.y)/2;
-        ctx.fillStyle=_fg()==='#e8e4dc'?'#aaa':'#666'; ctx.font='13px "DM Sans",sans-serif';
+        ctx.fillStyle=_fg()==='#e8e4dc'?'#aaa':'#666'; ctx.font='13px "Noto Sans SC", "Manrope", sans-serif';
         ctx.fillText('d', mx+6, my-4);
 
         ctx.beginPath(); ctx.arc(O.x,O.y,5,0,2*Math.PI); ctx.fillStyle=_fg(); ctx.fill();
-        ctx.font='500 14px "DM Sans",Arial,sans-serif'; ctx.fillStyle=_fg();
+        ctx.font='500 14px "Noto Sans SC", "Manrope", Arial, sans-serif'; ctx.fillStyle=_fg();
         ctx.fillText('O', O.x-16, O.y-8);
 
         [{p:P1,l:'P'},{p:P2,l:'Q'}].forEach(({p,l})=>{
@@ -265,7 +265,50 @@
     window._clRedraw=update;
     window.addEventListener('load',update);
     update();
-})();
+        let mascotDragReported = false;
+        let mascotPointerDown = false;
+        let mascotStartPoint = null;
+        function getMascotPoint(event) {
+            if (event.touches && event.touches[0]) {
+                return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+            }
+            if (event.changedTouches && event.changedTouches[0]) {
+                return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+            }
+            return { x: event.clientX, y: event.clientY };
+        }
+        function reportMascotDrag() {
+            if (mascotDragReported) return;
+            mascotDragReported = true;
+            try {
+                window.parent.postMessage({ _src: 'circlelab', mascotDrag: true }, '*');
+            } catch (e) {}
+        }
+        function handleMascotDragStart(event) {
+            mascotPointerDown = true;
+            mascotStartPoint = getMascotPoint(event);
+        }
+        function handleMascotDragMove(event) {
+            if (!mascotPointerDown || mascotDragReported || !mascotStartPoint) return;
+            const currentPoint = getMascotPoint(event);
+            if (Math.hypot(currentPoint.x - mascotStartPoint.x, currentPoint.y - mascotStartPoint.y) < 6) return;
+            reportMascotDrag();
+        }
+        function handleMascotDragEnd() {
+            mascotPointerDown = false;
+            mascotStartPoint = null;
+        }
+
+        canvas.addEventListener('mousedown', handleMascotDragStart);
+        canvas.addEventListener('touchstart', handleMascotDragStart, { passive: true });
+        window.addEventListener('mousemove', handleMascotDragMove);
+        window.addEventListener('touchmove', handleMascotDragMove, { passive: true });
+        window.addEventListener('mouseup', handleMascotDragEnd);
+        window.addEventListener('touchend', handleMascotDragEnd);
+        window.addEventListener('touchcancel', handleMascotDragEnd);
+        window.addEventListener('blur', handleMascotDragEnd);
+    })();
 </script>
 </body>
 </html>
+

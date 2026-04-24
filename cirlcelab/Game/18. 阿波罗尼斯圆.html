@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>阿波罗尼斯圆 - CircleLab</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="game.css">
     <style>
         body {
-            font-family: 'Noto Sans SC', 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Noto Sans SC', 'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background: var(--bg);
             color: var(--text);
             transition: background 0.3s, color 0.3s;
@@ -35,7 +35,7 @@
             border-bottom: 1px solid var(--border);
         }
         .card-header .title {
-            font-family: 'Noto Serif SC', 'Source Han Serif SC', 'DM Serif Display', Georgia, serif;
+            font-family: 'Source Han Serif SC', 'Noto Serif SC', 'Anthropic Serif', Georgia, serif;
             font-size: 1.35rem;
             color: var(--text);
         }
@@ -135,7 +135,7 @@
         .desc-symbol {
             font-weight: 600;
             color: var(--accent2);
-            font-family: 'DM Sans', Arial, sans-serif;
+            font-family: 'Noto Sans SC', 'Manrope', Arial, sans-serif;
         }
 
         .theorem {
@@ -241,7 +241,7 @@
 
         // ---------- 辅助函数 ----------
         function _fg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#e8e4dc' : '#1a1a1a'; }
-        function _bg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? '#1c1c1c' : '#ffffff'; }
+        function _bg()     { return document.documentElement.getAttribute('data-theme') === 'dark' ? (getComputedStyle(document.documentElement).getPropertyValue('--card-bg').trim() || '#181F23') : '#ffffff'; }
         function _isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
         function _lang()   { return (window._CL && window._CL.lang) || 'zh'; }
         function _gridColor() { return _isDark() ? '#2a2a2a' : '#f0ede6'; }
@@ -373,14 +373,14 @@
             ctx.beginPath(); ctx.moveTo(0, OY); ctx.lineTo(CANVAS_W, OY); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(OX, 0); ctx.lineTo(OX, CANVAS_H); ctx.stroke();
             ctx.fillStyle = axisC;
-            ctx.font = '12px "DM Sans", sans-serif';
+            ctx.font = '12px "Noto Sans SC", "Manrope", sans-serif';
             ctx.fillText('x', CANVAS_W-14, OY-6);
             ctx.fillText('y', OX+8, 14);
             ctx.fillText('O', OX+5, OY+14);
 
             // 刻度
             ctx.fillStyle = _isDark() ? '#777' : '#999';
-            ctx.font = '11px "DM Sans", sans-serif';
+            ctx.font = '11px "Noto Sans SC", "Manrope", sans-serif';
             for (let i = -Math.floor(OX/SCALE); i <= Math.floor((CANVAS_W-OX)/SCALE); i++) {
                 if (i===0) continue;
                 ctx.fillText(i, OX + i*SCALE - 4, OY + 14);
@@ -403,7 +403,7 @@
             const pC1 = toCanvas(ap.C1x, ap.C1y), pC2 = toCanvas(ap.C2x, ap.C2y);
             ctx.beginPath(); ctx.arc(pC1.x, pC1.y, 4, 0, 2*Math.PI);
             ctx.fillStyle = purple; ctx.fill();
-            ctx.fillStyle = _fg(); ctx.font = '11px "DM Sans", sans-serif';
+            ctx.fillStyle = _fg(); ctx.font = '11px "Noto Sans SC", "Manrope", sans-serif';
             ctx.fillText('C₁', pC1.x + 5, pC1.y - 5);
 
             ctx.beginPath(); ctx.arc(pC2.x, pC2.y, 4, 0, 2*Math.PI);
@@ -430,7 +430,7 @@
             ctx.setLineDash([5, 3]); ctx.stroke(); ctx.setLineDash([]);
 
             // 长度标注
-            ctx.font = '12px "DM Sans", sans-serif';
+            ctx.font = '12px "Noto Sans SC", "Manrope", sans-serif';
             const mPA = { x:(pP.x+pA.x)/2, y:(pP.y+pA.y)/2 };
             const mPB = { x:(pP.x+pB.x)/2, y:(pP.y+pB.y)/2 };
             ctx.fillStyle = '#e74c3c';
@@ -441,7 +441,7 @@
             // 定点 A、B
             ctx.beginPath(); ctx.arc(pA.x, pA.y, 6, 0, 2*Math.PI);
             ctx.fillStyle = '#e74c3c'; ctx.fill();
-            ctx.fillStyle = _fg(); ctx.font = '500 14px "DM Sans", sans-serif';
+            ctx.fillStyle = _fg(); ctx.font = '500 14px "Noto Sans SC", "Manrope", sans-serif';
             ctx.fillText('A', pA.x - 18, pA.y - 8);
 
             ctx.beginPath(); ctx.arc(pB.x, pB.y, 6, 0, 2*Math.PI);
@@ -452,14 +452,14 @@
             // 探测点 P
             ctx.beginPath(); ctx.arc(pP.x, pP.y, 6, 0, 2*Math.PI);
             ctx.fillStyle = pColor; ctx.fill();
-            ctx.fillStyle = _fg(); ctx.font = '500 13px "DM Sans", sans-serif';
+            ctx.fillStyle = _fg(); ctx.font = '500 13px "Noto Sans SC", "Manrope", sans-serif';
             ctx.fillText('P', pP.x + 9, pP.y - 7);
 
             // 圆心标注
             ctx.beginPath(); ctx.arc(pAC.x, pAC.y, 4, 0, 2*Math.PI);
             ctx.fillStyle = purple; ctx.fill();
             ctx.fillStyle = purple;
-            ctx.font = '12px "DM Sans", sans-serif';
+            ctx.font = '12px "Noto Sans SC", "Manrope", sans-serif';
             ctx.fillText(`圆心(${fmt(ap.cx)},${fmt(ap.cy)})  R=${fmt(ap.R)}`, pAC.x + 7, pAC.y - 6);
         }
 
@@ -547,7 +547,50 @@
             update();
         });
         update();
+        let mascotDragReported = false;
+        let mascotPointerDown = false;
+        let mascotStartPoint = null;
+        function getMascotPoint(event) {
+            if (event.touches && event.touches[0]) {
+                return { x: event.touches[0].clientX, y: event.touches[0].clientY };
+            }
+            if (event.changedTouches && event.changedTouches[0]) {
+                return { x: event.changedTouches[0].clientX, y: event.changedTouches[0].clientY };
+            }
+            return { x: event.clientX, y: event.clientY };
+        }
+        function reportMascotDrag() {
+            if (mascotDragReported) return;
+            mascotDragReported = true;
+            try {
+                window.parent.postMessage({ _src: 'circlelab', mascotDrag: true }, '*');
+            } catch (e) {}
+        }
+        function handleMascotDragStart(event) {
+            mascotPointerDown = true;
+            mascotStartPoint = getMascotPoint(event);
+        }
+        function handleMascotDragMove(event) {
+            if (!mascotPointerDown || mascotDragReported || !mascotStartPoint) return;
+            const currentPoint = getMascotPoint(event);
+            if (Math.hypot(currentPoint.x - mascotStartPoint.x, currentPoint.y - mascotStartPoint.y) < 6) return;
+            reportMascotDrag();
+        }
+        function handleMascotDragEnd() {
+            mascotPointerDown = false;
+            mascotStartPoint = null;
+        }
+
+        canvas.addEventListener('mousedown', handleMascotDragStart);
+        canvas.addEventListener('touchstart', handleMascotDragStart, { passive: true });
+        window.addEventListener('mousemove', handleMascotDragMove);
+        window.addEventListener('touchmove', handleMascotDragMove, { passive: true });
+        window.addEventListener('mouseup', handleMascotDragEnd);
+        window.addEventListener('touchend', handleMascotDragEnd);
+        window.addEventListener('touchcancel', handleMascotDragEnd);
+        window.addEventListener('blur', handleMascotDragEnd);
     })();
 </script>
 </body>
 </html>
+
