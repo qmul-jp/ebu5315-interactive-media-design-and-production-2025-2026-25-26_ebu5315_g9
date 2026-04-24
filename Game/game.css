@@ -1,0 +1,394 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap");
+
+@font-face {
+    font-family: "Anthropic Serif";
+    src: url("../homepage/fonts/6997199fab1923a705f0042d_AnthropicSerif-Roman-Web.woff2")
+        format("woff2");
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+/* ============================================================
+   game.css — CircleLab 共用样式
+   用法：在各 HTML 文件 <head> 中加入
+         <link rel="stylesheet" href="game.css">
+   各文件仍可在内部 <style> 中覆盖或补充专属样式。
+   ============================================================ */
+
+/* ── CSS 变量（亮色主题默认值） ── */
+:root {
+    --font-sans:    'Manrope', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-serif:   'Anthropic Serif', Georgia, serif;
+    --bg:          #faf9f5;
+    --card-bg:     #ffffff;
+    --sidebar-bg:  #faf9f5;
+    --header-bg:   #faf9f5;
+    --text:        #1f1e1d;
+    --text-sub:    #888;
+    --accent:      #1a1a1a;
+    --accent2:     #d97757;
+    --border:      #e8e4dc;
+    --data-panel-border: #e8e4dc;
+    --data-panel-top-border: #e8e4dc;
+    --data-divider: #e8e4dc;
+    --data-divider-width: 1px;
+    --theorem-bg: #f0ede6;
+    --hover-bg:    #f0ede6;
+    --active-bg:   #1a1a1a;
+    --active-text: #ffffff;
+    --shadow:      0 1px 12px rgba(0, 0, 0, 0.06);
+    --scrollbar-track: transparent;
+    --scrollbar-thumb: color-mix(in oklch, var(--border) 42%, transparent);
+    --scrollbar-thumb-hover: color-mix(in oklch, var(--border) 58%, transparent);
+    --icon-mouse: #878785;
+    --icon-ruler: #6A6B6A;
+    --icon-calculator: #878785;
+    --icon-compass: #878785;
+}
+
+:root:lang(zh),
+html[lang^="zh"] {
+    --font-sans:    'Manrope', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-serif:   'Anthropic Serif', 'Source Han Serif SC', 'Noto Serif SC', Georgia, serif;
+}
+
+/* ── 暗色主题覆盖 ── */
+[data-theme="dark"] {
+    --bg:          #06080B;
+    --card-bg:     #181F23;
+    --sidebar-bg:  #06080b;
+    --header-bg:   #06080b;
+    --text:        #e8e4dc;
+    --text-sub:    #666;
+    --accent:      #e8e4dc;
+    --accent2:     #d97757;
+    --border:      #2a2a2a;
+    --data-panel-border: color-mix(in oklch, oklch(0.74 0.14 170) 58%, #2a2a2a);
+    --data-panel-top-border: color-mix(in oklch, oklch(0.74 0.14 170) 58%, #2a2a2a);
+    --data-divider: transparent;
+    --theorem-bg: color-mix(in oklch, oklch(0.74 0.14 170) 14%, #181F23 86%);
+    --hover-bg:    #181F23;
+    --active-bg:   #e8e4dc;
+    --active-text: #141414;
+    --shadow:      0 1px 12px rgba(0, 0, 0, 0.3);
+    --scrollbar-track: transparent;
+    --scrollbar-thumb: color-mix(in oklch, var(--border) 42%, transparent);
+    --scrollbar-thumb-hover: color-mix(in oklch, var(--border) 58%, transparent);
+    --icon-mouse: color-mix(in oklch, #e8e4dc 54%, #878785 46%);
+    --icon-ruler: color-mix(in oklch, #e8e4dc 72%, #878785 28%);
+    --icon-calculator: color-mix(in oklch, #e8e4dc 54%, #878785 46%);
+    --icon-compass: color-mix(in oklch, #e8e4dc 54%, #878785 46%);
+}
+
+/* ── Reset ── */
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Body ── */
+body {
+    font-family: var(--font-sans) !important;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+}
+
+html {
+    scrollbar-width: auto;
+    scrollbar-color: auto;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+    width: auto;
+    height: auto;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track {
+    background: initial;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb {
+    background: initial;
+    border-radius: initial;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover {
+    background: initial;
+}
+
+/* ── 卡片容器 ── */
+.circle-card {
+    max-width: 820px;
+    width: 100%;
+    background: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    transition: background 0.3s, border-color 0.3s;
+}
+
+/* ── 卡片头部 ── */
+html[data-embedded="true"],
+html[data-embedded="true"] body {
+    background: var(--card-bg) !important;
+}
+html[data-embedded="true"] body {
+    min-height: 100vh !important;
+}
+html[data-embedded="true"] .circle-card {
+    border: none;
+    box-shadow: none;
+}
+
+.card-header {
+    padding: 20px 28px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--card-bg);
+    transition: background 0.3s, border-color 0.3s;
+}
+html[data-embedded="true"] .card-header {
+    display: none;
+}
+.card-header .title {
+    font-family: var(--font-serif) !important;
+    font-size: 1.35rem;
+    color: var(--text);
+    letter-spacing: -0.01em;
+}
+.card-header .sub-en {
+    font-size: 0.75rem;
+    color: var(--text-sub);
+    margin-top: 4px;
+    font-weight: 400;
+}
+
+/* ── Canvas 容器 ── */
+.canvas-container {
+    padding: 28px 28px 16px;
+    display: flex;
+    justify-content: center;
+    background: var(--card-bg);
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+    border-radius: 10px;
+    background: var(--card-bg);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid var(--border);
+    transition: background 0.2s, border-color 0.2s;
+}
+
+/* ── 数据面板 ── */
+.data-panel {
+    margin: 8px 28px 20px;
+    background: var(--hover-bg);
+    border: 1px solid var(--data-panel-border);
+    border-top-color: var(--data-panel-top-border);
+    border-radius: 10px !important;
+    padding: 18px 20px;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+/* ── 公式行 ── */
+.formula-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 24px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
+    border-bottom: var(--data-divider-width) dashed var(--data-divider);
+    text-align: center;
+}
+.formula-row:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+/* ── 数据项 ── */
+.metric {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.metric-value {
+    font-family: var(--font-sans) !important;
+    font-weight: 600;
+    background: var(--card-bg);
+    border: 1px solid var(--data-panel-border);
+    padding: 2px 10px;
+    border-radius: 10px;
+    color: var(--accent2);
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+}
+
+/* ── 描述标签行 ── */
+.descriptions {
+    margin: 12px 28px 8px;
+    line-height: 1.8;
+    font-size: 0.9rem;
+    color: var(--text);
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+    border-top: var(--data-divider-width) dashed var(--data-divider);
+    padding-top: 18px;
+}
+.desc-item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    background: var(--hover-bg);
+    border: 1px solid var(--data-panel-border);
+    padding: 6px 16px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    transition: background 0.2s, border-color 0.2s;
+}
+.desc-symbol {
+    font-weight: 600;
+    color: var(--accent2);
+    font-family: var(--font-sans) !important;
+}
+
+.card-header .sub-en,
+.content-title-en,
+.welcome p,
+.theorem,
+.interact-hint,
+.metric,
+.desc-item {
+    font-family: var(--font-sans);
+}
+
+/* ── 定理块 ── */
+.cl-topic-icon {
+    display: inline-flex;
+    width: 1.24em;
+    height: 1.24em;
+    margin-right: 0.3em;
+    vertical-align: -0.26em;
+    line-height: 1;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+    flex-shrink: 0;
+    color: currentColor;
+}
+.cl-topic-icon[data-icon="ruler"] {
+    color: var(--icon-ruler);
+}
+.cl-topic-icon[data-icon="mouse"] {
+    color: var(--icon-mouse);
+}
+.cl-topic-icon[data-icon="calculator"] {
+    color: var(--icon-calculator);
+}
+.cl-topic-icon[data-icon="compass"] {
+    color: var(--icon-compass);
+    width: 1.3em;
+}
+.cl-topic-icon svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.65;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.theorem {
+    margin: 8px 28px 28px;
+    background: var(--theorem-bg);
+    
+    padding: 16px 20px;
+    border-radius: 10px !important;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text);
+    justify-content: center;
+    text-align: center;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+/* ── 底部交互提示 ── */
+html[data-embedded="true"] .theorem {
+    background: var(--theorem-bg) !important;
+    border-left: none !important;
+}
+
+.interact-hint {
+    margin: 0 28px 24px;
+    font-size: 0.7rem;
+    color: var(--text-sub);
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    border-top: var(--data-divider-width) solid var(--data-divider);
+    padding-top: 16px;
+}
+
+/* ── 结论徽章（通用） ── */
+.conclusion-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border: 2px solid currentColor;
+    background: #e9cccc;
+}
+html[data-theme="light"] .conclusion-badge,
+html:not([data-theme="dark"]) .conclusion-badge {
+    background: color-mix(in oklch, #d97757 16%, #faf9f5);
+}
+html[data-theme="dark"] .conclusion-badge {
+    background: transparent;
+}
+
+/* ── 弧标记辅助 ── */
+.arc-label {
+    display: inline-block;
+    position: relative;
+    padding-top: 0.3em;
+}
+.arc-label .arc-symbol {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleX(1.3);
+    font-size: 0.75em;
+    line-height: 1;
+}
+
+/* ── 响应式 ── */
+@media (max-width: 600px) {
+    .descriptions { gap: 8px; }
+    .desc-item    { padding: 4px 12px; }
+    .formula-row  { gap: 12px; }
+    body          { padding: 12px; }
+}
