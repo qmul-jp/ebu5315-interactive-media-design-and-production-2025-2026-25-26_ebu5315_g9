@@ -784,11 +784,8 @@ body.overview-mode .question-panel {
   box-shadow: none;
 }
 
-.question-panel::before,
-.question-panel::after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
+body.exam-mode .page {
+  grid-template-columns: 84px minmax(0, 1fr);
 }
 
 .question-panel::before {
@@ -799,7 +796,7 @@ body.overview-mode .question-panel {
   display: none;
 }
 
-.side-panel {
+.page-nav-sidebar {
   position: sticky;
   top: var(--space-3);
   align-self: start;

@@ -2,17 +2,18 @@
 <html lang="zh" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CircleLab</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>CircleLab · 圆形几何交互探索</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="game.css">
     <style>
-        /* index.html 专属样式 */
+        /* index.html 专属样式 — 包含开屏黑板图片完整居中 + 文字下移 */
         body {
             height: 100vh;
             display: flex;
             flex-direction: column;
             padding: 0;
+            overflow: hidden;
         }
 
         /* ── HEADER ── */
@@ -95,7 +96,7 @@
 
         /* ── SIDEBAR ── */
         aside {
-            width: 220px;
+            width: 240px;
             flex-shrink: 0;
             background: var(--sidebar-bg);
             border-right: 1px solid var(--border);
@@ -130,7 +131,8 @@
             font-variant-numeric: tabular-nums;
             margin-top: 2px;
             flex-shrink: 0;
-            width: 16px;
+            width: 24px;
+            font-weight: 500;
         }
         .nav-text    { font-size: 0.82rem; color: var(--text); line-height: 1.4; font-weight: 400; }
         .nav-text-en { font-size: 0.70rem; color: var(--text-sub); line-height: 1.3; margin-top: 1px; }
@@ -158,27 +160,136 @@
         .content-title    { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: var(--text); }
         .content-title-en { font-size: 0.75rem; color: var(--text-sub); margin-top: 2px; }
 
+        /* ── Breadcrumb ── */
+        .breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 28px;
+            background: var(--header-bg);
+            border-bottom: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text-sub);
+            flex-shrink: 0;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .breadcrumb-home {
+            color: var(--text-sub);
+            cursor: pointer;
+            transition: color 0.15s;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .breadcrumb-home:hover { color: var(--accent2); }
+        .breadcrumb-sep {
+            color: var(--border);
+            font-size: 0.7rem;
+            user-select: none;
+            margin: 0 1px;
+        }
+        .breadcrumb-current {
+            color: var(--text);
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 320px;
+        }
+
+        /* ========= 欢迎区域全新设计：黑板图片按原尺寸比例居中，无裁剪，文字下移 ========= */
         .welcome {
             flex: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 12px;
+            justify-content: center;      /* 整体垂直居中，但图片较大时会自然偏移，文字通过额外margin下移 */
+            gap: 24px;
             color: var(--text-sub);
+            text-align: center;
+            padding: 32px 24px 48px;
+            overflow-y: auto;
         }
+        
+        /* 图片容器：彻底去除圆形、边框、背景限制，完全展示原始比例 */
         .welcome-circle {
-            width: 64px; height: 64px;
-            border-radius: 50%;
-            border: 2px solid var(--border);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.8rem;
+            display: block;
+            width: auto;
+            max-width: 100%;
+            background: transparent;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            padding: 0;
+            margin: 0 auto;
+            text-align: center;
+            line-height: 0;
+            /* 增加下边距让文字适当下移 */
+            margin-bottom: 28px;
         }
-        .welcome h2 { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text); }
-        .welcome p  { font-size: 0.85rem; }
+        
+        /* 黑板图片本身：原始尺寸优先，仅当超出容器时等比缩放，严格居中，无任何裁剪 */
+        .welcome-circle img {
+            display: block;
+            margin: 0 auto;
+            width: 800px;
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;      /* 确保比例完整，绝不裁剪 */
+            border-radius: 0;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            transition: box-shadow 0.2s;
+            background: transparent;
+        }
+        
+        /* 标题与描述文字自然下移 (配合图片下方 margin-bottom 已产生足够间距) */
+        .welcome h2 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 1.6rem;
+            color: var(--text);
+            margin: 0 0 8px 0;
+            font-weight: 500;
+            letter-spacing: -0.3px;
+        }
+        .welcome p {
+            font-size: 0.95rem;
+            max-width: 320px;
+            line-height: 1.5;
+            color: var(--text-sub);
+            margin-top: 4px;
+        }
+        
+        /* 暗色主题下图片阴影微调 */
+        [data-theme="dark"] .welcome-circle img {
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* 响应式：手机端图片不会溢出，文字大小舒适 */
+        @media (max-width: 640px) {
+            .welcome {
+                padding: 24px 16px 40px;
+                gap: 18px;
+            }
+            .welcome-circle {
+                margin-bottom: 20px;
+            }
+            .welcome h2 {
+                font-size: 1.3rem;
+            }
+            .welcome p {
+                font-size: 0.85rem;
+            }
+        }
 
-        iframe { flex: 1; border: none; width: 100%; background: #ffffff; display: none; }
+        iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+            background: var(--card-bg);
+            display: none;
+            transition: background 0.2s;
+        }
         iframe.visible { display: block; }
+        
     </style>
 </head>
 <body>
@@ -202,20 +313,30 @@
     <aside id="sidebar"></aside>
 
     <main id="mainArea">
+        <nav class="breadcrumb" id="breadcrumb" style="display:none">
+            <span class="breadcrumb-home" id="breadcrumbHome" onclick="goHome()">首页</span>
+            <span class="breadcrumb-sep">／</span>
+            <span class="breadcrumb-current" id="breadcrumbCurrent"></span>
+        </nav>
         <div class="content-header" id="contentHeader" style="display:none">
             <div class="content-title" id="contentTitle"></div>
             <div class="content-title-en" id="contentTitleEn"></div>
         </div>
         <div class="welcome" id="welcome">
-            <div class="welcome-circle">○</div>
+            <!-- 黑板图片容器：按原始尺寸比例居中显示，无任何裁剪或圆形限制 -->
+            <div class="welcome-circle">
+                <img src="黑板.png" alt="黑板 | 圆形几何探索" 
+                     onerror="this.onerror=null; this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201823%201171%22%3E%3Crect%20width%3D%221823%22%20height%3D%221171%22%20fill%3D%22%232d4a2e%22%2F%3E%3Ctext%20x%3D%22911%22%20y%3D%22585%22%20font-size%3D%2280%22%20text-anchor%3D%22middle%22%20fill%3D%22%23f5e6c4%22%20font-family%3D%22monospace%22%3E📐%20CircleLab%3C%2Ftext%3E%3C%2Fsvg%3E';">
+            </div>
             <h2 id="welcomeTitle">欢迎来到 CircleLab</h2>
             <p id="welcomeSub">从左侧目录选择一个主题开始探索</p>
         </div>
-        <iframe id="contentFrame" src=""></iframe>
+        <iframe id="contentFrame" src="about:blank" title="CircleLab 交互内容"></iframe>
     </main>
 </div>
 
 <script>
+    // ======================= 几何主题库 =======================
     const topics = [
         { zh: '圆的基本定义',     en: 'Basic Definition of a Circle',     file: '1. 圆的基本定义.html' },
         { zh: '圆的周长和面积',   en: 'Circumference & Area',             file: '2. 圆的周长和面积.html' },
@@ -224,7 +345,7 @@
         { zh: '直线与圆的位置关系', en: 'Line–Circle Relationship',        file: '5. 直线与圆的位置关系.html' },
         { zh: '垂径定理',         en: 'Perpendicular Chord Theorem',       file: '6. 垂径定理.html' },
         { zh: '圆心角定理',       en: 'Central Angle Theorem',             file: '7. 圆心角定理.html' },
-        { zh: '圆周角定理',       en: 'Central Angle Theorem',             file: '8. 圆周角定理.html' },
+        { zh: '圆周角定理',       en: 'Inscribed Angle Theorem',             file: '8. 圆周角定理.html' },
         { zh: '圆内接四边形性质', en: 'Inscribed Quadrilateral',           file: '9. 圆内接四边形的性质.html' },
         { zh: '切线的判定与性质', en: 'Tangent Line Properties',           file: '10. 切线的判定与性质.html' },
         { zh: '切线长定理',       en: 'Tangent Length Theorem',             file: '11. 切线长定理.html' },
@@ -237,20 +358,34 @@
         { zh: '阿波罗尼斯圆',     en: 'Apollonius Circle',                  file: '18. 阿波罗尼斯圆.html' },
     ];
 
+    // 全局状态
     let lang = 'zh';
     let activeIndex = -1;
-    let currentFontSize = 16;   // 基准字号 px，范围 12~20
+    let currentFontSize = 16;   // 基准字号 px
 
+    // 国际化文案（开屏部分以及侧栏标签）
     const i18n = {
-        zh: { sub: '圆形几何交互探索',        sidebarLabel: '目录',     welcomeTitle: '欢迎来到 CircleLab', welcomeSub: '从左侧目录选择一个主题开始探索' },
-        en: { sub: 'Interactive Circle Geometry', sidebarLabel: 'Contents', welcomeTitle: 'Welcome to CircleLab', welcomeSub: 'Select a topic from the sidebar to begin' }
+        zh: { 
+            sub: '圆形几何交互探索',        
+            sidebarLabel: '📖 目录',     
+            welcomeTitle: '欢迎来到 CircleLab', 
+            welcomeSub: '从左侧目录选择一个主题开始探索',
+            breadcrumbHome: '首页',
+        },
+        en: { 
+            sub: 'Interactive Circle Geometry', 
+            sidebarLabel: '📖 Contents', 
+            welcomeTitle: 'Welcome to CircleLab', 
+            welcomeSub: 'Select a topic from the sidebar to begin',
+            breadcrumbHome: 'Home',
+        }
     };
 
+    // 全局根字号调整 & 广播至iframe
     function setRootFontSize(size) {
         size = Math.min(20, Math.max(12, size));
         currentFontSize = size;
         document.documentElement.style.fontSize = size + 'px';
-        // 同步到 iframe
         broadcast({ _src: 'circlelab', fontSize: currentFontSize });
     }
 
@@ -258,8 +393,10 @@
         setRootFontSize(currentFontSize + delta);
     }
 
+    // 构建侧边栏目录（支持中英文动态）
     function buildSidebar() {
         const aside = document.getElementById('sidebar');
+        if (!aside) return;
         aside.innerHTML = '';
         const label = document.createElement('div');
         label.className = 'sidebar-label';
@@ -271,8 +408,9 @@
             const item = document.createElement('div');
             item.className = 'nav-item' + (i === activeIndex ? ' active' : '');
             item.onclick = () => loadTopic(i);
+            const idxStr = String(i + 1).padStart(2, '0');
             item.innerHTML = `
-                <span class="nav-num">${String(i + 1).padStart(2, '0')}</span>
+                <span class="nav-num">${idxStr}</span>
                 <div>
                     <div class="nav-text">${lang === 'zh' ? t.zh : t.en}</div>
                     <div class="nav-text-en">${lang === 'zh' ? t.en : t.zh}</div>
@@ -281,64 +419,190 @@
         });
     }
 
+    // 加载指定主题（iframe内容）
     function loadTopic(i) {
-        activeIndex = i;
-        const t = topics[i];
-        document.getElementById('welcome').style.display = 'none';
-        document.getElementById('contentHeader').style.display = 'block';
-        document.getElementById('contentTitle').textContent   = t.zh;
-        document.getElementById('contentTitleEn').textContent = t.en;
-
-        const frame = document.getElementById('contentFrame');
-        frame.classList.add('visible');
-        frame.src = t.file;
-        frame.onload = function () {
-            // 发送主题、语言、当前字号
+        if (i === activeIndex && document.getElementById('contentFrame').src !== 'about:blank') {
+            // 相同主题，同步语言/主题/字号即可
             broadcast({ _src: 'circlelab', lang: lang });
             broadcast({ _src: 'circlelab', theme: document.documentElement.getAttribute('data-theme') || 'light' });
             broadcast({ _src: 'circlelab', fontSize: currentFontSize });
+            return;
+        }
+        activeIndex = i;
+        const t = topics[i];
+        // 隐藏欢迎界面，显示内容头部和iframe
+        const welcomeDiv = document.getElementById('welcome');
+        const contentHeaderDiv = document.getElementById('contentHeader');
+        const frame = document.getElementById('contentFrame');
+        
+        if (welcomeDiv) welcomeDiv.style.display = 'none';
+        if (contentHeaderDiv) contentHeaderDiv.style.display = 'block';
+        
+        // 显示并更新 breadcrumb
+        const breadcrumb = document.getElementById('breadcrumb');
+        const breadcrumbHome = document.getElementById('breadcrumbHome');
+        const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+        if (breadcrumb) breadcrumb.style.display = 'flex';
+        if (breadcrumbHome) breadcrumbHome.textContent = i18n[lang].breadcrumbHome;
+        if (breadcrumbCurrent) breadcrumbCurrent.textContent = lang === 'zh' ? t.zh : t.en;
+        
+        // 更新头部标题
+        const titleElem = document.getElementById('contentTitle');
+        const titleEnElem = document.getElementById('contentTitleEn');
+        if (titleElem) titleElem.textContent = t.zh;
+        if (titleEnElem) titleEnElem.textContent = t.en;
+        
+        // 加载iframe内容
+        frame.classList.add('visible');
+        frame.src = t.file;
+        frame.onload = function () {
+            // 确保子页面获得父页面的语言、主题、字号
+            broadcast({ _src: 'circlelab', lang: lang });
+            broadcast({ _src: 'circlelab', theme: document.documentElement.getAttribute('data-theme') || 'light' });
+            broadcast({ _src: 'circlelab', fontSize: currentFontSize });
+            try {
+                frame.contentWindow.postMessage({ _src: 'circlelab', topicIndex: activeIndex, topicFile: t.file }, '*');
+            } catch(e) {}
         };
+        // 重新高亮侧边栏
         buildSidebar();
     }
 
+    // 向iframe广播消息（主题、语言、主题模式、字号）
     function broadcast(msg) {
         const frame = document.getElementById('contentFrame');
-        if (frame && frame.contentWindow) {
-            try { frame.contentWindow.postMessage(msg, '*'); } catch (e) {}
+        if (frame && frame.contentWindow && frame.contentWindow.postMessage) {
+            try {
+                frame.contentWindow.postMessage(msg, '*');
+            } catch (e) {
+                // 跨域限制忽略（同域一般无问题）
+            }
         }
     }
 
+    // 语言切换 (中/英)
     function toggleLang() {
         lang = lang === 'zh' ? 'en' : 'zh';
-        document.getElementById('btnLang').textContent = lang === 'zh' ? 'EN' : '中';
-        document.getElementById('headerSub').textContent   = i18n[lang].sub;
-        document.getElementById('welcomeTitle').textContent = i18n[lang].welcomeTitle;
-        document.getElementById('welcomeSub').textContent   = i18n[lang].welcomeSub;
-        if (activeIndex >= 0) {
+        const btnLang = document.getElementById('btnLang');
+        if (btnLang) btnLang.textContent = lang === 'zh' ? 'EN' : '中';
+        // 更新头部副标题
+        const headerSub = document.getElementById('headerSub');
+        if (headerSub) headerSub.textContent = i18n[lang].sub;
+        // 欢迎界面文案
+        const welcomeTitle = document.getElementById('welcomeTitle');
+        const welcomeSub = document.getElementById('welcomeSub');
+        if (welcomeTitle) welcomeTitle.textContent = i18n[lang].welcomeTitle;
+        if (welcomeSub) welcomeSub.textContent = i18n[lang].welcomeSub;
+        
+        // 如果当前已加载某个主题，更新内容区头部标题及侧边栏
+        if (activeIndex >= 0 && topics[activeIndex]) {
             const t = topics[activeIndex];
-            document.getElementById('contentTitle').textContent   = lang === 'zh' ? t.zh : t.en;
-            document.getElementById('contentTitleEn').textContent = lang === 'zh' ? t.en : t.zh;
+            const contentTitle = document.getElementById('contentTitle');
+            const contentTitleEn = document.getElementById('contentTitleEn');
+            if (contentTitle) contentTitle.textContent = lang === 'zh' ? t.zh : t.en;
+            if (contentTitleEn) contentTitleEn.textContent = lang === 'zh' ? t.en : t.zh;
+            // 同步更新 breadcrumb
+            const breadcrumbHome = document.getElementById('breadcrumbHome');
+            const breadcrumbCurrent = document.getElementById('breadcrumbCurrent');
+            if (breadcrumbHome) breadcrumbHome.textContent = i18n[lang].breadcrumbHome;
+            if (breadcrumbCurrent) breadcrumbCurrent.textContent = lang === 'zh' ? t.zh : t.en;
+        } else {
+            // 未加载主题时也更新 Home 文字（breadcrumb 此时是隐藏的，预更新备用）
+            const breadcrumbHome = document.getElementById('breadcrumbHome');
+            if (breadcrumbHome) breadcrumbHome.textContent = i18n[lang].breadcrumbHome;
         }
+        // 重建侧边栏（目录文字中英同步）
         buildSidebar();
+        // 广播语言变更给iframe
         broadcast({ _src: 'circlelab', lang: lang });
     }
 
+    // 明/暗主题切换
     function toggleTheme() {
-        const html   = document.documentElement;
+        const html = document.documentElement;
         const isDark = html.getAttribute('data-theme') === 'dark';
-        const theme  = isDark ? 'light' : 'dark';
-        html.setAttribute('data-theme', theme);
-        document.getElementById('btnTheme').textContent = isDark ? '🌙' : '☀️';
-        broadcast({ _src: 'circlelab', theme: theme });
+        const newTheme = isDark ? 'light' : 'dark';
+        html.setAttribute('data-theme', newTheme);
+        const themeBtn = document.getElementById('btnTheme');
+        if (themeBtn) themeBtn.textContent = isDark ? '🌙' : '☀️';
+        // 广播主题变化至所有子页面
+        broadcast({ _src: 'circlelab', theme: newTheme });
+        // 保存主题偏好
+        localStorage.setItem('circlelab_theme', newTheme);
     }
 
-    // 初始化根字号
-    setRootFontSize(16);
-    // 绑定字号按钮
-    document.getElementById('btnFontMinus').addEventListener('click', () => changeFontSize(-1));
-    document.getElementById('btnFontPlus').addEventListener('click', () => changeFontSize(1));
+    // 监听来自iframe的请求（例如子页面主动请求父级状态）
+    window.addEventListener('message', (event) => {
+        if (event.data && event.data._src === 'circlelab') {
+            // 子页面请求同步当前语言、主题或字号
+            if (event.data.requestSync) {
+                broadcast({ _src: 'circlelab', lang: lang });
+                broadcast({ _src: 'circlelab', theme: document.documentElement.getAttribute('data-theme') || 'light' });
+                broadcast({ _src: 'circlelab', fontSize: currentFontSize });
+            }
+        }
+    });
 
-    buildSidebar();
+    // 字体按钮绑定
+    function bindFontControls() {
+        const minusBtn = document.getElementById('btnFontMinus');
+        const plusBtn = document.getElementById('btnFontPlus');
+        if (minusBtn) minusBtn.addEventListener('click', () => changeFontSize(-1));
+        if (plusBtn) plusBtn.addEventListener('click', () => changeFontSize(1));
+    }
+    
+    // 点击 breadcrumb 首页返回欢迎界面
+    function goHome() {
+        activeIndex = -1;
+        const welcomeDiv = document.getElementById('welcome');
+        const contentHeaderDiv = document.getElementById('contentHeader');
+        const frame = document.getElementById('contentFrame');
+        const breadcrumb = document.getElementById('breadcrumb');
+        if (welcomeDiv) welcomeDiv.style.display = '';
+        if (contentHeaderDiv) contentHeaderDiv.style.display = 'none';
+        if (frame) { frame.classList.remove('visible'); frame.src = 'about:blank'; }
+        if (breadcrumb) breadcrumb.style.display = 'none';
+        buildSidebar();
+    }
+
+    // 初始化主题偏好恢复 + 启动应用
+    function init() {
+        setRootFontSize(16);
+        bindFontControls();
+        buildSidebar();
+        
+        // 恢复主题偏好
+        const savedTheme = localStorage.getItem('circlelab_theme');
+        if (savedTheme && (savedTheme === 'dark' || savedTheme === 'light')) {
+            if (savedTheme !== document.documentElement.getAttribute('data-theme')) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+                const themeBtn = document.getElementById('btnTheme');
+                if (themeBtn) themeBtn.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+            }
+        } else {
+            const current = document.documentElement.getAttribute('data-theme') || 'light';
+            localStorage.setItem('circlelab_theme', current);
+        }
+        
+        // 监听主题变更并保存（防止通过其他方式修改）
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mut) => {
+                if (mut.attributeName === 'data-theme') {
+                    const newTheme = document.documentElement.getAttribute('data-theme') || 'light';
+                    localStorage.setItem('circlelab_theme', newTheme);
+                    broadcast({ _src: 'circlelab', theme: newTheme });
+                }
+            });
+        });
+        observer.observe(document.documentElement, { attributes: true });
+        
+        // 挂载全局切换函数 (供内联onclick使用)
+        window.toggleLang = toggleLang;
+        window.toggleTheme = toggleTheme;
+        window.goHome = goHome;
+    }
+    // 启动
+    window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>

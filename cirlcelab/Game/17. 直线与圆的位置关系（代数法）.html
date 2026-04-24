@@ -21,7 +21,7 @@
         }
 
         .circle-card {
-            max-width: 820px;
+            max-width: 860px;
             width: 100%;
             background: var(--card-bg);
             border-radius: 24px;
@@ -127,6 +127,26 @@
             line-height: 1.6;
             border: 1px solid var(--border);
         }
+        
+        /* ===== 新增功能：相切时显示的图片容器样式（完全独立，不影响任何原有布局）===== */
+        .tangent-img-wrapper {
+            text-align: center;
+            margin: 0 28px 18px;          /* 与推导块和交互提示协调，不拥挤 */
+            padding: 0;
+            transition: all 0.2s ease;
+        }
+        .tangent-img-wrapper img {
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            max-height: 160px;             /* 卡片宽度范围内舒适 */
+            border-radius: 18px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+            border: 1px solid var(--border);
+            background: var(--card-bg);
+            display: block;
+            margin: 0 auto;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +165,12 @@
     <div class="descriptions" id="descArea"></div>
     <div class="theorem" id="theoremText"></div>
     <div class="eq-block" id="derivationBlock"></div>
+    
+    <!-- 新增：直线与圆相切时显示图片的容器（默认隐藏，位于推导块下方，交互提示上方） -->
+    <div id="tangentImageContainer" class="tangent-img-wrapper" style="display: none;">
+        <img src="相切.png" alt="直线与圆相切示意图" id="tangentImg">
+    </div>
+    
     <div class="interact-hint">
         <span>🖱️ <span data-cl-zh>拖拽圆心 O 或直线上的控制点 L₁、L₂</span><span data-cl-en style="display:none">Drag center O or line handles L₁, L₂</span></span>
     </div>
@@ -264,6 +290,7 @@
             const distance = getDistanceToLine(lineEq);
             const TANGENT_TOL = 0.03;  // 相切判定容差
             const diff = Math.abs(distance - oR);
+            const isTangent = diff <= TANGENT_TOL;
             
             const green = '#27ae60', orange = '#e67e22', blue = '#2980b9';
             let lineColor, statusHtml, conclusionZh, conclusionEn, deltaDisplay;
@@ -275,7 +302,7 @@
                 conclusionZh = '相离 · 无交点';
                 conclusionEn = 'Separate · No intersection';
                 deltaDisplay = res.disc.toFixed(2);
-            } else if (Math.abs(distance - oR) <= TANGENT_TOL) {
+            } else if (isTangent) {
                 lineColor = green;
                 statusHtml = `<span style="color:${green}">Δ = 0</span>`;
                 conclusionZh = '相切 · 一个切点';
@@ -310,9 +337,9 @@
                 lineEqStr = `y = ${kPart}${mPart}`;
             }
 
-            const descHtml = `
-                <div class="desc-item"><span class="desc-symbol">圆</span> ${circleEq}</div>
-                <div class="desc-item"><span class="desc-symbol">直线</span> ${lineEqStr}</div>
+           const descHtml = `
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '圆' : 'Circle'}</span> ${circleEq}</div>
+                <div class="desc-item"><span class="desc-symbol">${isZh ? '直线' : 'Line'}</span> ${lineEqStr}</div>
                 <div class="desc-item"><span class="desc-symbol">Δ</span> = ${deltaDisplay}</div>
                 <div class="desc-item">${statusHtml}</div>
                 <div class="desc-item" style="color:${lineColor}">${isZh ? conclusionZh : conclusionEn}</div>
@@ -323,9 +350,9 @@
             const distStr = fmt(distance, 4);
             const theoremHtml = isZh
                 ? `圆心 (${fmt(oa)}, ${fmt(ob)}) 到直线的距离 d = ${distStr}，半径 r = ${fmt(oR,2)}。<br>` +
-                  `d ${distance > oR ? '>' : (diff <= TANGENT_TOL ? '≈' : '<')} r ⇒ ${conclusionZh}`
+                  `d ${distance > oR ? '>' : (isTangent ? '≈' : '<')} r ⇒ ${conclusionZh}`
                 : `Distance from center (${fmt(oa)}, ${fmt(ob)}) to line d = ${distStr}, radius r = ${fmt(oR,2)}.<br>` +
-                  `d ${distance > oR ? '>' : (diff <= TANGENT_TOL ? '≈' : '<')} r ⇒ ${conclusionEn}`;
+                  `d ${distance > oR ? '>' : (isTangent ? '≈' : '<')} r ⇒ ${conclusionEn}`;
             setTheorem(theoremHtml);
 
             // 代数推导块
@@ -354,13 +381,24 @@
                       `Δ = B² − 4AC = ${fmtCoef(B*B)} − ${fmtCoef(4*A*C)} = ${fmtCoef(res.disc)}`;
             }
             setDerivation(derivation);
+            
+            // ========== 新增功能：相切时显示图片，否则隐藏（不改变任何原有逻辑和样式）==========
+            const imgContainer = document.getElementById('tangentImageContainer');
+            if (imgContainer) {
+                if (isTangent) {
+                    imgContainer.style.display = 'block';
+                } else {
+                    imgContainer.style.display = 'none';
+                }
+            }
+            // ========== 新增功能结束 ==========
 
             // 画图
             const ints = getIntersections(res);
-            drawCanvas(lineColor, ints, lineEq, distance);
+            drawCanvas(lineColor, ints, lineEq, distance, isTangent);
         }
 
-        function drawCanvas(lineColor, ints, lineEq, distance) {
+        function drawCanvas(lineColor, ints, lineEq, distance, isTangent) {
             ctx.clearRect(0, 0, CANVAS_W, CANVAS_H);
             ctx.fillStyle = _bg();
             ctx.fillRect(0, 0, CANVAS_W, CANVAS_H);
@@ -455,7 +493,7 @@
             ctx.strokeStyle = '#e74c3c'; ctx.lineWidth = 1.5;
             ctx.setLineDash([3,2]); ctx.stroke(); ctx.setLineDash([]);
 
-            // 显示圆心到直线的垂线及距离（可选，教学直观）
+            // 显示圆心到直线的垂线及距离（教学直观）
             if (distance !== undefined && !lineEq.isVertical) {
                 let footX, footY;
                 const A = lineEq.slope, B = -1, C = lineEq.intercept;

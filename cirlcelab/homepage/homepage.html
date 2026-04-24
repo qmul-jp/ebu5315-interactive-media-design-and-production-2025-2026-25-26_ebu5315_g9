@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,11 +9,18 @@
         try {
           const theme = window.localStorage.getItem("circlelab-theme");
           const language = window.localStorage.getItem("circlelab-language");
-          if (theme === "light" || theme === "solar") {
+          if (theme !== "dark") {
             document.documentElement.dataset.theme = "light";
+          } else {
+            delete document.documentElement.dataset.theme;
           }
+          document.documentElement.style.setProperty("--font-scale", "0.94");
+          document.documentElement.style.setProperty("--settings-font-step", "1");
           document.documentElement.lang = language === "zh" ? "zh-CN" : "en";
         } catch (error) {
+          document.documentElement.dataset.theme = "light";
+          document.documentElement.style.setProperty("--font-scale", "0.94");
+          document.documentElement.style.setProperty("--settings-font-step", "1");
           document.documentElement.lang = "en";
         }
       })();
@@ -21,27 +28,33 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Noto+Serif+SC:wght@400;500;600;700&display=swap"
       rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      href="fonts/6997199fab1923a705f0042d_AnthropicSerif-Roman-Web.woff2"
+      as="font"
+      type="font/woff2"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body data-title-key="document.home">
     <header class="site-header">
       <div class="nav-shell">
-        <a class="brand" href="#" aria-label="Circle Geometry home">
-          <img src="logowhite.png" alt="Circle Geometry logo" />
+        <a class="brand" href="#" data-i18n-aria-label="brand.home_aria" aria-label="Circle Geometry home">
+          <img src="logowhite.svg" data-i18n-alt="brand.logo_alt" alt="Circle Geometry logo" />
         </a>
 
-        <nav class="primary-nav" aria-label="Primary">
+        <nav class="primary-nav" data-i18n-aria-label="nav.primary_aria" aria-label="Primary">
           <ul>
             <li><a class="nav-link is-active" href="#" data-i18n="nav.home">Home</a></li>
-            <li><a class="nav-link" href="#" data-i18n="nav.game">Game</a></li>
-            <li><a class="nav-link" href="#" data-i18n="nav.quiz">Quiz</a></li>
+            <li><a class="nav-link" href="../Game/index.html" data-i18n="nav.game">Game</a></li>
+            <li><a class="nav-link" href="../quiz/quiz.html" data-i18n="nav.quiz">Quiz</a></li>
           </ul>
         </nav>
 
-        <nav class="account-nav" aria-label="Account">
+        <nav class="account-nav" data-i18n-aria-label="nav.account_aria" aria-label="Account">
           <ul>
             <li><a class="nav-link login-btn" href="#loginOverlay" data-open-login aria-controls="loginOverlay" data-i18n="nav.login">Log in</a></li>
             <li><a class="nav-link signup-btn" href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="nav.signup">Sign up</a></li>
@@ -63,9 +76,9 @@
               </button>
               <div class="settings-dropdown" id="settingsMenu" data-settings-menu hidden>
                 <p class="settings-panel-title" data-i18n="settings.title">Preferences</p>
-                <section class="settings-section" aria-label="Language settings">
+                <section class="settings-section" data-i18n-aria-label="settings.language_section_aria" aria-label="Language settings">
                   <p class="settings-label" data-i18n="settings.language">Language</p>
-                  <div class="settings-options" role="group" aria-label="Language">
+                  <div class="settings-options" role="group" data-i18n-aria-label="settings.language_group_aria" aria-label="Language">
                     <button class="settings-option" type="button" data-language-option="en">
                       <span data-i18n="settings.language_en">English</span>
                     </button>
@@ -74,15 +87,38 @@
                     </button>
                   </div>
                 </section>
-                <section class="settings-section" aria-label="Theme settings">
+                <section class="settings-section" data-i18n-aria-label="settings.theme_section_aria" aria-label="Theme settings">
                   <p class="settings-label" data-i18n="settings.theme">Theme</p>
-                  <div class="settings-options" role="group" aria-label="Theme">
+                  <div class="settings-options" role="group" data-i18n-aria-label="settings.theme_group_aria" aria-label="Theme">
                     <button class="settings-option" type="button" data-theme-option="dark">
                       <span data-i18n="settings.theme_dark">Dark</span>
                     </button>
                     <button class="settings-option" type="button" data-theme-option="light">
                       <span data-i18n="settings.theme_light">Light</span>
                     </button>
+                  </div>
+                </section>
+                <section class="settings-section" data-i18n-aria-label="settings.font_section_aria" aria-label="Text size settings">
+                  <p class="settings-label" data-i18n="settings.font_size">Text Size</p>
+                  <div class="settings-font-slider" role="group" data-i18n-aria-label="settings.font_group_aria" aria-label="Text size">
+                    <input
+                      class="settings-font-range"
+                      type="range"
+                      min="0"
+                      max="3"
+                      step="1"
+                      value="1"
+                      data-font-scale-range
+                      data-i18n-aria-label="settings.font_slider_aria"
+                      aria-label="Adjust text size"
+                    />
+                    <span class="settings-font-active-dot" aria-hidden="true"></span>
+                    <div class="settings-font-ticks" aria-hidden="true">
+                      <span class="settings-font-tick"></span>
+                      <span class="settings-font-tick"></span>
+                      <span class="settings-font-tick"></span>
+                      <span class="settings-font-tick"></span>
+                    </div>
                   </div>
                 </section>
               </div>
@@ -96,7 +132,7 @@
       <section class="hero-interactive" id="heroInteractive" aria-labelledby="hero-title">
         <div class="hero-content">
           <p class="hero-kicker" data-i18n="hero.kicker">CIRCLE LAB</p>
-          <h1 id="hero-title" data-i18n="hero.title">Master
+          <h1 id="hero-title" class="scroll-title-cascade" data-i18n="hero.title">Master
 Circle
 with Ease</h1>
           <p class="hero-intro" data-i18n="hero.intro">
@@ -104,7 +140,7 @@ with Ease</h1>
           </p>
           <div class="hero-actions">
             <a class="hero-btn primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="hero.start">Start Learning</a>
-            <a class="hero-btn secondary" href="#" data-i18n="hero.demo">Watch Demo</a>
+            <button class="hero-btn secondary hero-chat-btn" type="button" data-open-float-chat data-i18n="hero.demo">Chat now</button>
           </div>
         </div>
 
@@ -138,11 +174,6 @@ with Ease</h1>
               <circle cx="700" cy="390" r="240" class="geo-construct-ring r1" />
               <circle cx="700" cy="390" r="332" class="geo-construct-ring r2" />
               <circle cx="700" cy="390" r="520" class="geo-construct-ring r3" />
-
-              <line x1="700" y1="-30" x2="700" y2="810" class="geo-construct-line" />
-              <line x1="250" y1="390" x2="1150" y2="390" class="geo-construct-line" />
-              <line x1="370" y1="120" x2="1030" y2="660" class="geo-construct-line soft" />
-              <line x1="370" y1="660" x2="1030" y2="120" class="geo-construct-line soft" />
 
               <g id="circleLattice">
                 <circle class="geo-lattice-circle l1" cx="700" cy="390" r="118" />
@@ -212,62 +243,71 @@ with Ease</h1>
 
       <section class="core-features" aria-labelledby="core-features-title">
         <div class="core-features-head">
-          <h2 id="core-features-title" class="scroll-title-reveal">
-            <span class="title-line">A Reimagined</span>
-            <span class="title-line title-line-nowrap">Approach to Geometry.</span>
+          <h2 id="core-features-title" class="scroll-title-cascade">
+            <span class="title-line" data-i18n="core.title.line1">A Reimagined</span>
+            <span class="title-line title-line-nowrap" data-i18n="core.title.line2">Approach to Geometry</span>
           </h2>
         </div>
         <div class="core-features-grid">
           <article class="core-feature-card">
-            <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="40" aria-hidden="true">
-              <img src="iconnew/sparkles.svg" alt="" />
-            </span>
-            <h3>Powered by AI</h3>
-            <p>
-              Smart guidance, right when you need it.<br />
-              Clear hints, instantly&mdash;learn faster with confidence.
-            </p>
-            <button class="core-feature-chat-btn" type="button">
-              <span>Chat now</span>
-              <svg class="core-feature-chat-btn-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path
-                  d="M13.17 12 8.22 7.05l1.42-1.41L16 12l-6.36 6.36-1.42-1.41z"
-                />
-              </svg>
-            </button>
+            <div class="core-feature-card-media">
+              <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="40" aria-hidden="true">
+                <img src="iconnew/sparkles.svg" alt="" />
+              </span>
+            </div>
+            <div class="core-feature-card-body">
+              <h3 data-i18n="core.card1.title">Powered by AI</h3>
+              <p data-i18n-html="core.card1.body">
+                AI guidance, right when you need it.<br />
+                Clear hints, instant support, and smarter practice.<br />
+                Learn with more confidence, clarity, and flow.
+              </p>
+            </div>
           </article>
           <article class="core-feature-card">
-            <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="80" aria-hidden="true">
-              <img src="iconnew/mouse-pointer-click.svg" alt="" />
-            </span>
-            <h3>Dynamic Exploration</h3>
-            <p>
-              See geometry come to life.<br />
-              Interact with shapes and watch them respond.<br />
-              Understand concepts through real-time visuals.
-            </p>
+            <div class="core-feature-card-media">
+              <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="80" aria-hidden="true">
+                <img src="iconnew/mouse-pointer-click.svg" alt="" />
+              </span>
+            </div>
+            <div class="core-feature-card-body">
+              <h3 data-i18n="core.card2.title">Dynamic Exploration</h3>
+              <p data-i18n-html="core.card2.body">
+                See geometry come to life.<br />
+                Interact with shapes and watch them respond.<br />
+                Understand concepts through real-time visuals.
+              </p>
+            </div>
           </article>
           <article class="core-feature-card">
-            <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="120" aria-hidden="true">
-              <img src="iconnew/book-open-check.svg" alt="" />
-            </span>
-            <h3>Learn in Motion</h3>
-            <p>
-              Learn by doing, not just reading.<br />
-              Play, explore, and challenge yourself.<br />
-              Spot mistakes and improve without delay.
-            </p>
+            <div class="core-feature-card-media">
+              <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="120" aria-hidden="true">
+                <img src="iconnew/book-open-check.svg" alt="" />
+              </span>
+            </div>
+            <div class="core-feature-card-body">
+              <h3 data-i18n="core.card3.title">Learn in Motion</h3>
+              <p data-i18n-html="core.card3.body">
+                Learn by doing, not just reading.<br />
+                Play, explore, and challenge yourself.<br />
+                Spot mistakes and improve without delay.
+              </p>
+            </div>
           </article>
           <article class="core-feature-card">
-            <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="160" aria-hidden="true">
-              <img src="iconnew/tv-minimal-play.svg" alt="" />
-            </span>
-            <h3>Stories in Motion</h3>
-            <p>
-              Watch ideas unfold on screen.<br />
-              Experience concepts through animation.<br />
-              Learn in a more engaging way.
-            </p>
+            <div class="core-feature-card-media">
+              <span class="core-feature-icon scroll-title-reveal" data-reveal-delay="160" aria-hidden="true">
+                <img src="iconnew/refresh-cw.svg" alt="" />
+              </span>
+            </div>
+            <div class="core-feature-card-body">
+              <h3 data-i18n="core.card4.title">Learn in Cycles</h3>
+              <p data-i18n-html="core.card4.body">
+                Study, play, and test in one connected flow.<br />
+                Move between ideas, interaction, and practice with ease.<br />
+                Build understanding through every step of the cycle.
+              </p>
+            </div>
           </article>
         </div>
       </section>
@@ -275,15 +315,15 @@ with Ease</h1>
       <section class="theorems-carousel" aria-labelledby="theorems-carousel-title">
         <div class="theorems-carousel-head">
           <div class="theorems-carousel-title-wrap">
-            <h2 id="theorems-carousel-title" class="scroll-title-reveal">Hands-On<br />Circle Theorems</h2>
+            <h2 id="theorems-carousel-title" class="scroll-title-cascade" data-i18n-html="theorems.title">Hands-On<br />Circle Theorems</h2>
           </div>
-          <div class="theorems-carousel-controls" aria-label="Theorem navigation">
-            <button class="theorem-nav-btn" type="button" data-theorem-nav="-1" aria-label="Previous theorems">
+          <div class="theorems-carousel-controls" data-i18n-aria-label="theorems.controls_aria" aria-label="Theorem navigation">
+            <button class="theorem-nav-btn" type="button" data-theorem-nav="-1" data-i18n-aria-label="theorems.prev_aria" aria-label="Previous theorems">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M14.5 5 7.5 12l7 7" />
               </svg>
             </button>
-            <button class="theorem-nav-btn" type="button" data-theorem-nav="1" aria-label="Next theorems">
+            <button class="theorem-nav-btn" type="button" data-theorem-nav="1" data-i18n-aria-label="theorems.next_aria" aria-label="Next theorems">
               <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M9.5 5 16.5 12l-7 7" />
               </svg>
@@ -295,11 +335,12 @@ with Ease</h1>
           <div class="theorems-carousel-track">
             <article class="theorem-frame theorem-frame-zoom-01">
               <span class="theorem-frame-no">01</span>
-              <h3>Angle at the Center</h3>
-              <p>The angle at the center is twice the angle at the circumference.</p>
+              <h3 data-i18n="theorem.1.title">Angle at the Center</h3>
+              <p data-i18n="theorem.1.desc">The angle at the center is twice the angle at the circumference.</p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.1.iframe_title"
                   title="Circle Theorem 1 - Angle at the Centre"
                   src="https://www.geogebra.org/material/iframe/id/VGNfTTEu/width/800/height/800/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="800px"
@@ -310,13 +351,14 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-zoom-02">
               <span class="theorem-frame-no">02</span>
-              <h3>Angle in a Semicircle</h3>
-              <p>
+              <h3 data-i18n="theorem.2.title">Angle in a Semicircle</h3>
+              <p data-i18n-html="theorem.2.desc">
                 The angle in a semicircle is always 90&deg;.<br /><br />
               </p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.2.iframe_title"
                   title="Circle Theorem 2 - Angles in a Semicircle"
                   src="https://www.geogebra.org/material/iframe/id/mXM8a8Xs/width/1203/height/843/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="1203px"
@@ -327,13 +369,14 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-zoom-03">
               <span class="theorem-frame-no">03</span>
-              <h3>Angles in the Same Segment</h3>
-              <p>
+              <h3 data-i18n="theorem.3.title">Angles in the Same Segment</h3>
+              <p data-i18n-html="theorem.3.desc">
                 The angles in the same segment are equal.<br /><br />
               </p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.3.iframe_title"
                   title="Circle Theorem 3 - Angles in the Same Segment"
                   src="https://www.geogebra.org/material/iframe/id/UT4sXfYW/width/1203/height/843/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="1203px"
@@ -344,13 +387,14 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-zoom-04">
               <span class="theorem-frame-no">04</span>
-              <h3>Cyclic Quadrilateral</h3>
-              <p>
+              <h3 data-i18n="theorem.4.title">Cyclic Quadrilateral</h3>
+              <p data-i18n="theorem.4.desc">
                 Opposite angles in a cyclic quadrilateral sum to 180&deg;.
               </p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.4.iframe_title"
                   title="Circle Theorem 4 - Cyclic Quadrilateral"
                   src="https://www.geogebra.org/material/iframe/id/RF6Nw68j/width/1203/height/843/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="1203px"
@@ -361,14 +405,15 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-zoom-05">
               <span class="theorem-frame-no">05</span>
-              <h3>Radius to a Tangent</h3>
-              <p>
+              <h3 data-i18n="theorem.5.title">Radius to a Tangent</h3>
+              <p data-i18n="theorem.5.desc">
                 The radius is perpendicular to the tangent at the point of
                 contact.
               </p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.5.iframe_title"
                   title="Circle Theorem 5 - Radius to a Tangent"
                   src="https://www.geogebra.org/material/iframe/id/u6Ev7bHg/width/1203/height/843/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="1203px"
@@ -379,13 +424,14 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-zoom-06">
               <span class="theorem-frame-no">06</span>
-              <h3>Tangents from a Point</h3>
-              <p>
+              <h3 data-i18n="theorem.6.title">Tangents from a Point</h3>
+              <p data-i18n-html="theorem.6.desc">
                 Tangents from the same point are equal in length.
               </p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.6.iframe_title"
                   title="Circle Theorem 6 - Tangents from a Point to a Circle"
                   src="https://www.geogebra.org/material/iframe/id/jy3Wk4AD/width/1468/height/927/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="1468px"
@@ -396,14 +442,15 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-zoom-06">
               <span class="theorem-frame-no">07</span>
-              <h3>Bisected Angle of Tangents</h3>
-              <p>
+              <h3 data-i18n="theorem.7.title">Bisected Angle of Tangents</h3>
+              <p data-i18n="theorem.7.desc">
                 The line to the center bisects the angle between the two
                 tangents.
               </p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.7.iframe_title"
                   title="Circle Theorem 7 - Tangents from a Point to a Circle II"
                   src="https://www.geogebra.org/material/iframe/id/NznhpcUp/width/1468/height/927/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="1468px"
@@ -414,14 +461,15 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-zoom-08">
               <span class="theorem-frame-no">08</span>
-              <h3>Alternate Segment Theorem</h3>
-              <p>
+              <h3 data-i18n="theorem.8.title">Alternate Segment Theorem</h3>
+              <p data-i18n="theorem.8.desc">
                 The angle between a tangent and a chord equals the angle in the
                 opposite arc.
               </p>
               <div class="theorem-embed">
                 <iframe
                   scrolling="no"
+                  data-i18n-title="theorem.8.iframe_title"
                   title="Circle Theorem 8 - Alternate Segment Theorem"
                   src="https://www.geogebra.org/material/iframe/id/xxmGNk6s/width/1468/height/927/border/888888/sfsb/true/smb/false/stb/false/stbh/false/ai/false/asb/false/sri/false/rc/false/ld/false/sdz/false/ctl/false"
                   width="1468px"
@@ -432,22 +480,22 @@ with Ease</h1>
             </article>
             <article class="theorem-frame theorem-frame-cta">
               <h3 class="theorem-cta-title">
-                <span>Learn. Explore.</span>
-                <span>Now challenge yourself.</span>
+                <span data-i18n="theorem.cta.line1">Learn. Explore.</span>
+                <span data-i18n="theorem.cta.line2">Now challenge yourself.</span>
               </h3>
-              <p class="theorem-cta-copy">
+              <p class="theorem-cta-copy" data-i18n-html="theorem.cta.copy">
                 Choose the quiz for a quick check, or step into the game for a
                 deeper experience.
               </p>
-              <div class="theorem-cta-actions" aria-label="Challenge actions">
-                <button class="theorem-cta-btn" type="button">
-                  <span>Start Quiz</span>
+              <div class="theorem-cta-actions" data-i18n-aria-label="theorem.cta.actions_aria" aria-label="Challenge actions">
+                <a class="theorem-cta-btn" href="../quiz/quiz.html">
+                  <span data-i18n="theorem.cta.quiz">Start Quiz</span>
                   <span class="theorem-cta-btn-icon" aria-hidden="true"></span>
-                </button>
-                <button class="theorem-cta-btn theorem-cta-btn-alt" type="button">
-                  <span>Play Now</span>
+                </a>
+                <a class="theorem-cta-btn theorem-cta-btn-alt" href="../Game/index.html">
+                  <span data-i18n="theorem.cta.play">Play Now</span>
                   <span class="theorem-cta-btn-icon" aria-hidden="true"></span>
-                </button>
+                </a>
               </div>
             </article>
           </div>
@@ -456,12 +504,18 @@ with Ease</h1>
 
       <section class="ai-study-section" aria-labelledby="ai-study-title">
         <div class="ai-study-copy">
-          <p class="ai-study-kicker">AI STUDY COPILOT</p>
-          <h2 id="ai-study-title" class="scroll-title-reveal">
-            Get stuck?<br />
-            Ask ArcMind.
+          <p class="ai-study-kicker" data-i18n="ai.kicker">AI STUDY COPILOT</p>
+          <h2 id="ai-study-title">
+            <span class="ai-study-title-line" data-i18n="ai.title.line1">Get stuck?</span>
+            <span
+              class="ai-study-title-line ai-study-title-animated scroll-title-cascade"
+              data-reveal-delay="80"
+              data-i18n="ai.title.line2"
+            >
+              Ask ArcMind
+            </span>
           </h2>
-          <p class="ai-study-subtitle">
+          <p class="ai-study-subtitle" data-i18n="ai.subtitle">
             Your AI guide to circle theorems and proofs, from first ideas to complete reasoning.
           </p>
         </div>
@@ -471,86 +525,233 @@ with Ease</h1>
             <div class="ai-chat-glow ai-chat-glow-a" aria-hidden="true"></div>
             <div class="ai-chat-glow ai-chat-glow-b" aria-hidden="true"></div>
 
-            <div class="ai-chat-shell" aria-label="AI chat demonstration">
-              <div class="ai-chat-header">
-                <div>
-                  <p class="ai-chat-title">ArcMind</p>
-                  <p class="ai-chat-subtitle">Help with theorems and proof practice</p>
+            <div class="ai-chat-shell" data-i18n-aria-label="ai.demo.shell_aria" aria-label="AI chat demonstration">
+              <div class="ai-chat-browser-bar" aria-hidden="true">
+                <div class="ai-chat-browser-controls">
+                  <span class="ai-chat-browser-dot is-close"></span>
+                  <span class="ai-chat-browser-dot is-minimize"></span>
+                  <span class="ai-chat-browser-dot is-expand"></span>
                 </div>
-              </div>
-
-              <div class="ai-chat-transcript" role="log" aria-live="polite" aria-label="AI chat transcript">
-                <div class="ai-chat-messages" data-ai-chat-messages>
-                  <article class="ai-chat-message is-assistant">
-                    <p class="ai-chat-message-meta">ArcMind</p>
-                    <p class="ai-chat-message-bubble">
-                      Ask a question about circle geometry and I'll help you think it through.
-                    </p>
-                  </article>
-                </div>
-              </div>
-
-              <form class="ai-chat-composer" aria-label="AI chat composer">
-                <label class="sr-only" for="aiChatInput">Ask ArcMind</label>
-                <textarea
-                  class="ai-chat-draft"
-                  id="aiChatInput"
-                  name="prompt"
-                  rows="1"
-                  maxlength="280"
-                  placeholder="Ask anything about circle"
-                  aria-describedby="aiChatHint aiChatDisclaimer"
-                ></textarea>
-                <p class="sr-only" id="aiChatHint">Press Enter to send. Press Shift plus Enter to start a new line.</p>
-
-                <div class="ai-chat-toolbar">
-                  <button class="ai-chat-icon-btn" type="button" aria-label="Add attachment">
+                <div class="ai-chat-browser-nav">
+                  <span class="ai-chat-browser-tool">
                     <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 6.5v11" />
-                      <path d="M6.5 12h11" />
+                      <path d="m15 6-6 6 6 6" />
                     </svg>
+                  </span>
+                  <span class="ai-chat-browser-tool">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m9 6 6 6-6 6" />
+                    </svg>
+                  </span>
+                  <span class="ai-chat-browser-tool is-panel">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="4" y="5" width="16" height="14" rx="2" />
+                      <path d="M9 5v14" />
+                    </svg>
+                  </span>
+                </div>
+                <div class="ai-chat-browser-address">
+                  <span class="ai-chat-browser-address-main">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <rect x="7" y="10" width="10" height="9" rx="2" />
+                      <path d="M9 10V8.5a3 3 0 0 1 6 0V10" />
+                    </svg>
+                    <span>arcmind.com/ai</span>
+                  </span>
+                  <span class="ai-chat-browser-tool ai-chat-browser-address-refresh">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M18 8a7 7 0 1 0 1.3 6.8" />
+                      <path d="M18 4v4h-4" />
+                    </svg>
+                  </span>
+                </div>
+                <div class="ai-chat-browser-actions">
+                  <span class="ai-chat-browser-more">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                  </span>
+                </div>
+              </div>
+
+              <div class="ai-chat-workspace">
+                <aside class="ai-chat-sidebar" data-i18n-aria-label="ai.demo.sidebar_aria" aria-label="ArcMind sidebar">
+                  <div class="ai-chat-sidebar-head">
+                    <div class="ai-chat-sidebar-brand">
+                      <span class="ai-chat-sidebar-brand-mark" aria-hidden="true">
+                        <svg class="ai-chat-sidebar-brand-lockup" viewBox="0 0 150 32" aria-hidden="true">
+                          <g transform="translate(0.55 0.3) scale(1.24)" fill="none" stroke="currentColor" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="6.5" />
+                            <path d="M12 5v14" />
+                            <path d="M5 12h14" />
+                            <path d="M16.95 7.05 7.05 16.95" />
+                          </g>
+                          <text x="37.2" y="17.6" dominant-baseline="middle" fill="currentColor" stroke="none" font-family="Anthropic Serif, Noto Serif SC, Songti SC, STSong, Georgia, serif" font-size="22" letter-spacing="-0.02em">ArcMind</text>
+                        </svg>
+                      </span>
+                    </div>
+                  </div>
+
+                  <button class="ai-chat-sidebar-new" type="button" data-ai-chat-reset>
+                    <img src="iconnew/plus.svg" alt="" aria-hidden="true" />
+                    <span data-i18n="ai.demo.new_chat">New Chat</span>
                   </button>
 
-                  <details class="ai-chat-model-picker">
-                    <summary class="ai-chat-model-picker-trigger" aria-label="Select model">
-                      <span class="ai-chat-model-picker-value">GPT-5.4</span>
-                      <svg class="ai-chat-model-picker-chevron" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="m7 10 5 5 5-5" />
-                      </svg>
-                    </summary>
+                  <div class="ai-chat-sidebar-section ai-chat-sidebar-section-assistant">
+                    <p class="ai-chat-sidebar-label" data-i18n="ai.demo.assistant_label">Assistant</p>
+                    <div class="ai-chat-sidebar-list" role="list">
+                      <button
+                        class="ai-chat-sidebar-action is-active"
+                        type="button"
+                        data-ai-chat-sidebar-action="ask"
+                        data-ai-chat-sidebar-intent="ask"
+                        role="listitem"
+                      >
+                        <img src="iconnew/sparkles.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.sidebar.ask">Ask ArcMind</span>
+                      </button>
+                      <button
+                        class="ai-chat-sidebar-action"
+                        type="button"
+                        data-ai-chat-sidebar-action="theorem"
+                        data-ai-chat-sidebar-intent="theorem"
+                        role="listitem"
+                      >
+                        <img src="iconnew/book-open-check.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.sidebar.theorem">Theorem Help</span>
+                      </button>
+                      <button
+                        class="ai-chat-sidebar-action"
+                        type="button"
+                        data-ai-chat-sidebar-action="proof"
+                        data-ai-chat-sidebar-intent="proof"
+                        role="listitem"
+                      >
+                        <img src="iconnew/mouse-pointer-click.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.sidebar.proof">Proof Practice</span>
+                      </button>
+                      <button
+                        class="ai-chat-sidebar-action"
+                        type="button"
+                        data-ai-chat-sidebar-action="quiz"
+                        data-ai-chat-sidebar-intent="quiz"
+                        role="listitem"
+                      >
+                        <img src="iconnew/check.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.sidebar.quiz">Quiz Support</span>
+                      </button>
+                    </div>
+                  </div>
 
-                    <div class="ai-chat-model-menu" role="listbox" aria-label="Select model">
-                      <p class="ai-chat-model-menu-label">Select model</p>
+                  <div class="ai-chat-sidebar-section ai-chat-sidebar-section-history">
+                    <p class="ai-chat-sidebar-label" data-i18n="ai.demo.recent_label">Recent</p>
+                    <div class="ai-chat-sidebar-history" role="list">
+                      <button class="ai-chat-sidebar-history-item" type="button" data-ai-chat-sidebar-intent="history-centre" role="listitem">
+                        <img src="starter/clock.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.history.1">Angle at the Centre</span>
+                      </button>
+                      <button class="ai-chat-sidebar-history-item" type="button" data-ai-chat-sidebar-intent="history-tangent" role="listitem">
+                        <img src="starter/clock.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.history.2">Tangent Theorem Proof</span>
+                      </button>
+                      <button class="ai-chat-sidebar-history-item" type="button" data-ai-chat-sidebar-intent="history-cyclic" role="listitem">
+                        <img src="starter/clock.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.history.3">Cyclic Quadrilateral</span>
+                      </button>
+                      <button class="ai-chat-sidebar-history-item" type="button" data-ai-chat-sidebar-intent="history-alternate" role="listitem">
+                        <img src="starter/clock.svg" alt="" aria-hidden="true" />
+                        <span data-i18n="ai.demo.history.4">Alternate Segment</span>
+                      </button>
+                    </div>
+                  </div>
+                </aside>
 
-                      <button class="ai-chat-model-menu-item is-selected" type="button" role="option" aria-selected="true">
-                        <span>GPT-5.4</span>
+                <div class="ai-chat-main">
+                  <div class="ai-chat-transcript" role="log" aria-live="polite" data-i18n-aria-label="ai.demo.transcript_aria" aria-label="AI chat transcript">
+                    <div class="ai-chat-empty-state" data-ai-chat-empty>
+                      <h3 class="ai-chat-empty-title" data-i18n="ai.demo.empty_title">Where should we start?</h3>
+                      <div
+                        class="ai-chat-empty-suggestions"
+                        role="list"
+                        data-i18n-aria-label="ai.demo.suggestions_aria"
+                        aria-label="Suggested circle prompts"
+                      >
+                        <button class="ai-chat-empty-suggestion" type="button" data-ai-chat-empty-suggestion role="listitem" data-i18n="ai.demo.suggestion.1">
+                          Why is the angle at the centre twice the angle at the circumference?
+                        </button>
+                        <button class="ai-chat-empty-suggestion" type="button" data-ai-chat-empty-suggestion role="listitem" data-i18n="ai.demo.suggestion.2">
+                          Help me prove this tangent theorem.
+                        </button>
+                        <button class="ai-chat-empty-suggestion" type="button" data-ai-chat-empty-suggestion role="listitem" data-i18n="ai.demo.suggestion.3">
+                          Give me a hint, not the answer.
+                        </button>
+                        <button class="ai-chat-empty-suggestion" type="button" data-ai-chat-empty-suggestion role="listitem" data-i18n="ai.demo.suggestion.4">
+                          Explain the alternate segment theorem.
+                        </button>
+                      </div>
+                    </div>
+                    <div class="ai-chat-messages" data-ai-chat-messages hidden></div>
+                  </div>
+
+                  <form class="ai-chat-composer" data-i18n-aria-label="ai.demo.composer_aria" aria-label="AI chat composer">
+                    <label class="sr-only" for="aiChatInput" data-i18n="ai.demo.ask_label">Ask ArcMind</label>
+                    <div class="ai-chat-toolbar">
+                      <button class="ai-chat-icon-btn" type="button" data-i18n-aria-label="ai.demo.attach_aria" aria-label="Add attachment">
                         <svg viewBox="0 0 24 24" aria-hidden="true">
-                          <path d="M20 7 10 17l-5-5" />
+                          <path d="m16 6-8.414 8.586a2 2 0 0 0 2.829 2.829l8.414-8.586a4 4 0 1 0-5.657-5.657l-8.379 8.551a6 6 0 1 0 8.485 8.485l8.379-8.551" />
                         </svg>
                       </button>
 
-                      <button class="ai-chat-model-menu-item" type="button" role="option" aria-selected="false">
-                        <span>Gemini 3 Pro</span>
-                      </button>
+                      <textarea
+                        class="ai-chat-draft"
+                      id="aiChatInput"
+                      name="prompt"
+                      rows="1"
+                      maxlength="280"
+                      data-i18n-placeholder="ai.demo.placeholder"
+                      placeholder="Ask anything about circle"
+                      aria-describedby="aiChatHint"
+                    ></textarea>
 
-                      <button class="ai-chat-model-menu-item" type="button" role="option" aria-selected="false">
-                        <span>Claude Sonnet 4.6</span>
+                      <details class="ai-chat-model-picker">
+                        <summary class="ai-chat-model-picker-trigger" data-i18n-aria-label="ai.demo.select_model_aria" aria-label="Select model">
+                          <span class="ai-chat-model-picker-value">GPT-5.4</span>
+                          <svg class="ai-chat-model-picker-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="m7 10 5 5 5-5" />
+                          </svg>
+                        </summary>
+
+                        <div class="ai-chat-model-menu" role="listbox" data-i18n-aria-label="ai.demo.select_model_aria" aria-label="Select model">
+                          <p class="ai-chat-model-menu-label" data-i18n="ai.demo.select_model">Select model</p>
+
+                          <button class="ai-chat-model-menu-item is-selected" type="button" role="option" aria-selected="true">
+                            <span>GPT-5.4</span>
+                            <svg viewBox="0 0 24 24" aria-hidden="true">
+                              <path d="M20 7 10 17l-5-5" />
+                            </svg>
+                          </button>
+
+                          <button class="ai-chat-model-menu-item" type="button" role="option" aria-selected="false">
+                            <span>Gemini 3 Pro</span>
+                          </button>
+
+                          <button class="ai-chat-model-menu-item" type="button" role="option" aria-selected="false">
+                            <span>Claude Sonnet 4.6</span>
+                          </button>
+                        </div>
+                      </details>
+
+                      <button class="ai-chat-send" type="submit" data-i18n-aria-label="ai.demo.send_aria" aria-label="Send message" disabled>
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <path d="M12 18V6" />
+                          <path d="m7 11 5-5 5 5" />
+                        </svg>
                       </button>
                     </div>
-                  </details>
-
-                  <button class="ai-chat-send" type="submit" aria-label="Send message" disabled>
-                    <svg viewBox="0 0 24 24" aria-hidden="true">
-                      <path d="M12 18V6" />
-                      <path d="m7 11 5-5 5 5" />
-                    </svg>
-                  </button>
+                    <p class="sr-only" id="aiChatHint" data-i18n="ai.demo.hint">Press Enter to send. Press Shift plus Enter to start a new line.</p>
+                  </form>
                 </div>
-              </form>
-
-              <p class="ai-chat-disclaimer" id="aiChatDisclaimer">
-                AI can make mistakes. Please check important information.
-              </p>
+              </div>
             </div>
           </div>
         </div>
@@ -559,20 +760,21 @@ with Ease</h1>
       <section class="pricing-section" aria-labelledby="pricing-title" data-pricing-view="personal">
         <div class="pricing-head">
           <div class="pricing-copy">
-            <h2 id="pricing-title" class="scroll-title-reveal">Unlock<br />More Possibilities.</h2>
-            <p class="pricing-intro">More support for theorems, proofs, and every next step.</p>
+            <h2 id="pricing-title" class="scroll-title-cascade" data-i18n="pricing.title">Unlock More Possibilities</h2>
+            <p class="pricing-intro" data-i18n="pricing.intro">More support for theorems, proofs, and every next step.</p>
           </div>
 
           <div class="pricing-switch-wrap">
-            <div class="pricing-view-toggle" role="tablist" aria-label="Pricing audience">
+            <div class="pricing-view-toggle" role="tablist" data-i18n-aria-label="pricing.audience_aria" aria-label="Pricing audience">
               <button
                 class="pricing-view-btn is-active"
                 type="button"
                 role="tab"
                 aria-selected="true"
                 data-pricing-view-target="personal"
+                data-i18n="pricing.audience.individual"
               >
-                Personal
+                Individual
               </button>
               <button
                 class="pricing-view-btn"
@@ -580,6 +782,7 @@ with Ease</h1>
                 role="tab"
                 aria-selected="false"
                 data-pricing-view-target="schools"
+                data-i18n="pricing.audience.schools"
               >
                 Schools
               </button>
@@ -592,84 +795,84 @@ with Ease</h1>
             <article class="pricing-card pricing-card-starter">
               <div class="pricing-card-top">
                 <div>
-                  <h3>Starter Plan</h3>
-                  <p class="pricing-card-subtitle">Start with the essentials</p>
+                  <h3 data-i18n="pricing.personal.starter.name">Starter</h3>
+                  <p class="pricing-card-subtitle" data-i18n="pricing.personal.starter.subtitle">Start with the essentials</p>
                 </div>
               </div>
               <div class="pricing-card-divider" aria-hidden="true"></div>
               <div class="pricing-card-price-row">
                 <span class="pricing-card-price">$4.99</span>
-                <span class="pricing-card-price-unit">/month</span>
+                <span class="pricing-card-price-unit" data-i18n="pricing.unit.month">/month</span>
               </div>
-              <p class="pricing-card-price-note">$59.88 billed yearly</p>
-              <button class="pricing-card-cta" type="button">Choose starter</button>
+              <p class="pricing-card-price-note" data-i18n="pricing.personal.starter.note_price">$59.88 billed yearly</p>
+              <button class="pricing-card-cta" type="button" data-i18n="pricing.personal.starter.cta">Choose starter</button>
               <div class="pricing-card-divider" aria-hidden="true"></div>
-              <p class="pricing-card-feature-lead">Includes:</p>
+              <p class="pricing-card-feature-lead" data-i18n="pricing.includes">Includes:</p>
               <ul class="pricing-feature-list">
-                <li>Core theorem access</li>
-                <li>Interactive foundations</li>
-                <li>Standard quiz practice</li>
-                <li>AI hints</li>
-                <li>Flexible self-paced learning</li>
+                <li data-i18n="pricing.personal.starter.f1">Core theorem access</li>
+                <li data-i18n="pricing.personal.starter.f2">Interactive foundations</li>
+                <li data-i18n="pricing.personal.starter.f3">Standard quiz practice</li>
+                <li data-i18n="pricing.personal.starter.f4">AI hints</li>
+                <li data-i18n="pricing.personal.starter.f5">Flexible self-paced learning</li>
               </ul>
-              <p class="pricing-card-note">Billed monthly. Includes access to essential features only. You can upgrade or cancel at any time.</p>
+              <p class="pricing-card-note" data-i18n="pricing.personal.starter.note">Billed monthly. Includes access to essential features only. You can upgrade or cancel at any time.</p>
             </article>
 
             <article class="pricing-card pricing-card-pro is-featured">
               <div class="pricing-card-top">
                 <div>
                   <div class="pricing-card-title-row">
-                    <h3>Pro Plan</h3>
-                    <div class="pricing-card-badge pricing-card-badge-inline">Most Popular</div>
+                    <h3 data-i18n="pricing.personal.pro.name">Pro</h3>
+                    <div class="pricing-card-badge pricing-card-badge-inline" data-i18n="pricing.personal.pro.badge">Most Popular</div>
                   </div>
-                  <p class="pricing-card-subtitle">Go further with smarter tools</p>
+                  <p class="pricing-card-subtitle" data-i18n="pricing.personal.pro.subtitle">Go further with smarter tools</p>
                 </div>
               </div>
               <div class="pricing-card-divider" aria-hidden="true"></div>
               <div class="pricing-card-price-row">
                 <span class="pricing-card-price">$9.99</span>
-                <span class="pricing-card-price-unit">/month</span>
+                <span class="pricing-card-price-unit" data-i18n="pricing.unit.month">/month</span>
               </div>
-              <p class="pricing-card-price-note">$119.88 billed yearly</p>
-              <button class="pricing-card-cta" type="button">Upgrade to Pro</button>
+              <p class="pricing-card-price-note" data-i18n="pricing.personal.pro.note_price">$119.88 billed yearly</p>
+              <button class="pricing-card-cta" type="button" data-i18n="pricing.personal.pro.cta">Upgrade to Pro</button>
               <div class="pricing-card-divider" aria-hidden="true"></div>
-              <p class="pricing-card-feature-lead">Everything in Pro, plus:</p>
+              <p class="pricing-card-feature-lead" data-i18n="pricing.personal.pro.lead">Everything in Pro, plus:</p>
               <ul class="pricing-feature-list">
-                <li>Explore the full theorem library</li>
-                <li>Unlock skill-based game modes</li>
-                <li>Access richer interactive models</li>
-                <li>Enjoy unlimited quiz practice</li>
-                <li>Learn with complete AI guidance</li>
-                <li>Track progress with ease</li>
-                <li>Go further with visual explanations</li>
+                <li data-i18n="pricing.personal.pro.f1">Explore the full theorem library</li>
+                <li data-i18n="pricing.personal.pro.f2">Unlock skill-based game modes</li>
+                <li data-i18n="pricing.personal.pro.f3">Access richer interactive models</li>
+                <li data-i18n="pricing.personal.pro.f4">Enjoy unlimited quiz practice</li>
+                <li data-i18n="pricing.personal.pro.f5">Learn with complete AI guidance</li>
+                <li data-i18n="pricing.personal.pro.f6">Track progress with ease</li>
+                <li data-i18n="pricing.personal.pro.f7">Go further with visual explanations</li>
               </ul>
-              <p class="pricing-card-note">Includes all Starter features plus advanced learning tools. You can upgrade or cancel at any time.</p>
+              <p class="pricing-card-note" data-i18n="pricing.personal.pro.note">Includes all Starter features plus advanced learning tools. You can upgrade or cancel at any time.</p>
             </article>
 
             <article class="pricing-card pricing-card-premium">
               <div class="pricing-card-top">
                 <div>
-                  <h3>Premium Plan</h3>
-                  <p class="pricing-card-subtitle">Everything without limits</p>
+                  <h3 data-i18n="pricing.personal.premium.name">Premium</h3>
+                  <p class="pricing-card-subtitle" data-i18n="pricing.personal.premium.subtitle">Everything without limits</p>
                 </div>
               </div>
               <div class="pricing-card-divider" aria-hidden="true"></div>
               <div class="pricing-card-price-row">
-                <span class="pricing-card-price">$49</span>
-                <span class="pricing-card-price-unit">per month</span>
+                <span class="pricing-card-price">$19.99</span>
+                <span class="pricing-card-price-unit" data-i18n="pricing.unit.month">/month</span>
               </div>
-              <p class="pricing-card-price-note">$588 billed yearly</p>
-              <button class="pricing-card-cta" type="button">Choose Premium</button>
+              <p class="pricing-card-price-note" data-i18n="pricing.personal.premium.note_price">$239.88 billed yearly</p>
+              <button class="pricing-card-cta" type="button" data-i18n="pricing.personal.premium.cta">Choose Premium</button>
               <div class="pricing-card-divider" aria-hidden="true"></div>
-              <p class="pricing-card-feature-lead">Everything in Pro, plus:</p>
+              <p class="pricing-card-feature-lead" data-i18n="pricing.personal.premium.lead">Everything in Pro, plus:</p>
               <ul class="pricing-feature-list">
-                <li>Personal study roadmap templates</li>
-                <li>Advanced performance analytics</li>
-                <li>Unlimited AI usage</li>
-                <li>Priority response support</li>
-                <li>Early access to upcoming modules</li>
+                <li data-i18n="pricing.personal.premium.f1">Personal study roadmap templates</li>
+                <li data-i18n="pricing.personal.premium.f2">Advanced performance analytics</li>
+                <li data-i18n="pricing.personal.premium.f3">Unlimited AI usage</li>
+                <li data-i18n="pricing.personal.premium.f4">Priority response support</li>
+                <li data-i18n="pricing.personal.premium.f5">Early access to upcoming modules</li>
               </ul>
-              <p class="pricing-card-note">Billed annually. Includes all Pro features plus exclusive premium content. You can cancel at any time.</p>
+              <p class="pricing-card-note" data-i18n="pricing.personal.premium.note">Billed annually. Includes all Pro features plus exclusive premium content. You can cancel at any time.</p>
             </article>
           </div>
         </div>
@@ -679,79 +882,79 @@ with Ease</h1>
             <article class="pricing-card pricing-card-starter pricing-card-school">
               <div class="pricing-card-top">
                 <div>
-                  <h3>Classroom</h3>
+                  <h3 data-i18n="pricing.school.classroom.name">Classroom</h3>
                 </div>
               </div>
               <div class="pricing-card-divider" aria-hidden="true"></div>
               <div class="pricing-card-price-row">
                 <span class="pricing-card-price">$79</span>
-                <span class="pricing-card-price-unit">per school / month</span>
+                <span class="pricing-card-price-unit" data-i18n="pricing.unit.school_month">per school / month</span>
               </div>
-              <p class="pricing-card-price-note">$948 billed yearly</p>
-              <button class="pricing-card-cta" type="button">Start Classroom</button>
+              <p class="pricing-card-price-note" data-i18n="pricing.school.classroom.note_price">$948 billed yearly</p>
+              <button class="pricing-card-cta" type="button" data-i18n="pricing.school.classroom.cta">Start Classroom</button>
               <div class="pricing-card-divider" aria-hidden="true"></div>
-              <p class="pricing-card-feature-lead">Includes:</p>
+              <p class="pricing-card-feature-lead" data-i18n="pricing.includes">Includes:</p>
               <ul class="pricing-feature-list">
-                <li>1 teacher seat and 35 student seats</li>
-                <li>Lesson projector mode</li>
-                <li>Auto-graded quiz reports</li>
-                <li>Shareable class assignment links</li>
-                <li>Basic learner progress tracking</li>
+                <li data-i18n="pricing.school.classroom.f1">1 teacher seat and 35 student seats</li>
+                <li data-i18n="pricing.school.classroom.f2">Lesson projector mode</li>
+                <li data-i18n="pricing.school.classroom.f3">Auto-graded quiz reports</li>
+                <li data-i18n="pricing.school.classroom.f4">Shareable class assignment links</li>
+                <li data-i18n="pricing.school.classroom.f5">Basic learner progress tracking</li>
               </ul>
-              <p class="pricing-card-note">Built for individual classrooms getting started with interactive geometry learning.</p>
+              <p class="pricing-card-note" data-i18n="pricing.school.classroom.note">Built for individual classrooms getting started with interactive geometry learning.</p>
             </article>
 
             <article class="pricing-card pricing-card-pro pricing-card-school is-featured">
               <div class="pricing-card-top">
                 <div>
                   <div class="pricing-card-title-row">
-                    <h3>Campus</h3>
-                    <div class="pricing-card-badge pricing-card-badge-inline">Best for Departments</div>
+                    <h3 data-i18n="pricing.school.campus.name">Campus</h3>
+                    <div class="pricing-card-badge pricing-card-badge-inline" data-i18n="pricing.school.campus.badge">Best for Departments</div>
                   </div>
                 </div>
               </div>
               <div class="pricing-card-divider" aria-hidden="true"></div>
               <div class="pricing-card-price-row">
                 <span class="pricing-card-price">$199</span>
-                <span class="pricing-card-price-unit">per school / month</span>
+                <span class="pricing-card-price-unit" data-i18n="pricing.unit.school_month">per school / month</span>
               </div>
-              <p class="pricing-card-price-note">$2,388 billed yearly</p>
-              <button class="pricing-card-cta" type="button">Choose Campus</button>
+              <p class="pricing-card-price-note" data-i18n="pricing.school.campus.note_price">$2,388 billed yearly</p>
+              <button class="pricing-card-cta" type="button" data-i18n="pricing.school.campus.cta">Choose Campus</button>
               <div class="pricing-card-divider" aria-hidden="true"></div>
-              <p class="pricing-card-feature-lead">Everything in Classroom, plus:</p>
+              <p class="pricing-card-feature-lead" data-i18n="pricing.school.campus.lead">Everything in Classroom, plus:</p>
               <ul class="pricing-feature-list">
-                <li>Up to 5 teachers and 200 students</li>
-                <li>Shared class dashboards</li>
-                <li>Bulk student import tools</li>
-                <li>Curriculum-aligned assignment packs</li>
-                <li>Priority onboarding and support</li>
+                <li data-i18n="pricing.school.campus.f1">Up to 5 teachers and 200 students</li>
+                <li data-i18n="pricing.school.campus.f2">Shared class dashboards</li>
+                <li data-i18n="pricing.school.campus.f3">Bulk student import tools</li>
+                <li data-i18n="pricing.school.campus.f4">Curriculum-aligned assignment packs</li>
+                <li data-i18n="pricing.school.campus.f5">Priority onboarding and support</li>
               </ul>
-              <p class="pricing-card-note">Designed for schools that need broader access, richer tools, and stronger classroom support.</p>
+              <p class="pricing-card-note" data-i18n="pricing.school.campus.note">Designed for schools that need broader access, richer tools, and stronger classroom support.</p>
             </article>
 
             <article class="pricing-card pricing-card-premium pricing-card-school">
               <div class="pricing-card-top">
                 <div>
-                  <h3>Institution</h3>
+                  <h3 data-i18n="pricing.school.institution.name">Institution</h3>
                 </div>
               </div>
               <div class="pricing-card-divider" aria-hidden="true"></div>
               <div class="pricing-card-price-row">
                 <span class="pricing-card-price">$449</span>
-                <span class="pricing-card-price-unit">per school / month</span>
+                <span class="pricing-card-price-unit" data-i18n="pricing.unit.school_month">per school / month</span>
               </div>
-              <p class="pricing-card-price-note">$5,388 billed yearly</p>
-              <button class="pricing-card-cta" type="button">Choose Institution</button>
+              <p class="pricing-card-price-note" data-i18n="pricing.school.institution.note_price">$5,388 billed yearly</p>
+              <button class="pricing-card-cta" type="button" data-i18n="pricing.school.institution.cta">Choose Institution</button>
               <div class="pricing-card-divider" aria-hidden="true"></div>
-              <p class="pricing-card-feature-lead">Everything in Campus, plus:</p>
+              <p class="pricing-card-feature-lead" data-i18n="pricing.school.institution.lead">Everything in Campus, plus:</p>
               <ul class="pricing-feature-list">
-                <li>Unlimited teachers and up to 800 students</li>
-                <li>Admin reporting and export tools</li>
-                <li>SSO and LMS support</li>
-                <li>Dedicated implementation support</li>
-                <li>Annual usage and success review</li>
+                <li data-i18n="pricing.school.institution.f1">Unlimited teachers and up to 800 students</li>
+                <li data-i18n="pricing.school.institution.f2">Admin reporting and export tools</li>
+                <li data-i18n="pricing.school.institution.f3">SSO and LMS support</li>
+                <li data-i18n="pricing.school.institution.f4">Dedicated implementation support</li>
+                <li data-i18n="pricing.school.institution.f5">Annual usage and success review</li>
               </ul>
-              <p class="pricing-card-note">Created for institutions seeking a complete, scalable, and advanced learning solution.</p>
+              <p class="pricing-card-note" data-i18n="pricing.school.institution.note">Created for institutions seeking a complete, scalable, and advanced learning solution.</p>
             </article>
           </div>
         </div>
@@ -759,65 +962,65 @@ with Ease</h1>
 
       <section class="callout-section" aria-labelledby="callout-title">
         <div class="callout-shell">
-          <h2 id="callout-title" class="callout-title">
-            <span class="callout-line">Uncover the patterns. Master the theorems.</span>
-            <span class="callout-line">Quizzes that inspire. Play that enlightens.</span>
+          <h2 id="callout-title" class="callout-title scroll-title-cascade">
+            <span class="callout-line" data-i18n="callout.line1">From patterns to theorems.</span>
+            <span class="callout-line" data-i18n="callout.line2">From practice to mastery.</span>
           </h2>
           <div class="callout-actions">
             <a class="callout-btn callout-btn-primary" href="#signupOverlay" data-open-signup aria-controls="signupOverlay" data-i18n="hero.start">Start Learning</a>
-            <a class="callout-btn callout-btn-secondary" href="contact.html">Get in Touch</a>
+            <a class="callout-btn callout-btn-secondary" href="#contactOverlay" data-open-contact aria-controls="contactOverlay" data-i18n="callout.contact">Get in Touch</a>
           </div>
         </div>
       </section>
 
     </main>
 
-    <footer class="site-footer" aria-label="Footer">
+    <footer class="site-footer" data-i18n-aria-label="footer.aria" aria-label="Footer">
       <div class="site-footer-shell">
         <div class="site-footer-main">
           <div class="site-footer-brand">
-            <a class="site-footer-brand-link" href="#" aria-label="CircleLab home">
-              <img class="site-footer-logo" src="logowhite.png" alt="CircleLab logo" />
+            <a class="site-footer-brand-link" href="#" data-i18n-aria-label="footer.brand_aria" aria-label="CircleLab home">
+              <img class="site-footer-logo" src="logowhite.svg" data-i18n-alt="footer.logo_alt" alt="CircleLab logo" />
             </a>
-            <p class="site-footer-tagline">Geometry made visible.</p>
+            <p class="site-footer-tagline" data-i18n="footer.tagline">Geometry made visible.</p>
           </div>
 
           <div class="site-footer-columns">
             <div class="site-footer-column">
-              <h2>Explore</h2>
+              <h2 data-i18n="footer.explore">Explore</h2>
               <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Theorems</a></li>
-                <li><a href="#">Quizzes</a></li>
-                <li><a href="#">Games</a></li>
+                <li><a href="#" data-i18n="footer.home">Home</a></li>
+                <li><a href="#" data-i18n="footer.theorems">Theorems</a></li>
+                <li><a href="../quiz/quiz.html" data-i18n="footer.quizzes">Quizzes</a></li>
+                <li><a href="../Game/index.html" data-i18n="footer.games">Games</a></li>
               </ul>
             </div>
 
             <div class="site-footer-column">
-              <h2>Support</h2>
+              <h2 data-i18n="footer.support">Support</h2>
               <ul>
-                <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="#">FAQs</a></li>
-                <li><a href="#">Feedback</a></li>
+                <li><a href="#contactOverlay" data-open-contact aria-controls="contactOverlay" data-i18n="footer.contact">Contact Us</a></li>
+                <li><a href="#" data-i18n="footer.faq">FAQs</a></li>
+                <li><a href="#" data-i18n="footer.feedback">Feedback</a></li>
               </ul>
             </div>
 
             <div class="site-footer-column">
-              <h2>Social</h2>
+              <h2 data-i18n="footer.social">Social</h2>
               <ul>
-                <li><a href="#">Twitter</a></li>
-                <li><a href="#">Instagram</a></li>
-                <li><a href="#">LinkedIn</a></li>
+                <li><a href="#" data-i18n="footer.twitter">Twitter</a></li>
+                <li><a href="#" data-i18n="footer.instagram">Instagram</a></li>
+                <li><a href="#" data-i18n="footer.linkedin">LinkedIn</a></li>
               </ul>
             </div>
           </div>
         </div>
 
         <div class="site-footer-bottom">
-          <p class="site-footer-copy">&copy; 2026 CircleLab. All rights reserved.</p>
+          <p class="site-footer-copy" data-i18n="footer.copy">&copy; 2026 CircleLab. All rights reserved.</p>
           <div class="site-footer-legal">
-            <a href="#">Terms and Conditions</a>
-            <a href="#">Privacy Policy</a>
+            <a href="#" data-i18n="footer.terms">Terms and Conditions</a>
+            <a href="#" data-i18n="footer.privacy">Privacy Policy</a>
           </div>
         </div>
       </div>
@@ -850,7 +1053,7 @@ with Ease</h1>
         </div>
 
         <section class="signup-modal-panel">
-          <button class="signup-modal-close" type="button" data-signup-close aria-label="Close sign up">
+          <button class="signup-modal-close" type="button" data-signup-close data-i18n-aria-label="signup.close_aria" aria-label="Close sign up">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6 6 18 18" />
               <path d="M18 6 6 18" />
@@ -858,7 +1061,7 @@ with Ease</h1>
           </button>
 
           <div class="signup-modal-badge" aria-hidden="true">
-            <img src="logowhite.png" alt="" />
+            <img src="logowhite.svg" alt="" />
           </div>
 
           <h2 class="signup-modal-title" id="signupModalTitle" data-i18n="signup.title">Create account</h2>
@@ -957,7 +1160,7 @@ with Ease</h1>
         </div>
 
         <section class="signup-modal-panel">
-          <button class="signup-modal-close" type="button" data-login-close aria-label="Close log in">
+          <button class="signup-modal-close" type="button" data-login-close data-i18n-aria-label="login.close_aria" aria-label="Close log in">
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6 6 18 18" />
               <path d="M18 6 6 18" />
@@ -965,7 +1168,7 @@ with Ease</h1>
           </button>
 
           <div class="signup-modal-badge" aria-hidden="true">
-            <img src="logowhite.png" alt="" />
+            <img src="logowhite.svg" alt="" />
           </div>
 
           <h2 class="signup-modal-title" id="loginModalTitle" data-i18n="login.title">Welcome back</h2>
@@ -1040,7 +1243,269 @@ with Ease</h1>
       </div>
     </div>
 
+    <div class="signup-overlay auth-overlay login-overlay contact-overlay" id="contactOverlay" data-contact-overlay hidden>
+      <div class="auth-overlay-backdrop" data-contact-close aria-hidden="true" onclick="(function(){var o=document.getElementById('contactOverlay');if(!o){return;}o.hidden=true;o.classList.remove('is-opening','is-closing','is-switch-target');if(window.location.hash==='#contactOverlay'){window.history.replaceState(null,'',window.location.pathname+window.location.search);}document.body.classList.remove('is-auth-open','is-auth-switching');})();"></div>
+      <div class="signup-modal login-modal contact-modal" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+        <div class="signup-modal-showcase" aria-hidden="true">
+          <svg class="signup-modal-geometry" viewBox="146 108 540 540" role="presentation" focusable="false">
+            <g class="signup-modal-geometry-circles">
+              <circle cx="366" cy="432" r="16" />
+              <circle cx="371" cy="440" r="18" />
+              <circle cx="373" cy="451" r="21" />
+              <circle cx="371" cy="463" r="24" />
+              <circle cx="364" cy="475" r="28" />
+              <circle cx="351" cy="483" r="32" />
+              <circle cx="335" cy="488" r="37" />
+              <circle cx="315" cy="486" r="43" />
+              <circle cx="296" cy="476" r="50" />
+              <circle cx="281" cy="457" r="57" />
+              <circle cx="272" cy="431" r="66" />
+              <circle cx="274" cy="401" r="76" />
+              <circle cx="289" cy="369" r="87" />
+              <circle cx="318" cy="341" r="101" />
+              <circle cx="361" cy="325" r="116" />
+              <circle cx="412" cy="325" r="134" />
+              <circle cx="467" cy="348" r="154" />
+            </g>
+          </svg>
+        </div>
+
+        <section class="signup-modal-panel">
+          <button class="signup-modal-close" type="button" data-contact-close data-i18n-aria-label="contact.close_aria" aria-label="Close contact form" onclick="(function(){var o=document.getElementById('contactOverlay');if(!o){return;}o.hidden=true;o.classList.remove('is-opening','is-closing','is-switch-target');if(window.location.hash==='#contactOverlay'){window.history.replaceState(null,'',window.location.pathname+window.location.search);}document.body.classList.remove('is-auth-open','is-auth-switching');})();">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M6 6 18 18" />
+              <path d="M18 6 6 18" />
+            </svg>
+          </button>
+
+          <div class="signup-modal-badge" aria-hidden="true">
+            <img src="logowhite.svg" alt="" />
+          </div>
+
+          <h2 class="signup-modal-title" id="contactModalTitle" data-i18n="contact.title">Get in touch</h2>
+          <p class="signup-modal-intro" data-i18n="contact.intro">
+            We'd love to hear from you.
+Share your questions, ideas, or feedback anytime.
+          </p>
+
+          <form class="signup-form contact-form" data-contact-form novalidate>
+            <div class="contact-form-grid">
+              <label class="signup-field" for="contactName">
+                <span data-i18n="contact.name">Your name</span>
+                <input
+                  class="signup-input"
+                  id="contactName"
+                  name="name"
+                  type="text"
+                  autocomplete="name"
+                  aria-describedby="contactFormFeedback"
+                  data-i18n-placeholder="contact.name_placeholder"
+                  placeholder="What should we call you?"
+                  required
+                />
+              </label>
+
+              <label class="signup-field" for="contactEmail">
+                <span data-i18n="field.email">Email address</span>
+                <input
+                  class="signup-input"
+                  id="contactEmail"
+                  name="email"
+                  type="email"
+                  autocomplete="email"
+                  aria-describedby="contactFormFeedback"
+                  data-i18n-placeholder="field.email_placeholder"
+                  placeholder="you@circlelab.com"
+                  required
+                />
+              </label>
+            </div>
+
+            <div class="signup-field contact-topic-field">
+              <span class="contact-topic-label" id="contactTopicLabel" data-i18n="contact.topic">Topic</span>
+              <span class="contact-select-wrap">
+                <input
+                  class="contact-topic-input"
+                  id="contactTopic"
+                  name="topic"
+                  type="hidden"
+                  value=""
+                />
+
+                <details class="contact-topic-picker" data-contact-topic-picker>
+                  <summary
+                    class="signup-input contact-topic-picker-trigger"
+                    aria-describedby="contactFormFeedback"
+                    aria-labelledby="contactTopicLabel contactTopicValue"
+                  >
+                    <span
+                      class="contact-topic-picker-value"
+                      id="contactTopicValue"
+                      data-contact-topic-value
+                      data-i18n="contact.topic_placeholder"
+                    >Choose a topic</span>
+                    <svg class="contact-topic-picker-chevron" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="m7 10 5 5 5-5" />
+                    </svg>
+                  </summary>
+
+                  <div class="contact-topic-menu" role="listbox" aria-labelledby="contactTopicLabel">
+                    <p class="contact-topic-menu-label" data-i18n="contact.topic">Topic</p>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="learning"
+                      data-i18n-key="contact.topic_learning"
+                    >
+                      <span data-i18n="contact.topic_learning">Learning support</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="feedback"
+                      data-i18n-key="contact.topic_feedback"
+                    >
+                      <span data-i18n="contact.topic_feedback">Product feedback</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="bug"
+                      data-i18n-key="contact.topic_bug"
+                    >
+                      <span data-i18n="contact.topic_bug">Bug report</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+
+                    <button
+                      class="contact-topic-menu-item"
+                      type="button"
+                      role="option"
+                      aria-selected="false"
+                      data-contact-topic-option
+                      data-value="school"
+                      data-i18n-key="contact.topic_school"
+                    >
+                      <span data-i18n="contact.topic_school">School or partnership</span>
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 7 10 17l-5-5" />
+                      </svg>
+                    </button>
+                  </div>
+                </details>
+              </span>
+            </div>
+
+            <label class="signup-field" for="contactMessage">
+              <span data-i18n="contact.message">Message</span>
+              <textarea
+                class="signup-input contact-textarea"
+                id="contactMessage"
+                name="message"
+                aria-describedby="contactFormFeedback"
+                data-i18n-placeholder="contact.message_placeholder"
+                placeholder="Let us know how we can help."
+                rows="6"
+                minlength="24"
+                required
+              ></textarea>
+            </label>
+
+            <button class="signup-submit" type="submit" data-i18n="contact.submit">Send message</button>
+            <p
+              class="signup-form-status"
+              id="contactFormFeedback"
+              data-contact-feedback
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              hidden
+            ></p>
+          </form>
+
+          <p class="signup-modal-helper">
+            <span data-i18n="contact.helper_prefix">Need quick help instead?</span>
+            <a href="#ai-study-title" data-i18n="contact.helper_link">Try the ArcMind</a>
+          </p>
+        </section>
+      </div>
+    </div>
+
+
+    <section class="cookie-banner" data-cookie-banner data-i18n-aria-label="cookie.aria" aria-label="Cookie preferences dialog">
+      <div class="cookie-banner-card">
+        <div class="cookie-banner-copy-wrap">
+          <h2 class="cookie-banner-title" data-i18n="cookie.title">We value your privacy</h2>
+          <p class="cookie-banner-copy" data-i18n-html="cookie.copy">
+            We use cookies to improve your browsing experience and remember your preferences on this device.
+          </p>
+          <button class="cookie-banner-policy" type="button" data-i18n="cookie.policy">
+            Privacy Policy
+          </button>
+        </div>
+
+        <div class="cookie-banner-actions">
+          <button class="cookie-banner-action cookie-banner-action-muted" type="button" data-cookie-dismiss data-i18n="cookie.manage" onclick="(function(){var o=document.querySelector('[data-cookie-banner]');if(!o){return;}o.classList.add('is-closing');window.setTimeout(function(){o.hidden=true;o.classList.remove('is-closing');},280);})();">
+            Manage cookies
+          </button>
+          <button class="cookie-banner-action cookie-banner-action-accent" type="button" data-cookie-dismiss data-i18n="cookie.accept" onclick="(function(){var o=document.querySelector('[data-cookie-banner]');if(!o){return;}o.classList.add('is-closing');window.setTimeout(function(){o.hidden=true;o.classList.remove('is-closing');},280);})();">
+            Accept all cookies
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <div class="ai-float-shell" data-ai-float-shell data-i18n-aria-label="float.shell_aria" aria-label="ArcMind quick access">
+      <div class="ai-float-glow ai-float-glow-a" aria-hidden="true"></div>
+      <div class="ai-float-glow ai-float-glow-b" aria-hidden="true"></div>
+      <form class="ai-float-bar" data-ai-float-form data-i18n-aria-label="float.form_aria" aria-label="Ask ArcMind quickly">
+        <button class="ai-float-plus" type="button" data-ai-float-focus data-i18n-aria-label="float.focus_aria" aria-label="Focus ArcMind">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14" />
+            <path d="M5 12h14" />
+          </svg>
+        </button>
+        <label class="sr-only" for="aiFloatInput" data-i18n="float.ask_label">Ask ArcMind</label>
+        <input
+          class="ai-float-input"
+          id="aiFloatInput"
+          name="prompt"
+          type="text"
+          maxlength="180"
+          data-i18n-placeholder="float.placeholder"
+          placeholder="Ask ArcMind"
+          autocomplete="off"
+        />
+        <button class="ai-float-send" type="submit" data-i18n-aria-label="float.send_aria" aria-label="Send to ArcMind" disabled>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 18V6" />
+            <path d="m7 11 5-5 5 5" />
+          </svg>
+        </button>
+      </form>
+    </div>
     <script src="preferences.js"></script>
     <script src="script.js"></script>
+    <script src="hero-chat-now.js"></script>
   </body>
 </html>

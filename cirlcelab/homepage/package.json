@@ -1,0 +1,10 @@
+{
+  "name": "circlelab-static-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static circle geometry website with automatic asset checks.",
+  "scripts": {
+    "check": "node tools/check-static-site.js",
+    "test": "node tools/check-static-site.js"
+  }
+}
